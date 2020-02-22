@@ -11,21 +11,23 @@ import com.gdx.game.map.Tile;
 import java.util.ArrayList;
 
 public class GdxGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	OrthographicCamera orthographicCamera;
-	Control control;
-	Island island;
+	private SpriteBatch batch;
+	private OrthographicCamera orthographicCamera;
+	private Control control;
+	private Island island;
 
 	// Temp x and y co-ords
-	int x, y;
+	int x;
+	int y;
 
 	// For Movement
-	int directionX, directionY;
+	int directionX;
+	int directionY;
 	int speed = 1;
 	
 	@Override
 	public void create() {
-		Media.setupImages();
+		//Media.setupImages();
 		batch = new SpriteBatch();
 		island = new Island();
 
@@ -44,16 +46,16 @@ public class GdxGame extends ApplicationAdapter {
 		directionX = 0;
 		directionY = 0;
 
-		if(control.down) {
+		if(control.isDown()) {
 			directionY = -1 ;
 		}
-		if(control.up) {
+		if(control.isUp()) {
 			directionY = 1 ;
 		}
-		if(control.left) {
+		if(control.isLeft()) {
 			directionX = -1;
 		}
-		if(control.right) {
+		if(control.isRight()) {
 			directionX = 1;
 		}
 
@@ -61,13 +63,16 @@ public class GdxGame extends ApplicationAdapter {
 		orthographicCamera.position.y += directionY * speed;
 		orthographicCamera.update();
 
-		// GAME DRAW
+		drawGame();
+	}
+
+	private void drawGame() {
 		batch.setProjectionMatrix(orthographicCamera.combined);
 		batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
 		batch.begin();
 		// Draw all tiles in the chunk / chunk rows
-		for(ArrayList<Tile> rows : island.chunk.tiles){
+		for(ArrayList<Tile> rows : island.getChunk().getTiles()){
 			for(Tile tile : rows){
 				batch.draw(tile.getTexture(), tile.getPos().x, tile.getPos().y, tile.getSize(), tile.getSize());
 				if (tile.getSecondaryTexture() != null) {

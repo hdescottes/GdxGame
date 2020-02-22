@@ -20,7 +20,7 @@ public class Island {
     // public Map<Integer, ArrayList<Chunk> chunks = new Map<Integer, ArrayList<Chunk>();
     
     // ONE CHUNK
-    public Chunk chunk;
+    private Chunk chunk;
     ArrayList<Entity> entities = new ArrayList<>();
     
     // TRACK CLICK
@@ -36,7 +36,15 @@ public class Island {
     String[] aGrassTop = {"000000111", "000000011","000000110"};
     String[] aGrassTopRight = {"000000100"};
     String[] aGrassTopLeft = {"000000001"};
-    
+
+    public Chunk getChunk() {
+        return chunk;
+    }
+
+    public void setChunk(Chunk chunk) {
+        this.chunk = chunk;
+    }
+
     public Island(){
         setupTiles();
         codeTiles();
@@ -106,7 +114,7 @@ public class Island {
 
             // Last row and column?
             if (row == chunk.getNumberRows() - 1 && col == chunk.getNumberCols() - 1){
-                chunk.tiles.add(chunkRow);
+                chunk.getTiles().add(chunkRow);
             }
             map.put(currentRow, chunkRow);
         } else {
@@ -114,7 +122,7 @@ public class Island {
             currentRow = row;
 
             // Add row to chunk
-            chunk.tiles.add(chunkRow);
+            chunk.getTiles().add(chunkRow);
 
             // Clear chunk row
             chunkRow = new ArrayList<>();
@@ -187,7 +195,7 @@ public class Island {
         // Loop all tiles and set the initial code
      
         // 1 CHUNK ONLY ATM
-        for(ArrayList<Tile> row : chunk.tiles){
+        for(ArrayList<Tile> row : chunk.getTiles()){
             for(Tile tile : row){ 
                 // Check all surrounding tiles and set 1 for pass 0 for non pass
                 // 0 0 0

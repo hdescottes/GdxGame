@@ -1,6 +1,7 @@
 package com.gdx.game.map;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Chunk {
@@ -15,10 +16,10 @@ public class Chunk {
                 Tile, Tile, Tile
             Row
                 Tile, Tile , Tile*/
-    public ArrayList<ArrayList<Tile>> tiles;
+    private ArrayList<ArrayList<Tile>> tiles;
     
     public Chunk(int numberRows, int numberCols, int tileSize){
-        tiles = new ArrayList<>();
+        this.tiles = new ArrayList<>();
         this.numberRows = numberRows;
         this.numberCols = numberCols;
         this.tileSize = tileSize;
@@ -48,8 +49,15 @@ public class Chunk {
         this.tileSize = tileSize;
     }
 
+    public List<ArrayList<Tile>> getTiles() {
+        return tiles;
+    }
+
+    public void setTiles(ArrayList<ArrayList<Tile>> tiles) {
+        this.tiles = tiles;
+    }
+
     public Tile getTile(int row, int col){
-        System.out.println("Row: " + row + " Col: " + col);
         return Optional.of(row)
                 .filter(r -> tiles.size() > r && r >= 0)
                 .map(r -> tiles.get(r))

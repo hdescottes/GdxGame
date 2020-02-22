@@ -6,37 +6,24 @@ import com.badlogic.gdx.graphics.Texture;
 public class Media {
 
     // TILES
-    public static Texture grass01, grass02, grass03, grass04;
-    public static Texture grassLeft, grassRight;
-    public static Texture grassLeftUpperEdge, grassRightUpperEdge;
-    public static Texture grassTop, grassTopRight, grassTopLeft;
-    public static Texture water01, water02, water03, water04;
-    public static Texture cliff, water;
+    public static final Texture grass01 = new Texture("8x8/grass/grass_01.png");
+    public static final Texture grass02 = new Texture("8x8/grass/grass_02.png");
+    public static final Texture grass03 = new Texture("8x8/grass/grass_03.png");
+    public static final Texture grass04 = new Texture("8x8/grass/grass_04.png");
+    public static final Texture grassLeft = new Texture("8x8/grass/right_grass_edge.png");
+    public static final Texture grassRight = new Texture("8x8/grass/left_grass_edge.png");
+    public static final Texture grassLeftUpperEdge = new Texture("8x8/grass/left_upper_edge.png");
+    public static final Texture grassRightUpperEdge = new Texture("8x8/grass/right_upper_edge.png");
+    public static final Texture grassTop = new Texture("8x8/grass/top.png");
+    public static final Texture grassTopRight = new Texture("8x8/grass/top_right.png");
+    public static final Texture grassTopLeft = new Texture("8x8/grass/top_left.png");
+    public static final Texture water01 = new Texture("8x8/water/water_01.png");
+    public static final Texture water02 = new Texture("8x8/water/water_02.png");
+    public static final Texture water03 = new Texture("8x8/water/water_03.png");
+    public static final Texture water04 = new Texture("8x8/water/water_04.png");
+    public static final Texture cliff = new Texture(Gdx.files.internal("8x8/cliff.png"));
 
-    public static void setupImages(){
-        // Source https://opengameart.org/content/micro-tileset-overworld-and-dungeon
-        // Example
-        // http://opengameart.org/sites/default/files/styles/watermarked/public/Render_0.png
-        grass01 = new Texture("8x8/grass/grass_01.png");
-        grass02 = new Texture("8x8/grass/grass_02.png");
-        grass03 = new Texture("8x8/grass/grass_03.png");
-        grass04 = new Texture("8x8/grass/grass_04.png");
-
-        grassLeft = new Texture("8x8/grass/right_grass_edge.png");
-        grassRight = new Texture("8x8/grass/left_grass_edge.png");
-
-        grassLeftUpperEdge = new Texture("8x8/grass/left_upper_edge.png");
-        grassRightUpperEdge = new Texture("8x8/grass/right_upper_edge.png");
-
-        grassTop = new Texture("8x8/grass/top.png");
-        grassTopRight = new Texture("8x8/grass/top_right.png");
-        grassTopLeft = new Texture("8x8/grass/top_left.png");
-
-        water01 = new Texture("8x8/water/water_01.png");
-        water02 = new Texture("8x8/water/water_02.png");
-        water03 = new Texture("8x8/water/water_03.png");
-        water04 = new Texture("8x8/water/water_04.png");
-        cliff = new Texture(Gdx.files.internal("8x8/cliff.png"));
+    private Media() {
     }
 
     public static void dispose() {

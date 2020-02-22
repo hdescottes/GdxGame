@@ -11,8 +11,8 @@ public class Camera {
         int displayH = Gdx.graphics.getHeight();
 
         // For 800x600 we will get 266*200
-        int h = (int) (displayH /Math.floor(displayH /160));
-        int w = (int) (displayW /(displayH / (displayH /Math.floor(displayH /160))));
+        int h = displayH /(displayH /160);
+        int w = displayW /(displayH / h);
 
         OrthographicCamera camera = new OrthographicCamera(w, h);
         camera.zoom = .4f;

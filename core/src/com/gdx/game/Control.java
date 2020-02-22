@@ -14,24 +14,128 @@ public class Control extends InputAdapter implements InputProcessor {
     OrthographicCamera camera;
 
     // DIRECTIONS
-    public boolean up;
-    public boolean down;
-    public boolean left;
-    public boolean right;
+    private boolean up;
+    private boolean down;
+    private boolean left;
+    private boolean right;
 
     // MOUSE
-    public boolean  LMB;
-    public boolean  RMB;
-    public boolean processedClick;
-    public Vector2 mouseClickPos = new Vector2();
-    public Vector2 mapClickPos = new Vector2();
+    private boolean lmb;
+    private boolean rmb;
+    private boolean processedClick;
+    private Vector2 mouseClickPos = new Vector2();
+    private Vector2 mapClickPos = new Vector2();
 
     // DEBUG
-    public boolean debug;
+    private boolean debug;
 
     // SCREEN
-    int screenWidth;
-    int screenHeight;
+    private int screenWidth;
+    private int screenHeight;
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public void setDown(boolean down) {
+        this.down = down;
+    }
+
+    public boolean isLeft() {
+        return left;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+
+    public boolean isLmb() {
+        return lmb;
+    }
+
+    public void setLmb(boolean lmb) {
+        this.lmb = lmb;
+    }
+
+    public boolean isRmb() {
+        return rmb;
+    }
+
+    public void setRmb(boolean rmb) {
+        this.rmb = rmb;
+    }
+
+    public boolean isProcessedClick() {
+        return processedClick;
+    }
+
+    public void setProcessedClick(boolean processedClick) {
+        this.processedClick = processedClick;
+    }
+
+    public Vector2 getMouseClickPos() {
+        return mouseClickPos;
+    }
+
+    public void setMouseClickPos(Vector2 mouseClickPos) {
+        this.mouseClickPos = mouseClickPos;
+    }
+
+    public Vector2 getMapClickPos() {
+        return mapClickPos;
+    }
+
+    public void setMapClickPos(Vector2 mapClickPos) {
+        this.mapClickPos = mapClickPos;
+    }
+
+    public boolean isDebug() {
+        return debug;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public void setScreenWidth(int screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    public void setScreenHeight(int screenHeight) {
+        this.screenHeight = screenHeight;
+    }
 
     public Control(int screenWidth, int screenHeight, OrthographicCamera camera){
         this.camera = camera;
@@ -127,9 +231,9 @@ public class Control extends InputAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(pointer == 0 && button == 0){
-            LMB = true;
+            lmb = true;
         } else if (pointer == 0 && button == 0){
-            RMB = true;
+            rmb = true;
         }
 
         setMouseClickedPos(screenX, screenY);
@@ -139,10 +243,10 @@ public class Control extends InputAdapter implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if(pointer == 0 && button == 0){
-            LMB = false;
+            lmb = false;
             processedClick = false;
         } else if (pointer == 0 && button == 0){
-            RMB = false;
+            rmb = false;
         }
 
         setMouseClickedPos(screenX, screenY);
