@@ -7,6 +7,6 @@ java {
 configure<SourceSetContainer> {
     named("main") {
         java.srcDir("src/java/")
-        resources.srcDir("../core/assets")
+        resources.srcDir("src/resources")
     }
 }

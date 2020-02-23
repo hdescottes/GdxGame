@@ -27,7 +27,6 @@ public class GdxGame extends ApplicationAdapter {
 	
 	@Override
 	public void create() {
-		//Media.setupImages();
 		batch = new SpriteBatch();
 		island = new Island();
 

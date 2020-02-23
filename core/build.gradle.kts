@@ -8,6 +8,9 @@ configure<SourceSetContainer> {
     named("main") {
         java.srcDir("src/main/java/")
     }
+    named("test") {
+        java.srcDir("src/test/java/")
+    }
 }
 
 tasks {
