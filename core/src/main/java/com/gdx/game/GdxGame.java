@@ -15,20 +15,13 @@ public class GdxGame extends ApplicationAdapter {
 	private OrthographicCamera orthographicCamera;
 	private Control control;
 	private Island island;
+	private Hero hero;
 
-	// Temp x and y co-ords
-	int x;
-	int y;
-
-	// For Movement
-	int directionX;
-	int directionY;
-	int speed = 1;
-	
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		island = new Island();
+		hero = new Hero(island.getCentreTile().getPos());
 
 		Camera camera = new Camera();
 		orthographicCamera = camera.createCamera();
@@ -41,25 +34,9 @@ public class GdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// GAME LOGIC
-		// Reset the direction values
-		directionX = 0;
-		directionY = 0;
+		hero.update(control);
 
-		if(control.isDown()) {
-			directionY = -1 ;
-		}
-		if(control.isUp()) {
-			directionY = 1 ;
-		}
-		if(control.isLeft()) {
-			directionX = -1;
-		}
-		if(control.isRight()) {
-			directionX = 1;
-		}
-
-		orthographicCamera.position.x += directionX * speed;
-		orthographicCamera.position.y += directionY * speed;
+		orthographicCamera.position.lerp(hero.getPos3(), .1f);
 		orthographicCamera.update();
 
 		drawGame();
@@ -79,6 +56,8 @@ public class GdxGame extends ApplicationAdapter {
 				}
 			}
 		}
+
+		hero.draw(batch);
 		batch.end();
 	}
 	

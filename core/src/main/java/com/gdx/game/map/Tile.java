@@ -9,16 +9,14 @@ public class Tile extends Entity {
     private int row;
     private int col;
     private String code;
-    private Texture texture;
     private Texture secondaryTexture;
     private TILETYPE type;
     
     public Tile(int x, int y, int size, TILETYPE type, Texture texture){
-        super();
+        super(texture, 0,0);
         this.getPos().x = x*size;
         this.getPos().y = y*size;
         this.size = size;
-        this.texture = texture;
         this.col = x;
         this.row = y;
         this.type = type;
@@ -55,16 +53,6 @@ public class Tile extends Entity {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    @Override
-    public Texture getTexture() {
-        return texture;
-    }
-
-    @Override
-    public void setTexture(Texture texture) {
-        this.texture = texture;
     }
 
     public Texture getSecondaryTexture() {
