@@ -159,28 +159,22 @@ public class Control extends InputAdapter implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Keys.DOWN:
-                down = true;
-                break;
-            case Keys.UP:
-                up = true;
-                break;
-            case Keys.LEFT:
-                left = true;
-                break;
-            case Keys.RIGHT:
-                right = true;
-                break;
-            case Keys.W:
-                up = true;
-                break;
-            case Keys.A:
-                left = true;
-                break;
             case Keys.S:
                 down = true;
                 break;
+            case Keys.UP:
+            case Keys.W:
+                up = true;
+                break;
+            case Keys.LEFT:
+            case Keys.A:
+                left = true;
+                break;
+            case Keys.RIGHT:
             case Keys.D:
                 right = true;
+                break;
+            default:
                 break;
         }
         return false;
@@ -190,26 +184,18 @@ public class Control extends InputAdapter implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch (keycode) {
             case Keys.DOWN:
-                down = false;
-                break;
-            case Keys.UP:
-                up = false;
-                break;
-            case Keys.LEFT:
-                left = false;
-                break;
-            case Keys.RIGHT:
-                right = false;
-                break;
-            case Keys.W:
-                up = false;
-                break;
-            case Keys.A:
-                left = false;
-                break;
             case Keys.S:
                 down = false;
                 break;
+            case Keys.UP:
+            case Keys.W:
+                up = false;
+                break;
+            case Keys.LEFT:
+            case Keys.A:
+                left = false;
+                break;
+            case Keys.RIGHT:
             case Keys.D:
                 right = false;
                 break;
@@ -218,6 +204,8 @@ public class Control extends InputAdapter implements InputProcessor {
                 break;
             case Keys.BACKSPACE:
                 debug = !debug;
+                break;
+            default:
                 break;
         }
         return false;
