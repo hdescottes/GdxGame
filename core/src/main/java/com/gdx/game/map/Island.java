@@ -13,8 +13,8 @@ import java.util.Map;
 import static com.gdx.game.Media.*;
 
 public class Island {
-    Tile centreTile;
-    Tile clickedTile;
+    private Tile centreTile;
+    private Tile clickedTile;
     
     // CHUNKS TODO: Add multiple chunks
     // public Map<Integer, ArrayList<Chunk> chunks = new Map<Integer, ArrayList<Chunk>();
@@ -49,7 +49,15 @@ public class Island {
         setupTiles();
         codeTiles();
     }
-    
+
+    public Tile getCentreTile() {
+        return centreTile;
+    }
+
+    public void setCentreTile(Tile centreTile) {
+        this.centreTile = centreTile;
+    }
+
     private void setupTiles(){
         chunk = new Chunk(33,33, 8);
 
