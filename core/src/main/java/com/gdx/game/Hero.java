@@ -1,27 +1,27 @@
 package com.gdx.game;
 
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gdx.game.Enums.ENTITYTYPE;
+import com.gdx.game.box2d.Box2dHelper;
+import com.gdx.game.box2d.Box2dWorld;
 
 public class Hero extends Entity {
 
-    private int directionX;
-    private int directionY;
     private int speed;
 
-    public Hero(Vector2 pos) {
+    public Hero(Vector3 pos3, Box2dWorld box2d) {
         super(Media.hero, 8, 8);
         this.type = ENTITYTYPE.HERO;
-        this.getPos().x = pos.x;
-        this.getPos().y = pos.y;
-        this.getPos3().x = pos.x;
-        this.getPos3().y = pos.y;
-        this.speed = 1;
+        this.getPos3().x = pos3.x;
+        this.getPos3().y = pos3.y;
+        this.speed = 50;
+        this.body = Box2dHelper.createBody(box2d.getWorld(), this.getWidth(), this.getHeight()/2, this.getPos3(), BodyDef.BodyType.DynamicBody);
     }
 
     public void update(Control control) {
-        directionX = 0;
-        directionY = 0;
+        float directionX = getDirectionX();
+        float directionY = getDirectionY();
 
         if(control.isDown()) {
             directionY = -1 ;
@@ -36,19 +36,18 @@ public class Hero extends Entity {
             directionX = 1;
         }
 
-        getPos().x += directionX * speed;
-        getPos().y += directionY * speed;
+        body.setLinearVelocity(directionX * speed, directionY * speed);
 
-        getPos3().x = getPos().x;
-        getPos3().y = getPos().y;
+        getPos3().x = body.getPosition().x - getWidth()/2;
+        getPos3().y = body.getPosition().y - getHeight()/4;
     }
 
     public float getCameraX() {
-        return getPos().x + getWidth()/2;
+        return getPos3().x + getWidth()/2;
     }
 
     public float getCameraY() {
-        return getPos().y + getHeight()/2;
+        return getPos3().y + getHeight()/2;
     }
 
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.map.Island;
 import com.gdx.game.map.Tile;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class GdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private OrthographicCamera orthographicCamera;
+	private Box2dWorld box2d;
 	private Control control;
 	private Island island;
 	private Hero hero;
@@ -20,8 +22,9 @@ public class GdxGame extends ApplicationAdapter {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-		island = new Island();
-		hero = new Hero(island.getCentreTile().getPos());
+		box2d = new Box2dWorld();
+		island = new Island(box2d);
+		hero = new Hero(island.getCentreTile().getPos3(), box2d);
 
 		Camera camera = new Camera();
 		orthographicCamera = camera.createCamera();
@@ -40,6 +43,7 @@ public class GdxGame extends ApplicationAdapter {
 		orthographicCamera.update();
 
 		drawGame();
+		box2d.tick(orthographicCamera, control);
 	}
 
 	private void drawGame() {
@@ -50,9 +54,9 @@ public class GdxGame extends ApplicationAdapter {
 		// Draw all tiles in the chunk / chunk rows
 		for(ArrayList<Tile> rows : island.getChunk().getTiles()){
 			for(Tile tile : rows){
-				batch.draw(tile.getTexture(), tile.getPos().x, tile.getPos().y, tile.getSize(), tile.getSize());
+				batch.draw(tile.getTexture(), tile.getPos3().x, tile.getPos3().y, tile.getSize(), tile.getSize());
 				if (tile.getSecondaryTexture() != null) {
-					batch.draw(tile.getSecondaryTexture(), tile.getPos().x, tile.getPos().y, tile.getSize(), tile.getSize());
+					batch.draw(tile.getSecondaryTexture(), tile.getPos3().x, tile.getPos3().y, tile.getSize(), tile.getSize());
 				}
 			}
 		}
