@@ -14,8 +14,8 @@ public class Tile extends Entity {
     
     public Tile(int x, int y, int size, TILETYPE type, Texture texture){
         super(texture, 0,0);
-        this.getPos().x = x*size;
-        this.getPos().y = y*size;
+        this.getPos3().x = x*size;
+        this.getPos3().y = y*size;
         this.size = size;
         this.col = x;
         this.row = y;
@@ -91,7 +91,15 @@ public class Tile extends Entity {
         return !isPassable();
     }
 
+    public boolean isAllWater() {
+        return code.equals("000000000");
+    }
+
+    public boolean notIsAllWater() {
+        return !isAllWater();
+    }
+
     public String details() {
-        return "x: " + getPos().x + " y: " + getPos().y + " row: " + row + " col: " + col + " code: " + code + " type: " + type.toString();
+        return "x: " + getPos3().x + " y: " + getPos3().y + " row: " + row + " col: " + col + " code: " + code + " type: " + type.toString();
     }
 }

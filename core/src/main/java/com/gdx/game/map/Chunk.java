@@ -73,6 +73,6 @@ public class Chunk {
                 .filter(c -> c.size() > col && col >= 0)
                 .map(c -> c.get(col))
                 .map(t -> t.isGrass()? "1" : "0")
-                .orElse(null);
+                .orElse("0");
     }
 }

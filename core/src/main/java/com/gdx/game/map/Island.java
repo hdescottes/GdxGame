@@ -2,15 +2,35 @@ package com.gdx.game.map;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gdx.game.Entity;
 import com.gdx.game.Enums.TILETYPE;
+import com.gdx.game.box2d.Box2dHelper;
+import com.gdx.game.box2d.Box2dWorld;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
-import static com.gdx.game.Media.*;
+import static com.gdx.game.Media.cliff;
+import static com.gdx.game.Media.grass01;
+import static com.gdx.game.Media.grass02;
+import static com.gdx.game.Media.grass03;
+import static com.gdx.game.Media.grass04;
+import static com.gdx.game.Media.grassLeft;
+import static com.gdx.game.Media.grassLeftUpperEdge;
+import static com.gdx.game.Media.grassRight;
+import static com.gdx.game.Media.grassRightUpperEdge;
+import static com.gdx.game.Media.grassTop;
+import static com.gdx.game.Media.grassTopLeft;
+import static com.gdx.game.Media.grassTopRight;
+import static com.gdx.game.Media.water01;
+import static com.gdx.game.Media.water02;
+import static com.gdx.game.Media.water03;
+import static com.gdx.game.Media.water04;
 
 public class Island {
     private Tile centreTile;
@@ -29,7 +49,7 @@ public class Island {
     int currentRow;
     
     // Arrays for mapping code to texture
-    String[] aGrassLeft = {"001001001","001001001", "001001000", "000001001"};
+    String[] aGrassLeft = {"001001001", "001001000", "000001001"};
     String[] aGrassRight = {"100100100","100100000","000100100"};
     String[] aGrassREnd = {"100000000"};
     String[] aGrassLEnd = {"001000000"};
@@ -45,9 +65,10 @@ public class Island {
         this.chunk = chunk;
     }
 
-    public Island(){
+    public Island(Box2dWorld box2d){
         setupTiles();
         codeTiles();
+        generateHitboxes(box2d);
     }
 
     public Tile getCentreTile() {
@@ -221,5 +242,15 @@ public class Island {
                 }    
             }
         }
+    }
+
+    private void generateHitboxes(Box2dWorld box2d) {
+        chunk.getTiles().forEach(r -> r.forEach(t -> createTileBody(box2d, t)));
+    }
+
+    private void createTileBody(Box2dWorld box2d, Tile tile) {
+        Stream.of(tile)
+                .filter(t -> t.isNotPassable() && t.notIsAllWater())
+                .forEach(t -> Box2dHelper.createBody(box2d.getWorld(), chunk.getTileSize(), chunk.getTileSize(), t.getPos3(), BodyDef.BodyType.StaticBody));
     }
 }

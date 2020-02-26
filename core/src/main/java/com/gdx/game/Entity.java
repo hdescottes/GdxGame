@@ -2,36 +2,27 @@ package com.gdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.gdx.game.Enums.ENTITYTYPE;
 
 public class Entity {
-    private Vector2 pos;
     private Vector3 pos3;
     private Texture texture;
     private float width;
     private float height;
     public ENTITYTYPE type;
     public float speed;
+    public Body body;
     
-    float dirX = 0;
-    float dirY = 0;
+    private float directionX = 0;
+    private float directionY = 0;
     
     public Entity(Texture texture, float width, float height){
-        this.pos = new Vector2();
         this.pos3 = new Vector3();
         this.texture = texture;
         this.width = width;
         this.height = height;
-    }
-
-    public Vector2 getPos() {
-        return pos;
-    }
-
-    public void setPos(Vector2 pos) {
-        this.pos = pos;
     }
 
     public Vector3 getPos3() {
@@ -66,7 +57,23 @@ public class Entity {
         this.height = height;
     }
 
+    public float getDirectionX() {
+        return directionX;
+    }
+
+    public void setDirectionX(float directionX) {
+        this.directionX = directionX;
+    }
+
+    public float getDirectionY() {
+        return directionY;
+    }
+
+    public void setDirectionY(float directionY) {
+        this.directionY = directionY;
+    }
+
     public void draw(SpriteBatch batch){
-        batch.draw(texture, pos.x, pos.y, width, height);
+        batch.draw(texture, pos3.x, pos3.y, width, height);
     }
 }
