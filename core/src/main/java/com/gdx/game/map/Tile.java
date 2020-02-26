@@ -10,16 +10,16 @@ public class Tile extends Entity {
     private int col;
     private String code;
     private Texture secondaryTexture;
-    private TILETYPE type;
+    private TILETYPE tiletype;
     
-    public Tile(int x, int y, int size, TILETYPE type, Texture texture){
+    public Tile(int x, int y, int size, TILETYPE tiletype, Texture texture){
         super(texture, 0,0);
         this.getPos3().x = x*size;
         this.getPos3().y = y*size;
         this.size = size;
         this.col = x;
         this.row = y;
-        this.type = type;
+        this.tiletype = tiletype;
         this.code = "";
     }
 
@@ -63,24 +63,24 @@ public class Tile extends Entity {
         this.secondaryTexture = secondaryTexture;
     }
 
-    public TILETYPE getType() {
-        return type;
+    public TILETYPE getTiletype() {
+        return tiletype;
     }
 
-    public void setType(TILETYPE type) {
-        this.type = type;
+    public void setTiletype(TILETYPE tiletype) {
+        this.tiletype = tiletype;
     }
 
     public boolean isGrass() {
-        return type.equals(TILETYPE.GRASS);
+        return tiletype.equals(TILETYPE.GRASS);
     }
     
     public boolean isWater() {
-        return type.equals(TILETYPE.WATER);
+        return tiletype.equals(TILETYPE.WATER);
     }
     
     public boolean isCliff() {
-        return type.equals(TILETYPE.CLIFF);
+        return tiletype.equals(TILETYPE.CLIFF);
     }
     
     public boolean isPassable() {
@@ -100,6 +100,6 @@ public class Tile extends Entity {
     }
 
     public String details() {
-        return "x: " + getPos3().x + " y: " + getPos3().y + " row: " + row + " col: " + col + " code: " + code + " type: " + type.toString();
+        return "x: " + getPos3().x + " y: " + getPos3().y + " row: " + row + " col: " + col + " code: " + code + " type: " + tiletype.toString();
     }
 }

@@ -8,14 +8,14 @@ import com.gdx.game.box2d.Box2dWorld;
 
 public class Hero extends Entity {
 
-    private int speed;
+    private int heroSpeed;
 
     public Hero(Vector3 pos3, Box2dWorld box2d) {
         super(Media.hero, 8, 8);
         this.type = ENTITYTYPE.HERO;
         this.getPos3().x = pos3.x;
         this.getPos3().y = pos3.y;
-        this.speed = 50;
+        this.heroSpeed = 50;
         this.body = Box2dHelper.createBody(box2d.getWorld(), this.getWidth(), this.getHeight()/2, this.getPos3(), BodyDef.BodyType.DynamicBody);
     }
 
@@ -36,7 +36,7 @@ public class Hero extends Entity {
             directionX = 1;
         }
 
-        body.setLinearVelocity(directionX * speed, directionY * speed);
+        body.setLinearVelocity(directionX * heroSpeed, directionY * heroSpeed);
 
         getPos3().x = body.getPosition().x - getWidth()/2;
         getPos3().y = body.getPosition().y - getHeight()/4;
