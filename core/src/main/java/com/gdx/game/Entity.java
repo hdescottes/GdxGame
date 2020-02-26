@@ -12,7 +12,6 @@ public class Entity {
     private float width;
     private float height;
     public ENTITYTYPE type;
-    public float speed;
     public Body body;
     
     private float directionX = 0;

@@ -2,7 +2,6 @@ package com.gdx.game.map;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gdx.game.Entity;
 import com.gdx.game.Enums.TILETYPE;
@@ -124,11 +123,11 @@ public class Island {
     private void createIsland(int row, int col, Tile tile, int minRow, int maxRow, int minCol, int maxCol, int firstTileRow) {
         if(row > minRow && row < maxRow && col > minCol && col < maxCol){
             tile.setTexture(randomGrass());
-            tile.setType(TILETYPE.GRASS);
+            tile.setTiletype(TILETYPE.GRASS);
 
             if(row == firstTileRow + 1){
                 tile.setTexture(cliff);
-                tile.setType(TILETYPE.CLIFF);
+                tile.setTiletype(TILETYPE.CLIFF);
             } else {
                 // Chance to add trees etc
             }
