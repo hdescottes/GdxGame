@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gdx.game.box2d.Box2dWorld;
+import com.gdx.game.entities.Hero;
 import com.gdx.game.map.Island;
 import com.gdx.game.map.Tile;
 
@@ -25,6 +26,7 @@ public class GdxGame extends ApplicationAdapter {
 		box2d = new Box2dWorld();
 		island = new Island(box2d);
 		hero = new Hero(island.getCentreTile().getPos3(), box2d);
+		island.getEntities().add(hero);
 
 		Camera camera = new Camera();
 		orthographicCamera = camera.createCamera();
@@ -61,8 +63,13 @@ public class GdxGame extends ApplicationAdapter {
 			}
 		}
 
-		hero.draw(batch);
+		drawEntities();
+
 		batch.end();
+	}
+
+	private void drawEntities() {
+		island.getEntities().forEach(e -> e.draw(batch));
 	}
 	
 	@Override

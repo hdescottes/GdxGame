@@ -1,7 +1,7 @@
 package com.gdx.game.map;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.gdx.game.Entity;
+import com.gdx.game.entities.Entity;
 import com.gdx.game.Enums.TILETYPE;
 
 public class Tile extends Entity {

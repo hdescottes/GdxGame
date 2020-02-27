@@ -1,8 +1,10 @@
-package com.gdx.game;
+package com.gdx.game.entities;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.gdx.game.Control;
 import com.gdx.game.Enums.ENTITYTYPE;
+import com.gdx.game.Media;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 
@@ -16,7 +18,7 @@ public class Hero extends Entity {
         this.getPos3().x = pos3.x;
         this.getPos3().y = pos3.y;
         this.heroSpeed = 50;
-        this.body = Box2dHelper.createBody(box2d.getWorld(), this.getWidth(), this.getHeight()/2, this.getPos3(), BodyDef.BodyType.DynamicBody);
+        this.body = Box2dHelper.createBody(box2d.getWorld(), this.getWidth(), this.getHeight()/2, this.getWidth()/4, 0, this.getPos3(), BodyDef.BodyType.DynamicBody);
     }
 
     public void update(Control control) {

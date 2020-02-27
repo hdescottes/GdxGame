@@ -3,10 +3,11 @@ package com.gdx.game.map;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.Entity;
 import com.gdx.game.Enums.TILETYPE;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
+import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.Tree;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,13 +35,13 @@ import static com.gdx.game.Media.water04;
 public class Island {
     private Tile centreTile;
     private Tile clickedTile;
-    
+
     // CHUNKS TODO: Add multiple chunks
-    // public Map<Integer, ArrayList<Chunk> chunks = new Map<Integer, ArrayList<Chunk>();
+    // public Map<Integer, ArrayList<Chunk>> chunks = new HashMap<>();
     
     // ONE CHUNK
     private Chunk chunk;
-    ArrayList<Entity> entities = new ArrayList<>();
+    private ArrayList<Entity> entities = new ArrayList<>();
     
     // TRACK CLICK
     int currentTileNo;
@@ -56,18 +57,11 @@ public class Island {
     String[] aGrassTopRight = {"000000100"};
     String[] aGrassTopLeft = {"000000001"};
 
-    public Chunk getChunk() {
-        return chunk;
-    }
-
-    public void setChunk(Chunk chunk) {
-        this.chunk = chunk;
-    }
-
     public Island(Box2dWorld box2d){
         setupTiles();
         codeTiles();
         generateHitboxes(box2d);
+        addEntities(box2d);
     }
 
     public Tile getCentreTile() {
@@ -76,6 +70,22 @@ public class Island {
 
     public void setCentreTile(Tile centreTile) {
         this.centreTile = centreTile;
+    }
+
+    public Chunk getChunk() {
+        return chunk;
+    }
+
+    public void setChunk(Chunk chunk) {
+        this.chunk = chunk;
+    }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(ArrayList<Entity> entities) {
+        this.entities = entities;
     }
 
     private void setupTiles(){
@@ -243,6 +253,19 @@ public class Island {
         }
     }
 
+    private void addEntities(Box2dWorld box2D) {
+        // Loop all tiles and add random trees
+        for(ArrayList<Tile> row : chunk.getTiles()){
+            for(Tile tile : row){
+                if (tile.isGrass()){
+                    if(MathUtils.random(100) > 90){
+                        entities.add(new Tree(tile.getPos3(), box2D));
+                    }
+                }
+            }
+        }
+    }
+
     private void generateHitboxes(Box2dWorld box2d) {
         chunk.getTiles().forEach(r -> r.forEach(t -> createTileBody(box2d, t)));
     }
@@ -250,6 +273,6 @@ public class Island {
     private void createTileBody(Box2dWorld box2d, Tile tile) {
         Stream.of(tile)
                 .filter(t -> t.isNotPassable() && t.notIsAllWater())
-                .forEach(t -> Box2dHelper.createBody(box2d.getWorld(), chunk.getTileSize(), chunk.getTileSize(), t.getPos3(), BodyDef.BodyType.StaticBody));
+                .forEach(t -> Box2dHelper.createBody(box2d.getWorld(), chunk.getTileSize(), chunk.getTileSize(), 0, 0, t.getPos3(), BodyDef.BodyType.StaticBody));
     }
 }
