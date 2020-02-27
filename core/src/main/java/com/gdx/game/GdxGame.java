@@ -11,6 +11,7 @@ import com.gdx.game.map.Island;
 import com.gdx.game.map.Tile;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
@@ -43,6 +44,8 @@ public class GdxGame extends ApplicationAdapter {
 
 		orthographicCamera.position.lerp(hero.getPos3(), .1f);
 		orthographicCamera.update();
+
+		Collections.sort(island.getEntities());
 
 		drawGame();
 		box2d.tick(orthographicCamera, control);
