@@ -61,7 +61,7 @@ public class Island {
         setupTiles();
         codeTiles();
         generateHitboxes(box2d);
-        addEntities(box2d);
+        generateTreeEntities(box2d);
     }
 
     public Tile getCentreTile() {
@@ -253,17 +253,16 @@ public class Island {
         }
     }
 
-    private void addEntities(Box2dWorld box2D) {
+    private void generateTreeEntities(Box2dWorld box2d) {
         // Loop all tiles and add random trees
-        for(ArrayList<Tile> row : chunk.getTiles()){
-            for(Tile tile : row){
-                if (tile.isGrass()){
-                    if(MathUtils.random(100) > 90){
-                        entities.add(new Tree(tile.getPos3(), box2D));
-                    }
-                }
-            }
-        }
+        chunk.getTiles().forEach(r -> r.forEach(t -> addRandomTrees(box2d, t)));
+    }
+
+    private void addRandomTrees(Box2dWorld box2D, Tile tile) {
+        Stream.of(tile)
+                .filter(Tile::isGrass)
+                .filter(t -> MathUtils.random(100) > 90)
+                .forEach(t -> entities.add(new Tree(tile.getPos3(), box2D)));
     }
 
     private void generateHitboxes(Box2dWorld box2d) {

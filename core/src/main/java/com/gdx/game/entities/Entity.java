@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gdx.game.Enums.ENTITYTYPE;
 
-public class Entity {
+public class Entity implements Comparable<Entity> {
     private Vector3 pos3;
     private Texture texture;
     private float width;
@@ -74,5 +74,13 @@ public class Entity {
 
     public void draw(SpriteBatch batch){
         batch.draw(texture, pos3.x, pos3.y, width, height);
+    }
+
+    @Override
+    public int compareTo(Entity entity) {
+        float tempY =  entity.getPos3().y;
+        float compareY = getPos3().y;
+
+        return Float.compare(tempY, compareY);
     }
 }
