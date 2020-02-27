@@ -9,10 +9,10 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Box2dHelper {
 
-    public static Body createBody(World world, float width, float height, Vector3 pos3, BodyDef.BodyType type) {
+    public static Body createBody(World world, float width, float height, float xOffset, float yOffset, Vector3 pos3, BodyDef.BodyType type) {
         Body body;
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(pos3.x + width/2, pos3.y + height/2);
+        bodyDef.position.set(pos3.x + width/2 + xOffset, pos3.y + height/2 + yOffset);
         bodyDef.angle = 0;
         bodyDef.fixedRotation = true;
         bodyDef.type = type;
