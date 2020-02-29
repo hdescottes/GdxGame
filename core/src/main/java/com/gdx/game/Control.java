@@ -137,19 +137,19 @@ public class Control extends InputAdapter implements InputProcessor {
         this.screenHeight = screenHeight;
     }
 
-    public Control(int screenWidth, int screenHeight, OrthographicCamera camera){
+    public Control(int screenWidth, int screenHeight, OrthographicCamera camera) {
         this.camera = camera;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
     }
 
-    private void setMouseClickedPos(int screenX, int screenY){
+    private void setMouseClickedPos(int screenX, int screenY) {
         // Set mouse position (flip screen Y)
         mouseClickPos.set(screenX, screenHeight - screenY);
         mapClickPos.set(getMapCoords(mouseClickPos));
     }
 
-    public Vector2 getMapCoords(Vector2 mouseCoords){
+    public Vector2 getMapCoords(Vector2 mouseCoords) {
         Vector3 v3 = new Vector3(mouseCoords.x, screenHeight - mouseCoords.y, 0);
         this.camera.unproject(v3);
         return new Vector2(v3.x,v3.y);
@@ -218,9 +218,9 @@ public class Control extends InputAdapter implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(pointer == 0 && button == 0){
+        if(pointer == 0 && button == 0) {
             lmb = true;
-        } else if (pointer == 0 && button == 0){
+        } else if (pointer == 0 && button == 0) {
             rmb = true;
         }
 
@@ -230,10 +230,10 @@ public class Control extends InputAdapter implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if(pointer == 0 && button == 0){
+        if(pointer == 0 && button == 0) {
             lmb = false;
             processedClick = false;
-        } else if (pointer == 0 && button == 0){
+        } else if (pointer == 0 && button == 0) {
             rmb = false;
         }
 

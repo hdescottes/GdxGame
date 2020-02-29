@@ -51,7 +51,7 @@ public class GdxGame extends ApplicationAdapter {
 		// GAME LOGIC
 		hero.update(control);
 
-		for(Entity entity: island.getEntities()){
+		for(Entity entity: island.getEntities()) {
 			entity.tick(Gdx.graphics.getDeltaTime());
 			entity.currentTile = island.getChunk().getTile(entity.body.getPosition());
 			entity.tick(Gdx.graphics.getDeltaTime(), island.getChunk());
@@ -74,8 +74,8 @@ public class GdxGame extends ApplicationAdapter {
 
 		batch.begin();
 		// Draw all tiles in the chunk / chunk rows
-		for(ArrayList<Tile> rows : island.getChunk().getTiles()){
-			for(Tile tile : rows){
+		for(ArrayList<Tile> rows : island.getChunk().getTiles()) {
+			for(Tile tile : rows) {
 				batch.draw(tile.getTexture(), tile.getPos3().x, tile.getPos3().y, tile.getSize(), tile.getSize());
 				if (tile.getSecondaryTexture() != null) {
 					batch.draw(tile.getSecondaryTexture(), tile.getPos3().x, tile.getPos3().y, tile.getSize(), tile.getSize());

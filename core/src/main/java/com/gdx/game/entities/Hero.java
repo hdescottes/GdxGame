@@ -40,8 +40,7 @@ public class Hero extends Entity {
 
         body.setLinearVelocity(directionX * heroSpeed, directionY * heroSpeed);
 
-        getPos3().x = body.getPosition().x - getWidth()/2;
-        getPos3().y = body.getPosition().y - getHeight()/4;
+        updatePositions();
     }
 
     public float getCameraX() {

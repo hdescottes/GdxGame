@@ -10,18 +10,20 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gdx.game.Enums.ENTITYSTATE;
 import com.gdx.game.Enums.ENTITYTYPE;
 import com.gdx.game.Media;
+import com.gdx.game.animation.AnimationUtils;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.map.Chunk;
 import com.gdx.game.map.Tile;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Bird extends Entity {
     private float maxHeight;
     private Tile destTile;
     private TextureRegion tRegion;
-    private static final int BIRD_SPEED = 15;
+    private static final float BIRD_SPEED = 15;
 
     public Bird(Vector3 pos3, Box2dWorld box2d, ENTITYSTATE state) {
         super(Media.tree, Media.birdShadow, 8, 8);
@@ -29,36 +31,27 @@ public class Bird extends Entity {
         this.type = ENTITYTYPE.BIRD;
         this.getPos3().set(getPos3());
         this.body = Box2dHelper.createBody(box2d.getWorld(), getWidth()/2, getHeight()/2, getWidth()/4, 0, pos3, BodyDef.BodyType.StaticBody);
-        //this.sensor = Box2dHelper.createSensor(box2d.getWorld(), getWidth(), getHeight()*.85f, getWidth()/2, getHeight()/3, pos3, BodyDef.BodyType.DynamicBody);
-        //this.hashcode = sensor.getFixtureList().get(0).hashCode();
         this.state = state;
         this.ticks = true;
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-        setTextureRegion();
-        setFlipped();
+        setBirdTextureRegion();
+        AnimationUtils.setFlipped(destVec, tRegion);
 
         batch.draw(Media.birdShadow, getPos3().x, getPos3().y);
-        if(tRegion != null){
-            batch.draw(tRegion, getPos3().x, getPos3().y + getPos3().z);
-        }
+        Optional.ofNullable(tRegion)
+                .ifPresent(t -> batch.draw(t, getPos3().x, getPos3().y + getPos3().z));
     }
 
-    private void setTextureRegion() {
+    private void setBirdTextureRegion() {
         if(isFlying() || isLanding()) {
-            tRegion = Media.birdFlyAnim.getKeyFrame(time, true);
+            tRegion = AnimationUtils.setTextureRegion(Media.birdFlyAnim, time);
         } else if(isWalking()) {
-            tRegion = Media.birdWalkAnim.getKeyFrame(time, true);
+            tRegion = AnimationUtils.setTextureRegion(Media.birdWalkAnim, time);
         } else if(isFeeding()) {
-            tRegion = Media.birdPeckAnim.getKeyFrame(time, true);
-        }
-    }
-
-    private void setFlipped() {
-        if(destVec != null && ((destVec.x > 0 && !tRegion.isFlipX()) || (destVec.x < 0 && tRegion.isFlipX()))) {
-            tRegion.flip(true, false);
+            tRegion = AnimationUtils.setTextureRegion(Media.birdPeckAnim, time);
         }
     }
 
@@ -85,7 +78,6 @@ public class Bird extends Entity {
 
     private void toggleHitboxes(boolean b) {
         body.setActive(b);
-        //sensor.setActive(b);
     }
 
     private void setNewState(float delta) {
@@ -121,13 +113,7 @@ public class Bird extends Entity {
         updatePositions();
     }
 
-    private void updatePositions() {
-        //sensor.setTransform(body.getPosition(),0);
-        getPos3().x = body.getPosition().x - getWidth()/2;
-        getPos3().y = body.getPosition().y - getHeight()/4;
-    }
-
-    private float setHeight() {
+    private int setHeight() {
         return MathUtils.random(10) + 10;
     }
 

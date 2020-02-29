@@ -12,7 +12,7 @@ public class Tile extends Entity {
     private Texture secondaryTexture;
     private TILETYPE tiletype;
     
-    public Tile(int x, int y, int size, TILETYPE tiletype, Texture texture){
+    public Tile(int x, int y, int size, TILETYPE tiletype, Texture texture) {
         super(texture,null,0,0);
         this.getPos3().x = x*size;
         this.getPos3().y = y*size;
