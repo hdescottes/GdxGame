@@ -20,7 +20,7 @@ public class Entity implements Comparable<Entity> {
     public ENTITYTYPE type;
     public ENTITYSTATE state; // For logic and selecting image to draw
     public Body body;
-    public Body sensor;
+    //public Body sensor;
 
     public Boolean ticks; // .tick will only be called if true
     public float time; // Store the time up for the Entity
