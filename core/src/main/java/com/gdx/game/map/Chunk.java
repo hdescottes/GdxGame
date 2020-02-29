@@ -1,5 +1,7 @@
 package com.gdx.game.map;
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +66,20 @@ public class Chunk {
                 .filter(c -> c.size() > col && col >= 0)
                 .map(c -> c.get(col))
                 .orElse(null);
+    }
+
+    public Tile getTile(Vector2 vector2) {
+        ArrayList<Tile> chunkRow;
+        int row = (int) ((vector2.y*getTileSize()/2) / getNumberRows());
+        int col = (int) ((vector2.x*getTileSize()/2) / getNumberCols());
+        if(getTiles().size() > row && row >= 0){
+            chunkRow = getTiles().get(row);
+
+            if(chunkRow != null && chunkRow.size() > col && col >= 0){
+                return chunkRow.get(col);
+            }
+        }
+        return null;
     }
 
     public String getTileCode(int row, int col){

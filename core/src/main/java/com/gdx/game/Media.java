@@ -2,12 +2,28 @@ package com.gdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Media {
 
     // ENTITIES
     public static final Texture hero = new Texture("entities/hero/hero.png");
     public static final Texture tree = new Texture("entities/tree/tree.png");
+
+    public static final Texture birdPeck = new Texture("entities/bird/bird_peck.png");
+    public static final Texture birdWalk = new Texture("entities/bird/bird_walk.png");
+    public static final Texture birdFly  = new Texture("entities/bird/bird_fly.png");
+    public static final Texture birdShadow = new Texture("entities/bird/bird_shadow.png");
+
+    // ANIMATIONS
+    protected static final TextureRegion[] birdWalkFrames = TextureRegion.split(birdWalk, 10, 9)[0];
+    protected static final TextureRegion[] birdPeckFrames = TextureRegion.split(birdPeck, 10, 9)[0];
+    protected static final TextureRegion[] birdFlyFrames = TextureRegion.split(birdFly, 10, 9)[0];
+
+    public static final Animation<TextureRegion> birdWalkAnim = new Animation<>(.1f, birdWalkFrames);
+    public static final Animation<TextureRegion> birdPeckAnim = new Animation<>(.1f, birdPeckFrames);
+    public static final Animation<TextureRegion> birdFlyAnim = new Animation<>(.1f, birdFlyFrames);
 
     // TILES
     public static final Texture grass01 = new Texture("8x8/grass/grass_01.png");

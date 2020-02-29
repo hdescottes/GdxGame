@@ -5,7 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
+import com.gdx.game.Enums.ENTITYSTATE;
 import com.gdx.game.box2d.Box2dWorld;
+import com.gdx.game.entities.Bird;
+import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.Hero;
 import com.gdx.game.map.Island;
 import com.gdx.game.map.Tile;
@@ -20,14 +24,19 @@ public class GdxGame extends ApplicationAdapter {
 	private Control control;
 	private Island island;
 	private Hero hero;
+	private float time;
 
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
 		box2d = new Box2dWorld();
 		island = new Island(box2d);
-		hero = new Hero(island.getCentreTile().getPos3(), box2d);
+		Vector3 islandCentrePos3 = island.getCentreTile().getPos3();
+		hero = new Hero(islandCentrePos3, box2d);
+		Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, ENTITYSTATE.FLYING);
+
 		island.getEntities().add(hero);
+		island.getEntities().add(bird);
 
 		Camera camera = new Camera();
 		orthographicCamera = camera.createCamera();
@@ -42,6 +51,12 @@ public class GdxGame extends ApplicationAdapter {
 		// GAME LOGIC
 		hero.update(control);
 
+		for(Entity entity: island.getEntities()){
+			entity.tick(Gdx.graphics.getDeltaTime());
+			entity.currentTile = island.getChunk().getTile(entity.body.getPosition());
+			entity.tick(Gdx.graphics.getDeltaTime(), island.getChunk());
+		}
+
 		orthographicCamera.position.lerp(hero.getPos3(), .1f);
 		orthographicCamera.update();
 
@@ -49,6 +64,8 @@ public class GdxGame extends ApplicationAdapter {
 
 		drawGame();
 		box2d.tick(orthographicCamera, control);
+
+		time += Gdx.graphics.getDeltaTime();
 	}
 
 	private void drawGame() {

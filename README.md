@@ -10,5 +10,6 @@ It is a roguelike RPG 2D base game.</p>
 <p>The map is actually a random quadrilateral island area with random trees.</p>
 
 #### Entities
-<p>For the moment, there is only a hero that can move inside the island with the direction pad or with "WASD". <br>
-The hero is only a png image. It will become, soon, an animated 2D sprite.</p>
+- The hero is only a png image. It will become, soon, an animated 2D sprite. <br>
+The hero move inside the island with the direction pad or with "WASD".
+- The bird is an animated sprite. It has a random behaviour and stay inside the island (see https://github.com/libgdx/gdx-ai/wiki/State-Machine to improve the AI)
