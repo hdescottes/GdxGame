@@ -57,7 +57,7 @@ public class Island {
     String[] aGrassTopRight = {"000000100"};
     String[] aGrassTopLeft = {"000000001"};
 
-    public Island(Box2dWorld box2d){
+    public Island(Box2dWorld box2d) {
         setupTiles();
         codeTiles();
         generateHitboxes(box2d);
@@ -88,7 +88,7 @@ public class Island {
         this.entities = entities;
     }
 
-    private void setupTiles(){
+    private void setupTiles() {
         chunk = new Chunk(33,33, 8);
 
         int currentRow = 0;
@@ -109,8 +109,8 @@ public class Island {
         // If number of tiles is needed.
         // int num_tiles = ((maxCol - minCol)-1) * ((maxRow - minRow)-1);
 
-        for(int row = 0; row < chunk.getNumberRows(); row ++){
-            for(int col = 0; col < chunk.getNumberCols(); col ++){
+        for(int row = 0; row < chunk.getNumberRows(); row ++) {
+            for(int col = 0; col < chunk.getNumberCols(); col ++) {
                 // Create TILE
                 Tile tile = new Tile(col, row, chunk.getTileSize(), TILETYPE.WATER, randomWater());
 
@@ -131,11 +131,11 @@ public class Island {
     }
 
     private void createIsland(int row, int col, Tile tile, int minRow, int maxRow, int minCol, int maxCol, int firstTileRow) {
-        if(row > minRow && row < maxRow && col > minCol && col < maxCol){
+        if(row > minRow && row < maxRow && col > minCol && col < maxCol) {
             tile.setTexture(randomGrass());
             tile.setTiletype(TILETYPE.GRASS);
 
-            if(row == firstTileRow + 1){
+            if(row == firstTileRow + 1) {
                 tile.setTexture(cliff);
                 tile.setTiletype(TILETYPE.CLIFF);
             } else {
@@ -146,12 +146,12 @@ public class Island {
 
     private HashMap<Integer, ArrayList<Tile>> addTilesToChunk(int row, int col, Tile tile, int currentRow, ArrayList<Tile> chunkRow, HashMap<Integer, ArrayList<Tile>> map) {
         // CHUNK ROW
-        if(currentRow == row){
+        if(currentRow == row) {
             // Add tile to current row
             chunkRow.add(tile);
 
             // Last row and column?
-            if (row == chunk.getNumberRows() - 1 && col == chunk.getNumberCols() - 1){
+            if (row == chunk.getNumberRows() - 1 && col == chunk.getNumberCols() - 1) {
                 chunk.getTiles().add(chunkRow);
             }
             map.put(currentRow, chunkRow);
@@ -176,24 +176,24 @@ public class Island {
     private void updateImage(Tile tile) {
         // Secondary Texture is to add edges to tiles
         // TODO: Add array of textures per tile
-        if(Arrays.asList(aGrassLeft).contains(tile.getCode())){
+        if(Arrays.asList(aGrassLeft).contains(tile.getCode())) {
             tile.setSecondaryTexture(grassLeft);
-        } else if(Arrays.asList(aGrassRight).contains(tile.getCode())){
+        } else if(Arrays.asList(aGrassRight).contains(tile.getCode())) {
             tile.setSecondaryTexture(grassRight);
-        } else if(Arrays.asList(aGrassREnd).contains(tile.getCode())){
+        } else if(Arrays.asList(aGrassREnd).contains(tile.getCode())) {
             tile.setSecondaryTexture(grassLeftUpperEdge);
-        } else if(Arrays.asList(aGrassLEnd).contains(tile.getCode())){
+        } else if(Arrays.asList(aGrassLEnd).contains(tile.getCode())) {
             tile.setSecondaryTexture(grassRightUpperEdge);
-        } else if(Arrays.asList(aGrassTop).contains(tile.getCode())){
+        } else if(Arrays.asList(aGrassTop).contains(tile.getCode())) {
             tile.setSecondaryTexture(grassTop);
-        } else if(Arrays.asList(aGrassTopRight).contains(tile.getCode())){
+        } else if(Arrays.asList(aGrassTopRight).contains(tile.getCode())) {
             tile.setSecondaryTexture(grassTopRight);
-        } else if(Arrays.asList(aGrassTopLeft).contains(tile.getCode())){
+        } else if(Arrays.asList(aGrassTopLeft).contains(tile.getCode())) {
             tile.setSecondaryTexture(grassTopLeft);
         }        
     }
     
-    private Texture randomGrass(){
+    private Texture randomGrass() {
         Texture grass;
         int tile = MathUtils.random(20);
         switch (tile) {
@@ -211,7 +211,7 @@ public class Island {
         return grass;
     }
 
-    private Texture randomWater(){
+    private Texture randomWater() {
         Texture water;
         int tile = MathUtils.random(20);
         switch (tile) {
@@ -233,7 +233,7 @@ public class Island {
         // Loop all tiles and set the initial code
      
         // 1 CHUNK ONLY ATM
-        for(ArrayList<Tile> row : chunk.getTiles()){
+        for(ArrayList<Tile> row : chunk.getTiles()) {
             for(Tile tile : row){ 
                 // Check all surrounding tiles and set 1 for pass 0 for non pass
                 // 0 0 0
@@ -243,8 +243,8 @@ public class Island {
                 int[] rows = {1,0,-1}; //1 for row above, 0 for same, -1 for row below
                 int[] cols = {-1,0,1};
                 
-                for(int r: rows){
-                    for(int c: cols){
+                for(int r: rows) {
+                    for(int c: cols) {
                         tile.setCode(tile.getCode() + chunk.getTileCode(tile.getRow() + r, tile.getCol() + c));
                         updateImage(tile);
                     }

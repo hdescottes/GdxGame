@@ -13,7 +13,7 @@ public class Hero extends Entity {
     private int heroSpeed;
 
     public Hero(Vector3 pos3, Box2dWorld box2d) {
-        super(Media.hero, 8, 8);
+        super(Media.hero,null,8, 8);
         this.type = ENTITYTYPE.HERO;
         this.getPos3().x = pos3.x;
         this.getPos3().y = pos3.y;
@@ -40,8 +40,7 @@ public class Hero extends Entity {
 
         body.setLinearVelocity(directionX * heroSpeed, directionY * heroSpeed);
 
-        getPos3().x = body.getPosition().x - getWidth()/2;
-        getPos3().y = body.getPosition().y - getHeight()/4;
+        updatePositions();
     }
 
     public float getCameraX() {

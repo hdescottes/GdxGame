@@ -1,8 +1,11 @@
 package com.gdx.game.map;
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Chunk {
     private int numberRows;
@@ -18,7 +21,7 @@ public class Chunk {
                 Tile, Tile , Tile*/
     private ArrayList<ArrayList<Tile>> tiles;
     
-    public Chunk(int numberRows, int numberCols, int tileSize){
+    public Chunk(int numberRows, int numberCols, int tileSize) {
         this.tiles = new ArrayList<>();
         this.numberRows = numberRows;
         this.numberCols = numberCols;
@@ -57,7 +60,7 @@ public class Chunk {
         this.tiles = tiles;
     }
 
-    public Tile getTile(int row, int col){
+    public Tile getTile(int row, int col) {
         return Optional.of(row)
                 .filter(r -> tiles.size() > r && r >= 0)
                 .map(r -> tiles.get(r))
@@ -66,7 +69,18 @@ public class Chunk {
                 .orElse(null);
     }
 
-    public String getTileCode(int row, int col){
+    public Tile getTile(Vector2 vector2) {
+        int row = (int) ((vector2.y*getTileSize()/2) / getNumberRows());
+        int col = (int) ((vector2.x*getTileSize()/2) / getNumberCols());
+        return Optional.ofNullable(getTiles())
+                .filter(t -> t.size() > row && row >= 0)
+                .map(t -> t.get(row))
+                .filter(c -> c.size() > col && col >= 0)
+                .map(c -> c.get(col))
+                .orElse(null);
+    }
+
+    public String getTileCode(int row, int col) {
         return Optional.of(row)
                 .filter(r -> tiles.size() > r && r >= 0)
                 .map(r -> tiles.get(r))
