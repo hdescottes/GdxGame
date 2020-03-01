@@ -272,6 +272,6 @@ public class Island {
     private void createTileBody(Box2dWorld box2d, Tile tile) {
         Stream.of(tile)
                 .filter(t -> t.isNotPassable() && t.notIsAllWater())
-                .forEach(t -> Box2dHelper.createBody(box2d.getWorld(), chunk.getTileSize(), chunk.getTileSize(), 0, 0, t.getPos3(), BodyDef.BodyType.StaticBody));
+                .forEach(t -> Box2dHelper.createBody(box2d.getWorld(), chunk.getTileSize(), chunk.getTileSize(), 0, 0, t.getPos3(), null, BodyDef.BodyType.StaticBody));
     }
 }

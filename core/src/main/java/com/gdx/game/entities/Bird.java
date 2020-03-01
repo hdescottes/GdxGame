@@ -30,7 +30,8 @@ public class Bird extends Entity {
         this.maxHeight = setHeight();
         this.type = ENTITYTYPE.BIRD;
         this.getPos3().set(getPos3());
-        this.body = Box2dHelper.createBody(box2d.getWorld(), getWidth()/2, getHeight()/2, getWidth()/4, 0, pos3, BodyDef.BodyType.StaticBody);
+        Vector2 adjustHitbox = new Vector2(-getWidth() / 4, -getHeight() / 8);
+        this.body = Box2dHelper.createBody(box2d.getWorld(), getWidth()/4, getHeight()/4,getWidth()/4, 0, pos3, adjustHitbox, BodyDef.BodyType.StaticBody);
         this.state = state;
         this.ticks = true;
     }
@@ -40,9 +41,9 @@ public class Bird extends Entity {
         setBirdTextureRegion();
         AnimationUtils.setFlipped(destVec, tRegion);
 
-        batch.draw(Media.birdShadow, getPos3().x, getPos3().y);
+        batch.draw(Media.birdShadow, getPos3().x, getPos3().y, getWidth()/2, getHeight()/4);
         Optional.ofNullable(tRegion)
-                .ifPresent(t -> batch.draw(t, getPos3().x, getPos3().y + getPos3().z));
+                .ifPresent(t -> batch.draw(t, getPos3().x, getPos3().y + getPos3().z, getWidth()/2, getHeight()/2));
     }
 
     private void setBirdTextureRegion() {
