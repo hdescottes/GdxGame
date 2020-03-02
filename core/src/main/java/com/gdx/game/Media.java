@@ -16,10 +16,11 @@ public class Media {
     public static final Texture birdFly  = new Texture("entities/bird/bird_fly.png");
     public static final Texture birdShadow = new Texture("entities/bird/bird_shadow.png");
 
-    public static final Texture heroWalkUp = new Texture("entities/hero/Hero_1_walking_up.png");
-    public static final Texture heroWalkDown = new Texture("entities/hero/Hero_1_walking_down.png");
-    public static final Texture heroWalkRight  = new Texture("entities/hero/Hero_1_walking_right.png");
-    public static final Texture heroWalkLeft = new Texture("entities/hero/Hero_1_walking_left.png");
+    public static final Texture heroWalkUp = new Texture("entities/hero/hero_1_walking_up.png");
+    public static final Texture heroWalkDown = new Texture("entities/hero/hero_1_walking_down.png");
+    public static final Texture heroWalkRight  = new Texture("entities/hero/hero_1_walking_right.png");
+    public static final Texture heroWalkLeft = new Texture("entities/hero/hero_1_walking_left.png");
+    public static final Texture heroShadow = new Texture("entities/hero/hero_shadow.png");
 
     // ANIMATIONS
     protected static final TextureRegion[] birdWalkFrames = TextureRegion.split(birdWalk, 10, 9)[0];

@@ -67,7 +67,7 @@ public class Hero extends Entity {
         setHeroTextureRegion();
         //AnimationUtils.setFlipped(destVec, tRegion);
 
-        //batch.draw(Media.birdShadow, getPos3().x, getPos3().y);
+        batch.draw(Media.heroShadow, getPos3().x, getPos3().y - (float)1.6, getWidth(), getHeight()/2);
         Optional.ofNullable(tRegion)
                 .ifPresent(t -> batch.draw(t, getPos3().x, getPos3().y, getWidth(), getHeight()*(float)1.2));
     }
