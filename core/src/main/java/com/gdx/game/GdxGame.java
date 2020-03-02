@@ -32,7 +32,7 @@ public class GdxGame extends ApplicationAdapter {
 		box2d = new Box2dWorld();
 		island = new Island(box2d);
 		Vector3 islandCentrePos3 = island.getCentreTile().getPos3();
-		hero = new Hero(islandCentrePos3, box2d);
+		hero = new Hero(islandCentrePos3, box2d, ENTITYSTATE.WALKING_DOWN);
 		Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, ENTITYSTATE.FLYING);
 
 		island.getEntities().add(hero);

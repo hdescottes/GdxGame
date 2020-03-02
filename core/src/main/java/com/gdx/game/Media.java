@@ -16,6 +16,11 @@ public class Media {
     public static final Texture birdFly  = new Texture("entities/bird/bird_fly.png");
     public static final Texture birdShadow = new Texture("entities/bird/bird_shadow.png");
 
+    public static final Texture heroWalkUp = new Texture("entities/hero/Hero_1_walking_up.png");
+    public static final Texture heroWalkDown = new Texture("entities/hero/Hero_1_walking_down.png");
+    public static final Texture heroWalkRight  = new Texture("entities/hero/Hero_1_walking_right.png");
+    public static final Texture heroWalkLeft = new Texture("entities/hero/Hero_1_walking_left.png");
+
     // ANIMATIONS
     protected static final TextureRegion[] birdWalkFrames = TextureRegion.split(birdWalk, 10, 9)[0];
     protected static final TextureRegion[] birdPeckFrames = TextureRegion.split(birdPeck, 10, 9)[0];
@@ -24,6 +29,16 @@ public class Media {
     public static final Animation<TextureRegion> birdWalkAnim = new Animation<>(.1f, birdWalkFrames);
     public static final Animation<TextureRegion> birdPeckAnim = new Animation<>(.1f, birdPeckFrames);
     public static final Animation<TextureRegion> birdFlyAnim = new Animation<>(.1f, birdFlyFrames);
+
+    public static final TextureRegion[] heroWalkUpFrames = TextureRegion.split(heroWalkUp, 32, 37)[0];
+    public static final TextureRegion[] heroWalkDownFrames = TextureRegion.split(heroWalkDown, 32, 37)[0];
+    public static final TextureRegion[] heroWalkRightFrames = TextureRegion.split(heroWalkRight, 32, 37)[0];
+    public static final TextureRegion[] heroWalkLeftFrames = TextureRegion.split(heroWalkLeft, 32, 37)[0];
+
+    public static final Animation<TextureRegion> heroWalkUpAnim = new Animation<>(.1f, heroWalkUpFrames);
+    public static final Animation<TextureRegion> heroWalkDownAnim = new Animation<>(.1f, heroWalkDownFrames);
+    public static final Animation<TextureRegion> heroWalkRightAnim = new Animation<>(.1f, heroWalkRightFrames);
+    public static final Animation<TextureRegion> heroWalkLeftAnim = new Animation<>(.1f, heroWalkLeftFrames);
 
     // TILES
     public static final Texture grass01 = new Texture("8x8/grass/grass_01.png");
