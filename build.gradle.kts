@@ -1,15 +1,12 @@
 val gdxVersion by extra {"1.9.10"}
 val box2DLightsVersion by extra {"1.4"}
-val jUnitJupiterVersion by extra {"5.5.2"}
+val jUnitRunnerVersion by extra {"5.0.0-ALPHA"}
+val mockitoVersion by extra {"3.3.0"}
 val assertJVersion by extra {"3.8.0"}
 
 plugins {
     java
     `java-library`
-}
-
-tasks.named<Test>("test") {
-    useJUnitPlatform()
 }
 
 allprojects {
@@ -24,9 +21,9 @@ allprojects {
     }
 
     dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitJupiterVersion")
+        testImplementation("org.mockito:mockito-core:$mockitoVersion")
+        testImplementation("org.junit:junit4-runner:$jUnitRunnerVersion")
         testImplementation("org.assertj:assertj-core:$assertJVersion")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitJupiterVersion")
     }
 }
 
@@ -39,7 +36,6 @@ project(":desktop") {
     dependencies {
         implementation(project(":core"))
         implementation("com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion")
-        implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
         implementation("com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop")
         implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop")
     }
@@ -53,8 +49,10 @@ project(":core") {
 
     dependencies {
         implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
+        implementation("com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion")
         implementation("com.badlogicgames.gdx:gdx-box2d:$gdxVersion")
         implementation("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
+        implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
         implementation("com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion")
     }
 }
