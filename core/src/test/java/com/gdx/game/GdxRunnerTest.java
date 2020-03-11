@@ -3,23 +3,21 @@ package com.gdx.game;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.BlockJUnit4ClassRunner;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
+import org.junit.jupiter.api.extension.Extension;
+import org.junit.platform.launcher.TestExecutionListener;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Allow to run test on Gdx app logic.
  */
-public class GdxRunnerTest extends BlockJUnit4ClassRunner implements ApplicationListener {
+public class GdxRunnerTest implements ApplicationListener, Extension {
 
-    private final Map<FrameworkMethod, RunNotifier> invokeInRender = new HashMap<>();
+    private final Map<Method, TestExecutionListener> invokeInRender = new HashMap<>();
 
-    public GdxRunnerTest(Class<?> klass) throws InitializationError {
-        super(klass);
+    public GdxRunnerTest() {
         HeadlessApplicationConfiguration conf = new HeadlessApplicationConfiguration();
 
         new HeadlessApplication(this, conf);
@@ -36,8 +34,8 @@ public class GdxRunnerTest extends BlockJUnit4ClassRunner implements Application
     @Override
     public void render() {
         synchronized (invokeInRender) {
-            for (Map.Entry<FrameworkMethod, RunNotifier> each : invokeInRender.entrySet()) {
-                super.runChild(each.getKey(), each.getValue());
+            for (Map.Entry<Method, TestExecutionListener> each : invokeInRender.entrySet()) {
+                runChild(each.getKey(), each.getValue());
             }
             invokeInRender.clear();
         }
@@ -55,11 +53,10 @@ public class GdxRunnerTest extends BlockJUnit4ClassRunner implements Application
     public void dispose() {
     }
 
-    @Override
-    protected void runChild(FrameworkMethod method, RunNotifier notifier) {
+    protected void runChild(Method method, TestExecutionListener testExecutionListener) {
         synchronized (invokeInRender) {
             //add for invoking in render phase, where gl context is available
-            invokeInRender.put(method, notifier);
+            invokeInRender.put(method, testExecutionListener);
         }
         //wait until that test was invoked
         waitUntilInvokedInRenderMethod();

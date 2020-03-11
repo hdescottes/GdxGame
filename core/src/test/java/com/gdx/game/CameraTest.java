@@ -4,20 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@RunWith(GdxRunnerTest.class)
+@ExtendWith(GdxRunnerTest.class)
 public class CameraTest {
 
     private Camera camera = new Camera();
 
-    @Before
+    @BeforeEach
     public void init() {
         Gdx.graphics = mock(Graphics.class);
         Gdx.input = mock(Input.class);

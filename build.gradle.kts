@@ -1,8 +1,9 @@
 val gdxVersion by extra {"1.9.10"}
-val box2DLightsVersion by extra {"1.4"}
-val jUnitRunnerVersion by extra {"5.0.0-ALPHA"}
+val box2DLightsVersion by extra {"1.5"}
+val jUnitPlatformVersion by extra {"1.6.0"}
+val jUnitJupiterVersion by extra {"5.6.0"}
 val mockitoVersion by extra {"3.3.0"}
-val assertJVersion by extra {"3.8.0"}
+val assertJVersion by extra {"3.15.0"}
 
 plugins {
     java
@@ -16,14 +17,20 @@ allprojects {
     apply(plugin = "java")
     apply(plugin = "java-library")
 
+    tasks.named<Test>("test") {
+        useJUnitPlatform()
+    }
+
     repositories {
         mavenCentral()
     }
 
     dependencies {
+        testImplementation("org.junit.platform:junit-platform-launcher:$jUnitPlatformVersion")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitJupiterVersion")
         testImplementation("org.mockito:mockito-core:$mockitoVersion")
-        testImplementation("org.junit:junit4-runner:$jUnitRunnerVersion")
         testImplementation("org.assertj:assertj-core:$assertJVersion")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitJupiterVersion")
     }
 }
 
