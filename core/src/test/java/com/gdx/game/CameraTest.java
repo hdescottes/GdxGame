@@ -13,18 +13,18 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(GdxRunnerTest.class)
-public class CameraTest {
+class CameraTest {
 
     private Camera camera = new Camera();
 
     @BeforeEach
-    public void init() {
+    void init() {
         Gdx.graphics = mock(Graphics.class);
         Gdx.input = mock(Input.class);
     }
 
     @Test
-    public void testCreateCamera_ShouldSucceed() {
+    void testCreateCamera_ShouldSucceed() {
         given(Gdx.graphics.getWidth()).willReturn(800);
         given(Gdx.graphics.getHeight()).willReturn(600);
 
@@ -35,7 +35,7 @@ public class CameraTest {
     }
 
     @Test
-    public void testInsertControl_ShouldSucceed() {
+    void testInsertControl_ShouldSucceed() {
         given(Gdx.graphics.getWidth()).willReturn(800);
         given(Gdx.graphics.getHeight()).willReturn(600);
 

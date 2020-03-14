@@ -11,7 +11,7 @@ import static com.badlogic.gdx.Input.Keys;
 
 public class Control extends InputAdapter implements InputProcessor {
     // CAMERA
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
 
     // DIRECTIONS
     private boolean up;
@@ -20,8 +20,8 @@ public class Control extends InputAdapter implements InputProcessor {
     private boolean right;
 
     // MOUSE
-    private boolean lmb;
-    private boolean rmb;
+    private boolean leftMouseButton;
+    private boolean rightMouseButton;
     private boolean processedClick;
     private Vector2 mouseClickPos = new Vector2();
     private Vector2 mapClickPos = new Vector2();
@@ -33,60 +33,36 @@ public class Control extends InputAdapter implements InputProcessor {
     private int screenWidth;
     private int screenHeight;
 
-    public OrthographicCamera getCamera() {
-        return camera;
-    }
-
-    public void setCamera(OrthographicCamera camera) {
-        this.camera = camera;
-    }
-
     public boolean isUp() {
         return up;
-    }
-
-    public void setUp(boolean up) {
-        this.up = up;
     }
 
     public boolean isDown() {
         return down;
     }
 
-    public void setDown(boolean down) {
-        this.down = down;
-    }
-
     public boolean isLeft() {
         return left;
-    }
-
-    public void setLeft(boolean left) {
-        this.left = left;
     }
 
     public boolean isRight() {
         return right;
     }
 
-    public void setRight(boolean right) {
-        this.right = right;
+    public boolean isLeftMouseButton() {
+        return leftMouseButton;
     }
 
-    public boolean isLmb() {
-        return lmb;
+    public void setLeftMouseButton(boolean leftMouseButton) {
+        this.leftMouseButton = leftMouseButton;
     }
 
-    public void setLmb(boolean lmb) {
-        this.lmb = lmb;
+    public boolean isRightMouseButton() {
+        return rightMouseButton;
     }
 
-    public boolean isRmb() {
-        return rmb;
-    }
-
-    public void setRmb(boolean rmb) {
-        this.rmb = rmb;
+    public void setRightMouseButton(boolean rightMouseButton) {
+        this.rightMouseButton = rightMouseButton;
     }
 
     public boolean isProcessedClick() {
@@ -152,7 +128,7 @@ public class Control extends InputAdapter implements InputProcessor {
     public Vector2 getMapCoords(Vector2 mouseCoords) {
         Vector3 v3 = new Vector3(mouseCoords.x, screenHeight - mouseCoords.y, 0);
         this.camera.unproject(v3);
-        return new Vector2(v3.x,v3.y);
+        return new Vector2(v3.x, v3.y);
     }
 
     @Override
@@ -219,9 +195,9 @@ public class Control extends InputAdapter implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if(pointer == 0 && button == 0) {
-            lmb = true;
+            leftMouseButton = true;
         } else if (pointer == 0 && button == 0) {
-            rmb = true;
+            rightMouseButton = true;
         }
 
         setMouseClickedPos(screenX, screenY);
@@ -231,10 +207,10 @@ public class Control extends InputAdapter implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if(pointer == 0 && button == 0) {
-            lmb = false;
+            leftMouseButton = false;
             processedClick = false;
         } else if (pointer == 0 && button == 0) {
-            rmb = false;
+            rightMouseButton = false;
         }
 
         setMouseClickedPos(screenX, screenY);
