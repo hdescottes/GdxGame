@@ -56,10 +56,9 @@ project(":core") {
 
     dependencies {
         implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
-        implementation("com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion")
         implementation("com.badlogicgames.gdx:gdx-box2d:$gdxVersion")
-        implementation("com.badlogicgames.gdx:gdx-freetype:$gdxVersion")
         implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
-        implementation("com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion")
+        testImplementation("com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion")
+        testImplementation("com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop")
     }
 }
