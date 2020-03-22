@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.Control;
+import com.gdx.game.manager.ControlManager;
 import com.gdx.game.Enums.ENTITYSTATE;
 import com.gdx.game.Enums.ENTITYTYPE;
 import com.gdx.game.Media;
@@ -31,29 +31,29 @@ public class Hero extends Entity {
         this.body = Box2dHelper.createBody(box2d.getWorld(), getWidth()/2, getHeight()/2, getWidth()/4, 0, pos3, null, BodyDef.BodyType.DynamicBody);
     }
 
-    public void update(Control control) {
+    public void update(ControlManager controlManager) {
         float directionX = getDirectionX();
         float directionY = getDirectionY();
 
-        if(control.isDown()) {
+        if(controlManager.isDown()) {
             directionY = -1 ;
             state = ENTITYSTATE.WALKING_DOWN;
         } else if(state == ENTITYSTATE.WALKING_DOWN){
             state = ENTITYSTATE.LOOK_DOWN;
         }
-        if(control.isUp()) {
+        if(controlManager.isUp()) {
             directionY = 1 ;
             state = ENTITYSTATE.WALKING_UP;
         } else if(state == ENTITYSTATE.WALKING_UP){
             state = ENTITYSTATE.LOOK_UP;
         }
-        if(control.isLeft()) {
+        if(controlManager.isLeft()) {
             directionX = -1;
             state = ENTITYSTATE.WALKING_LEFT;
         } else if(state == ENTITYSTATE.WALKING_LEFT){
             state = ENTITYSTATE.LOOK_LEFT;
         }
-        if(control.isRight()) {
+        if(controlManager.isRight()) {
             directionX = 1;
             state = ENTITYSTATE.WALKING_RIGHT;
         } else if(state == ENTITYSTATE.WALKING_RIGHT){

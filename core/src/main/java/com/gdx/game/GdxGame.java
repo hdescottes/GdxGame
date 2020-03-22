@@ -11,6 +11,8 @@ import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Bird;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.Hero;
+import com.gdx.game.manager.CameraManager;
+import com.gdx.game.manager.ControlManager;
 import com.gdx.game.map.Island;
 import com.gdx.game.map.Tile;
 
@@ -21,7 +23,7 @@ public class GdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private OrthographicCamera orthographicCamera;
 	private Box2dWorld box2d;
-	private Control control;
+	private ControlManager controlManager;
 	private Island island;
 	private Hero hero;
 	private float time;
@@ -38,9 +40,9 @@ public class GdxGame extends ApplicationAdapter {
 		island.getEntities().add(hero);
 		island.getEntities().add(bird);
 
-		Camera camera = new Camera();
-		orthographicCamera = camera.createCamera();
-		control = camera.insertControl(orthographicCamera);
+		CameraManager cameraManager = new CameraManager();
+		orthographicCamera = cameraManager.createCamera();
+		controlManager = cameraManager.insertControl(orthographicCamera);
 	}
 
 	@Override
@@ -49,7 +51,7 @@ public class GdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// GAME LOGIC
-		hero.update(control);
+		hero.update(controlManager);
 
 		for(Entity entity: island.getEntities()) {
 			entity.tick(Gdx.graphics.getDeltaTime());
@@ -63,7 +65,7 @@ public class GdxGame extends ApplicationAdapter {
 		Collections.sort(island.getEntities());
 
 		drawGame();
-		box2d.tick(orthographicCamera, control);
+		box2d.tick(orthographicCamera, controlManager);
 
 		time += Gdx.graphics.getDeltaTime();
 	}

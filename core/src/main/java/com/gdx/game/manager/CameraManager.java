@@ -1,9 +1,10 @@
-package com.gdx.game;
+package com.gdx.game.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.gdx.game.manager.ControlManager;
 
-public class Camera {
+public class CameraManager {
 
     public OrthographicCamera createCamera() {
         // Display Size
@@ -19,9 +20,9 @@ public class Camera {
         return camera;
     }
 
-    public Control insertControl(OrthographicCamera camera) {
-        Control control = new Control((int) camera.viewportWidth, (int) camera.viewportHeight, camera);
-        Gdx.input.setInputProcessor(control);
-        return control;
+    public ControlManager insertControl(OrthographicCamera camera) {
+        ControlManager controlManager = new ControlManager((int) camera.viewportWidth, (int) camera.viewportHeight, camera);
+        Gdx.input.setInputProcessor(controlManager);
+        return controlManager;
     }
 }

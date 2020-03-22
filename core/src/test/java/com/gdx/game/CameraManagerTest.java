@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.gdx.game.manager.CameraManager;
+import com.gdx.game.manager.ControlManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +15,9 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(GdxRunnerTest.class)
-class CameraTest {
+class CameraManagerTest {
 
-    private Camera camera = new Camera();
+    private CameraManager cameraManager = new CameraManager();
 
     @BeforeEach
     void init() {
@@ -28,7 +30,7 @@ class CameraTest {
         given(Gdx.graphics.getWidth()).willReturn(800);
         given(Gdx.graphics.getHeight()).willReturn(600);
 
-        OrthographicCamera orthographicCamera = camera.createCamera();
+        OrthographicCamera orthographicCamera = cameraManager.createCamera();
 
         assertThat(orthographicCamera).isNotNull();
         assertThat(orthographicCamera.zoom).isEqualTo(.4f);
@@ -39,11 +41,11 @@ class CameraTest {
         given(Gdx.graphics.getWidth()).willReturn(800);
         given(Gdx.graphics.getHeight()).willReturn(600);
 
-        OrthographicCamera orthographicCamera = camera.createCamera();
-        Control control = camera.insertControl(orthographicCamera);
+        OrthographicCamera orthographicCamera = cameraManager.createCamera();
+        ControlManager controlManager = cameraManager.insertControl(orthographicCamera);
 
-        assertThat(control).isNotNull();
-        assertThat(control.getScreenWidth()).isEqualTo((int) orthographicCamera.viewportWidth);
-        assertThat(control.getScreenHeight()).isEqualTo((int) orthographicCamera.viewportHeight);
+        assertThat(controlManager).isNotNull();
+        assertThat(controlManager.getScreenWidth()).isEqualTo((int) orthographicCamera.viewportWidth);
+        assertThat(controlManager.getScreenHeight()).isEqualTo((int) orthographicCamera.viewportHeight);
     }
 }
