@@ -1,5 +1,7 @@
 package com.gdx.game.entities;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
@@ -10,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.gdx.game.Enums.ENTITYSTATE;
 import com.gdx.game.Enums.ENTITYTYPE;
 import com.gdx.game.Media;
-import com.gdx.game.animation.AnimationUtils;
+import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.map.Chunk;
@@ -24,6 +26,7 @@ public class Bird extends Entity {
     private Tile destTile;
     private TextureRegion tRegion;
     private static final float BIRD_SPEED = 15;
+    private AnimationManager animationManager = new AnimationManager();
 
     public Bird(Vector3 pos3, Box2dWorld box2d, ENTITYSTATE state) {
         super(Media.tree, Media.birdShadow, 8, 8);
@@ -39,7 +42,7 @@ public class Bird extends Entity {
     @Override
     public void draw(SpriteBatch batch) {
         setBirdTextureRegion();
-        AnimationUtils.setFlipped(destVec, tRegion);
+        animationManager.setFlipped(destVec, tRegion);
 
         batch.draw(Media.birdShadow, getPos3().x, getPos3().y, getWidth()/2, getHeight()/4);
         Optional.ofNullable(tRegion)
@@ -48,12 +51,20 @@ public class Bird extends Entity {
 
     private void setBirdTextureRegion() {
         if(isFlying() || isLanding()) {
-            tRegion = AnimationUtils.setTextureRegion(Media.birdFlyAnim, time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(Media.birdFly)), time);
         } else if(isWalking()) {
-            tRegion = AnimationUtils.setTextureRegion(Media.birdWalkAnim, time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(Media.birdWalk)), time);
         } else if(isFeeding()) {
-            tRegion = AnimationUtils.setTextureRegion(Media.birdPeckAnim, time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(Media.birdPeck)), time);
         }
+    }
+
+    private TextureRegion[] textureRegions(Texture texture) {
+        return animationManager.setTextureRegions(texture, 10, 9);
+    }
+
+    private Animation<TextureRegion> animation(TextureRegion[] textureRegions) {
+        return animationManager.setAnimation(textureRegions);
     }
 
     @Override
