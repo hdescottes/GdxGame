@@ -1,14 +1,16 @@
 package com.gdx.game.entities;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.Control;
+import com.gdx.game.manager.ControlManager;
 import com.gdx.game.Enums.ENTITYSTATE;
 import com.gdx.game.Enums.ENTITYTYPE;
 import com.gdx.game.Media;
-import com.gdx.game.animation.AnimationUtils;
+import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 
@@ -16,8 +18,9 @@ import java.util.Optional;
 
 public class Hero extends Entity {
 
-    private static final int heroSpeed = 40;
+    private static final int HERO_SPEED = 40;
     private TextureRegion tRegion;
+    private AnimationManager animationManager = new AnimationManager();
 
     public Hero(Vector3 pos3, Box2dWorld box2d, ENTITYSTATE state) {
         super(Media.hero,null,8, 8);
@@ -28,36 +31,36 @@ public class Hero extends Entity {
         this.body = Box2dHelper.createBody(box2d.getWorld(), getWidth()/2, getHeight()/2, getWidth()/4, 0, pos3, null, BodyDef.BodyType.DynamicBody);
     }
 
-    public void update(Control control) {
+    public void update(ControlManager controlManager) {
         float directionX = getDirectionX();
         float directionY = getDirectionY();
 
-        if(control.isDown()) {
+        if(controlManager.isDown()) {
             directionY = -1 ;
             state = ENTITYSTATE.WALKING_DOWN;
         } else if(state == ENTITYSTATE.WALKING_DOWN){
             state = ENTITYSTATE.LOOK_DOWN;
         }
-        if(control.isUp()) {
+        if(controlManager.isUp()) {
             directionY = 1 ;
             state = ENTITYSTATE.WALKING_UP;
         } else if(state == ENTITYSTATE.WALKING_UP){
             state = ENTITYSTATE.LOOK_UP;
         }
-        if(control.isLeft()) {
+        if(controlManager.isLeft()) {
             directionX = -1;
             state = ENTITYSTATE.WALKING_LEFT;
         } else if(state == ENTITYSTATE.WALKING_LEFT){
             state = ENTITYSTATE.LOOK_LEFT;
         }
-        if(control.isRight()) {
+        if(controlManager.isRight()) {
             directionX = 1;
             state = ENTITYSTATE.WALKING_RIGHT;
         } else if(state == ENTITYSTATE.WALKING_RIGHT){
             state = ENTITYSTATE.LOOK_RIGHT;
         }
 
-        body.setLinearVelocity(directionX * heroSpeed, directionY * heroSpeed);
+        body.setLinearVelocity(directionX * HERO_SPEED, directionY * HERO_SPEED);
 
         updatePositions();
     }
@@ -74,22 +77,30 @@ public class Hero extends Entity {
 
     private void setHeroTextureRegion() {
         if(isWalkingUp()) {
-            tRegion = AnimationUtils.setTextureRegion(Media.heroWalkUpAnim, time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(Media.heroWalkUp)), time);
         } else if(isWalkingDown()) {
-            tRegion = AnimationUtils.setTextureRegion(Media.heroWalkDownAnim, time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(Media.heroWalkDown)), time);
         } else if(isWalkingRight()) {
-            tRegion = AnimationUtils.setTextureRegion(Media.heroWalkRightAnim, time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(Media.heroWalkRight)), time);
         } else if(isWalkingLeft()) {
-            tRegion = AnimationUtils.setTextureRegion(Media.heroWalkLeftAnim, time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(Media.heroWalkLeft)), time);
         } else if(isLookingUp()) {
-            tRegion = Media.heroWalkUpFrames[1];
+            tRegion = textureRegions(Media.heroWalkUp)[1];
         } else if(isLookingDown()) {
-            tRegion = Media.heroWalkDownFrames[1];
+            tRegion = textureRegions(Media.heroWalkDown)[1];
         } else if(isLookingRight()) {
-            tRegion = Media.heroWalkRightFrames[1];
+            tRegion = textureRegions(Media.heroWalkRight)[1];
         } else if(isLookingLeft()) {
-            tRegion = Media.heroWalkLeftFrames[1];
+            tRegion = textureRegions(Media.heroWalkLeft)[1];
         }
+    }
+
+    private TextureRegion[] textureRegions(Texture texture) {
+        return animationManager.setTextureRegions(texture, 32,37);
+    }
+
+    private Animation<TextureRegion> animation(TextureRegion[] textureRegions) {
+        return animationManager.setAnimation(textureRegions);
     }
 
     public float getCameraX() {

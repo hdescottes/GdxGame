@@ -1,4 +1,4 @@
-package com.gdx.game;
+package com.gdx.game.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import static com.badlogic.gdx.Input.Keys;
 
-public class Control extends InputAdapter implements InputProcessor {
+public class ControlManager extends InputAdapter implements InputProcessor {
     // CAMERA
     private OrthographicCamera camera;
 
@@ -113,7 +113,7 @@ public class Control extends InputAdapter implements InputProcessor {
         this.screenHeight = screenHeight;
     }
 
-    public Control(int screenWidth, int screenHeight, OrthographicCamera camera) {
+    public ControlManager(int screenWidth, int screenHeight, OrthographicCamera camera) {
         this.camera = camera;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
