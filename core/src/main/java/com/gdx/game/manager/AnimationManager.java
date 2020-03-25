@@ -15,6 +15,10 @@ public class AnimationManager {
         return TextureRegion.split(texture, tileWidth, tileHeight)[0];
     }
 
+    public TextureRegion[][] setTextureRegionsDouble(Texture texture, int tileWidth, int tileHeight) {
+        return TextureRegion.split(texture, tileWidth, tileHeight);
+    }
+
     public Animation<TextureRegion> setAnimation(TextureRegion[] textureRegions) {
         return new Animation<>(0.1f, textureRegions);
     }

@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Media {
 
+    // IMAGES
+    public static final Texture backgroundSheet = new Texture("asset/background/natureBackground_frames_sheet.png");
+
     // ENTITIES
     public static final Texture hero = new Texture("entities/hero/hero.png");
     public static final Texture tree = new Texture("entities/tree/tree.png");
@@ -44,6 +47,7 @@ public class Media {
     public static void dispose() {
         hero.dispose();
         tree.dispose();
+        backgroundSheet.dispose();
         grass01.dispose();
         grass02.dispose();
         grass03.dispose();
