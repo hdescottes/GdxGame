@@ -35,7 +35,10 @@ public class GameScreen extends AbstractScreen {
 
         island.getEntities().add(hero);
         island.getEntities().add(bird);
+    }
 
+    @Override
+    public void show() {
         CameraManager cameraManager = new CameraManager();
         controlManager = cameraManager.insertControl(getCam());
     }
@@ -92,7 +95,6 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void dispose() {
         super.dispose();
-        gdxGame.getBatch().dispose();
         Media.dispose();
     }
 }
