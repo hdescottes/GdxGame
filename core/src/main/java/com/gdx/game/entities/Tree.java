@@ -15,5 +15,7 @@ public class Tree extends Entity {
         this.getPos3().x = pos3.x;
         this.getPos3().y = pos3.y;
         this.body = Box2dHelper.createBody(box2d.getWorld(), getWidth()/2, getHeight()/2, getWidth()/4, 0, getPos3(), null, BodyDef.BodyType.StaticBody);
+        this.sensor = Box2dHelper.createSensor(box2d.getWorld(), getWidth()*.6f, getHeight()*.6f, getWidth()/4 - 0.4f, -0.4f, getPos3(), null, BodyDef.BodyType.DynamicBody);
+        this.hashcode = sensor.getFixtureList().get(0).hashCode();
     }
 }

@@ -37,4 +37,30 @@ public class Box2dHelper {
 
         return body;
     }
+
+    public static Body createSensor(World world, float width, float height, float xOffset, float yOffset, Vector3 pos3, Vector2 vector2, BodyDef.BodyType type) {
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(pos3.x + width/2 + xOffset, pos3.y + height/2 + yOffset);
+        bodyDef.angle = 0;
+        bodyDef.fixedRotation = true;
+        bodyDef.type = type;
+        body = world.createBody(bodyDef);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        PolygonShape boxShape = new PolygonShape();
+        if(vector2 == null) {
+            vector2 = new Vector2(0,0);
+        }
+        boxShape.setAsBox(width / 2, height / 2, vector2, 0);
+
+        fixtureDef.shape = boxShape;
+        fixtureDef.isSensor = true;
+
+        body.createFixture(fixtureDef);
+        boxShape.dispose();
+
+        return body;
+    }
+
 }

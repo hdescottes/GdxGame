@@ -18,6 +18,8 @@ public class Entity implements Comparable<Entity> {
     public ENTITYTYPE type;
     public ENTITYSTATE state;
     public Body body;
+    public int hashcode;
+    public Body sensor; // A trigger hitbox
 
     public Boolean ticks; // .tick will only be called if true
     public float time; // Store the time up for the Entity
@@ -117,6 +119,8 @@ public class Entity implements Comparable<Entity> {
         getPos3().x = body.getPosition().x - getWidth()/2;
         getPos3().y = body.getPosition().y - getHeight()/4;
     }
+
+    public void collision(Entity entity, boolean begin){}
 
     @Override
     public int compareTo(Entity entity) {
