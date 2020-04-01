@@ -35,6 +35,9 @@ public class GameScreen extends AbstractScreen {
 
         island.getEntities().add(hero);
         island.getEntities().add(bird);
+
+        // HashMap of Entities for collisions
+        box2d.populateEntityMap(island.getEntities());
     }
 
     @Override
