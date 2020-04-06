@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.gdx.game.Enums.ENTITYSTATE;
-import com.gdx.game.Enums.ENTITYTYPE;
+import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
+import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.map.Chunk;
 import com.gdx.game.map.Tile;
 

@@ -3,11 +3,11 @@ package com.gdx.game.map;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.Enums.TILETYPE;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.Tree;
+import com.gdx.game.map.MapEnums.TILETYPE;
 
 import java.util.ArrayList;
 import java.util.Arrays;

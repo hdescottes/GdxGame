@@ -2,7 +2,7 @@ package com.gdx.game.entities;
 
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.Enums.ENTITYTYPE;
+import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.Media;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
