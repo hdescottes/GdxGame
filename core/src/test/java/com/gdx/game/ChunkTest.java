@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 
+import static com.gdx.game.map.MapEnums.TILETYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -29,7 +30,7 @@ public class ChunkTest {
         Chunk chunk = new Chunk(1,1,1);
         ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
         ArrayList<Tile> tilesBis = new ArrayList<>();
-        Tile tile = new Tile(1,1,1, Enums.TILETYPE.GRASS, Media.grass01);
+        Tile tile = new Tile(1,1,1, TILETYPE.GRASS, Media.grass01);
         tilesBis.add(tile);
         tiles.add(tilesBis);
         chunk.setTiles(tiles);
@@ -44,7 +45,7 @@ public class ChunkTest {
         Chunk chunk = new Chunk(1,1,1);
         ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
         ArrayList<Tile> tilesBis = new ArrayList<>();
-        Tile tile = new Tile(1,1,1, Enums.TILETYPE.GRASS, Media.grass01);
+        Tile tile = new Tile(1,1,1, TILETYPE.GRASS, Media.grass01);
         tilesBis.add(tile);
         tiles.add(tilesBis);
         chunk.setTiles(tiles);
@@ -60,7 +61,7 @@ public class ChunkTest {
         Chunk chunk = new Chunk(1,1,1);
         ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
         ArrayList<Tile> tilesBis = new ArrayList<>();
-        Tile tile = new Tile(1,1,1, Enums.TILETYPE.GRASS, Media.grass01);
+        Tile tile = new Tile(1,1,1, TILETYPE.GRASS, Media.grass01);
         tilesBis.add(tile);
         tiles.add(tilesBis);
         chunk.setTiles(tiles);
@@ -76,7 +77,7 @@ public class ChunkTest {
         Chunk chunk = new Chunk(1,1,1);
         ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
         ArrayList<Tile> tilesBis = new ArrayList<>();
-        Tile tile = new Tile(1,1,1, Enums.TILETYPE.GRASS, Media.grass01);
+        Tile tile = new Tile(1,1,1, TILETYPE.GRASS, Media.grass01);
         tilesBis.add(tile);
         tiles.add(tilesBis);
         chunk.setTiles(tiles);
@@ -91,7 +92,7 @@ public class ChunkTest {
         Chunk chunk = new Chunk(1,1,1);
         ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
         ArrayList<Tile> tilesBis = new ArrayList<>();
-        Tile tile = new Tile(1,1,1, Enums.TILETYPE.GRASS, Media.grass01);
+        Tile tile = new Tile(1,1,1, TILETYPE.GRASS, Media.grass01);
         tilesBis.add(tile);
         tiles.add(tilesBis);
         chunk.setTiles(tiles);
@@ -106,7 +107,7 @@ public class ChunkTest {
         Chunk chunk = new Chunk(1,1,1);
         ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
         ArrayList<Tile> tilesBis = new ArrayList<>();
-        Tile tile = new Tile(1,1,1, Enums.TILETYPE.WATER, Media.water01);
+        Tile tile = new Tile(1,1,1, TILETYPE.WATER, Media.water01);
         tilesBis.add(tile);
         tiles.add(tilesBis);
         chunk.setTiles(tiles);
@@ -121,7 +122,7 @@ public class ChunkTest {
         Chunk chunk = new Chunk(1,1,1);
         ArrayList<ArrayList<Tile>> tiles = new ArrayList<>();
         ArrayList<Tile> tilesBis = new ArrayList<>();
-        Tile tile = new Tile(1,1,1, Enums.TILETYPE.GRASS, Media.grass01);
+        Tile tile = new Tile(1,1,1, TILETYPE.GRASS, Media.grass01);
         tilesBis.add(tile);
         tiles.add(tilesBis);
         chunk.setTiles(tiles);

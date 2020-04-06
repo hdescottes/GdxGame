@@ -1,8 +1,8 @@
 package com.gdx.game.map;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.gdx.game.Enums.TILETYPE;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.map.MapEnums.TILETYPE;
 
 public class Tile extends Entity {
     private int size;

@@ -3,7 +3,7 @@ package com.gdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector3;
-import com.gdx.game.Enums;
+import com.gdx.game.entities.EntityEnums;
 import com.gdx.game.GdxGame;
 import com.gdx.game.Media;
 import com.gdx.game.box2d.Box2dWorld;
@@ -30,8 +30,8 @@ public class GameScreen extends AbstractScreen {
         box2d = new Box2dWorld();
         island = new Island(box2d);
         Vector3 islandCentrePos3 = island.getCentreTile().getPos3();
-        hero = new Hero(islandCentrePos3, box2d, Enums.ENTITYSTATE.WALKING_DOWN);
-        Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, Enums.ENTITYSTATE.FLYING);
+        hero = new Hero(islandCentrePos3, box2d, EntityEnums.ENTITYSTATE.WALKING_DOWN);
+        Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, EntityEnums.ENTITYSTATE.FLYING);
 
         island.getEntities().add(hero);
         island.getEntities().add(bird);
