@@ -3,12 +3,12 @@ package com.gdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector3;
-import com.gdx.game.entities.EntityEnums;
 import com.gdx.game.GdxGame;
 import com.gdx.game.Media;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Bird;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityEnums;
 import com.gdx.game.entities.Hero;
 import com.gdx.game.manager.CameraManager;
 import com.gdx.game.manager.ControlManager;
@@ -69,6 +69,8 @@ public class GameScreen extends AbstractScreen {
         box2d.tick(getCam(), controlManager);
 
         delta += Gdx.graphics.getDeltaTime();
+
+        island.clearRemovedEntities(box2d);
     }
 
     private void drawGame() {

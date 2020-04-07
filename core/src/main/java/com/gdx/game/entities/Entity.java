@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
 import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.map.Chunk;
@@ -22,6 +23,7 @@ public class Entity implements Comparable<Entity> {
     public Body sensor; // A trigger hitbox
 
     public Boolean ticks; // .tick will only be called if true
+    public boolean remove;
     public float time; // Store the time up for the Entity
     public Vector3 destVec; // Destination vector for movement
     public Tile currentTile; // Tile the Entity occupies
@@ -95,8 +97,12 @@ public class Entity implements Comparable<Entity> {
     }
 
     public void draw(SpriteBatch batch) {
-        if(shadow != null) batch.draw(shadow, pos3.x, pos3.y, width, height);
-        if(texture != null) batch.draw(texture, pos3.x, pos3.y, width, height);
+        if(shadow != null) {
+            batch.draw(shadow, pos3.x, pos3.y, width, height);
+        }
+        if(texture != null) {
+            batch.draw(texture, pos3.x, pos3.y, width, height);
+        }
     }
 
     public void tick(float delta) {
@@ -120,7 +126,18 @@ public class Entity implements Comparable<Entity> {
         getPos3().y = body.getPosition().y - getHeight()/4;
     }
 
-    public void collision(Entity entity, boolean begin){}
+    public void collision(Entity entity, boolean begin) {}
+
+    public void interact() {}
+
+    public void removeBodies(Box2dWorld box2D) {
+        if(sensor != null) {
+            box2D.getWorld().destroyBody(sensor);
+        }
+        if(body != null) {
+            box2D.getWorld().destroyBody(body);
+        }
+    }
 
     @Override
     public int compareTo(Entity entity) {
