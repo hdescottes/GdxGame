@@ -12,6 +12,7 @@ import com.gdx.game.map.MapEnums.TILETYPE;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -273,5 +274,23 @@ public class Island {
         Stream.of(tile)
                 .filter(t -> t.isNotPassable() && t.notIsAllWater())
                 .forEach(t -> Box2dHelper.createBody(box2d.getWorld(), chunk.getTileSize(), chunk.getTileSize(), 0, 0, t.getPos3(), null, BodyDef.BodyType.StaticBody));
+    }
+
+    public void clearRemovedEntities(Box2dWorld box2D) {
+        Iterator<Entity> it = entities.iterator();
+        while(it.hasNext()) {
+            Entity e = it.next();
+            removeEntity(box2D, it, e);
+        }
+    }
+
+    private void removeEntity(Box2dWorld box2d, Iterator<Entity> it, Entity entity) {
+        Stream.of(entity)
+                .filter(e -> e.remove)
+                .forEach(e -> {
+                    e.removeBodies(box2d);
+                    box2d.removeEntityToMap(e);
+                    it.remove();
+                });
     }
 }

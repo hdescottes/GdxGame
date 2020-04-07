@@ -6,16 +6,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
-import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.Media;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
+import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
+import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.manager.ControlManager;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Hero extends Entity {
 
@@ -66,6 +67,16 @@ public class Hero extends Entity {
         body.setLinearVelocity(directionX * HERO_SPEED, directionY * HERO_SPEED);
 
         updatePositions();
+
+        interactAction(controlManager);
+    }
+
+    private void interactAction(ControlManager controlManager) {
+        Stream.of(interactEntities)
+                .filter(i -> controlManager.isInteract() && i.size() > 0)
+                .forEach(i -> i.get(0).interact());
+
+        controlManager.setInteract(false);
     }
 
     @Override

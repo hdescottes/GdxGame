@@ -74,9 +74,7 @@ public class Box2dWorld {
 
     public void populateEntityMap(ArrayList<Entity> entities) {
         entityMap.clear();
-        for (Entity e : entities) {
-            entityMap.put(e.hashcode, e);
-        }
+        entities.forEach(e -> entityMap.put(e.hashcode, e));
     }
 
     public void tick(OrthographicCamera orthographicCamera, ControlManager controlManager) {
@@ -84,5 +82,9 @@ public class Box2dWorld {
             debugRenderer.render(world, orthographicCamera.combined);
         }
         world.step(Gdx.app.getGraphics().getDeltaTime(), 6, 2);
+    }
+
+    public void removeEntityToMap(Entity entity){
+        entityMap.remove(entity.hashcode, entity);
     }
 }
