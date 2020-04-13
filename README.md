@@ -11,7 +11,8 @@ It is a roguelike RPG 2D base game.</p>
 
 #### Entities
 - The hero is an animated 2D sprite. <br>
-The hero move inside the island with the arrow keys or with "WASD".
+The hero move inside the island with the arrow keys or with "WASD". <br>
+The hero can interact with the trees with the "E" key. For now, it will just remove the tree.
 - The bird is an animated sprite. It has a random behaviour and stay inside the island (see https://github.com/libgdx/gdx-ai/wiki/State-Machine to improve the AI)
 
 -------
