@@ -30,7 +30,7 @@ class CameraManagerTest {
         given(Gdx.graphics.getWidth()).willReturn(800);
         given(Gdx.graphics.getHeight()).willReturn(600);
 
-        OrthographicCamera orthographicCamera = cameraManager.createCamera();
+        OrthographicCamera orthographicCamera = cameraManager.createCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), .4f);
 
         assertThat(orthographicCamera).isNotNull();
         assertThat(orthographicCamera.zoom).isEqualTo(.4f);
@@ -41,7 +41,7 @@ class CameraManagerTest {
         given(Gdx.graphics.getWidth()).willReturn(800);
         given(Gdx.graphics.getHeight()).willReturn(600);
 
-        OrthographicCamera orthographicCamera = cameraManager.createCamera();
+        OrthographicCamera orthographicCamera = cameraManager.createCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), .4f);
         ControlManager controlManager = cameraManager.insertControl(orthographicCamera);
 
         assertThat(controlManager).isNotNull();

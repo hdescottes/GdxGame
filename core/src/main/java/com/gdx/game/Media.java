@@ -7,10 +7,12 @@ public class Media {
 
     // IMAGES
     public static final Texture backgroundSheet = new Texture("asset/background/natureBackground_frames_sheet.png");
+    public static final Texture battleBackgroundMeadow = new Texture("asset/background/battleBackground_meadow.png");
 
     // ENTITIES
     public static final Texture hero = new Texture("entities/hero/hero.png");
     public static final Texture tree = new Texture("entities/tree/tree.png");
+    public static final Texture rabite = new Texture("entities/enemies/rabite.png");
 
     public static final Texture birdPeck = new Texture("entities/bird/bird_peck.png");
     public static final Texture birdWalk = new Texture("entities/bird/bird_walk.png");
@@ -22,6 +24,8 @@ public class Media {
     public static final Texture heroWalkRight  = new Texture("entities/hero/hero_1_walking_right.png");
     public static final Texture heroWalkLeft = new Texture("entities/hero/hero_1_walking_left.png");
     public static final Texture heroShadow = new Texture("entities/hero/hero_shadow.png");
+
+    public static final Texture rabiteWalkDown = new Texture("entities/enemies/rabite_walking_down.png");
 
     // TILES
     public static final Texture grass01 = new Texture("8x8/grass/grass_01.png");

@@ -21,6 +21,8 @@ import java.util.stream.Stream;
 public class Hero extends Entity {
 
     private static final int HERO_SPEED = 40;
+    private boolean collision = false;
+    private Entity entityCollision;
     private TextureRegion tRegion;
     private AnimationManager animationManager = new AnimationManager();
     private ArrayList<Entity> interactEntities = new ArrayList<>();
@@ -85,9 +87,13 @@ public class Hero extends Entity {
             // Hero entered hitbox
             interactEntities.add(entity);
             System.out.println("You encountered a " + entity.getClass().getSimpleName());
+            setCollision(true);
+            setEntityCollision(entity);
         } else {
             // Hero Left hitbox
             interactEntities.remove(entity);
+            setCollision(false);
+            setEntityCollision(null);
         }
     }
 
@@ -135,6 +141,22 @@ public class Hero extends Entity {
 
     public float getCameraY() {
         return getPos3().y + getHeight()/2;
+    }
+
+    public boolean isCollision() {
+        return collision;
+    }
+
+    public void setCollision(boolean collision) {
+        this.collision = collision;
+    }
+
+    public Entity getEntityCollision() {
+        return entityCollision;
+    }
+
+    public void setEntityCollision(Entity entityCollision) {
+        this.entityCollision = entityCollision;
     }
 
     private boolean isWalkingUp(){

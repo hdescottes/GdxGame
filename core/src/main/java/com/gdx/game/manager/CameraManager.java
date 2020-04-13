@@ -6,17 +6,9 @@ import com.gdx.game.manager.ControlManager;
 
 public class CameraManager {
 
-    public OrthographicCamera createCamera() {
-        // Display Size
-        int displayW = Gdx.graphics.getWidth();
-        int displayH = Gdx.graphics.getHeight();
-
-        // For 800x600 we will get 266*200
-        int h = displayH /(displayH /160);
-        int w = displayW /(displayH / h);
-
-        OrthographicCamera camera = new OrthographicCamera(w, h);
-        camera.zoom = .4f;
+    public OrthographicCamera createCamera(int width, int height, float zoom) {
+        OrthographicCamera camera = new OrthographicCamera(width, height);
+        camera.zoom = zoom;
         return camera;
     }
 
