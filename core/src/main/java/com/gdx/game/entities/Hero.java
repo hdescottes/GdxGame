@@ -6,21 +6,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.manager.ControlManager;
-import com.gdx.game.Enums.ENTITYSTATE;
-import com.gdx.game.Enums.ENTITYTYPE;
 import com.gdx.game.Media;
-import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
+import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
+import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
+import com.gdx.game.manager.AnimationManager;
+import com.gdx.game.manager.ControlManager;
 
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class Hero extends Entity {
 
     private static final int HERO_SPEED = 40;
     private TextureRegion tRegion;
     private AnimationManager animationManager = new AnimationManager();
+    private ArrayList<Entity> interactEntities = new ArrayList<>();
 
     public Hero(Vector3 pos3, Box2dWorld box2d, ENTITYSTATE state) {
         super(Media.hero,null,8, 8);
@@ -29,6 +32,7 @@ public class Hero extends Entity {
         this.getPos3().y = pos3.y;
         this.state = state;
         this.body = Box2dHelper.createBody(box2d.getWorld(), getWidth()/2, getHeight()/2, getWidth()/4, 0, pos3, null, BodyDef.BodyType.DynamicBody);
+        this.hashcode = body.getFixtureList().get(0).hashCode();
     }
 
     public void update(ControlManager controlManager) {
@@ -63,6 +67,28 @@ public class Hero extends Entity {
         body.setLinearVelocity(directionX * HERO_SPEED, directionY * HERO_SPEED);
 
         updatePositions();
+
+        interactAction(controlManager);
+    }
+
+    private void interactAction(ControlManager controlManager) {
+        Stream.of(interactEntities)
+                .filter(i -> controlManager.isInteract() && i.size() > 0)
+                .forEach(i -> i.get(0).interact());
+
+        controlManager.setInteract(false);
+    }
+
+    @Override
+    public void collision(Entity entity, boolean begin) {
+        if(begin){
+            // Hero entered hitbox
+            interactEntities.add(entity);
+            System.out.println("You encountered a " + entity.getClass().getSimpleName());
+        } else {
+            // Hero Left hitbox
+            interactEntities.remove(entity);
+        }
     }
 
     @Override

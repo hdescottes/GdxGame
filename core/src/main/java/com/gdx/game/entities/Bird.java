@@ -9,12 +9,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.Enums.ENTITYSTATE;
-import com.gdx.game.Enums.ENTITYTYPE;
+import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
+import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.Media;
-import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
+import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.map.Chunk;
 import com.gdx.game.map.Tile;
 
@@ -35,6 +35,8 @@ public class Bird extends Entity {
         this.getPos3().set(getPos3());
         Vector2 adjustHitbox = new Vector2(-getWidth() / 4, -getHeight() / 8);
         this.body = Box2dHelper.createBody(box2d.getWorld(), getWidth()/4, getHeight()/4,getWidth()/4, 0, pos3, adjustHitbox, BodyDef.BodyType.StaticBody);
+        this.sensor = Box2dHelper.createSensor(box2d.getWorld(), getWidth()*.3f, getHeight()*.3f,getWidth()/4 - 0.4f, -0.4f, pos3, adjustHitbox, BodyDef.BodyType.StaticBody);
+        this.hashcode = sensor.getFixtureList().get(0).hashCode();
         this.state = state;
         this.ticks = true;
     }
@@ -90,6 +92,7 @@ public class Bird extends Entity {
 
     private void toggleHitboxes(boolean b) {
         body.setActive(b);
+        sensor.setActive(b);
     }
 
     private void setNewState(float delta) {
@@ -120,6 +123,8 @@ public class Bird extends Entity {
 
     private void moveToDestination(float delta) {
         body.setTransform(body.getPosition().interpolate(new Vector2(destTile.getPos3().x + getWidth(),
+                destTile.getPos3().y + getHeight()), delta * BIRD_SPEED / 4, Interpolation.circle), 0);
+        sensor.setTransform(body.getPosition().interpolate(new Vector2(destTile.getPos3().x + getWidth(),
                 destTile.getPos3().y + getHeight()), delta * BIRD_SPEED / 4, Interpolation.circle), 0);
 
         updatePositions();
@@ -186,8 +191,10 @@ public class Bird extends Entity {
         if(currentTile.isPassable()) {
             if(tRegion.isFlipX()) {
                 body.setTransform(body.getPosition().x - BIRD_SPEED / 4 * delta, body.getPosition().y,0);
+                sensor.setTransform(body.getPosition().x - BIRD_SPEED / 4 * delta, body.getPosition().y,0);
             } else {
                 body.setTransform(body.getPosition().x + BIRD_SPEED / 4 * delta, body.getPosition().y,0);
+                sensor.setTransform(body.getPosition().x + BIRD_SPEED / 4 * delta, body.getPosition().y,0);
             }
             updatePositions();
         }

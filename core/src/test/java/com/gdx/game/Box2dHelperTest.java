@@ -38,4 +38,20 @@ public class Box2dHelperTest {
         assertThat(body.getFixtureList().size).isEqualTo(1);
         assertThat(body.getFixtureList().first().getRestitution()).isEqualTo(0.4f);
     }
+
+    @Test
+    void testCreateSensor() {
+        Box2dWorld box2d = new Box2dWorld();
+        float width = 10;
+        float height = 10;
+        int xOffset = 1;
+        int yOffset = 1;
+        Vector3 pos3 = new Vector3(1,1,1);
+
+        Body body = Box2dHelper.createSensor(box2d.getWorld(), width, height, xOffset, yOffset, pos3, null, BodyDef.BodyType.StaticBody);
+
+        assertThat(body.getPosition()).isEqualTo(new Vector2(pos3.x + width/2 + xOffset, pos3.y + height/2 + yOffset));
+        assertThat(body.getFixtureList().size).isEqualTo(1);
+        assertThat(body.getFixtureList().first().isSensor()).isEqualTo(true);
+    }
 }

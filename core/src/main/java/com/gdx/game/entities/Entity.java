@@ -4,8 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.gdx.game.Enums.ENTITYSTATE;
-import com.gdx.game.Enums.ENTITYTYPE;
+import com.gdx.game.box2d.Box2dWorld;
+import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
+import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.map.Chunk;
 import com.gdx.game.map.Tile;
 
@@ -18,8 +19,11 @@ public class Entity implements Comparable<Entity> {
     public ENTITYTYPE type;
     public ENTITYSTATE state;
     public Body body;
+    public int hashcode;
+    public Body sensor; // A trigger hitbox
 
     public Boolean ticks; // .tick will only be called if true
+    public boolean remove;
     public float time; // Store the time up for the Entity
     public Vector3 destVec; // Destination vector for movement
     public Tile currentTile; // Tile the Entity occupies
@@ -93,8 +97,12 @@ public class Entity implements Comparable<Entity> {
     }
 
     public void draw(SpriteBatch batch) {
-        if(shadow != null) batch.draw(shadow, pos3.x, pos3.y, width, height);
-        if(texture != null) batch.draw(texture, pos3.x, pos3.y, width, height);
+        if(shadow != null) {
+            batch.draw(shadow, pos3.x, pos3.y, width, height);
+        }
+        if(texture != null) {
+            batch.draw(texture, pos3.x, pos3.y, width, height);
+        }
     }
 
     public void tick(float delta) {
@@ -116,6 +124,19 @@ public class Entity implements Comparable<Entity> {
     public void updatePositions() {
         getPos3().x = body.getPosition().x - getWidth()/2;
         getPos3().y = body.getPosition().y - getHeight()/4;
+    }
+
+    public void collision(Entity entity, boolean begin) {}
+
+    public void interact() {}
+
+    public void removeBodies(Box2dWorld box2D) {
+        if(sensor != null) {
+            box2D.getWorld().destroyBody(sensor);
+        }
+        if(body != null) {
+            box2D.getWorld().destroyBody(body);
+        }
     }
 
     @Override

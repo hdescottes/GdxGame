@@ -44,6 +44,16 @@ class AnimationManagerTest {
     }
 
     @Test
+    void testSetTextureRegionsDouble_ShouldSucceed() {
+        AnimationManager animationManager = new AnimationManager();
+
+        TextureRegion[][] textureRegions = animationManager.setTextureRegionsDouble(Media.heroWalkUp, 32, 37);
+
+        assertThat(textureRegions.length).isEqualTo(1);
+        assertThat(textureRegions[0].length).isEqualTo(3);
+    }
+
+    @Test
     void testSetAnimation_ShouldSucceed() {
         AnimationManager animationManager = new AnimationManager();
         TextureRegion[] textureRegions = TextureRegion.split(Media.heroWalkUp, 32, 37)[0];
