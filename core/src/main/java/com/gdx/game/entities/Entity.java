@@ -80,6 +80,14 @@ public class Entity implements Comparable<Entity> {
         this.height = height;
     }
 
+    public ENTITYTYPE getType() {
+        return type;
+    }
+
+    public void setType(ENTITYTYPE type) {
+        this.type = type;
+    }
+
     public float getDirectionX() {
         return directionX;
     }

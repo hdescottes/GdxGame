@@ -19,10 +19,11 @@ import com.gdx.game.Media;
 import com.gdx.game.manager.AnimationManager;
 
 public class MenuScreen extends AbstractScreen {
+
     private AssetManager assetManager = new AssetManager();
     private Table table;
     private Stage menuStage = new Stage();
-    private Animation<TextureRegion> walkAnimation;
+    private Animation<TextureRegion> flowAnimation;
     private float stateTime;
 
     public MenuScreen(GdxGame gdxGame) {
@@ -49,15 +50,15 @@ public class MenuScreen extends AbstractScreen {
                 backgroundSheet.getWidth() / nbCol,
                 backgroundSheet.getHeight() / nbRow);
 
-        TextureRegion[] walkFrames = new TextureRegion[nbCol * nbRow];
+        TextureRegion[] flowFrames = new TextureRegion[nbCol * nbRow];
         int index = 0;
         for (int i = 0; i < nbRow; i++) {
             for (int j = 0; j < nbCol; j++) {
-                walkFrames[index++] = tmp[i][j];
+                flowFrames[index++] = tmp[i][j];
             }
         }
 
-        walkAnimation = animationManager.setAnimation(walkFrames);
+        flowAnimation = animationManager.setAnimation(flowFrames);
     }
 
     private void handlePlayButton() {
@@ -95,7 +96,7 @@ public class MenuScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         stateTime += Gdx.graphics.getDeltaTime();
-        TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+        TextureRegion currentFrame = flowAnimation.getKeyFrame(stateTime, true);
 
         gdxGame.getBatch().begin();
         gdxGame.getBatch().draw(currentFrame, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

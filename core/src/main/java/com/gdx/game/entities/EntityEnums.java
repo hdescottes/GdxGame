@@ -5,7 +5,8 @@ public class EntityEnums {
     public enum ENTITYTYPE {
         HERO,
         TREE,
-        BIRD
+        BIRD,
+        ENEMY
     }
 
     public enum ENTITYSTATE {
