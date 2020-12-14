@@ -1,9 +1,8 @@
-val gdxVersion by extra {"1.9.10"}
-val box2DLightsVersion by extra {"1.5"}
-val jUnitPlatformVersion by extra {"1.6.0"}
-val jUnitJupiterVersion by extra {"5.6.0"}
-val mockitoVersion by extra {"3.3.0"}
-val assertJVersion by extra {"3.15.0"}
+val gdxVersion by extra {"1.9.12"}
+val jUnitPlatformVersion by extra {"1.7.0"}
+val jUnitJupiterVersion by extra {"5.7.0"}
+val mockitoVersion by extra {"3.6.0"}
+val assertJVersion by extra {"3.18.1"}
 
 plugins {
     java

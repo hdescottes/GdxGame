@@ -76,7 +76,7 @@ class ControlManagerTest {
         Vector2 mapCoords = controlManager.getMapCoords(mouseCoords);
 
         assertThat(mapCoords.x).isEqualTo((2*mouseCoords.x) / screenWidth - 1);
-        assertThat(mapCoords.y).isEqualTo((2*(screenHeight-(screenHeight-mouseCoords.y)-1)) / screenHeight - 1);
+        assertThat(mapCoords.y).isEqualTo((2*(screenHeight-(screenHeight-mouseCoords.y)-0)) / screenHeight - 1);
     }
 
     @Test
@@ -99,7 +99,7 @@ class ControlManagerTest {
 
     @Test
     void testScrolled_ShouldSucceed() {
-        Boolean hasMouseScrolled = controlManager.scrolled(1);
+        Boolean hasMouseScrolled = controlManager.scrolled(1, 1);
 
         assertThat(hasMouseScrolled).isEqualTo(false);
     }
