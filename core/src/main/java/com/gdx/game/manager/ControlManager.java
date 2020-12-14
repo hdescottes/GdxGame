@@ -241,9 +241,4 @@ public class ControlManager extends InputAdapter implements InputProcessor {
     public boolean mouseMoved(int screenX, int screenY) {
         return false;
     }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
 }
