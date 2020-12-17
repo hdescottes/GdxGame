@@ -13,7 +13,7 @@ import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.manager.CameraManager;
 import com.gdx.game.manager.ControlManager;
 
-public class BattleScreen extends AbstractScreen {
+public class BattleScreen extends BaseScreen {
 
     private Box2dWorld box2d;
     private ControlManager controlManager;

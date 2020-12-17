@@ -17,8 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.gdx.game.GdxGame;
 import com.gdx.game.Media;
 import com.gdx.game.manager.AnimationManager;
+import com.gdx.game.screen.transition.effects.FadeInTransitionEffect;
+import com.gdx.game.screen.transition.effects.FadeOutTransitionEffect;
+import com.gdx.game.screen.transition.effects.TransitionEffect;
 
-public class MenuScreen extends AbstractScreen {
+import java.util.ArrayList;
+
+public class MenuScreen extends BaseScreen {
 
     private AssetManager assetManager = new AssetManager();
     private Table table;
@@ -78,7 +83,10 @@ public class MenuScreen extends AbstractScreen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-                gdxGame.setScreen(gdxGame.getGameScreen());
+                ArrayList<TransitionEffect> effects = new ArrayList<>();
+                effects.add(new FadeOutTransitionEffect(1f));
+                effects.add(new FadeInTransitionEffect(1f));
+                setScreenWithTransition(gdxGame.getScreen(), gdxGame.getGameScreen(), effects);
             }
         });
 

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class GameScreen extends AbstractScreen {
+public class GameScreen extends BaseScreen {
 
     private Box2dWorld box2d;
     private ControlManager controlManager;
