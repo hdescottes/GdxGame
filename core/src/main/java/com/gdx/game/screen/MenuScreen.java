@@ -83,7 +83,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent even, float x, float y) {
                 ArrayList<TransitionEffect> effects = new ArrayList<>();
                 effects.add(new FadeInTransitionEffect(1f));
-                setScreenWithTransition(gdxGame.getScreen(), gdxGame.getOptionScreen(), effects);
+                setScreenWithTransition(gdxGame.getScreen(), new OptionScreen(gdxGame, gdxGame.getScreen()), effects);
             }
         });
     }

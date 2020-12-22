@@ -21,6 +21,7 @@ public class ControlManager extends InputAdapter implements InputProcessor {
 
     // ACTIONS
     private boolean interact;
+    private boolean option;
 
     // MOUSE
     private boolean leftMouseButton;
@@ -58,6 +59,14 @@ public class ControlManager extends InputAdapter implements InputProcessor {
 
     public void setInteract(boolean interact) {
         this.interact = interact;
+    }
+
+    public boolean isOption() {
+        return option;
+    }
+
+    public void setOption(boolean option) {
+        this.option = option;
     }
 
     public boolean isLeftMouseButton() {
@@ -188,6 +197,9 @@ public class ControlManager extends InputAdapter implements InputProcessor {
                 break;
             case Keys.E:
                 interact = true;
+                break;
+            case Keys.O:
+                option = true;
                 break;
             case Keys.ESCAPE:
                 Gdx.app.exit();

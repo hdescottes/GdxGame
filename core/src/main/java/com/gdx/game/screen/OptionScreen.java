@@ -1,35 +1,66 @@
 package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.crashinvaders.vfx.VfxManager;
+import com.crashinvaders.vfx.effects.GaussianBlurEffect;
 import com.gdx.game.GdxGame;
+
+import java.util.ArrayList;
 
 public class OptionScreen extends BaseScreen {
 
     private AssetManager assetManager = new AssetManager();
     private Table table;
     private Stage optionStage = new Stage();
+    private Stage backgroundStage = new Stage();
+    private Screen previousScreen;
+    private Image previousScreenAsImg;
     private float stateTime;
 
-    public OptionScreen(GdxGame gdxGame) {
+    private VfxManager vfxManager;
+    private GaussianBlurEffect vfxEffect;
+
+    public OptionScreen(GdxGame gdxGame, Screen previousScreen) {
         super(gdxGame);
+        this.previousScreen = previousScreen;
+
+        loadContents();
+    }
+
+    public OptionScreen(GdxGame gdxGame, Screen previousScreen, Image previousScreenAsImg) {
+        super(gdxGame);
+        this.previousScreen = previousScreen;
+        this.previousScreenAsImg = previousScreenAsImg;
+
+        loadContents();
+    }
+
+    private void loadContents() {
+        vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
+        vfxEffect = new GaussianBlurEffect();
+        vfxManager.addEffect(vfxEffect);
 
         loadAssets();
         createTable();
         handleBackground();
         handleControlButton();
         handleMusicButton();
+        handleBackButton();
     }
 
     private void loadAssets() {
@@ -43,7 +74,6 @@ public class OptionScreen extends BaseScreen {
     }
 
     private void handleBackground() {
-
     }
 
     private void handleControlButton() {
@@ -53,7 +83,7 @@ public class OptionScreen extends BaseScreen {
         controlButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-                gdxGame.setScreen(gdxGame.getMenuScreen());
+                //TODO: To be completed
             }
         });
 
@@ -66,7 +96,19 @@ public class OptionScreen extends BaseScreen {
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-                gdxGame.setScreen(gdxGame.getMenuScreen());
+                //TODO: To be completed
+            }
+        });
+    }
+
+    private void handleBackButton() {
+        createButton("Back",0,table.getHeight()/5);
+
+        Actor musicButton = table.getCells().get(2).getActor();
+        musicButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent even, float x, float y) {
+                setScreenWithTransition(gdxGame.getScreen(), previousScreen, new ArrayList<>());
             }
         });
     }
@@ -98,6 +140,21 @@ public class OptionScreen extends BaseScreen {
     public void render(float delta) {
         stateTime += Gdx.graphics.getDeltaTime();
 
+        vfxManager.cleanUpBuffers();
+        vfxManager.beginInputCapture();
+
+        if (previousScreen != null && previousScreenAsImg == null) {
+            previousScreen.render(stateTime);
+        }
+        if (previousScreenAsImg != null) {
+            backgroundStage.addActor(previousScreenAsImg);
+            backgroundStage.draw();
+        }
+
+        vfxManager.endInputCapture();
+        vfxManager.applyEffects();
+        vfxManager.renderToScreen();
+
         optionStage.act(delta);
         optionStage.draw();
     }
@@ -106,5 +163,7 @@ public class OptionScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         table.remove();
+        vfxManager.dispose();
+        vfxEffect.dispose();
     }
 }
