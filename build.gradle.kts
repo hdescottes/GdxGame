@@ -1,4 +1,5 @@
 val gdxVersion by extra {"1.9.12"}
+val gdxVfxVersion by extra {"0.5.0"}
 val jUnitPlatformVersion by extra {"1.7.0"}
 val jUnitJupiterVersion by extra {"5.7.0"}
 val mockitoVersion by extra {"3.6.0"}
@@ -57,6 +58,8 @@ project(":core") {
         implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
         implementation("com.badlogicgames.gdx:gdx-box2d:$gdxVersion")
         implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
+        implementation("com.crashinvaders.vfx:gdx-vfx-core:$gdxVfxVersion")
+        implementation("com.crashinvaders.vfx:gdx-vfx-effects:$gdxVfxVersion")
         testImplementation("com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion")
         testImplementation("com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop")
     }
