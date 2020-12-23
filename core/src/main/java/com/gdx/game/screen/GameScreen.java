@@ -3,6 +3,8 @@ package com.gdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.game.GdxGame;
 import com.gdx.game.Media;
 import com.gdx.game.box2d.Box2dWorld;
@@ -86,6 +88,11 @@ public class GameScreen extends BaseScreen {
         }
 
         island.clearRemovedEntities(box2d);
+
+        if(controlManager.isOption()) {
+            Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
+            gdxGame.setScreen(new OptionScreen(gdxGame, gdxGame.getScreen(), screenShot));
+        }
     }
 
     private void drawGame() {

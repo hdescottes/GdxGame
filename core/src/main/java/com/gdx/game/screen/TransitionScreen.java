@@ -65,6 +65,7 @@ public class TransitionScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        current.dispose();
+        next.dispose();
     }
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -35,13 +36,20 @@ public class MenuScreen extends BaseScreen {
         super(gdxGame);
 
         loadAssets();
+        createTable();
         handleBackground();
         handlePlayButton();
+        handleOptionButton();
     }
 
     private void loadAssets() {
         assetManager.load("asset/textures.atlas", TextureAtlas.class);
         assetManager.finishLoading();
+    }
+
+    private void createTable() {
+        table = new Table();
+        table.setBounds(0,0, (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
     }
 
     private void handleBackground() {
@@ -66,20 +74,24 @@ public class MenuScreen extends BaseScreen {
         flowAnimation = animationManager.setAnimation(flowFrames);
     }
 
+    private void handleOptionButton() {
+        createButton("Options", 0, table.getHeight()/10);
+
+        Actor optionButton = table.getCells().get(1).getActor();
+        optionButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent even, float x, float y) {
+                ArrayList<TransitionEffect> effects = new ArrayList<>();
+                effects.add(new FadeInTransitionEffect(1f));
+                setScreenWithTransition(gdxGame.getScreen(), new OptionScreen(gdxGame, gdxGame.getScreen()), effects);
+            }
+        });
+    }
+
     private void handlePlayButton() {
-        table = new Table();
+        createButton("Play", 0, table.getHeight()/9);
 
-        TextureAtlas atlas = assetManager.get("asset/textures.atlas", TextureAtlas.class);
-        TextureRegion[][] playButtons = atlas.findRegion("play_button").split(80, 40);
-
-        BitmapFont pixel10 = new BitmapFont(Gdx.files.internal("fonts/pixel.fnt"), atlas.findRegion("pixel"), false);
-
-        TextureRegionDrawable imageUp = new TextureRegionDrawable(playButtons[0][0]);
-        TextureRegionDrawable imageDown = new TextureRegionDrawable(playButtons[1][0]);
-
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle(imageUp, imageDown, null, pixel10);
-        TextButton playButton = new TextButton("Play", buttonStyle);
-        playButton.getLabel().setColor(new Color(79 / 255.f, 79 / 255.f, 117 / 255.f, 1));
+        Actor playButton = table.getCells().get(0).getActor();
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
@@ -89,15 +101,28 @@ public class MenuScreen extends BaseScreen {
                 setScreenWithTransition(gdxGame.getScreen(), gdxGame.getGameScreen(), effects);
             }
         });
+    }
 
-        table.add(playButton);
-        table.setPosition((float) Gdx.graphics.getWidth()/2, (float) Gdx.graphics.getHeight()/2);
+    private void createButton(String buttonName, float posX, float posY) {
+        TextureAtlas atlas = assetManager.get("asset/textures.atlas", TextureAtlas.class);
+        TextureRegion[][] playButtons = atlas.findRegion("play_button").split(80, 40);
 
-        menuStage.addActor(table);
+        BitmapFont pixel10 = new BitmapFont(Gdx.files.internal("fonts/pixel.fnt"), atlas.findRegion("pixel"), false);
+
+        TextureRegionDrawable imageUp = new TextureRegionDrawable(playButtons[0][0]);
+        TextureRegionDrawable imageDown = new TextureRegionDrawable(playButtons[1][0]);
+
+        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle(imageUp, imageDown, null, pixel10);
+        TextButton button = new TextButton(buttonName, buttonStyle);
+        button.getLabel().setColor(new Color(79 / 255.f, 79 / 255.f, 117 / 255.f, 1));
+
+        table.add(button).padLeft(posX).padTop(posY);
+        table.row();
     }
 
     @Override
     public void show() {
+        menuStage.addActor(table);
         Gdx.input.setInputProcessor(menuStage);
     }
 
@@ -116,6 +141,7 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void dispose() {
+        super.dispose();
         table.remove();
     }
 }
