@@ -20,6 +20,14 @@ Currently, the battle screen only hold the background and the hero sprite. <br>
 It has a timer of 3s before returning to the main game screen. <br>
 Soon, it will hold the enemy sprite and we will be able to properly "battle" in a turn-based battle.
 
+#### Option Screen
+The option screen is divided into 3 buttons : <br>
+- The music settings (which will be add later) <br>
+- The control settings (which will be add later) <br>
+- A back input, so we can return to the previous screen <br>
+
+The option screen is triggered on the "O" key.
+
 -------
 <p align="center">
     <img src="desktop/src/main/resources/demo/demo.gif" width="396" height="315">
