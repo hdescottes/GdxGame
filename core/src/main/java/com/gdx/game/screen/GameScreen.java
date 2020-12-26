@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.game.GdxGame;
-import com.gdx.game.Media;
+import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Bird;
 import com.gdx.game.entities.Entity;
@@ -26,18 +26,20 @@ public class GameScreen extends BaseScreen {
 
     private Box2dWorld box2d;
     private ControlManager controlManager;
+    private RessourceManager ressourceManager;
     private Island island;
     private Hero hero;
 
-    public GameScreen(GdxGame gdxGame) {
+    public GameScreen(GdxGame gdxGame, RessourceManager ressourceManager) {
         super(gdxGame);
+        this.ressourceManager = ressourceManager;
 
         box2d = new Box2dWorld();
-        island = new Island(box2d);
+        island = new Island(box2d, ressourceManager);
         Vector3 islandCentrePos3 = island.getCentreTile().getPos3();
-        hero = new Hero(islandCentrePos3, box2d, EntityEnums.ENTITYSTATE.WALKING_DOWN);
-        Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, EntityEnums.ENTITYSTATE.FLYING);
-        Rabite rabite = new Rabite(new Vector3(islandCentrePos3.x - 10, islandCentrePos3.y - 10, 0), box2d, EntityEnums.ENTITYSTATE.IDLE);
+        hero = new Hero(islandCentrePos3, box2d, EntityEnums.ENTITYSTATE.WALKING_DOWN, ressourceManager);
+        Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, EntityEnums.ENTITYSTATE.FLYING, ressourceManager);
+        Rabite rabite = new Rabite(new Vector3(islandCentrePos3.x - 10, islandCentrePos3.y - 10, 0), box2d, EntityEnums.ENTITYSTATE.IDLE, ressourceManager);
 
         island.getEntities().add(hero);
         island.getEntities().add(bird);
@@ -83,7 +85,7 @@ public class GameScreen extends BaseScreen {
                 entityMap.put("hero", hero);
                 entityMap.put("enemy", hero.getEntityCollision());
                 gdxGame.setEntityMap(entityMap);
-                gdxGame.setScreen(new BattleScreen(gdxGame));
+                gdxGame.setScreen(new BattleScreen(gdxGame, ressourceManager));
             }
         }
 
@@ -91,7 +93,7 @@ public class GameScreen extends BaseScreen {
 
         if(controlManager.isOption()) {
             Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
-            gdxGame.setScreen(new OptionScreen(gdxGame, gdxGame.getScreen(), screenShot));
+            gdxGame.setScreen(new OptionScreen(gdxGame, gdxGame.getScreen(), screenShot, ressourceManager));
         }
     }
 
@@ -122,6 +124,6 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        Media.dispose();
+        ressourceManager.dispose();
     }
 }

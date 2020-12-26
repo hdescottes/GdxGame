@@ -3,6 +3,7 @@ package com.gdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.screen.GameScreen;
 import com.gdx.game.screen.MenuScreen;
 
@@ -11,6 +12,7 @@ import java.util.HashMap;
 public class GdxGame extends Game {
 	private SpriteBatch batch;
 	private HashMap<String, Entity> entityMap;
+	private RessourceManager ressourceManager;
 	private MenuScreen menuScreen;
 	private GameScreen gameScreen;
 
@@ -36,9 +38,10 @@ public class GdxGame extends Game {
 
 	public void create() {
 		batch = new SpriteBatch();
+		ressourceManager = new RessourceManager();
 
-		menuScreen = new MenuScreen(this);
-		gameScreen = new GameScreen(this);
+		menuScreen = new MenuScreen(this, ressourceManager);
+		gameScreen = new GameScreen(this, ressourceManager);
 
 		this.setScreen(menuScreen);
 	}
@@ -52,6 +55,6 @@ public class GdxGame extends Game {
 		batch.dispose();
 		menuScreen.dispose();
 		gameScreen.dispose();
-		Media.dispose();
+		ressourceManager.dispose();
 	}
 }

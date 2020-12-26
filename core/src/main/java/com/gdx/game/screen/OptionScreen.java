@@ -2,11 +2,9 @@ package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -19,12 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.crashinvaders.vfx.VfxManager;
 import com.crashinvaders.vfx.effects.GaussianBlurEffect;
 import com.gdx.game.GdxGame;
+import com.gdx.game.manager.RessourceManager;
 
 import java.util.ArrayList;
 
 public class OptionScreen extends BaseScreen {
 
-    private AssetManager assetManager = new AssetManager();
+    private RessourceManager ressourceManager;
     private Table table;
     private Stage optionStage = new Stage();
     private Stage backgroundStage = new Stage();
@@ -35,17 +34,19 @@ public class OptionScreen extends BaseScreen {
     private VfxManager vfxManager;
     private GaussianBlurEffect vfxEffect;
 
-    public OptionScreen(GdxGame gdxGame, Screen previousScreen) {
+    public OptionScreen(GdxGame gdxGame, Screen previousScreen, RessourceManager ressourceManager) {
         super(gdxGame);
         this.previousScreen = previousScreen;
+        this.ressourceManager = ressourceManager;
 
         loadContents();
     }
 
-    public OptionScreen(GdxGame gdxGame, Screen previousScreen, Image previousScreenAsImg) {
+    public OptionScreen(GdxGame gdxGame, Screen previousScreen, Image previousScreenAsImg, RessourceManager ressourceManager) {
         super(gdxGame);
         this.previousScreen = previousScreen;
         this.previousScreenAsImg = previousScreenAsImg;
+        this.ressourceManager = ressourceManager;
 
         loadContents();
     }
@@ -55,17 +56,11 @@ public class OptionScreen extends BaseScreen {
         vfxEffect = new GaussianBlurEffect();
         vfxManager.addEffect(vfxEffect);
 
-        loadAssets();
         createTable();
         handleBackground();
         handleControlButton();
         handleMusicButton();
         handleBackButton();
-    }
-
-    private void loadAssets() {
-        assetManager.load("asset/textures.atlas", TextureAtlas.class);
-        assetManager.finishLoading();
     }
 
     private void createTable() {
@@ -114,10 +109,9 @@ public class OptionScreen extends BaseScreen {
     }
 
     private void createButton(String buttonName, float posX, float posY) {
-        TextureAtlas atlas = assetManager.get("asset/textures.atlas", TextureAtlas.class);
-        TextureRegion[][] playButtons = atlas.findRegion("play_button").split(80, 40);
+        TextureRegion[][] playButtons = ressourceManager.button;
 
-        BitmapFont pixel10 = new BitmapFont(Gdx.files.internal("fonts/pixel.fnt"), atlas.findRegion("pixel"), false);
+        BitmapFont pixel10 = ressourceManager.pixel10;
 
         TextureRegionDrawable imageUp = new TextureRegionDrawable(playButtons[0][0]);
         TextureRegionDrawable imageDown = new TextureRegionDrawable(playButtons[1][0]);

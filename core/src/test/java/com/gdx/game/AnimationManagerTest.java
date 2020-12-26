@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.gdx.game.manager.AnimationManager;
+import com.gdx.game.manager.RessourceManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,8 +26,9 @@ class AnimationManagerTest {
 
     @Test
     void testSetTextureRegion_ShouldSucceed() {
+        RessourceManager ressourceManager = new RessourceManager();
         AnimationManager animationManager = new AnimationManager();
-        TextureRegion[] textureRegions = TextureRegion.split(Media.heroWalkUp, 32, 37)[0];
+        TextureRegion[] textureRegions = TextureRegion.split(ressourceManager.heroWalkUp, 32, 37)[0];
         Animation<TextureRegion> animation = new Animation<>(0.1f, textureRegions);
 
         TextureRegion textureRegion = animationManager.setTextureRegion(animation, 0);
@@ -36,18 +38,20 @@ class AnimationManagerTest {
 
     @Test
     void testSetTextureRegions_ShouldSucceed() {
+        RessourceManager ressourceManager = new RessourceManager();
         AnimationManager animationManager = new AnimationManager();
 
-        TextureRegion[] textureRegions = animationManager.setTextureRegions(Media.heroWalkUp, 32, 37);
+        TextureRegion[] textureRegions = animationManager.setTextureRegions(ressourceManager.heroWalkUp, 32, 37);
 
         assertThat(textureRegions.length).isEqualTo(3);
     }
 
     @Test
     void testSetTextureRegionsDouble_ShouldSucceed() {
+        RessourceManager ressourceManager = new RessourceManager();
         AnimationManager animationManager = new AnimationManager();
 
-        TextureRegion[][] textureRegions = animationManager.setTextureRegionsDouble(Media.heroWalkUp, 32, 37);
+        TextureRegion[][] textureRegions = animationManager.setTextureRegionsDouble(ressourceManager.heroWalkUp, 32, 37);
 
         assertThat(textureRegions.length).isEqualTo(1);
         assertThat(textureRegions[0].length).isEqualTo(3);
@@ -55,8 +59,9 @@ class AnimationManagerTest {
 
     @Test
     void testSetAnimation_ShouldSucceed() {
+        RessourceManager ressourceManager = new RessourceManager();
         AnimationManager animationManager = new AnimationManager();
-        TextureRegion[] textureRegions = TextureRegion.split(Media.heroWalkUp, 32, 37)[0];
+        TextureRegion[] textureRegions = TextureRegion.split(ressourceManager.heroWalkUp, 32, 37)[0];
 
         Animation<TextureRegion> animation = animationManager.setAnimation(textureRegions);
 
@@ -66,11 +71,12 @@ class AnimationManagerTest {
 
     @Test
     void testSetFlipped_ShouldSucceed() {
+        RessourceManager ressourceManager = new RessourceManager();
         AnimationManager animationManager = new AnimationManager();
         Vector3 destVec = new Vector3();
         destVec.set(10,10,0);
         TextureRegion textureRegion = new TextureRegion();
-        textureRegion.setTexture(Media.heroWalkRight);
+        textureRegion.setTexture(ressourceManager.heroWalkRight);
         textureRegion.setRegion(1,1,10,10);
 
         animationManager.setFlipped(destVec, textureRegion);

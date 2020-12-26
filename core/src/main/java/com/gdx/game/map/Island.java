@@ -3,6 +3,7 @@ package com.gdx.game.map;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Entity;
@@ -16,26 +17,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.gdx.game.Media.cliff;
-import static com.gdx.game.Media.grass01;
-import static com.gdx.game.Media.grass02;
-import static com.gdx.game.Media.grass03;
-import static com.gdx.game.Media.grass04;
-import static com.gdx.game.Media.grassLeft;
-import static com.gdx.game.Media.grassLeftUpperEdge;
-import static com.gdx.game.Media.grassRight;
-import static com.gdx.game.Media.grassRightUpperEdge;
-import static com.gdx.game.Media.grassTop;
-import static com.gdx.game.Media.grassTopLeft;
-import static com.gdx.game.Media.grassTopRight;
-import static com.gdx.game.Media.water01;
-import static com.gdx.game.Media.water02;
-import static com.gdx.game.Media.water03;
-import static com.gdx.game.Media.water04;
-
 public class Island {
     private Tile centreTile;
     private Tile clickedTile;
+    private RessourceManager ressourceManager;
 
     // CHUNKS TODO: Add multiple chunks
     // public Map<Integer, ArrayList<Chunk>> chunks = new HashMap<>();
@@ -58,7 +43,9 @@ public class Island {
     String[] aGrassTopRight = {"000000100"};
     String[] aGrassTopLeft = {"000000001"};
 
-    public Island(Box2dWorld box2d) {
+    public Island(Box2dWorld box2d, RessourceManager ressourceManager) {
+        this.ressourceManager = ressourceManager;
+
         setupTiles();
         codeTiles();
         generateHitboxes(box2d);
@@ -137,7 +124,7 @@ public class Island {
             tile.setTiletype(TILETYPE.GRASS);
 
             if(row == firstTileRow + 1) {
-                tile.setTexture(cliff);
+                tile.setTexture(ressourceManager.cliff);
                 tile.setTiletype(TILETYPE.CLIFF);
             } else {
                 // Chance to add trees etc
@@ -178,19 +165,19 @@ public class Island {
         // Secondary Texture is to add edges to tiles
         // TODO: Add array of textures per tile
         if(Arrays.asList(aGrassLeft).contains(tile.getCode())) {
-            tile.setSecondaryTexture(grassLeft);
+            tile.setSecondaryTexture(ressourceManager.grassLeft);
         } else if(Arrays.asList(aGrassRight).contains(tile.getCode())) {
-            tile.setSecondaryTexture(grassRight);
+            tile.setSecondaryTexture(ressourceManager.grassRight);
         } else if(Arrays.asList(aGrassREnd).contains(tile.getCode())) {
-            tile.setSecondaryTexture(grassLeftUpperEdge);
+            tile.setSecondaryTexture(ressourceManager.grassLeftUpperEdge);
         } else if(Arrays.asList(aGrassLEnd).contains(tile.getCode())) {
-            tile.setSecondaryTexture(grassRightUpperEdge);
+            tile.setSecondaryTexture(ressourceManager.grassRightUpperEdge);
         } else if(Arrays.asList(aGrassTop).contains(tile.getCode())) {
-            tile.setSecondaryTexture(grassTop);
+            tile.setSecondaryTexture(ressourceManager.grassTop);
         } else if(Arrays.asList(aGrassTopRight).contains(tile.getCode())) {
-            tile.setSecondaryTexture(grassTopRight);
+            tile.setSecondaryTexture(ressourceManager.grassTopRight);
         } else if(Arrays.asList(aGrassTopLeft).contains(tile.getCode())) {
-            tile.setSecondaryTexture(grassTopLeft);
+            tile.setSecondaryTexture(ressourceManager.grassTopLeft);
         }        
     }
     
@@ -198,15 +185,15 @@ public class Island {
         Texture grass;
         int tile = MathUtils.random(20);
         switch (tile) {
-            case 1:  grass = grass01;
+            case 1:  grass = ressourceManager.grass01;
                      break;
-            case 2:  grass = grass02;
+            case 2:  grass = ressourceManager.grass02;
                      break;
-            case 3:  grass = grass03;
+            case 3:  grass = ressourceManager.grass03;
                      break;
-            case 4:  grass = grass04;
+            case 4:  grass = ressourceManager.grass04;
                      break;
-            default: grass = grass01;
+            default: grass = ressourceManager.grass01;
                      break;        
         }
         return grass;
@@ -216,15 +203,15 @@ public class Island {
         Texture water;
         int tile = MathUtils.random(20);
         switch (tile) {
-            case 1:  water = water01;
+            case 1:  water = ressourceManager.water01;
                      break;
-            case 2:  water = water02;
+            case 2:  water = ressourceManager.water02;
                      break;
-            case 3:  water = water03;
+            case 3:  water = ressourceManager.water03;
                      break;
-            case 4:  water = water04;
+            case 4:  water = ressourceManager.water04;
                      break;
-            default: water = water01;
+            default: water = ressourceManager.water01;
                      break;        
         }
         return water;
@@ -263,7 +250,7 @@ public class Island {
         Stream.of(tile)
                 .filter(Tile::isGrass)
                 .filter(t -> MathUtils.random(100) > 90)
-                .forEach(t -> entities.add(new Tree(tile.getPos3(), box2D)));
+                .forEach(t -> entities.add(new Tree(tile.getPos3(), box2D, ressourceManager)));
     }
 
     private void generateHitboxes(Box2dWorld box2d) {
