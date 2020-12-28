@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.game.GdxGame;
-import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Bird;
 import com.gdx.game.entities.Entity;
@@ -15,6 +14,7 @@ import com.gdx.game.entities.Hero;
 import com.gdx.game.entities.Rabite;
 import com.gdx.game.manager.CameraManager;
 import com.gdx.game.manager.ControlManager;
+import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.map.Island;
 import com.gdx.game.map.Tile;
 
@@ -26,13 +26,11 @@ public class GameScreen extends BaseScreen {
 
     private Box2dWorld box2d;
     private ControlManager controlManager;
-    private RessourceManager ressourceManager;
     private Island island;
     private Hero hero;
 
     public GameScreen(GdxGame gdxGame, RessourceManager ressourceManager) {
-        super(gdxGame);
-        this.ressourceManager = ressourceManager;
+        super(gdxGame, ressourceManager);
 
         box2d = new Box2dWorld();
         island = new Island(box2d, ressourceManager);

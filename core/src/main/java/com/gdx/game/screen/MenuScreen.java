@@ -1,21 +1,17 @@
 package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.gdx.game.GdxGame;
-import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.manager.AnimationManager;
+import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.screen.transition.effects.FadeInTransitionEffect;
 import com.gdx.game.screen.transition.effects.FadeOutTransitionEffect;
 import com.gdx.game.screen.transition.effects.TransitionEffect;
@@ -24,15 +20,13 @@ import java.util.ArrayList;
 
 public class MenuScreen extends BaseScreen {
 
-    private RessourceManager ressourceManager;
     private Table table;
     private Stage menuStage = new Stage();
     private Animation<TextureRegion> flowAnimation;
     private float stateTime;
 
     public MenuScreen(GdxGame gdxGame, RessourceManager ressourceManager) {
-        super(gdxGame);
-        this.ressourceManager = ressourceManager;
+        super(gdxGame, ressourceManager);
 
         createTable();
         handleBackground();
@@ -68,7 +62,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void handleOptionButton() {
-        createButton("Options", 0, table.getHeight()/10);
+        createButton("Options", 0, table.getHeight()/10, table);
 
         Actor optionButton = table.getCells().get(1).getActor();
         optionButton.addListener(new ClickListener() {
@@ -82,7 +76,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void handlePlayButton() {
-        createButton("Play", 0, table.getHeight()/9);
+        createButton("Play", 0, table.getHeight()/9, table);
 
         Actor playButton = table.getCells().get(0).getActor();
         playButton.addListener(new ClickListener() {
@@ -94,22 +88,6 @@ public class MenuScreen extends BaseScreen {
                 setScreenWithTransition(gdxGame.getScreen(), gdxGame.getGameScreen(), effects);
             }
         });
-    }
-
-    private void createButton(String buttonName, float posX, float posY) {
-        TextureRegion[][] playButtons = ressourceManager.button;
-
-        BitmapFont pixel10 = ressourceManager.pixel10;
-
-        TextureRegionDrawable imageUp = new TextureRegionDrawable(playButtons[0][0]);
-        TextureRegionDrawable imageDown = new TextureRegionDrawable(playButtons[1][0]);
-
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle(imageUp, imageDown, null, pixel10);
-        TextButton button = new TextButton(buttonName, buttonStyle);
-        button.getLabel().setColor(new Color(79 / 255.f, 79 / 255.f, 117 / 255.f, 1));
-
-        table.add(button).padLeft(posX).padTop(posY);
-        table.row();
     }
 
     @Override

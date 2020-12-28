@@ -5,18 +5,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.gdx.game.GdxGame;
-import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Hero;
 import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.manager.CameraManager;
 import com.gdx.game.manager.ControlManager;
+import com.gdx.game.manager.RessourceManager;
 
 public class BattleScreen extends BaseScreen {
 
     private Box2dWorld box2d;
     private ControlManager controlManager;
-    private RessourceManager ressourceManager;
     private Hero hero;
     private AnimationManager animationManager = new AnimationManager();
     private TextureRegion[]  textureRegions;
@@ -28,8 +27,7 @@ public class BattleScreen extends BaseScreen {
     private Long delay = 3L;
 
     public BattleScreen(GdxGame gdxGame, RessourceManager ressourceManager) {
-        super(gdxGame);
-        this.ressourceManager = ressourceManager;
+        super(gdxGame, ressourceManager);
 
         this.viewport = new StretchViewport(getBattleCam().viewportWidth, getBattleCam().viewportHeight, getBattleCam());
         battleStage = new Stage(viewport, gdxGame.getBatch());
