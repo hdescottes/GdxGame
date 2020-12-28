@@ -21,7 +21,7 @@ public class TransitionEffect {
     }
 
     public void render(Screen current, Screen next) {
-
+        // Nothing
     }
 
     public boolean isFinished() {

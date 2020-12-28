@@ -49,7 +49,6 @@ public class OptionScreen extends BaseScreen {
         vfxManager.addEffect(vfxEffect);
 
         createTable();
-        handleBackground();
         handleControlButton();
         handleMusicButton();
         handleBackButton();
@@ -58,9 +57,6 @@ public class OptionScreen extends BaseScreen {
     private void createTable() {
         table = new Table();
         table.setBounds(0,0, (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
-    }
-
-    private void handleBackground() {
     }
 
     private void handleControlButton() {

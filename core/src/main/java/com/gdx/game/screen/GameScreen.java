@@ -75,16 +75,12 @@ public class GameScreen extends BaseScreen {
         drawGame();
         box2d.tick(getGameCam(), controlManager);
 
-        delta += Gdx.graphics.getDeltaTime();
-
-        if(hero.isCollision()) {
-            if(hero.getEntityCollision().getType() == EntityEnums.ENTITYTYPE.ENEMY) {
-                HashMap<String, Entity> entityMap = new HashMap<>();
-                entityMap.put("hero", hero);
-                entityMap.put("enemy", hero.getEntityCollision());
-                gdxGame.setEntityMap(entityMap);
-                gdxGame.setScreen(new BattleScreen(gdxGame, ressourceManager));
-            }
+        if(hero.isCollision() && hero.getEntityCollision().getType() == EntityEnums.ENTITYTYPE.ENEMY) {
+            HashMap<String, Entity> entityMap = new HashMap<>();
+            entityMap.put("hero", hero);
+            entityMap.put("enemy", hero.getEntityCollision());
+            gdxGame.setEntityMap(entityMap);
+            gdxGame.setScreen(new BattleScreen(gdxGame, ressourceManager));
         }
 
         island.clearRemovedEntities(box2d);

@@ -7,11 +7,11 @@ import com.gdx.game.manager.RessourceManager;
 import com.gdx.game.screen.GameScreen;
 import com.gdx.game.screen.MenuScreen;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class GdxGame extends Game {
 	private SpriteBatch batch;
-	private HashMap<String, Entity> entityMap;
+	private Map<String, Entity> entityMap;
 	private RessourceManager ressourceManager;
 	private MenuScreen menuScreen;
 	private GameScreen gameScreen;
@@ -20,11 +20,11 @@ public class GdxGame extends Game {
 		return batch;
 	}
 
-	public HashMap<String, Entity> getEntityMap() {
+	public Map<String, Entity> getEntityMap() {
 		return entityMap;
 	}
 
-	public void setEntityMap(HashMap<String, Entity> entityMap) {
+	public void setEntityMap(Map<String, Entity> entityMap) {
 		this.entityMap = entityMap;
 	}
 
@@ -46,10 +46,7 @@ public class GdxGame extends Game {
 		this.setScreen(menuScreen);
 	}
 
-	public void render() {
-		super.render();
-	}
-	
+	@Override
 	public void dispose() {
 		super.dispose();
 		batch.dispose();

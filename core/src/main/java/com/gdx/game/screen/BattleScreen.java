@@ -59,7 +59,7 @@ public class BattleScreen extends BaseScreen {
         gdxGame.getBatch().begin();
         gdxGame.getBatch().draw(ressourceManager.battleBackgroundMeadow, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         if(textureRegions != null) {
-            gdxGame.getBatch().draw(textureRegions[1], 150, 175, textureRegions[1].getRegionWidth()*3, textureRegions[1].getRegionHeight()*3);
+            gdxGame.getBatch().draw(textureRegions[1], 150, 175, textureRegions[1].getRegionWidth()*3f, textureRegions[1].getRegionHeight()*3f);
         }
 
         gdxGame.getBatch().end();

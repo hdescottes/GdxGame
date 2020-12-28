@@ -12,6 +12,9 @@ public class ImmediateModeRendererUtils {
     private static final ImmediateModeRenderer renderer = new ImmediateModeRenderer20(true, true, 0);
     private static Matrix4 projectionMatrix = null;
 
+    private ImmediateModeRendererUtils() {
+    }
+
     public static Matrix4 getProjectionMatrix() {
         if (projectionMatrix == null) {
             projectionMatrix = new Matrix4();
@@ -22,27 +25,27 @@ public class ImmediateModeRendererUtils {
 
     public static void fillRectangle(float x0, float y0, float x1, float y1, Color color) {
         renderer.begin(getProjectionMatrix(), GL20.GL_TRIANGLES);
-        {
-            // first triangle
-            renderer.color(color.r, color.g, color.b, color.a);
-            renderer.vertex(x0, y0, 0f);
 
-            renderer.color(color.r, color.g, color.b, color.a);
-            renderer.vertex(x0, y1, 0f);
+        // first triangle
+        renderer.color(color.r, color.g, color.b, color.a);
+        renderer.vertex(x0, y0, 0f);
 
-            renderer.color(color.r, color.g, color.b, color.a);
-            renderer.vertex(x1, y1, 0f);
+        renderer.color(color.r, color.g, color.b, color.a);
+        renderer.vertex(x0, y1, 0f);
 
-            // second triangle
-            renderer.color(color.r, color.g, color.b, color.a);
-            renderer.vertex(x1, y1, 0f);
+        renderer.color(color.r, color.g, color.b, color.a);
+        renderer.vertex(x1, y1, 0f);
 
-            renderer.color(color.r, color.g, color.b, color.a);
-            renderer.vertex(x1, y0, 0f);
+        // second triangle
+        renderer.color(color.r, color.g, color.b, color.a);
+        renderer.vertex(x1, y1, 0f);
 
-            renderer.color(color.r, color.g, color.b, color.a);
-            renderer.vertex(x0, y0, 0f);
-        }
+        renderer.color(color.r, color.g, color.b, color.a);
+        renderer.vertex(x1, y0, 0f);
+
+        renderer.color(color.r, color.g, color.b, color.a);
+        renderer.vertex(x0, y0, 0f);
+
         renderer.end();
     }
 }
