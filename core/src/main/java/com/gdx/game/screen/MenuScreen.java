@@ -94,6 +94,7 @@ public class MenuScreen extends BaseScreen {
     public void show() {
         menuStage.addActor(table);
         Gdx.input.setInputProcessor(menuStage);
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(ressourceManager.cursor, 0, 0));
     }
 
     @Override

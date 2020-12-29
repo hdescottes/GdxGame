@@ -2,6 +2,7 @@ package com.gdx.game.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,6 +16,7 @@ public class RessourceManager {
     // IMAGES
     public Texture backgroundSheet;
     public Texture battleBackgroundMeadow;
+    public Pixmap cursor;
 
     // BUTTON
     public TextureRegion[][] button;
@@ -113,6 +115,7 @@ public class RessourceManager {
         // IMAGES
         backgroundSheet = assetManager.get("asset/background/natureBackground_frames_sheet.png");
         battleBackgroundMeadow = assetManager.get("asset/background/battleBackground_meadow.png");
+        cursor = new Pixmap(Gdx.files.internal("asset/tool/cursor.png"));
 
         // BUTTON
         button = atlas.findRegion("play_button").split(80, 40);
