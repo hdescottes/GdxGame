@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.manager.RessourceManager;
+import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
@@ -27,11 +27,11 @@ public class Bird extends Entity {
     private TextureRegion tRegion;
     private static final float BIRD_SPEED = 15;
     private AnimationManager animationManager = new AnimationManager();
-    private RessourceManager ressourceManager;
+    private ResourceManager resourceManager;
 
-    public Bird(Vector3 pos3, Box2dWorld box2d, ENTITYSTATE state, RessourceManager ressourceManager) {
-        super(ressourceManager.tree, ressourceManager.birdShadow, 8, 8);
-        this.ressourceManager = ressourceManager;
+    public Bird(Vector3 pos3, Box2dWorld box2d, ENTITYSTATE state, ResourceManager resourceManager) {
+        super(resourceManager.tree, resourceManager.birdShadow, 8, 8);
+        this.resourceManager = resourceManager;
         this.maxHeight = setHeight();
         this.type = ENTITYTYPE.BIRD;
         this.getPos3().set(getPos3());
@@ -48,18 +48,18 @@ public class Bird extends Entity {
         setBirdTextureRegion();
         animationManager.setFlipped(destVec, tRegion);
 
-        batch.draw(ressourceManager.birdShadow, getPos3().x, getPos3().y, getWidth()/2, getHeight()/4);
+        batch.draw(resourceManager.birdShadow, getPos3().x, getPos3().y, getWidth()/2, getHeight()/4);
         Optional.ofNullable(tRegion)
                 .ifPresent(t -> batch.draw(t, getPos3().x, getPos3().y + getPos3().z, getWidth()/2, getHeight()/2));
     }
 
     private void setBirdTextureRegion() {
         if(isFlying() || isLanding()) {
-            tRegion = animationManager.setTextureRegion(animation(textureRegions(ressourceManager.birdFly)), time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(resourceManager.birdFly)), time);
         } else if(isWalking()) {
-            tRegion = animationManager.setTextureRegion(animation(textureRegions(ressourceManager.birdWalk)), time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(resourceManager.birdWalk)), time);
         } else if(isFeeding()) {
-            tRegion = animationManager.setTextureRegion(animation(textureRegions(ressourceManager.birdPeck)), time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(resourceManager.birdPeck)), time);
         }
     }
 

@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gdx.game.GdxGame;
 import com.gdx.game.manager.AnimationManager;
-import com.gdx.game.manager.RessourceManager;
+import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.screen.transition.effects.FadeInTransitionEffect;
 import com.gdx.game.screen.transition.effects.FadeOutTransitionEffect;
 import com.gdx.game.screen.transition.effects.TransitionEffect;
@@ -25,8 +25,8 @@ public class MenuScreen extends BaseScreen {
     private Animation<TextureRegion> flowAnimation;
     private float stateTime;
 
-    public MenuScreen(GdxGame gdxGame, RessourceManager ressourceManager) {
-        super(gdxGame, ressourceManager);
+    public MenuScreen(GdxGame gdxGame, ResourceManager resourceManager) {
+        super(gdxGame, resourceManager);
 
         createTable();
         handleBackground();
@@ -39,12 +39,16 @@ public class MenuScreen extends BaseScreen {
         table.setBounds(0,0, (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
     }
 
+    private void handleMusic() {
+        resourceManager.playMusic("music/Rising_Sun.mp3");
+    }
+
     private void handleBackground() {
         int nbRow = 7;
         int nbCol = 7;
         AnimationManager animationManager = new AnimationManager();
 
-        Texture backgroundSheet = ressourceManager.backgroundSheet;
+        Texture backgroundSheet = resourceManager.backgroundSheet;
 
         TextureRegion[][] tmp = animationManager.setTextureRegionsDouble(backgroundSheet,
                 backgroundSheet.getWidth() / nbCol,
@@ -70,7 +74,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent even, float x, float y) {
                 ArrayList<TransitionEffect> effects = new ArrayList<>();
                 effects.add(new FadeInTransitionEffect(1f));
-                setScreenWithTransition(gdxGame.getScreen(), new OptionScreen(gdxGame, gdxGame.getScreen(), ressourceManager), effects);
+                setScreenWithTransition(gdxGame.getScreen(), new OptionScreen(gdxGame, gdxGame.getScreen(), resourceManager), effects);
             }
         });
     }
@@ -94,7 +98,8 @@ public class MenuScreen extends BaseScreen {
     public void show() {
         menuStage.addActor(table);
         Gdx.input.setInputProcessor(menuStage);
-        Gdx.graphics.setCursor(Gdx.graphics.newCursor(ressourceManager.cursor, 0, 0));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(resourceManager.cursor, 0, 0));
+        handleMusic();
     }
 
     @Override

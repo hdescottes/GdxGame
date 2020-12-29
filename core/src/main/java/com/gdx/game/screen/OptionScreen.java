@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.crashinvaders.vfx.VfxManager;
 import com.crashinvaders.vfx.effects.GaussianBlurEffect;
 import com.gdx.game.GdxGame;
-import com.gdx.game.manager.RessourceManager;
+import com.gdx.game.manager.ResourceManager;
 
 import java.util.ArrayList;
 
@@ -28,15 +28,15 @@ public class OptionScreen extends BaseScreen {
     private VfxManager vfxManager;
     private GaussianBlurEffect vfxEffect;
 
-    public OptionScreen(GdxGame gdxGame, Screen previousScreen, RessourceManager ressourceManager) {
-        super(gdxGame, ressourceManager);
+    public OptionScreen(GdxGame gdxGame, Screen previousScreen, ResourceManager resourceManager) {
+        super(gdxGame, resourceManager);
         this.previousScreen = previousScreen;
 
         loadContents();
     }
 
-    public OptionScreen(GdxGame gdxGame, Screen previousScreen, Image previousScreenAsImg, RessourceManager ressourceManager) {
-        super(gdxGame, ressourceManager);
+    public OptionScreen(GdxGame gdxGame, Screen previousScreen, Image previousScreenAsImg, ResourceManager resourceManager) {
+        super(gdxGame, resourceManager);
         this.previousScreen = previousScreen;
         this.previousScreenAsImg = previousScreenAsImg;
 

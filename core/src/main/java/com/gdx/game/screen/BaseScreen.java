@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.game.GdxGame;
 import com.gdx.game.manager.CameraManager;
-import com.gdx.game.manager.RessourceManager;
+import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.screen.transition.effects.TransitionEffect;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class BaseScreen implements Screen {
     protected final GdxGame gdxGame;
-    protected RessourceManager ressourceManager;
+    protected ResourceManager resourceManager;
     protected OrthographicCamera gameCam;
     protected OrthographicCamera battleCam;
     // viewport that keeps aspect ratios of the game when resizing
@@ -30,9 +30,9 @@ public class BaseScreen implements Screen {
     // main stage of each screen
     protected Stage stage;
 
-    public BaseScreen(GdxGame gdxGame, RessourceManager ressourceManager) {
+    public BaseScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         this.gdxGame = gdxGame;
-        this.ressourceManager = ressourceManager;
+        this.resourceManager = resourceManager;
 
         CameraManager cameraManager = new CameraManager();
         gameCam = cameraManager.createCamera(Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight()/3, .4f);
@@ -50,9 +50,9 @@ public class BaseScreen implements Screen {
     }
 
     public void createButton(String buttonName, float posX, float posY, Table table) {
-        TextureRegion[][] playButtons = ressourceManager.button;
+        TextureRegion[][] playButtons = resourceManager.button;
 
-        BitmapFont pixel10 = ressourceManager.pixel10;
+        BitmapFont pixel10 = resourceManager.pixel10;
 
         TextureRegionDrawable imageUp = new TextureRegionDrawable(playButtons[0][0]);
         TextureRegionDrawable imageDown = new TextureRegionDrawable(playButtons[1][0]);

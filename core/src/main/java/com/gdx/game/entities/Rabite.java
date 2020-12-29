@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.manager.RessourceManager;
+import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.manager.AnimationManager;
@@ -20,11 +20,11 @@ public class Rabite extends Entity{
     private Tile destTile;
     private TextureRegion tRegion;
     private AnimationManager animationManager = new AnimationManager();
-    private RessourceManager ressourceManager;
+    private ResourceManager resourceManager;
 
-    public Rabite(Vector3 pos3, Box2dWorld box2d, EntityEnums.ENTITYSTATE state, RessourceManager ressourceManager) {
-        super(ressourceManager.rabite,null,8, 8);
-        this.ressourceManager = ressourceManager;
+    public Rabite(Vector3 pos3, Box2dWorld box2d, EntityEnums.ENTITYSTATE state, ResourceManager resourceManager) {
+        super(resourceManager.rabite,null,8, 8);
+        this.resourceManager = resourceManager;
         this.type = EntityEnums.ENTITYTYPE.ENEMY;
         this.getPos3().x = pos3.x;
         this.getPos3().y = pos3.y;
@@ -41,28 +41,28 @@ public class Rabite extends Entity{
         setRabiteTextureRegion();
         //animationManager.setFlipped(destVec, tRegion);
 
-        batch.draw(ressourceManager.heroShadow, getPos3().x + 0.1f, getPos3().y, getWidth(), getHeight()/2);
+        batch.draw(resourceManager.heroShadow, getPos3().x + 0.1f, getPos3().y, getWidth(), getHeight()/2);
         Optional.ofNullable(tRegion)
                 .ifPresent(t -> batch.draw(t, getPos3().x, getPos3().y, getWidth(), getHeight()*(float)1.2));
     }
 
     private void setRabiteTextureRegion() {
         if(isWalkingUp()) {
-            tRegion = animationManager.setTextureRegion(animation(textureRegions(ressourceManager.heroWalkUp)), time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(resourceManager.heroWalkUp)), time);
         } else if(isWalkingDown()) {
-            tRegion = animationManager.setTextureRegion(animation(textureRegions(ressourceManager.rabiteWalkDown)), time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(resourceManager.rabiteWalkDown)), time);
         } else if(isWalkingRight()) {
-            tRegion = animationManager.setTextureRegion(animation(textureRegions(ressourceManager.heroWalkRight)), time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(resourceManager.heroWalkRight)), time);
         } else if(isWalkingLeft()) {
-            tRegion = animationManager.setTextureRegion(animation(textureRegions(ressourceManager.heroWalkLeft)), time);
+            tRegion = animationManager.setTextureRegion(animation(textureRegions(resourceManager.heroWalkLeft)), time);
         } else if(isLookingUp()) {
-            tRegion = textureRegions(ressourceManager.heroWalkUp)[1];
+            tRegion = textureRegions(resourceManager.heroWalkUp)[1];
         } else if(isLookingDown()) {
-            tRegion = textureRegions(ressourceManager.rabiteWalkDown)[3];
+            tRegion = textureRegions(resourceManager.rabiteWalkDown)[3];
         } else if(isLookingRight()) {
-            tRegion = textureRegions(ressourceManager.heroWalkRight)[1];
+            tRegion = textureRegions(resourceManager.heroWalkRight)[1];
         } else if(isLookingLeft()) {
-            tRegion = textureRegions(ressourceManager.heroWalkLeft)[1];
+            tRegion = textureRegions(resourceManager.heroWalkLeft)[1];
         }
     }
 

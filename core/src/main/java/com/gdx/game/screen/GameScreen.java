@@ -14,7 +14,7 @@ import com.gdx.game.entities.Hero;
 import com.gdx.game.entities.Rabite;
 import com.gdx.game.manager.CameraManager;
 import com.gdx.game.manager.ControlManager;
-import com.gdx.game.manager.RessourceManager;
+import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.Island;
 import com.gdx.game.map.Tile;
 
@@ -29,15 +29,15 @@ public class GameScreen extends BaseScreen {
     private Island island;
     private Hero hero;
 
-    public GameScreen(GdxGame gdxGame, RessourceManager ressourceManager) {
-        super(gdxGame, ressourceManager);
+    public GameScreen(GdxGame gdxGame, ResourceManager resourceManager) {
+        super(gdxGame, resourceManager);
 
         box2d = new Box2dWorld();
-        island = new Island(box2d, ressourceManager);
+        island = new Island(box2d, resourceManager);
         Vector3 islandCentrePos3 = island.getCentreTile().getPos3();
-        hero = new Hero(islandCentrePos3, box2d, EntityEnums.ENTITYSTATE.WALKING_DOWN, ressourceManager);
-        Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, EntityEnums.ENTITYSTATE.FLYING, ressourceManager);
-        Rabite rabite = new Rabite(new Vector3(islandCentrePos3.x - 10, islandCentrePos3.y - 10, 0), box2d, EntityEnums.ENTITYSTATE.IDLE, ressourceManager);
+        hero = new Hero(islandCentrePos3, box2d, EntityEnums.ENTITYSTATE.WALKING_DOWN, resourceManager);
+        Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, EntityEnums.ENTITYSTATE.FLYING, resourceManager);
+        Rabite rabite = new Rabite(new Vector3(islandCentrePos3.x - 10, islandCentrePos3.y - 10, 0), box2d, EntityEnums.ENTITYSTATE.IDLE, resourceManager);
 
         island.getEntities().add(hero);
         island.getEntities().add(bird);
@@ -47,10 +47,15 @@ public class GameScreen extends BaseScreen {
         box2d.populateEntityMap(island.getEntities());
     }
 
+    private void handleMusic() {
+        resourceManager.playMusic("music/Dwarves'_Theme.mp3");
+    }
+
     @Override
     public void show() {
         CameraManager cameraManager = new CameraManager();
         controlManager = cameraManager.insertControl(getGameCam());
+        handleMusic();
     }
 
     @Override
@@ -80,14 +85,14 @@ public class GameScreen extends BaseScreen {
             entityMap.put("hero", hero);
             entityMap.put("enemy", hero.getEntityCollision());
             gdxGame.setEntityMap(entityMap);
-            gdxGame.setScreen(new BattleScreen(gdxGame, ressourceManager));
+            gdxGame.setScreen(new BattleScreen(gdxGame, resourceManager));
         }
 
         island.clearRemovedEntities(box2d);
 
         if(controlManager.isOption()) {
             Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
-            gdxGame.setScreen(new OptionScreen(gdxGame, gdxGame.getScreen(), screenShot, ressourceManager));
+            gdxGame.setScreen(new OptionScreen(gdxGame, gdxGame.getScreen(), screenShot, resourceManager));
         }
     }
 
@@ -118,6 +123,6 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        ressourceManager.dispose();
+        resourceManager.dispose();
     }
 }

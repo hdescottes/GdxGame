@@ -10,7 +10,7 @@ import com.gdx.game.entities.Hero;
 import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.manager.CameraManager;
 import com.gdx.game.manager.ControlManager;
-import com.gdx.game.manager.RessourceManager;
+import com.gdx.game.manager.ResourceManager;
 
 public class BattleScreen extends BaseScreen {
 
@@ -26,8 +26,8 @@ public class BattleScreen extends BaseScreen {
     private float lifeTime;
     private Long delay = 3L;
 
-    public BattleScreen(GdxGame gdxGame, RessourceManager ressourceManager) {
-        super(gdxGame, ressourceManager);
+    public BattleScreen(GdxGame gdxGame, ResourceManager resourceManager) {
+        super(gdxGame, resourceManager);
 
         this.viewport = new StretchViewport(getBattleCam().viewportWidth, getBattleCam().viewportHeight, getBattleCam());
         battleStage = new Stage(viewport, gdxGame.getBatch());
@@ -39,9 +39,13 @@ public class BattleScreen extends BaseScreen {
     private void handleEntities() {
         if(gdxGame.getEntityMap() != null) {
             hero = (Hero) gdxGame.getEntityMap().get("hero");
-            hero.setTexture(ressourceManager.heroWalkRight);
+            hero.setTexture(resourceManager.heroWalkRight);
             textureRegions = animationManager.setTextureRegions(hero.getTexture(), 32, 37);
         }
+    }
+
+    private void handleMusic() {
+        resourceManager.playMusic("music/Challenge.mp3");
     }
 
     @Override
@@ -50,6 +54,8 @@ public class BattleScreen extends BaseScreen {
         controlManager = cameraManager.insertControl(getBattleCam());
 
         Gdx.input.setInputProcessor(battleStage);
+
+        handleMusic();
     }
 
     @Override
@@ -57,7 +63,7 @@ public class BattleScreen extends BaseScreen {
         gdxGame.getBatch().setProjectionMatrix(getBattleCam().combined);
 
         gdxGame.getBatch().begin();
-        gdxGame.getBatch().draw(ressourceManager.battleBackgroundMeadow, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        gdxGame.getBatch().draw(resourceManager.battleBackgroundMeadow, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         if(textureRegions != null) {
             gdxGame.getBatch().draw(textureRegions[1], 150, 175, textureRegions[1].getRegionWidth()*3f, textureRegions[1].getRegionHeight()*3f);
         }
