@@ -48,7 +48,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void handleMusic() {
-        resourceManager.playMusic("music/Dwarves'_Theme.mp3");
+        playMusic("music/Dwarves'_Theme.mp3");
     }
 
     @Override

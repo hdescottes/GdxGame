@@ -45,7 +45,7 @@ public class BattleScreen extends BaseScreen {
     }
 
     private void handleMusic() {
-        resourceManager.playMusic("music/Challenge.mp3");
+        playMusic("music/Challenge.mp3");
     }
 
     @Override

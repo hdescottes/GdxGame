@@ -65,6 +65,14 @@ public class BaseScreen implements Screen {
         table.row();
     }
 
+    public void playMusic(String musicPath) {
+        if (gdxGame.getPreferenceManager().isMusicEnabled()) {
+            resourceManager.playMusic(musicPath);
+        } else {
+            resourceManager.stopMusic();
+        }
+    }
+
     @Override
     public void show() {
         // Nothing

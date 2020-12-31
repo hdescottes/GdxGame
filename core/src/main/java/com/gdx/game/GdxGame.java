@@ -3,6 +3,7 @@ package com.gdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.manager.PreferenceManager;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.screen.GameScreen;
 import com.gdx.game.screen.MenuScreen;
@@ -13,6 +14,7 @@ public class GdxGame extends Game {
 	private SpriteBatch batch;
 	private Map<String, Entity> entityMap;
 	private ResourceManager resourceManager;
+	private PreferenceManager preferenceManager = new PreferenceManager();
 	private MenuScreen menuScreen;
 	private GameScreen gameScreen;
 
@@ -34,6 +36,10 @@ public class GdxGame extends Game {
 
 	public GameScreen getGameScreen() {
 		return gameScreen;
+	}
+
+	public PreferenceManager getPreferenceManager() {
+		return preferenceManager;
 	}
 
 	public void create() {
