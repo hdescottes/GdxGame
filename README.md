@@ -22,7 +22,7 @@ Soon, it will hold the enemy sprite and we will be able to properly "battle" in 
 
 #### Option Screen
 The option screen is divided into 3 buttons : <br>
-- The music settings (which will be add later) <br>
+- The music settings (music is ok / sound is not implemented yet) <br>
 - The control settings (which will be add later) <br>
 - A back input, so we can return to the previous screen <br>
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class ResourceManager {
 
@@ -32,6 +33,9 @@ public class ResourceManager {
 
     // FONT
     public BitmapFont pixel10;
+
+    // SETTINGS
+    public Skin skin;
 
     // ENTITIES
     public Texture hero;
@@ -142,6 +146,9 @@ public class ResourceManager {
         // FONT
         pixel10 = new BitmapFont(Gdx.files.internal("fonts/pixel.fnt"), atlas.findRegion("pixel"), false);
 
+        // SETTINGS
+        skin = new Skin(Gdx.files.internal("asset/data/uiskin.json"));
+
         // ENTITIES
         hero = assetManager.get("entities/hero/hero.png");
         tree = assetManager.get("entities/tree/tree.png");
@@ -187,6 +194,10 @@ public class ResourceManager {
         isOptionScreen = optionScreen;
     }
 
+    public Music getMusic() {
+        return music;
+    }
+
     public void setMusic(Music music) {
         this.music = music;
     }
@@ -200,6 +211,14 @@ public class ResourceManager {
             music.stop();
             music.dispose();
             addMusic(musicPath);
+        }
+    }
+
+    public void stopMusic() {
+        if (music != null) {
+            music.stop();
+            music.dispose();
+            setMusic(null);
         }
     }
 

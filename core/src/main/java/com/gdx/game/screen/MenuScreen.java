@@ -40,7 +40,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void handleMusic() {
-        resourceManager.playMusic("music/Rising_Sun.mp3");
+        playMusic("music/Rising_Sun.mp3");
     }
 
     private void handleBackground() {
