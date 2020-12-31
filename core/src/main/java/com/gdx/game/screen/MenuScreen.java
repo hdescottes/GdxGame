@@ -111,8 +111,10 @@ public class MenuScreen extends BaseScreen {
         gdxGame.getBatch().draw(currentFrame, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         gdxGame.getBatch().end();
 
-        menuStage.act(delta);
-        menuStage.draw();
+        if(!resourceManager.isOptionScreen()) {
+            menuStage.act(delta);
+            menuStage.draw();
+        }
     }
 
     @Override

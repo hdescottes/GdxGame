@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class ResourceManager {
 
+    protected boolean isOptionScreen;
+
     // ATLAS
     public TextureAtlas atlas;
 
@@ -175,6 +177,14 @@ public class ResourceManager {
         water03 = assetManager.get("8x8/water/water_03.png");
         water04 = assetManager.get("8x8/water/water_04.png");
         cliff = assetManager.get("8x8/cliff.png");
+    }
+
+    public boolean isOptionScreen() {
+        return isOptionScreen;
+    }
+
+    public void setOptionScreen(boolean optionScreen) {
+        isOptionScreen = optionScreen;
     }
 
     public void setMusic(Music music) {

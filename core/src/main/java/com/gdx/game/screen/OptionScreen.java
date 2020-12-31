@@ -32,6 +32,7 @@ public class OptionScreen extends BaseScreen {
         super(gdxGame, resourceManager);
         this.previousScreen = previousScreen;
 
+        resourceManager.setOptionScreen(true);
         loadContents();
     }
 
@@ -40,6 +41,7 @@ public class OptionScreen extends BaseScreen {
         this.previousScreen = previousScreen;
         this.previousScreenAsImg = previousScreenAsImg;
 
+        resourceManager.setOptionScreen(true);
         loadContents();
     }
 
@@ -69,7 +71,6 @@ public class OptionScreen extends BaseScreen {
                 //TODO: To be completed
             }
         });
-
     }
 
     private void handleMusicButton() {
@@ -131,5 +132,10 @@ public class OptionScreen extends BaseScreen {
         table.remove();
         vfxManager.dispose();
         vfxEffect.dispose();
+    }
+
+    @Override
+    public void hide() {
+        resourceManager.setOptionScreen(false);
     }
 }
