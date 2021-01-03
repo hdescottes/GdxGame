@@ -1,7 +1,6 @@
 package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,7 +28,7 @@ public class OptionScreen extends BaseScreen {
     private Stage musicStage = new Stage();
     private Stage controlStage = new Stage();
     private Stage backgroundStage = new Stage();
-    private Screen previousScreen;
+    private BaseScreen previousScreen;
     private Image previousScreenAsImg;
     private boolean musicClickListener;
     private boolean controlClickListener;
@@ -38,7 +37,7 @@ public class OptionScreen extends BaseScreen {
     private VfxManager vfxManager;
     private GaussianBlurEffect vfxEffect;
 
-    public OptionScreen(GdxGame gdxGame, Screen previousScreen, ResourceManager resourceManager) {
+    public OptionScreen(GdxGame gdxGame, BaseScreen previousScreen, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
         this.previousScreen = previousScreen;
 
@@ -46,7 +45,7 @@ public class OptionScreen extends BaseScreen {
         loadContents();
     }
 
-    public OptionScreen(GdxGame gdxGame, Screen previousScreen, Image previousScreenAsImg, ResourceManager resourceManager) {
+    public OptionScreen(GdxGame gdxGame, BaseScreen previousScreen, Image previousScreenAsImg, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
         this.previousScreen = previousScreen;
         this.previousScreenAsImg = previousScreenAsImg;
@@ -127,8 +126,8 @@ public class OptionScreen extends BaseScreen {
         CheckBox musicCheckbox = new CheckBox("Enable Music", resourceManager.skin);
         musicCheckbox.setChecked(gdxGame.getPreferenceManager().isMusicEnabled());
         musicCheckbox.addListener(event -> {
-            boolean enabled = musicCheckbox.isChecked();
-            gdxGame.getPreferenceManager().setMusicEnabled(enabled);
+            gdxGame.getPreferenceManager().setMusicEnabled(musicCheckbox.isChecked());
+            playMusic(previousScreen.getMusicTheme());
             return false;
         });
 

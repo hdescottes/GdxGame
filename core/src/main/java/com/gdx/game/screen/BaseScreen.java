@@ -29,6 +29,7 @@ public class BaseScreen implements Screen {
     protected Viewport viewport;
     // main stage of each screen
     protected Stage stage;
+    protected String musicTheme;
 
     public BaseScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         this.gdxGame = gdxGame;
@@ -40,6 +41,10 @@ public class BaseScreen implements Screen {
         // the game will retain it's scaled dimensions regardless of resizing
         viewport = new StretchViewport(gameCam.viewportWidth, gameCam.viewportHeight, gameCam);
         stage = new Stage(viewport, gdxGame.getBatch());
+    }
+
+    public String getMusicTheme() {
+        return musicTheme;
     }
 
     public void setScreenWithTransition(Screen current, Screen next, List<TransitionEffect> transitionEffect) {
@@ -68,6 +73,7 @@ public class BaseScreen implements Screen {
     public void playMusic(String musicPath) {
         if (gdxGame.getPreferenceManager().isMusicEnabled()) {
             resourceManager.playMusic(musicPath);
+            resourceManager.getMusic().setVolume(gdxGame.getPreferenceManager().getMusicVolume());
         } else {
             resourceManager.stopMusic();
         }

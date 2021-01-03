@@ -28,9 +28,11 @@ public class GameScreen extends BaseScreen {
     private ControlManager controlManager;
     private Island island;
     private Hero hero;
+    private final String musicTheme = "music/Dwarves'_Theme.mp3";
 
     public GameScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
+        super.musicTheme = musicTheme;
 
         box2d = new Box2dWorld();
         island = new Island(box2d, resourceManager);
@@ -48,7 +50,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void handleMusic() {
-        playMusic("music/Dwarves'_Theme.mp3");
+        playMusic(musicTheme);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class GameScreen extends BaseScreen {
 
         if(controlManager.isOption()) {
             Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
-            gdxGame.setScreen(new OptionScreen(gdxGame, gdxGame.getScreen(), screenShot, resourceManager));
+            gdxGame.setScreen(new OptionScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), screenShot, resourceManager));
         }
     }
 

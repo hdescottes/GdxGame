@@ -24,9 +24,11 @@ public class MenuScreen extends BaseScreen {
     private Stage menuStage = new Stage();
     private Animation<TextureRegion> flowAnimation;
     private float stateTime;
+    private final String musicTheme = "music/Rising_Sun.mp3";
 
     public MenuScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
+        super.musicTheme = musicTheme;
 
         createTable();
         handleBackground();
@@ -40,7 +42,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void handleMusic() {
-        playMusic("music/Rising_Sun.mp3");
+        playMusic(musicTheme);
     }
 
     private void handleBackground() {
@@ -74,7 +76,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent even, float x, float y) {
                 ArrayList<TransitionEffect> effects = new ArrayList<>();
                 effects.add(new FadeInTransitionEffect(1f));
-                setScreenWithTransition(gdxGame.getScreen(), new OptionScreen(gdxGame, gdxGame.getScreen(), resourceManager), effects);
+                setScreenWithTransition(gdxGame.getScreen(), new OptionScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), resourceManager), effects);
             }
         });
     }
