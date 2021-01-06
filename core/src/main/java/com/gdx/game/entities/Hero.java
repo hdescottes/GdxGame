@@ -13,6 +13,8 @@ import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
 import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.manager.ControlManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -28,10 +30,12 @@ public class Hero extends Entity {
     private ResourceManager resourceManager;
     private ArrayList<Entity> interactEntities = new ArrayList<>();
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Hero.class);
+
     public Hero(Vector3 pos3, Box2dWorld box2d, ENTITYSTATE state, ResourceManager resourceManager) {
         super(resourceManager.hero,null,8, 8);
         this.resourceManager = resourceManager;
-        this.type = ENTITYTYPE.HERO;
+        this.type = ENTITYTYPE.PLAYER;
         this.getPos3().x = pos3.x;
         this.getPos3().y = pos3.y;
         this.state = state;
@@ -77,7 +81,7 @@ public class Hero extends Entity {
 
     private void interactAction(ControlManager controlManager) {
         Stream.of(interactEntities)
-                .filter(i -> controlManager.isInteract() && i.size() > 0)
+                .filter(i -> controlManager.isInteract() && !i.isEmpty())
                 .forEach(i -> i.get(0).interact());
 
         controlManager.setInteract(false);
@@ -88,7 +92,7 @@ public class Hero extends Entity {
         if(begin){
             // Hero entered hitbox
             interactEntities.add(entity);
-            System.out.println("You encountered a " + entity.getClass().getSimpleName());
+            LOGGER.info(String.format("You encountered a %s", entity.getClass().getSimpleName()));
             setCollision(true);
             setEntityCollision(entity);
         } else {

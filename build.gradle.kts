@@ -4,6 +4,7 @@ val jUnitPlatformVersion by extra {"1.7.0"}
 val jUnitJupiterVersion by extra {"5.7.0"}
 val mockitoVersion by extra {"3.6.0"}
 val assertJVersion by extra {"3.18.1"}
+val logbackVersion by extra {"1.3.0-alpha5"}
 
 plugins {
     java
@@ -60,6 +61,7 @@ project(":core") {
         implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
         implementation("com.crashinvaders.vfx:gdx-vfx-core:$gdxVfxVersion")
         implementation("com.crashinvaders.vfx:gdx-vfx-effects:$gdxVfxVersion")
+        implementation("ch.qos.logback:logback-classic:$logbackVersion")
         testImplementation("com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion")
         testImplementation("com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop")
     }

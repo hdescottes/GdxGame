@@ -3,10 +3,16 @@ package com.gdx.game.entities;
 public class EntityEnums {
 
     public enum ENTITYTYPE {
-        HERO,
+        PLAYER,
         TREE,
         BIRD,
         ENEMY
+    }
+
+    public enum ENTITYCLASS {
+        HERO,
+        RABITE,
+        BIRD
     }
 
     public enum ENTITYSTATE {

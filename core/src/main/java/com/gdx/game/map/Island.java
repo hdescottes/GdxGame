@@ -3,12 +3,14 @@ package com.gdx.game.map;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.Tree;
+import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapEnums.TILETYPE;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +20,9 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class Island {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Island.class);
+
     private Tile centreTile;
     private Tile clickedTile;
     private ResourceManager resourceManager;
@@ -278,6 +283,7 @@ public class Island {
                     e.removeBodies(box2d);
                     box2d.removeEntityToMap(e);
                     it.remove();
+                    LOGGER.info(String.format("%s has been removed", entity.getClass().getSimpleName()));
                 });
     }
 }
