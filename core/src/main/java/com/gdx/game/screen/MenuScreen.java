@@ -24,11 +24,11 @@ public class MenuScreen extends BaseScreen {
     private Stage menuStage = new Stage();
     private Animation<TextureRegion> flowAnimation;
     private float stateTime;
-    private final String musicTheme = "music/Rising_Sun.mp3";
+    private static final String MENU_THEME = "music/Rising_Sun.mp3";
 
     public MenuScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
-        super.musicTheme = musicTheme;
+        super.musicTheme = MENU_THEME;
 
         createTable();
         handleBackground();
@@ -42,7 +42,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void handleMusic() {
-        playMusic(musicTheme);
+        playMusic(MENU_THEME);
     }
 
     private void handleBackground() {

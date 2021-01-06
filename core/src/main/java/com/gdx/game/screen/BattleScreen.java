@@ -20,6 +20,7 @@ public class BattleScreen extends BaseScreen {
     private AnimationManager animationManager = new AnimationManager();
     private TextureRegion[]  textureRegions;
     private Stage battleStage;
+    private static final String BATTLE_THEME = "music/Challenge.mp3";
 
     //To be able to come back to game screen
     //TODO: remove
@@ -28,6 +29,7 @@ public class BattleScreen extends BaseScreen {
 
     public BattleScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
+        super.musicTheme = BATTLE_THEME;
 
         this.viewport = new StretchViewport(getBattleCam().viewportWidth, getBattleCam().viewportHeight, getBattleCam());
         battleStage = new Stage(viewport, gdxGame.getBatch());
@@ -45,7 +47,7 @@ public class BattleScreen extends BaseScreen {
     }
 
     private void handleMusic() {
-        playMusic("music/Challenge.mp3");
+        playMusic(BATTLE_THEME);
     }
 
     @Override

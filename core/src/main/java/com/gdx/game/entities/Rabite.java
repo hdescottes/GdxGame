@@ -10,7 +10,7 @@ import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.box2d.Box2dHelper;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.manager.AnimationManager;
-import com.gdx.game.map.Tile;
+import com.gdx.game.map.demo.Tile;
 
 import java.util.Optional;
 

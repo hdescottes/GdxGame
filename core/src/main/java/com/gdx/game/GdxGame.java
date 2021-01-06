@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.manager.PreferenceManager;
 import com.gdx.game.manager.ResourceManager;
-import com.gdx.game.screen.GameScreen;
+import com.gdx.game.screen.DemoScreen;
 import com.gdx.game.screen.MenuScreen;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ public class GdxGame extends Game {
 	private ResourceManager resourceManager;
 	private PreferenceManager preferenceManager = new PreferenceManager();
 	private MenuScreen menuScreen;
-	private GameScreen gameScreen;
+	private DemoScreen demoScreen;
 
 	public SpriteBatch getBatch() {
 		return batch;
@@ -34,8 +34,8 @@ public class GdxGame extends Game {
 		return menuScreen;
 	}
 
-	public GameScreen getGameScreen() {
-		return gameScreen;
+	public DemoScreen getGameScreen() {
+		return demoScreen;
 	}
 
 	public PreferenceManager getPreferenceManager() {
@@ -47,7 +47,7 @@ public class GdxGame extends Game {
 		resourceManager = new ResourceManager();
 
 		menuScreen = new MenuScreen(this, resourceManager);
-		gameScreen = new GameScreen(this, resourceManager);
+		demoScreen = new DemoScreen(this, resourceManager);
 
 		this.setScreen(menuScreen);
 	}
@@ -57,7 +57,7 @@ public class GdxGame extends Game {
 		super.dispose();
 		batch.dispose();
 		menuScreen.dispose();
-		gameScreen.dispose();
+		demoScreen.dispose();
 		resourceManager.dispose();
 	}
 }

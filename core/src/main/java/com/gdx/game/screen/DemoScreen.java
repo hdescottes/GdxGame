@@ -12,34 +12,37 @@ import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityEnums;
 import com.gdx.game.entities.Hero;
 import com.gdx.game.entities.Rabite;
+import com.gdx.game.factory.EntityFactory;
 import com.gdx.game.manager.CameraManager;
 import com.gdx.game.manager.ControlManager;
 import com.gdx.game.manager.ResourceManager;
-import com.gdx.game.map.Island;
-import com.gdx.game.map.Tile;
+import com.gdx.game.map.demo.Island;
+import com.gdx.game.map.demo.Tile;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class GameScreen extends BaseScreen {
+public class DemoScreen extends BaseScreen {
 
     private Box2dWorld box2d;
     private ControlManager controlManager;
     private Island island;
     private Hero hero;
-    private final String musicTheme = "music/Dwarves'_Theme.mp3";
+    private Bird bird;
+    private Rabite rabite;
+    private static final String GAME_THEME = "music/Dwarves'_Theme.mp3";
 
-    public GameScreen(GdxGame gdxGame, ResourceManager resourceManager) {
+    public DemoScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
-        super.musicTheme = musicTheme;
+        super.musicTheme = GAME_THEME;
 
         box2d = new Box2dWorld();
         island = new Island(box2d, resourceManager);
         Vector3 islandCentrePos3 = island.getCentreTile().getPos3();
-        hero = new Hero(islandCentrePos3, box2d, EntityEnums.ENTITYSTATE.WALKING_DOWN, resourceManager);
-        Bird bird = new Bird(new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, EntityEnums.ENTITYSTATE.FLYING, resourceManager);
-        Rabite rabite = new Rabite(new Vector3(islandCentrePos3.x - 10, islandCentrePos3.y - 10, 0), box2d, EntityEnums.ENTITYSTATE.IDLE, resourceManager);
+        hero = (Hero) EntityFactory.getEntity(EntityEnums.ENTITYCLASS.HERO, islandCentrePos3, box2d, resourceManager);
+        bird = (Bird) EntityFactory.getEntity(EntityEnums.ENTITYCLASS.BIRD, new Vector3(islandCentrePos3.x - 20, islandCentrePos3.y - 20, 0), box2d, resourceManager);
+        rabite = (Rabite) EntityFactory.getEntity(EntityEnums.ENTITYCLASS.RABITE, new Vector3(islandCentrePos3.x - 10, islandCentrePos3.y - 10, 0), box2d, resourceManager);
 
         island.getEntities().add(hero);
         island.getEntities().add(bird);
@@ -50,7 +53,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void handleMusic() {
-        playMusic(musicTheme);
+        playMusic(GAME_THEME);
     }
 
     @Override
