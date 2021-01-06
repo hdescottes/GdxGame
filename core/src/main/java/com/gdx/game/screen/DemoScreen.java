@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-public class GameScreen extends BaseScreen {
+public class DemoScreen extends BaseScreen {
 
     private Box2dWorld box2d;
     private ControlManager controlManager;
@@ -33,7 +33,7 @@ public class GameScreen extends BaseScreen {
     private Rabite rabite;
     private static final String GAME_THEME = "music/Dwarves'_Theme.mp3";
 
-    public GameScreen(GdxGame gdxGame, ResourceManager resourceManager) {
+    public DemoScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
         super.musicTheme = GAME_THEME;
 
