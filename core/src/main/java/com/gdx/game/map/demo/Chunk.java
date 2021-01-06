@@ -1,11 +1,10 @@
-package com.gdx.game.map;
+package com.gdx.game.map.demo;
 
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class Chunk {
     private int numberRows;

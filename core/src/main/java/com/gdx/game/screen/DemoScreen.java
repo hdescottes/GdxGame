@@ -16,8 +16,8 @@ import com.gdx.game.factory.EntityFactory;
 import com.gdx.game.manager.CameraManager;
 import com.gdx.game.manager.ControlManager;
 import com.gdx.game.manager.ResourceManager;
-import com.gdx.game.map.Island;
-import com.gdx.game.map.Tile;
+import com.gdx.game.map.demo.Island;
+import com.gdx.game.map.demo.Tile;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -7,8 +7,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
 import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
-import com.gdx.game.map.Chunk;
-import com.gdx.game.map.Tile;
+import com.gdx.game.map.demo.Chunk;
+import com.gdx.game.map.demo.Tile;
 
 public class Entity implements Comparable<Entity> {
     private Vector3 pos3;

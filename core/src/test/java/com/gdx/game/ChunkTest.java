@@ -5,15 +5,15 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.game.manager.ResourceManager;
-import com.gdx.game.map.Chunk;
-import com.gdx.game.map.Tile;
+import com.gdx.game.map.demo.Chunk;
+import com.gdx.game.map.demo.Tile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 
-import static com.gdx.game.map.MapEnums.TILETYPE;
+import static com.gdx.game.map.demo.MapEnums.TILETYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 

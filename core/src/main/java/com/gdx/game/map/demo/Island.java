@@ -1,4 +1,4 @@
-package com.gdx.game.map;
+package com.gdx.game.map.demo;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
@@ -8,7 +8,7 @@ import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.Tree;
 import com.gdx.game.manager.ResourceManager;
-import com.gdx.game.map.MapEnums.TILETYPE;
+import com.gdx.game.map.demo.MapEnums.TILETYPE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

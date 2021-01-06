@@ -1,4 +1,4 @@
-package com.gdx.game.map;
+package com.gdx.game.map.demo;
 
 public class MapEnums {
 

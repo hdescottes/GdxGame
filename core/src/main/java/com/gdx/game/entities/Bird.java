@@ -15,8 +15,8 @@ import com.gdx.game.box2d.Box2dWorld;
 import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
 import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
 import com.gdx.game.manager.AnimationManager;
-import com.gdx.game.map.Chunk;
-import com.gdx.game.map.Tile;
+import com.gdx.game.map.demo.Chunk;
+import com.gdx.game.map.demo.Tile;
 
 import java.util.ArrayList;
 import java.util.Optional;
