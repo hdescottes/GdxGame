@@ -11,7 +11,7 @@ public class PreferenceManager {
     private static final String PREF_SOUND_VOLUME = "sound";
     private static final String PREFS_NAME = "gdxGame";
 
-    protected Preferences getPrefs() {
+    protected static Preferences getPrefs() {
         return Gdx.app.getPreferences(PREFS_NAME);
     }
 
@@ -33,7 +33,7 @@ public class PreferenceManager {
         getPrefs().flush();
     }
 
-    public float getMusicVolume() {
+    public static float getMusicVolume() {
         return getPrefs().getFloat(PREF_MUSIC_VOLUME, 0.5f);
     }
 

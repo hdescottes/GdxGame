@@ -1,21 +1,25 @@
 package com.gdx.game.screen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
+import com.gdx.game.GdxGame;
+import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.screen.transition.effects.TransitionEffect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
 
-public class TransitionScreen implements Screen {
+public class TransitionScreen extends BaseScreen {
 
     private Game game;
-    private Screen current;
-    private Screen next;
+    private BaseScreen current;
+    private BaseScreen next;
 
     int currentTransitionEffect;
     ArrayList<TransitionEffect> transitionEffects;
 
-    TransitionScreen(Game game, Screen current, Screen next, ArrayList<TransitionEffect> transitionEffects) {
+    TransitionScreen(Game game, BaseScreen current, BaseScreen next, ArrayList<TransitionEffect> transitionEffects) {
+        super((GdxGame) game, null);
         this.current = current;
         this.next = next;
         this.transitionEffects = transitionEffects;
@@ -25,7 +29,7 @@ public class TransitionScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (currentTransitionEffect >= transitionEffects.size()) {
+        if(currentTransitionEffect >= transitionEffects.size()) {
             game.setScreen(next);
             return;
         }
@@ -33,8 +37,15 @@ public class TransitionScreen implements Screen {
         transitionEffects.get(currentTransitionEffect).update(delta);
         transitionEffects.get(currentTransitionEffect).render(current, next);
 
-        if (transitionEffects.get(currentTransitionEffect).isFinished()) {
+        if(transitionEffects.get(currentTransitionEffect).isFinished()) {
             currentTransitionEffect++;
+        }
+
+        if(next.getClass() != OptionScreen.class) {
+            Optional<AudioObserver.AudioTypeEvent> audioEvent = Arrays.stream(AudioObserver.AudioTypeEvent.values())
+                    .filter(e -> e.getValue().equalsIgnoreCase(current.getMusicTheme()))
+                    .findFirst();
+            audioEvent.ifPresent(audioTypeEvent -> notify(AudioObserver.AudioCommand.MUSIC_STOP, audioTypeEvent));
         }
     }
 

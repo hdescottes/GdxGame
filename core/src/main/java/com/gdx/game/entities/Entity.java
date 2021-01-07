@@ -1,157 +1,267 @@
 package com.gdx.game.entities;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.gdx.game.box2d.Box2dWorld;
-import com.gdx.game.entities.EntityEnums.ENTITYSTATE;
-import com.gdx.game.entities.EntityEnums.ENTITYTYPE;
-import com.gdx.game.map.demo.Chunk;
-import com.gdx.game.map.demo.Tile;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.gdx.game.component.Component;
+import com.gdx.game.component.ComponentObserver;
+import com.gdx.game.component.GraphicsComponent;
+import com.gdx.game.component.InputComponent;
+import com.gdx.game.component.PhysicsComponent;
+import com.gdx.game.map.MapManager;
+import com.gdx.game.profile.ProfileManager;
 
-public class Entity implements Comparable<Entity> {
-    private Vector3 pos3;
-    private Texture texture;
-    private Texture shadow;
-    private float width;
-    private float height;
-    public ENTITYTYPE type;
-    public ENTITYSTATE state;
-    public Body body;
-    public int hashcode;
-    public Body sensor; // A trigger hitbox
+import java.util.ArrayList;
+import java.util.Hashtable;
 
-    public Boolean ticks; // .tick will only be called if true
-    public boolean remove;
-    public float time; // Store the time up for the Entity
-    public Vector3 destVec; // Destination vector for movement
-    public Tile currentTile; // Tile the Entity occupies
-    public float coolDown; // For logic
-    
-    private float directionX = 0;
-    private float directionY = 0;
-    
-    public Entity(Texture texture, Texture shadow, float width, float height) {
-        this.pos3 = new Vector3();
-        this.texture = texture;
-        this.shadow = shadow;
-        this.width = width;
-        this.height = height;
-    }
+public class Entity {
 
-    public Vector3 getPos3() {
-        return pos3;
-    }
+	public enum Direction {
+		UP,
+		RIGHT,
+		DOWN,
+		LEFT;
 
-    public void setPos3(Vector3 pos3) {
-        this.pos3 = pos3;
-    }
+		static public Direction getRandomNext() {
+			return Direction.values()[MathUtils.random(Direction.values().length - 1)];
+		}
 
-    public Texture getTexture() {
-        return texture;
-    }
+		public Direction getOpposite() {
+			if(this == LEFT) {
+				return RIGHT;
+			} else if(this == RIGHT) {
+				return LEFT;
+			} else if(this == UP) {
+				return DOWN;
+			} else {
+				return UP;
+			}
+		}
+	}
 
-    public void setTexture(Texture texture) {
-        this.texture = texture;
-    }
+	public enum State {
+		IDLE,
+		WALKING,
+		IMMOBILE;//This should always be last
 
-    public Texture getShadow() {
-        return shadow;
-    }
+		static public State getRandomNext() {
+			//Ignore IMMOBILE which should be last state
+			return State.values()[MathUtils.random(State.values().length - 2)];
+		}
+	}
 
-    public void setShadow(Texture shadow) {
-        this.shadow = shadow;
-    }
+	public enum AnimationType {
+		WALK_LEFT,
+		WALK_RIGHT,
+		WALK_UP,
+		WALK_DOWN,
+		IDLE,
+		IMMOBILE
+	}
 
-    public float getWidth() {
-        return width;
-    }
+	public static final int FRAME_WIDTH = 16;
+	public static final int FRAME_HEIGHT = 16;
+	private static final int MAX_COMPONENTS = 5;
 
-    public void setWidth(float width) {
-        this.width = width;
-    }
+	private Json json;
+	private EntityConfig entityConfig;
+	private Array<Component> components;
+	private InputComponent inputComponent;
+	private GraphicsComponent graphicsComponent;
+	private PhysicsComponent physicsComponent;
 
-    public float getHeight() {
-        return height;
-    }
+	public Entity(Entity entity) {
+		set(entity);
+	}
 
-    public void setHeight(float height) {
-        this.height = height;
-    }
+	private Entity set(Entity entity) {
+		inputComponent = entity.inputComponent;
+		graphicsComponent = entity.graphicsComponent;
+		physicsComponent = entity.physicsComponent;
 
-    public ENTITYTYPE getType() {
-        return type;
-    }
+		if(components == null) {
+			components = new Array<>(MAX_COMPONENTS);
+		}
+		components.clear();
+		components.add(inputComponent);
+		components.add(physicsComponent);
+		components.add(graphicsComponent);
 
-    public void setType(ENTITYTYPE type) {
-        this.type = type;
-    }
+		json = entity.json;
 
-    public float getDirectionX() {
-        return directionX;
-    }
+		entityConfig = new EntityConfig(entity.entityConfig);
+		return this;
+	}
 
-    public void setDirectionX(float directionX) {
-        this.directionX = directionX;
-    }
+	public Entity(InputComponent inputComponent, PhysicsComponent physicsComponent, GraphicsComponent graphicsComponent) {
+		entityConfig = new EntityConfig();
+		json = new Json();
 
-    public float getDirectionY() {
-        return directionY;
-    }
+		components = new Array<>(MAX_COMPONENTS);
 
-    public void setDirectionY(float directionY) {
-        this.directionY = directionY;
-    }
+		this.inputComponent = inputComponent;
+		this.physicsComponent = physicsComponent;
+		this.graphicsComponent = graphicsComponent;
 
-    public void draw(SpriteBatch batch) {
-        if(shadow != null) {
-            batch.draw(shadow, pos3.x, pos3.y, width, height);
-        }
-        if(texture != null) {
-            batch.draw(texture, pos3.x, pos3.y, width, height);
-        }
-    }
+		components.add(this.inputComponent);
+		components.add(this.physicsComponent);
+		components.add(this.graphicsComponent);
+	}
 
-    public void tick(float delta) {
-        time += delta;
-    }
+	public EntityConfig getEntityConfig() {
+		return entityConfig;
+	}
 
-    public void tick(float delta, Chunk chunk) {
-    }
+	public void sendMessage(Component.MESSAGE messageType, String ... args) {
+		String fullMessage = messageType.toString();
 
-    public void getVector(Vector3 dest) {
-        float dx = dest.x - getPos3().x;
-        float dy = dest.y - getPos3().y;
-        double h = Math.sqrt(dx * dx + dy * dy);
-        float dn = (float)(h / 1.4142135623730951);
+		for(String string : args) {
+			fullMessage += Component.MESSAGE_TOKEN + string;
+		}
 
-        destVec = new Vector3(dx / dn, dy / dn, 0);
-    }
+		for(Component component: components) {
+			component.receiveMessage(fullMessage);
+		}
+	}
 
-    public void updatePositions() {
-        getPos3().x = body.getPosition().x - getWidth()/2;
-        getPos3().y = body.getPosition().y - getHeight()/4;
-    }
+	public void registerObserver(ComponentObserver observer) {
+		inputComponent.addObserver(observer);
+		physicsComponent.addObserver(observer);
+		graphicsComponent.addObserver(observer);
+	}
 
-    public void collision(Entity entity, boolean begin) {}
+	public void unregisterObservers() {
+		inputComponent.removeAllObservers();
+		physicsComponent.removeAllObservers();
+		graphicsComponent.removeAllObservers();
+	}
 
-    public void interact() {}
+	public void update(MapManager mapMgr, Batch batch, float delta) {
+		inputComponent.update(this, delta);
+		physicsComponent.update(this, mapMgr, delta);
+		graphicsComponent.update(this, mapMgr, batch, delta);
+	}
 
-    public void removeBodies(Box2dWorld box2D) {
-        if(sensor != null) {
-            box2D.getWorld().destroyBody(sensor);
-        }
-        if(body != null) {
-            box2D.getWorld().destroyBody(body);
-        }
-    }
+	public void updateInput(float delta) {
+		inputComponent.update(this, delta);
+	}
 
-    @Override
-    public int compareTo(Entity entity) {
-        float tempY =  entity.getPos3().y;
-        float compareY = getPos3().y;
+	public void dispose() {
+		for(Component component: components) {
+			component.dispose();
+		}
+	}
 
-        return Float.compare(tempY, compareY);
-    }
+	public Rectangle getCurrentBoundingBox() {
+		return physicsComponent.boundingBox;
+	}
+
+	public Vector2 getCurrentPosition() {
+		return graphicsComponent.getCurrentPosition();
+	}
+
+	public InputProcessor getInputProcessor() {
+		return inputComponent;
+	}
+
+	public void setEntityConfig(EntityConfig entityConfig) {
+		this.entityConfig = entityConfig;
+	}
+
+	public Animation<TextureRegion> getAnimation(AnimationType type) {
+		return graphicsComponent.getAnimation(type);
+	}
+
+	static public EntityConfig getEntityConfig(String configFilePath) {
+		Json json = new Json();
+		return json.fromJson(EntityConfig.class, Gdx.files.internal(configFilePath));
+	}
+
+	static public Array<EntityConfig> getEntityConfigs(String configFilePath) {
+		Json json = new Json();
+		Array<EntityConfig> configs = new Array<>();
+
+    	ArrayList<JsonValue> list = json.fromJson(ArrayList.class, Gdx.files.internal(configFilePath));
+
+		for(JsonValue jsonVal : list) {
+			configs.add(json.readValue(EntityConfig.class, jsonVal));
+		}
+
+		return configs;
+	}
+
+	public static EntityConfig loadEntityConfigByPath(String entityConfigPath) {
+		EntityConfig entityConfig = Entity.getEntityConfig(entityConfigPath);
+		EntityConfig serializedConfig = ProfileManager.getInstance().getProperty(entityConfig.getEntityID(), EntityConfig.class);
+
+		if(serializedConfig == null) {
+			return entityConfig;
+		} else {
+			return serializedConfig;
+		}
+	}
+
+	public static EntityConfig loadEntityConfig(EntityConfig entityConfig) {
+		EntityConfig serializedConfig = ProfileManager.getInstance().getProperty(entityConfig.getEntityID(), EntityConfig.class);
+
+		if(serializedConfig == null) {
+			return entityConfig;
+		} else {
+			return serializedConfig;
+		}
+	}
+
+	public static Entity initEntity(EntityConfig entityConfig, Vector2 position) {
+		Json json = new Json();
+		Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+		entity.setEntityConfig(entityConfig);
+
+		entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
+		entity.sendMessage(Component.MESSAGE.INIT_START_POSITION, json.toJson(position));
+		entity.sendMessage(Component.MESSAGE.INIT_STATE, json.toJson(entity.getEntityConfig().getState()));
+		entity.sendMessage(Component.MESSAGE.INIT_DIRECTION, json.toJson(entity.getEntityConfig().getDirection()));
+
+		return entity;
+	}
+
+	public static Hashtable<String, Entity> initEntities(Array<EntityConfig> configs) {
+		Json json = new Json();
+		Hashtable<String, Entity > entities = new Hashtable<>();
+		for(EntityConfig config: configs ) {
+			Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+
+			entity.setEntityConfig(config);
+			entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
+			entity.sendMessage(Component.MESSAGE.INIT_START_POSITION, json.toJson(new Vector2(0,0)));
+			entity.sendMessage(Component.MESSAGE.INIT_STATE, json.toJson(entity.getEntityConfig().getState()));
+			entity.sendMessage(Component.MESSAGE.INIT_DIRECTION, json.toJson(entity.getEntityConfig().getDirection()));
+
+			entities.put(entity.getEntityConfig().getEntityID(), entity);
+		}
+
+		return entities;
+	}
+
+	public static Entity initEntity(EntityConfig entityConfig) {
+		Json json = new Json();
+		Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+		entity.setEntityConfig(entityConfig);
+
+		entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
+		entity.sendMessage(Component.MESSAGE.INIT_START_POSITION, json.toJson(new Vector2(0,0)));
+		entity.sendMessage(Component.MESSAGE.INIT_STATE, json.toJson(entity.getEntityConfig().getState()));
+		entity.sendMessage(Component.MESSAGE.INIT_DIRECTION, json.toJson(entity.getEntityConfig().getDirection()));
+
+		return entity;
+	}
+
+
 }

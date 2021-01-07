@@ -1,0 +1,111 @@
+{
+entityID : TOWN_MAGE
+state : IMMOBILE
+direction : DOWN
+conversationConfigPath : "conversations/conversation003.json"
+questConfigPath : ""
+currentQuestID : ""
+itemTypeID: NONE
+inventory : [
+	{
+		value: WANDS01
+	},
+	{
+		value: WANDS02
+	},
+	{
+		value: WANDS03
+	},
+	{
+		value: WANDS04
+	},
+	{
+		value: WANDS05
+	},
+	{
+		value: POTIONS01
+	},
+		{
+		value: POTIONS01
+	},
+	{
+		value: POTIONS01
+	},
+	{
+		value: POTIONS02
+	},
+	{
+		value: POTIONS02
+	},
+	{
+		value: POTIONS02
+	},
+	{
+		value: POTIONS03
+	},
+	{
+		value: POTIONS03
+	},
+	{
+		value: POTIONS03
+	},
+	{
+		value: SCROLL01
+	},
+	{
+		value: SCROLL01
+	},
+	{
+		value: SCROLL02
+	},
+	{
+		value: SCROLL02
+	},
+	{
+		value: SCROLL03
+	},
+	{
+		value: SCROLL03
+	},
+	]
+animationConfig: [
+	{
+	    frameDuration: 1.0
+		animationType: IDLE
+		texturePaths: [
+				sprites/characters/Player0.png
+				sprites/characters/Player1.png
+		]
+		gridPoints: [
+			{
+				x: 3
+				y: 6
+			}
+			
+			{
+				x: 3
+				y: 6
+			}
+		]
+	}
+	{
+	    frameDuration: 1.0
+		animationType: IMMOBILE
+		texturePaths: [
+				sprites/characters/Player0.png
+				sprites/characters/Player1.png
+		]
+		gridPoints: [
+			{
+				x: 3
+				y: 6
+			}
+			
+			{
+				x: 3
+				y: 6
+			}
+		]
+	}
+]
+}	

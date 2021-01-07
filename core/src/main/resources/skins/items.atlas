@@ -1,0 +1,320 @@
+
+items.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ARMOR01
+  rotate: false
+  xy: 1, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+ARMOR02
+  rotate: false
+  xy: 1, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+ARMOR03
+  rotate: false
+  xy: 55, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+ARMOR04
+  rotate: false
+  xy: 1, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+ARMOR05
+  rotate: false
+  xy: 55, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+BABY001
+  rotate: false
+  xy: 109, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+BOOTS01
+  rotate: false
+  xy: 1, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+BOOTS02
+  rotate: false
+  xy: 55, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+BOOTS03
+  rotate: false
+  xy: 109, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+BOOTS04
+  rotate: false
+  xy: 163, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+BOOTS05
+  rotate: false
+  xy: 1, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+FUR001
+  rotate: false
+  xy: 55, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+HELMET01
+  rotate: false
+  xy: 109, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+HELMET02
+  rotate: false
+  xy: 163, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+HELMET03
+  rotate: false
+  xy: 217, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+HELMET04
+  rotate: false
+  xy: 55, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+HELMET05
+  rotate: false
+  xy: 109, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+HERB001
+  rotate: false
+  xy: 163, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+HORNS001
+  rotate: false
+  xy: 217, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+inv_boot
+  rotate: false
+  xy: 271, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+inv_chest
+  rotate: false
+  xy: 109, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+inv_helmet
+  rotate: false
+  xy: 163, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+inv_shield
+  rotate: false
+  xy: 217, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+inv_weapon
+  rotate: false
+  xy: 271, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+POTIONS01
+  rotate: false
+  xy: 325, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+POTIONS02
+  rotate: false
+  xy: 163, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+POTIONS03
+  rotate: false
+  xy: 217, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+SCROLL01
+  rotate: false
+  xy: 271, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+SCROLL02
+  rotate: false
+  xy: 325, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+SCROLL03
+  rotate: false
+  xy: 379, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+SHIELD01
+  rotate: false
+  xy: 217, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+SHIELD02
+  rotate: false
+  xy: 271, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+SHIELD03
+  rotate: false
+  xy: 325, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+SHIELD04
+  rotate: false
+  xy: 379, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+SHIELD05
+  rotate: false
+  xy: 433, 217
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WANDS01
+  rotate: false
+  xy: 271, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WANDS02
+  rotate: false
+  xy: 325, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WANDS03
+  rotate: false
+  xy: 379, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WANDS04
+  rotate: false
+  xy: 433, 163
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WANDS05
+  rotate: false
+  xy: 325, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WEAPON01
+  rotate: false
+  xy: 379, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WEAPON02
+  rotate: false
+  xy: 433, 109
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WEAPON03
+  rotate: false
+  xy: 379, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WEAPON04
+  rotate: false
+  xy: 433, 55
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1
+WEAPON05
+  rotate: false
+  xy: 433, 1
+  size: 52, 52
+  orig: 52, 52
+  offset: 0, 0
+  index: -1

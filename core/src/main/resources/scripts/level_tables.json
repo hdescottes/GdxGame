@@ -1,0 +1,62 @@
+[
+{
+levelID : 1
+xpMax : 200
+hpMax : 50
+mpMax : 50
+},
+{
+levelID : 2
+xpMax : 400
+hpMax : 70
+mpMax : 70
+},
+{
+levelID : 3
+xpMax : 800
+hpMax : 90
+mpMax : 90
+},
+{
+levelID : 4
+xpMax : 1600
+hpMax : 110
+mpMax : 110
+},
+{
+levelID : 5
+xpMax : 3200
+hpMax : 130
+mpMax : 130
+},
+{
+levelID : 6
+xpMax : 6400
+hpMax : 160
+mpMax : 160
+},
+{
+levelID : 7
+xpMax : 10000
+hpMax : 200
+mpMax : 200
+},
+{
+levelID : 8
+xpMax : 14000
+hpMax : 240
+mpMax : 240
+},
+{
+levelID : 9
+xpMax : 20000
+hpMax : 300
+mpMax : 300
+},
+{
+levelID : 10
+xpMax : 25000
+hpMax : 400
+mpMax : 400
+},
+]

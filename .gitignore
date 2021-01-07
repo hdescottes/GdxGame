@@ -4,6 +4,7 @@ lib/
 !gradle/wrapper/gradle-wrapper.jar
 *.hprof
 .DS_Store
+*.sav
 
 ### STS ###
 .apt_generated

@@ -1,0 +1,49 @@
+{
+entityID : TOWN_INNKEEPER
+state : IMMOBILE
+direction : DOWN
+conversationConfigPath : ""
+questConfigPath : ""
+currentQuestID : ""
+itemTypeID: NONE
+animationConfig: [
+	{
+	    frameDuration: 1.0
+		animationType: IDLE
+		texturePaths: [
+				sprites/characters/Player0.png
+				sprites/characters/Player1.png
+		]
+		gridPoints: [
+			{
+				x: 0
+				y: 5
+			}
+			
+			{
+				x: 0
+				y: 5
+			}
+		]
+	}
+	{
+	    frameDuration: 1.0
+		animationType: IMMOBILE
+		texturePaths: [
+				sprites/characters/Player0.png
+				sprites/characters/Player1.png
+		]
+		gridPoints: [
+			{
+				x: 0
+				y: 5
+			}
+			
+			{
+				x: 0
+				y: 5
+			}
+		]
+	}
+]
+}	

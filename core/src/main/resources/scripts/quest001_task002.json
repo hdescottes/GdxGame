@@ -1,0 +1,26 @@
+{
+entityID : QUEST001_TASK002
+state : IMMOBILE
+direction : DOWN
+conversationConfigPath : "conversations/conversation005.json"
+questConfigPath : ""
+currentQuestID : ""
+itemTypeID: HORNS001
+inventory : [
+	]
+animationConfig: [
+	{
+	    frameDuration: 1.0
+		animationType: IMMOBILE
+		texturePaths: [
+				sprites/items/Flesh.png
+		]
+		gridPoints: [
+			{
+				x: 8
+				y: 4
+			}
+		]
+	}
+]
+}	

@@ -182,17 +182,17 @@ public class OptionScreen extends BaseScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-                setScreenWithTransition(gdxGame.getScreen(), previousScreen, new ArrayList<>());
+                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), previousScreen, new ArrayList<>());
             }
         });
     }
 
     @Override
     public void show() {
-        if (controlClickListener) {
+        if(controlClickListener) {
             controlStage.addActor(controlTable);
             Gdx.input.setInputProcessor(controlStage);
-        } else if (musicClickListener) {
+        } else if(musicClickListener) {
             musicStage.addActor(musicTable);
             Gdx.input.setInputProcessor(musicStage);
         } else {
@@ -208,10 +208,10 @@ public class OptionScreen extends BaseScreen {
         vfxManager.cleanUpBuffers();
         vfxManager.beginInputCapture();
 
-        if (previousScreen != null && previousScreenAsImg == null) {
+        if(previousScreen != null && previousScreenAsImg == null) {
             previousScreen.render(stateTime);
         }
-        if (previousScreenAsImg != null) {
+        if(previousScreenAsImg != null) {
             backgroundStage.addActor(previousScreenAsImg);
             backgroundStage.draw();
         }
@@ -220,11 +220,11 @@ public class OptionScreen extends BaseScreen {
         vfxManager.applyEffects();
         vfxManager.renderToScreen();
 
-        if (controlClickListener) {
+        if(controlClickListener) {
             show();
             controlStage.act(delta);
             controlStage.draw();
-        } else if (musicClickListener) {
+        } else if(musicClickListener) {
             show();
             musicStage.act(delta);
             musicStage.draw();

@@ -1,0 +1,23 @@
+font.name=SDS_6x6
+font.size=18
+font.bold=false
+font.italic=false
+
+font2.file=D:\My Documents\Personal\My Projects\Mastering LibGDX Game Development\Chapters\04\work\SDS_6x6.ttf
+font2.use=true
+
+pad.top=0
+pad.right=0
+pad.bottom=0
+pad.left=0
+pad.advance.x=0
+pad.advance.y=0
+
+glyph.native.rendering=false
+glyph.page.width=512
+glyph.page.height=512
+glyph.text=ABCDEFGHIJKLMNOPQRSTUVWXYZ\nabcdefghijklmnopqrstuvwxyz\n1234567890\n"!`?'.,;:()[]{}<>|/@\^$-%+=#_&~*
+
+effect.class=com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect
+effect.Color=ffffff
+

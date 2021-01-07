@@ -1,0 +1,11 @@
+{
+conversations: {
+        1: {
+                id: 1
+                dialog: Thank you!
+        }
+}
+associatedChoices: {
+}
+currentConversationID: 1
+}

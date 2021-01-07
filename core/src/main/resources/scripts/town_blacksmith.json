@@ -1,0 +1,126 @@
+{
+entityID : TOWN_BLACKSMITH
+state : IMMOBILE
+direction : DOWN
+conversationConfigPath : "conversations/conversation003.json"
+questConfigPath : ""
+currentQuestID : ""
+itemTypeID: NONE
+inventory : [
+	{
+		value: SHIELD01
+	},
+	{
+		value: SHIELD02
+	},
+	{
+		value: SHIELD03
+	},
+	{
+		value: SHIELD04
+	},
+	{
+		value: SHIELD05
+	},
+	{
+		value: ARMOR01
+	},
+	{
+		value: ARMOR02
+	},
+	{
+		value: ARMOR03
+	},
+	{
+		value: ARMOR04
+	},
+	{
+		value: ARMOR05
+	},
+	{
+		value: BOOTS01
+	},
+	{
+		value: BOOTS02
+	},
+	{
+		value: BOOTS03
+	},
+	{
+		value: BOOTS04
+	},
+	{
+		value: BOOTS05
+	},
+	{
+		value: HELMET01
+	},
+	{
+		value: HELMET02
+	},
+	{
+		value: HELMET03
+	},
+	{
+		value: HELMET04
+	},
+	{
+		value: HELMET05
+	},
+	{
+		value: WEAPON01
+	},
+	{
+		value: WEAPON02
+	},
+	{
+		value: WEAPON03
+	},
+	{
+		value: WEAPON04
+	},
+	{
+		value: WEAPON05
+	},
+]
+animationConfig: [
+	{
+	    frameDuration: 1.0
+		animationType: IDLE
+		texturePaths: [
+				sprites/characters/Player0.png
+				sprites/characters/Player1.png
+		]
+		gridPoints: [
+			{
+				x: 3
+				y: 1
+			}
+			
+			{
+				x: 3
+				y: 1
+			}
+		]
+	}
+	{
+	    frameDuration: 1.0
+		animationType: IMMOBILE
+		texturePaths: [
+				sprites/characters/Player0.png
+				sprites/characters/Player1.png
+		]
+		gridPoints: [
+			{
+				x: 3
+				y: 1
+			}
+			
+			{
+				x: 3
+				y: 1
+			}
+		]
+	}
+]
+}	
