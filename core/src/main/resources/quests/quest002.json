@@ -1,0 +1,62 @@
+{
+questTitle : "Herbs for Mother"
+questID : 2
+goldReward : 20
+xpReward : 20
+isQuestComplete : FALSE
+questTasks: {
+	2: {
+		taskProperties: {
+			IS_TASK_COMPLETE: {
+				class: java.lang.String
+				value: "false"
+			}
+			TARGET_TYPE: {
+				class: java.lang.String
+				value: "scripts/quest002_task002.json"
+			}
+			TARGET_NUM: {
+				class: java.lang.String
+				value: "5"
+			}
+			TARGET_LOCATION: {
+				class: java.lang.String
+				value: "TOWN"
+			}
+			
+		}
+		id: 2
+		taskPhrase: Please collect 5 herbs for my sick mother
+		questType : FETCH
+	}
+	1: {
+		taskProperties: {
+			IS_TASK_COMPLETE: {
+				class: java.lang.String
+				value: "false"
+			}
+			TARGET_TYPE: {
+				class: java.lang.String
+				value: "TOWN_FOLK1"
+			}
+			TARGET_LOCATION: {
+				class: java.lang.String
+				value: "TOWN"
+			}
+		}
+		id: 1
+		taskPhrase: Come back to me with the herbs
+		questType : RETURN
+	}
+}
+questTaskDependencies: {
+	1: [
+		{
+			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			sourceId: 1
+			destinationId: 2
+		}
+	]
+	2: []
+}
+}

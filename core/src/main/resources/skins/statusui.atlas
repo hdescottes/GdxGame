@@ -1,0 +1,184 @@
+
+statusui.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bludbourne_title
+  rotate: false
+  xy: 1, 46
+  size: 300, 30
+  orig: 300, 30
+  offset: 0, 0
+  index: -1
+Bar
+  rotate: false
+  xy: 1, 13
+  size: 99, 31
+  orig: 99, 31
+  offset: 0, 0
+  index: -1
+XP_Bar
+  rotate: false
+  xy: 102, 27
+  size: 94, 17
+  orig: 94, 17
+  offset: 0, 0
+  index: -1
+MP_Bar
+  rotate: false
+  xy: 198, 27
+  size: 93, 17
+  orig: 93, 17
+  offset: 0, 0
+  index: -1
+HP_Bar
+  rotate: false
+  xy: 102, 9
+  size: 93, 16
+  orig: 93, 16
+  offset: 0, 0
+  index: -1
+dialog
+  rotate: false
+  xy: 303, 40
+  size: 36, 36
+  split: 20, 15, 18, 17
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+generic_background
+  rotate: false
+  xy: 341, 47
+  size: 30, 29
+  split: 14, 15, 12, 16
+  orig: 30, 29
+  offset: 0, 0
+  index: -1
+dialogDim
+  rotate: false
+  xy: 293, 2
+  size: 36, 36
+  split: 25, 10, 15, 20
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+default-round-large
+  rotate: false
+  xy: 197, 5
+  size: 20, 20
+  split: 9, 10, 9, 10
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+default-scroll
+  rotate: false
+  xy: 219, 5
+  size: 20, 20
+  split: 9, 10, 9, 10
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+default-round-down
+  rotate: false
+  xy: 241, 5
+  size: 12, 20
+  split: 6, 5, 8, 11
+  orig: 12, 20
+  offset: 0, 0
+  index: -1
+default-round
+  rotate: false
+  xy: 255, 5
+  size: 12, 20
+  split: 5, 6, 8, 11
+  orig: 12, 20
+  offset: 0, 0
+  index: -1
+inventory_button_closed
+  rotate: false
+  xy: 269, 9
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+inventory_button_open
+  rotate: false
+  xy: 331, 22
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+quest_book_off
+  rotate: false
+  xy: 331, 4
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+quest_book_on
+  rotate: false
+  xy: 349, 29
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+textfield
+  rotate: false
+  xy: 349, 13
+  size: 14, 14
+  split: 7, 6, 7, 6
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+grey
+  rotate: false
+  xy: 341, 40
+  size: 5, 5
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+red
+  rotate: false
+  xy: 1, 6
+  size: 5, 5
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+default-rect-pad
+  rotate: false
+  xy: 1, 1
+  size: 5, 3
+  split: 2, 2, 1, 1
+  orig: 5, 3
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 349, 6
+  size: 5, 5
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 349, 1
+  size: 3, 3
+  split: 1, 1, 1, 1
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
+default-rect
+  rotate: false
+  xy: 354, 1
+  size: 3, 3
+  split: 1, 1, 1, 1
+  orig: 3, 3
+  offset: 0, 0
+  index: -1
+selection
+  rotate: false
+  xy: 331, 1
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

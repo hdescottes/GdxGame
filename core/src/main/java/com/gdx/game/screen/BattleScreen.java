@@ -5,19 +5,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.gdx.game.GdxGame;
-import com.gdx.game.box2d.Box2dWorld;
-import com.gdx.game.entities.Hero;
-import com.gdx.game.manager.AnimationManager;
-import com.gdx.game.manager.CameraManager;
-import com.gdx.game.manager.ControlManager;
 import com.gdx.game.manager.ResourceManager;
 
 public class BattleScreen extends BaseScreen {
 
-    private Box2dWorld box2d;
+/*    private Box2dWorld box2d;
     private ControlManager controlManager;
     private Hero hero;
-    private AnimationManager animationManager = new AnimationManager();
+    private AnimationManager animationManager = new AnimationManager();*/
     private TextureRegion[]  textureRegions;
     private Stage battleStage;
     private static final String BATTLE_THEME = "music/Challenge.mp3";
@@ -33,18 +28,18 @@ public class BattleScreen extends BaseScreen {
 
         this.viewport = new StretchViewport(getBattleCam().viewportWidth, getBattleCam().viewportHeight, getBattleCam());
         battleStage = new Stage(viewport, gdxGame.getBatch());
-
+/*
         box2d = new Box2dWorld();
-        handleEntities();
+        handleEntities();*/
     }
-
+/*
     private void handleEntities() {
         if(gdxGame.getEntityMap() != null) {
             hero = (Hero) gdxGame.getEntityMap().get("hero");
             hero.setTexture(resourceManager.heroWalkRight);
             textureRegions = animationManager.setTextureRegions(hero.getTexture(), 32, 37);
         }
-    }
+    }*/
 
     private void handleMusic() {
         playMusic(BATTLE_THEME);
@@ -52,8 +47,8 @@ public class BattleScreen extends BaseScreen {
 
     @Override
     public void show() {
-        CameraManager cameraManager = new CameraManager();
-        controlManager = cameraManager.insertControl(getBattleCam());
+        /*CameraManager cameraManager = new CameraManager();
+        controlManager = cameraManager.insertControl(getBattleCam());*/
 
         Gdx.input.setInputProcessor(battleStage);
 
@@ -74,12 +69,12 @@ public class BattleScreen extends BaseScreen {
 
         //To be able to come back to game screen
         //TODO: remove
-        lifeTime += Gdx.graphics.getDeltaTime();
+       /* lifeTime += Gdx.graphics.getDeltaTime();
         if (lifeTime > delay) {
             hero.collision(hero.getEntityCollision(), false);
             gdxGame.setScreen(gdxGame.getGameScreen());
         }
 
-        box2d.tick(getBattleCam(), controlManager);
+        box2d.tick(getBattleCam(), controlManager);*/
     }
 }

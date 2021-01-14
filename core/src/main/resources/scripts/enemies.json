@@ -1,0 +1,166 @@
+[
+	{
+	entityID : RABITE
+	state : IMMOBILE
+	direction : DOWN
+	conversationConfigPath : ""
+	questConfigPath : ""
+	currentQuestID : ""
+	itemTypeID: NONE
+	entityProperties: {
+		ENTITY_HEALTH_POINTS: {
+			class: java.lang.String
+			value: 15
+		}
+		ENTITY_ATTACK_POINTS: {
+			class: java.lang.String
+			value: 40
+		}
+		ENTITY_DEFENSE_POINTS: {
+			class: java.lang.String
+			value: 5
+		}
+		ENTITY_XP_REWARD: {
+			class: java.lang.String
+			value: 5
+		}
+		ENTITY_GP_REWARD: {
+			class: java.lang.String
+			value: 5
+		}
+	}
+	animationConfig: [
+		{
+			frameDuration: .5
+			animationType: IDLE
+			texturePaths: [
+					sprites/characters/Demon0.png
+					sprites/characters/Demon1.png
+			]
+			gridPoints: [
+				{
+					x: 0
+					y: 0
+				}
+
+				{
+					x: 0
+					y: 0
+				}
+			]
+		}
+		{
+			frameDuration: .5
+			animationType: IMMOBILE
+			texturePaths: [
+					sprites/characters/Demon0.png
+					sprites/characters/Demon1.png
+			]
+			gridPoints: [
+				{
+					x: 0
+					y: 0
+				}
+
+				{
+					x: 0
+					y: 0
+				}
+			]
+		}
+	]
+},
+	{
+		entityID : RABITE2
+		state : IMMOBILE
+		direction : DOWN
+		conversationConfigPath : ""
+		questConfigPath : ""
+		currentQuestID : ""
+		itemTypeID: NONE
+		entityProperties: {
+			ENTITY_HEALTH_POINTS: {
+				class: java.lang.String
+				value: 15
+			}
+			ENTITY_ATTACK_POINTS: {
+				class: java.lang.String
+				value: 40
+			}
+			ENTITY_DEFENSE_POINTS: {
+				class: java.lang.String
+				value: 5
+			}
+			ENTITY_XP_REWARD: {
+				class: java.lang.String
+				value: 5
+			}
+			ENTITY_GP_REWARD: {
+				class: java.lang.String
+				value: 5
+			}
+		}
+		animationConfig: [
+			{
+				frameDuration: .15
+				animationType: IDLE
+				texturePaths: [
+					sprites/characters/Demon0.png
+					sprites/characters/Demon1.png
+					entities/enemies/rabite2.png
+
+				]
+				gridPoints: [
+					{
+						x: 0
+						y: 0
+					}
+
+					{
+						x: 0
+						y: 1
+					}
+
+					{
+						x: 0
+						y: 2
+					}
+
+					{
+						x: 0
+						y: 3
+					}
+				]
+			}
+			{
+				frameDuration: .15
+				animationType: IMMOBILE
+				texturePaths: [
+					entities/enemies/rabite2.png
+				]
+				gridPoints: [
+					{
+						x: 0
+						y: 0
+					}
+
+					{
+						x: 0
+						y: 1
+					}
+
+					{
+						x: 0
+						y: 2
+					}
+
+					{
+						x: 0
+						y: 3
+					}
+				]
+			}
+		]
+	},
+
+]

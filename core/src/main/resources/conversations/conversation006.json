@@ -1,0 +1,35 @@
+{
+conversations: {
+        1: {
+                id: 1
+                dialog: Can you please help me? I seem to have lost my baby!
+        }
+		2: {
+                id: 2
+                dialog: Ok
+        }
+        3: {
+                id: 3
+                dialog: Ok
+        }
+}
+associatedChoices: {
+        1: [
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 1
+                        destinationId: 2
+                        choicePhrase: "Yes, of course I will help you!"
+						conversationCommandEvent: ACCEPT_QUEST
+                }
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 1
+                        destinationId: 3
+                        choicePhrase: "No, sorry, I can't help you."
+						conversationCommandEvent: EXIT_CONVERSATION
+                }
+	        ]
+}
+currentConversationID: 1
+}

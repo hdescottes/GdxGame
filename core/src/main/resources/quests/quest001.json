@@ -1,0 +1,122 @@
+{
+questTitle : "Beast Feast Leftovers"
+questID : 1
+goldReward : 100
+xpReward : 100
+isQuestComplete : FALSE
+questTasks: {
+	4: {
+		taskProperties: {
+			IS_TASK_COMPLETE: {
+				class: java.lang.String
+				value: "false"
+			}
+			TARGET_TYPE: {
+				class: java.lang.String
+				value: "BEAST_AREA"
+			}
+			TARGET_LOCATION: {
+				class: java.lang.String
+				value: "TOP_WORLD"
+			}
+		}
+		id: 4
+		taskPhrase: "Find the area where the Tuskan beast feasts, East of Town"
+		questType : DISCOVER
+	}
+	3: {
+		taskProperties: {
+			IS_TASK_COMPLETE: {
+				class: java.lang.String
+				value: "false"
+			}
+			TARGET_TYPE: {
+				class: java.lang.String
+				value: "scripts/quest001_task003.json"
+			}
+			TARGET_NUM: {
+				class: java.lang.String
+				value: "5"
+			}
+			TARGET_LOCATION: {
+				class: java.lang.String
+				value: "TOP_WORLD"
+			}
+		}
+		id: 3
+		taskPhrase: "Collect 5 furs"
+		questType : FETCH
+	}
+	2: {
+		taskProperties: {
+			IS_TASK_COMPLETE: {
+				class: java.lang.String
+				value: "false"
+			}
+			TARGET_TYPE: {
+				class: java.lang.String
+				value: "scripts/quest001_task002.json"
+			}
+			TARGET_NUM: {
+				class: java.lang.String
+				value: "5"
+			}
+			TARGET_LOCATION: {
+				class: java.lang.String
+				value: "TOP_WORLD"
+			}
+		}
+		id: 2
+		taskPhrase: "Collect 5 horns"
+		questType : FETCH
+	}
+	1: {
+		taskProperties: {
+			IS_TASK_COMPLETE: {
+				class: java.lang.String
+				value: "false"
+			}
+			TARGET_TYPE: {
+				class: java.lang.String
+				value: "TOWN_FOLK4"
+			}
+			TARGET_LOCATION: {
+				class: java.lang.String
+				value: "TOWN"
+			}
+		}
+		id: 1
+		taskPhrase: "Come back to me with the items"
+		questType : RETURN
+	}
+}
+questTaskDependencies: {
+	4: []
+	3: [
+		{
+			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			sourceId: 3
+			destinationId: 4
+		}
+	]
+	2: [
+		{
+			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			sourceId: 2
+			destinationId: 4
+		}
+	]
+	1: [
+		{
+			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			sourceId: 1
+			destinationId: 2
+		}
+		{
+			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			sourceId: 1
+			destinationId: 3
+		}
+	]
+}
+}

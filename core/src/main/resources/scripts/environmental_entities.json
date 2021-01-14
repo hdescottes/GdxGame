@@ -1,0 +1,51 @@
+[
+{
+entityID : FIRE
+state : IMMOBILE
+direction : DOWN
+conversationConfigPath : ""
+questConfigPath : ""
+currentQuestID : ""
+itemTypeID: NONE
+animationConfig: [
+	{
+	    frameDuration: 1.0
+		animationType: IDLE
+		texturePaths: [
+				sprites/objects/Effect0.png
+				sprites/objects/Effect1.png
+		]
+		gridPoints: [
+			{
+				x: 21
+				y: 1
+			}
+			
+			{
+				x: 21
+				y: 1
+			}
+		]
+	}
+	{
+	    frameDuration: 1.0
+		animationType: IMMOBILE
+		texturePaths: [
+				sprites/objects/Effect0.png
+				sprites/objects/Effect1.png
+		]
+		gridPoints: [
+			{
+				x: 21
+				y: 1
+			}
+			
+			{
+				x: 21
+				y: 1
+			}
+		]
+	}
+]
+}
+]	

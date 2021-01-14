@@ -1,0 +1,107 @@
+{
+conversations: {
+        1: {
+                id: 1
+                dialog: I'm pretty famous around here. Name's Madam Miranda. Let's just say I have a gift.
+        }
+        2: {
+                id: 2
+                dialog: Let me try something on you. What is your favorite cardinal direction? 
+        }
+        3: {
+                id: 3
+                dialog: This path is one in which leaders are forged out of the fire of battle.
+        }
+        4: {
+                id: 4
+                dialog: This path is one in which guile and cunning will be your salvation from the world's ills.
+        }
+        5: {
+                id: 5
+                dialog: This path is one in which strength of will and strong constitution will help you endure the challenges to come.
+        }
+        6: {
+                id: 6
+                dialog: This path leads down a dark road full of treachery and deceit. Be weary fellow traveler.
+        }
+}
+associatedChoices: {
+        1: [
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 1
+                        destinationId: 2
+                        choicePhrase: Next
+						conversationCommandEvent: NONE
+                }
+        ]
+        2: [
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 2
+                        destinationId: 3
+                        choicePhrase: North
+						conversationCommandEvent: NONE
+                }
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 2
+                        destinationId: 4
+                        choicePhrase: East
+						conversationCommandEvent: NONE
+                }
+				{
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 2
+                        destinationId: 5
+                        choicePhrase: West
+						conversationCommandEvent: NONE
+                }
+				{
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 2
+                        destinationId: 6
+                        choicePhrase: South
+						conversationCommandEvent: NONE
+                }
+        ]
+        3: [
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 3
+                        destinationId: 1
+                        choicePhrase: Go to beginning!
+						conversationCommandEvent: NONE
+                }
+        ]
+		4: [
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 4
+                        destinationId: 1
+                        choicePhrase: Go to beginning!
+						conversationCommandEvent: NONE
+                }
+        ]
+		5: [
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 5
+                        destinationId: 1
+                        choicePhrase: Go to beginning!
+						conversationCommandEvent: NONE
+                }
+        ]
+		6: [
+                {
+                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        sourceId: 6
+                        destinationId: 1
+                        choicePhrase: Go to beginning!
+						conversationCommandEvent: NONE
+                }
+        ]
+		
+}
+currentConversationID: 1
+}

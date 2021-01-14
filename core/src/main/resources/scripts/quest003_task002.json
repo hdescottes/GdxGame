@@ -1,0 +1,31 @@
+{
+entityID : QUEST003_TASK002
+state : IMMOBILE
+direction : DOWN
+conversationConfigPath : "conversations/conversation005.json"
+questConfigPath : ""
+currentQuestID : ""
+itemTypeID: BABY001
+inventory : [
+	]
+animationConfig: [
+	{
+	    frameDuration: 1.0
+		animationType: IMMOBILE
+		texturePaths: [
+				sprites/characters/Player0.png
+				sprites/characters/Player1.png
+		]
+		gridPoints: [
+			{
+				x: 1
+				y: 1
+			}
+			{
+				x: 1
+				y: 1
+			}
+		]
+	}
+]
+}	
