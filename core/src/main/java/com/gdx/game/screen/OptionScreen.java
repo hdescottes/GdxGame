@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Align;
 import com.crashinvaders.vfx.VfxManager;
 import com.crashinvaders.vfx.effects.GaussianBlurEffect;
 import com.gdx.game.GdxGame;
+import com.gdx.game.audio.AudioManager;
+import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.manager.ResourceManager;
 
 import java.util.ArrayList;
@@ -120,14 +122,14 @@ public class OptionScreen extends BaseScreen {
         musicSlider.setValue(gdxGame.getPreferenceManager().getMusicVolume());
         musicSlider.addListener(event -> {
             gdxGame.getPreferenceManager().setMusicVolume(musicSlider.getValue());
-            resourceManager.getMusic().setVolume(gdxGame.getPreferenceManager().getMusicVolume());
+            AudioManager.getInstance().getCurrentMusic().setVolume(gdxGame.getPreferenceManager().getMusicVolume());
             return false;
         });
         CheckBox musicCheckbox = new CheckBox("Enable Music", resourceManager.skin);
         musicCheckbox.setChecked(gdxGame.getPreferenceManager().isMusicEnabled());
         musicCheckbox.addListener(event -> {
             gdxGame.getPreferenceManager().setMusicEnabled(musicCheckbox.isChecked());
-            playMusic(previousScreen.getMusicTheme());
+            notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, previousScreen.getMusicTheme());
             return false;
         });
 

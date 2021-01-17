@@ -10,10 +10,11 @@ import com.gdx.game.map.Map;
 import com.gdx.game.map.MapFactory;
 import com.gdx.game.profile.ProfileManager;
 
+import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.TEST_THEME;
+
 public class ToppleRoad1 extends Map {
 
     private static String mapPath = "asset/map/Topple_Road_1.tmx";
-    private static final String TEST_THEME = AudioObserver.AudioTypeEvent.TEST_THEME.getValue();
 
     public ToppleRoad1() {
         super(MapFactory.MapType.TOPPLE_ROAD_1, mapPath);
@@ -25,19 +26,19 @@ public class ToppleRoad1 extends Map {
 
     }
 
-    public String getMusicTheme() {
+    public AudioObserver.AudioTypeEvent getMusicTheme() {
         return TEST_THEME;
     }
 
     @Override
     public void unloadMusic() {
-        notify(AudioObserver.AudioCommand.MUSIC_STOP, AudioObserver.AudioTypeEvent.TEST_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_STOP, TEST_THEME);
     }
 
     @Override
     public void loadMusic() {
-        notify(AudioObserver.AudioCommand.MUSIC_LOAD, AudioObserver.AudioTypeEvent.TEST_THEME);
-        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, AudioObserver.AudioTypeEvent.TEST_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_LOAD, TEST_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, TEST_THEME);
     }
 
     private void initSpecialEntityPosition(Entity entity) {

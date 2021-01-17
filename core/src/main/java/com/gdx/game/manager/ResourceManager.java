@@ -32,9 +32,6 @@ public class ResourceManager {
     public Texture battleBackgroundMeadow;
     public Pixmap cursor;
 
-    // MUSICS
-    private Music music;
-
     // BUTTON
     public TextureRegion[][] button;
 
@@ -60,12 +57,6 @@ public class ResourceManager {
         // IMAGES
         assetManager.load("asset/background/natureBackground_frames_sheet.png", Texture.class);
         assetManager.load("asset/background/battleBackground_meadow.png", Texture.class);
-
-        // MUSICS
-        assetManager.load("music/Rising_Sun.mp3", Music.class);
-        assetManager.load("music/Dwarves'_Theme.mp3", Music.class);
-        assetManager.load("music/Challenge.mp3", Music.class);
-        assetManager.load("music/Village.mp3", Music.class);
 
         // ENTITIES
         assetManager.load("entities/enemies/rabite.png", Texture.class);
@@ -105,41 +96,6 @@ public class ResourceManager {
 
     public void setOptionScreen(boolean optionScreen) {
         isOptionScreen = optionScreen;
-    }
-
-    public Music getMusic() {
-        return music;
-    }
-
-    public void setMusic(Music music) {
-        this.music = music;
-    }
-
-    public void playMusic(String musicPath) {
-        if(music == null) {
-            addMusic(musicPath);
-        }
-
-        if(music != assetManager.get(musicPath, Music.class)) {
-            music.stop();
-            music.dispose();
-            addMusic(musicPath);
-        }
-    }
-
-    public void stopMusic() {
-        if(music != null) {
-            music.stop();
-            music.dispose();
-            setMusic(null);
-        }
-    }
-
-    private void addMusic(String musicPath) {
-        music = assetManager.get(musicPath, Music.class);
-        music.setLooping(true);
-        music.play();
-        setMusic(music);
     }
 
     public static void loadMapAsset(String mapFilenamePath) {
@@ -239,7 +195,7 @@ public class ResourceManager {
 
         // once the asset manager is done loading
         if(assetManager.isLoaded(musicFilenamePath)) {
-            music = assetManager.get(musicFilenamePath,Music.class);
+            music = assetManager.get(musicFilenamePath, Music.class);
         } else {
             LOGGER.debug("Music is not loaded: " + musicFilenamePath);
         }

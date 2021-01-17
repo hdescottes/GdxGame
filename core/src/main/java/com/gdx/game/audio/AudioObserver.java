@@ -6,6 +6,7 @@ public interface AudioObserver {
         MENU_THEME("music/Rising_Sun.mp3"),
         TOPPLE_THEME("music/Village.mp3"),
         TEST_THEME("music/Dwarves'_Theme.mp3"),
+        BATTLE_THEME("music/Challenge.mp3"),
         NONE("");
 
         private String audioFullFilePath;

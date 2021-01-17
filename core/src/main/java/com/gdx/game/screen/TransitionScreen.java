@@ -43,7 +43,7 @@ public class TransitionScreen extends BaseScreen {
 
         if(next.getClass() != OptionScreen.class) {
             Optional<AudioObserver.AudioTypeEvent> audioEvent = Arrays.stream(AudioObserver.AudioTypeEvent.values())
-                    .filter(e -> e.getValue().equalsIgnoreCase(current.getMusicTheme()))
+                    .filter(e -> e.equals(current.getMusicTheme()))
                     .findFirst();
             audioEvent.ifPresent(audioTypeEvent -> notify(AudioObserver.AudioCommand.MUSIC_STOP, audioTypeEvent));
         }
