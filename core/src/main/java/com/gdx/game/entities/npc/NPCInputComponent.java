@@ -43,7 +43,7 @@ public class NPCInputComponent extends InputComponent {
 
     @Override
     public void dispose() {
-
+        // Nothing
     }
 
     @Override

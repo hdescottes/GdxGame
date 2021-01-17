@@ -37,14 +37,14 @@ public class EntityFactory {
         FIRE
     }
 
-    public static String PLAYER_CONFIG = "scripts/player.json";
-    public static String TOWN_GUARD_WALKING_CONFIG = "scripts/town_guard_walking.json";
-    public static String TOWN_BLACKSMITH_CONFIG = "scripts/town_blacksmith.json";
-    public static String TOWN_MAGE_CONFIG = "scripts/town_mage.json";
-    public static String TOWN_INNKEEPER_CONFIG = "scripts/town_innkeeper.json";
-    public static String TOWN_FOLK_CONFIGS = "scripts/town_folk.json";
-    public static String ENEMY_CONFIG = "scripts/enemies.json";
-    public static String ENVIRONMENTAL_ENTITY_CONFIGS = "scripts/environmental_entities.json";
+    public static final String PLAYER_CONFIG = "scripts/player.json";
+    public static final String TOWN_GUARD_WALKING_CONFIG = "scripts/town_guard_walking.json";
+    public static final String TOWN_BLACKSMITH_CONFIG = "scripts/town_blacksmith.json";
+    public static final String TOWN_MAGE_CONFIG = "scripts/town_mage.json";
+    public static final String TOWN_INNKEEPER_CONFIG = "scripts/town_innkeeper.json";
+    public static final String TOWN_FOLK_CONFIGS = "scripts/town_folk.json";
+    public static final String ENEMY_CONFIG = "scripts/enemies.json";
+    public static final String ENVIRONMENTAL_ENTITY_CONFIGS = "scripts/environmental_entities.json";
 
     private EntityFactory() {
         entities = new Hashtable<>();
@@ -100,8 +100,7 @@ public class EntityFactory {
 
     public Entity getEntityByName(EntityName entityName) {
         EntityConfig config = new EntityConfig(entities.get(entityName.toString()));
-        Entity entity = Entity.initEntity(config);
-        return entity;
+        return Entity.initEntity(config);
     }
 
 }

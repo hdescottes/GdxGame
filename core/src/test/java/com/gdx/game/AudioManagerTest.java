@@ -14,8 +14,8 @@ import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.TOPPLE_THEME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(GdxRunnerTest.class)
-public class AudioManagerTest {
+@ExtendWith(GdxRunner.class)
+class AudioManagerTest {
 
     @BeforeEach
     void init() {
@@ -23,14 +23,14 @@ public class AudioManagerTest {
     }
 
     @Test
-    public void testGetInstance_ShouldSucceed() {
+    void testGetInstance_ShouldSucceed() {
         AudioManager audioManager = AudioManager.getInstance();
 
         assertThat(audioManager).isNotNull();
     }
 
     @Test
-    public void testOnNotify_ShouldSucceedWithMusicPlayOnce() {
+    void testOnNotify_ShouldSucceedWithMusicPlayOnce() {
         new ResourceManager();
         AudioManager audioManager = AudioManager.getInstance();
         audioManager.setCurrentMusic(null);
@@ -42,7 +42,7 @@ public class AudioManagerTest {
     }
 
     @Test
-    public void testOnNotify_ShouldSucceedWithMusicPlayLoop() {
+    void testOnNotify_ShouldSucceedWithMusicPlayLoop() {
         new ResourceManager();
         AudioManager audioManager = AudioManager.getInstance();
         audioManager.setCurrentMusic(null);
@@ -54,7 +54,7 @@ public class AudioManagerTest {
     }
 
     @Test
-    public void testOnNotify_ShouldSucceedWithMusicStop() {
+    void testOnNotify_ShouldSucceedWithMusicStop() {
         new ResourceManager();
         AudioManager audioManager = AudioManager.getInstance();
         audioManager.setCurrentMusic(null);

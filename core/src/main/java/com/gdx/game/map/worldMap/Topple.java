@@ -44,6 +44,7 @@ public class Topple extends Map {
         mapEntities.add(townfolk4);
     }
 
+    @Override
     public AudioObserver.AudioTypeEvent getMusicTheme() {
         return TOPPLE_THEME;
     }

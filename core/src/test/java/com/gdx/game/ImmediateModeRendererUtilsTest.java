@@ -18,8 +18,8 @@ import static com.badlogic.gdx.math.Matrix4.M23;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(GdxRunnerTest.class)
-public class ImmediateModeRendererUtilsTest {
+@ExtendWith(GdxRunner.class)
+class ImmediateModeRendererUtilsTest {
 
     @BeforeEach
     void init() {
@@ -28,7 +28,7 @@ public class ImmediateModeRendererUtilsTest {
     }
 
     @Test
-    public void testGetProjectionMatrix_ShouldSucceed() {
+    void testGetProjectionMatrix_ShouldSucceed() {
         Matrix4 matrix4 = ImmediateModeRendererUtils.getProjectionMatrix();
 
         assertThat(matrix4).isNotNull();

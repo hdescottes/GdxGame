@@ -65,7 +65,7 @@ public class NPCPhysicsComponent extends PhysicsComponent {
         selectionRay.set(mapMgr.getPlayer().getCurrentBoundingBox().x, mapMgr.getPlayer().getCurrentBoundingBox().y, 0.0f, boundingBox.x, boundingBox.y, 0.0f);
         float distance =  selectionRay.origin.dst(selectionRay.direction);
 
-        return !(distance <= selectRayMaximumDistance);
+        return !(distance <= SELECT_RAY_MAXIMUM_DISTANCE);
     }
 
     @Override

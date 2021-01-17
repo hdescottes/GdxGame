@@ -51,27 +51,27 @@ public class TransitionScreen extends BaseScreen {
 
     @Override
     public void show() {
-
+        // Nothing
     }
 
     @Override
     public void resize(int width, int height) {
-
+        // Nothing
     }
 
     @Override
     public void pause() {
-
+        // Nothing
     }
 
     @Override
     public void resume() {
-
+        // Nothing
     }
 
     @Override
     public void hide() {
-
+        // Nothing
     }
 
     @Override

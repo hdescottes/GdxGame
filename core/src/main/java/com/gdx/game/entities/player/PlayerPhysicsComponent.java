@@ -113,7 +113,7 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
                 selectionRay.set(boundingBox.x, boundingBox.y, 0.0f, mapEntityBoundingBox.x, mapEntityBoundingBox.y, 0.0f);
                 float distance =  selectionRay.origin.dst(selectionRay.direction);
 
-                if(distance <= selectRayMaximumDistance) {
+                if(distance <= SELECT_RAY_MAXIMUM_DISTANCE) {
                     //We have a valid entity selection
                     //Picked/Selected
                     LOGGER.debug("Selected Entity! " + mapEntity.getEntityConfig().getEntityID());

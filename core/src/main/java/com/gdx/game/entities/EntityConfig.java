@@ -144,7 +144,7 @@ public class EntityConfig {
         this.inventory = inventory;
     }
 
-    static public class AnimationConfig {
+    public static class AnimationConfig {
         private float frameDuration = 1.0f;
         private Entity.AnimationType animationType;
         private Array<String> texturePaths;

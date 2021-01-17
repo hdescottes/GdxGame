@@ -10,8 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(GdxRunnerTest.class)
-public class ResourceManagerTest {
+@ExtendWith(GdxRunner.class)
+class ResourceManagerTest {
 
     @BeforeEach
     void init() {
@@ -19,10 +19,10 @@ public class ResourceManagerTest {
     }
 
     @Test
-    public void testResourceManager_ShouldSucceed() {
+    void testResourceManager_ShouldSucceed() {
         ResourceManager resourceManager = new ResourceManager();
 
-        assertThat(resourceManager).isNotNull();
-        assertThat(resourceManager).hasFieldOrProperty("assetManager");
+        assertThat(resourceManager).isNotNull()
+                .hasFieldOrProperty("assetManager");
     }
 }

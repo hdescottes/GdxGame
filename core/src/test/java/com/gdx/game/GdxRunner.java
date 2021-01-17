@@ -13,11 +13,11 @@ import java.util.Map;
 /**
  * Allow to run test on Gdx app logic.
  */
-public class GdxRunnerTest implements ApplicationListener, Extension {
+public class GdxRunner implements ApplicationListener, Extension {
 
     private final Map<Method, TestExecutionListener> invokeInRender = new HashMap<>();
 
-    public GdxRunnerTest() {
+    public GdxRunner() {
         HeadlessApplicationConfiguration conf = new HeadlessApplicationConfiguration();
 
         new HeadlessApplication(this, conf);

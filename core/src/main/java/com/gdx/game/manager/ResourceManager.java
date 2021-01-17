@@ -46,11 +46,9 @@ public class ResourceManager {
     public Texture heroWalkUp;
     public Texture rabiteWalkDown;
 
-    public static AssetManager assetManager;
+    private static AssetManager assetManager = new AssetManager();
 
     public ResourceManager() {
-        assetManager = new AssetManager();
-
         // ATLAS
         assetManager.load("asset/textures.atlas", TextureAtlas.class);
 
@@ -113,9 +111,9 @@ public class ResourceManager {
             assetManager.load(mapFilenamePath, TiledMap.class);
             //Until we add loading screen, just block until we load the map
             assetManager.finishLoadingAsset(mapFilenamePath);
-            LOGGER.debug("Map loaded!: " + mapFilenamePath);
+            LOGGER.debug("Map loaded!: {}", mapFilenamePath);
         } else {
-            LOGGER.debug("Map doesn't exist!: " + mapFilenamePath );
+            LOGGER.debug("Map doesn't exist!: {}", mapFilenamePath );
         }
     }
 
@@ -130,7 +128,7 @@ public class ResourceManager {
         if(assetManager.isLoaded(mapFilenamePath)) {
             map = assetManager.get(mapFilenamePath, TiledMap.class);
         } else {
-            LOGGER.debug("Map is not loaded: " + mapFilenamePath);
+            LOGGER.debug("Map is not loaded: {}", mapFilenamePath);
         }
 
         return map;
@@ -152,7 +150,7 @@ public class ResourceManager {
             //Until we add loading screen, just block until we load the map
             assetManager.finishLoadingAsset(textureFilenamePath);
         } else {
-            LOGGER.debug("Texture doesn't exist!: " + textureFilenamePath);
+            LOGGER.debug("Texture doesn't exist!: {}", textureFilenamePath);
         }
     }
 
@@ -163,7 +161,7 @@ public class ResourceManager {
         if(assetManager.isLoaded(textureFilenamePath)) {
             texture = assetManager.get(textureFilenamePath,Texture.class);
         } else {
-            LOGGER.debug("Texture is not loaded: " + textureFilenamePath);
+            LOGGER.debug("Texture is not loaded: {}", textureFilenamePath);
         }
 
         return texture;
@@ -184,9 +182,9 @@ public class ResourceManager {
             assetManager.load(musicFilenamePath, Music.class);
             //Until we add loading screen, just block until we load the map
             assetManager.finishLoadingAsset(musicFilenamePath);
-            LOGGER.debug("Music loaded!: " + musicFilenamePath);
+            LOGGER.debug("Music loaded!: {}", musicFilenamePath);
         } else {
-            LOGGER.debug("Music doesn't exist!: " + musicFilenamePath);
+            LOGGER.debug("Music doesn't exist!: {}", musicFilenamePath);
         }
     }
 
@@ -197,7 +195,7 @@ public class ResourceManager {
         if(assetManager.isLoaded(musicFilenamePath)) {
             music = assetManager.get(musicFilenamePath, Music.class);
         } else {
-            LOGGER.debug("Music is not loaded: " + musicFilenamePath);
+            LOGGER.debug("Music is not loaded: {}", musicFilenamePath);
         }
 
         return music;

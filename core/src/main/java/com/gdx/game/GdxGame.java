@@ -7,8 +7,6 @@ import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.screen.GameScreen;
 import com.gdx.game.screen.MenuScreen;
 
-import java.util.Map;
-
 public class GdxGame extends Game {
 	private SpriteBatch batch;
 	private ResourceManager resourceManager;

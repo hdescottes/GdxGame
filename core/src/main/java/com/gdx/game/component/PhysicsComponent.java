@@ -2,10 +2,7 @@ package com.gdx.game.component;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -35,7 +32,7 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
     public Rectangle boundingBox;
     protected BoundingBoxLocation boundingBoxLocation;
     protected Ray selectionRay;
-    protected final float selectRayMaximumDistance = 32.0f;
+    protected static final float SELECT_RAY_MAXIMUM_DISTANCE = 32.0f;
 
     public enum BoundingBoxLocation {
         BOTTOM_LEFT,

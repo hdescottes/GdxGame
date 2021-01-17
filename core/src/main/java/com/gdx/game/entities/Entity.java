@@ -180,12 +180,12 @@ public class Entity {
 		return graphicsComponent.getAnimation(type);
 	}
 
-	static public EntityConfig getEntityConfig(String configFilePath) {
+	public static EntityConfig getEntityConfig(String configFilePath) {
 		Json json = new Json();
 		return json.fromJson(EntityConfig.class, Gdx.files.internal(configFilePath));
 	}
 
-	static public Array<EntityConfig> getEntityConfigs(String configFilePath) {
+	public static Array<EntityConfig> getEntityConfigs(String configFilePath) {
 		Json json = new Json();
 		Array<EntityConfig> configs = new Array<>();
 

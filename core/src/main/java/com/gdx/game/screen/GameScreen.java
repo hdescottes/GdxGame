@@ -29,13 +29,13 @@ public class GameScreen extends BaseScreen {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameScreen.class);
 
     public static class VIEWPORT {
-        public static float viewportWidth;
-        public static float viewportHeight;
-        public static float virtualWidth;
-        public static float virtualHeight;
-        public static float physicalWidth;
-        public static float physicalHeight;
-        public static float aspectRatio;
+        private static float viewportWidth;
+        private static float viewportHeight;
+        private static float virtualWidth;
+        private static float virtualHeight;
+        private static float physicalWidth;
+        private static float physicalHeight;
+        private static float aspectRatio;
     }
 
     public enum GameState {
@@ -84,6 +84,7 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
+    @Override
     public AudioObserver.AudioTypeEvent getMusicTheme() {
         return musicTheme;
     }
@@ -211,7 +212,7 @@ public class GameScreen extends BaseScreen {
 
     }
 
-    private void setupViewport(int width, int height) {
+    private static void setupViewport(int width, int height) {
         //Make the viewport a percentage of the total display area
         VIEWPORT.virtualWidth = width;
         VIEWPORT.virtualHeight = height;

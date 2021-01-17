@@ -27,6 +27,7 @@ public class NPCGraphicsComponent extends GraphicsComponent {
     private boolean sentHideCoversationMessage = false;
 
     public NPCGraphicsComponent() {
+        // Nothing
     }
 
     @Override
@@ -136,5 +137,6 @@ public class NPCGraphicsComponent extends GraphicsComponent {
 
     @Override
     public void dispose() {
+        // Nothing
     }
 }

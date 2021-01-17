@@ -93,6 +93,7 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
 
     @Override
     public void dispose() {
+        // Nothing
     }
 
 }

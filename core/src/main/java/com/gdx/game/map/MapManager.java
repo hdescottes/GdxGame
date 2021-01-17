@@ -25,6 +25,7 @@ public class MapManager implements ProfileObserver {
     private Entity currentSelectedEntity = null;
 
     public MapManager() {
+        // Nothing
     }
 
     @Override

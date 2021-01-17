@@ -18,7 +18,7 @@ public class MapFactory {
         return mapTable;
     }
 
-    static public Map getMap(MapType mapType) {
+    public static Map getMap(MapType mapType) {
         Map map = null;
         switch(mapType) {
             case TOPPLE_ROAD_1:

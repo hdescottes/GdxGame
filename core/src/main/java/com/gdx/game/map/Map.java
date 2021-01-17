@@ -24,25 +24,25 @@ public abstract class Map implements AudioSubject {
 
     private Array<AudioObserver> observers;
 
-    public final static float UNIT_SCALE  = 1/16f;
+    public static final float UNIT_SCALE  = 1/16f;
 
     //Map layers
-    protected final static String COLLISION_LAYER = "MAP_COLLISION_LAYER";
-    protected final static String SPAWNS_LAYER = "MAP_SPAWNS_LAYER";
-    protected final static String PORTAL_LAYER = "MAP_PORTAL_LAYER";
-    protected final static String QUEST_ITEM_SPAWN_LAYER = "MAP_QUEST_ITEM_SPAWN_LAYER";
-    protected final static String QUEST_DISCOVER_LAYER = "MAP_QUEST_DISCOVER_LAYER";
-    protected final static String ENEMY_SPAWN_LAYER = "MAP_ENEMY_SPAWN_LAYER";
-    protected final static String PARTICLE_EFFECT_SPAWN_LAYER = "PARTICLE_EFFECT_SPAWN_LAYER";
+    protected static final String COLLISION_LAYER = "MAP_COLLISION_LAYER";
+    protected static final String SPAWNS_LAYER = "MAP_SPAWNS_LAYER";
+    protected static final String PORTAL_LAYER = "MAP_PORTAL_LAYER";
+    protected static final String QUEST_ITEM_SPAWN_LAYER = "MAP_QUEST_ITEM_SPAWN_LAYER";
+    protected static final String QUEST_DISCOVER_LAYER = "MAP_QUEST_DISCOVER_LAYER";
+    protected static final String ENEMY_SPAWN_LAYER = "MAP_ENEMY_SPAWN_LAYER";
+    protected static final String PARTICLE_EFFECT_SPAWN_LAYER = "PARTICLE_EFFECT_SPAWN_LAYER";
 
-    public final static String BACKGROUND_LAYER = "Background_Layer";
-    public final static String GROUND_LAYER = "Ground_Layer";
-    public final static String DECORATION_LAYER = "Decoration_Layer";
+    public static final String BACKGROUND_LAYER = "Background_Layer";
+    public static final String GROUND_LAYER = "Ground_Layer";
+    public static final String DECORATION_LAYER = "Decoration_Layer";
 
     //Starting locations
-    protected final static String PLAYER_START = "PLAYER_START";
-    protected final static String NPC_START = "NPC_START";
-    protected final static String ENEMY_SPAWN = "ENEMY_SPAWN";
+    protected static final String PLAYER_START = "PLAYER_START";
+    protected static final String NPC_START = "NPC_START";
+    protected static final String ENEMY_SPAWN = "ENEMY_SPAWN";
 
     protected Json json;
 
@@ -347,8 +347,8 @@ public abstract class Map implements AudioSubject {
         setClosestStartPosition(convertedUnits);
     }
 
-    abstract public void unloadMusic();
-    abstract public void loadMusic();
+    public abstract void unloadMusic();
+    public abstract void loadMusic();
 
     @Override
     public void addObserver(AudioObserver audioObserver) {

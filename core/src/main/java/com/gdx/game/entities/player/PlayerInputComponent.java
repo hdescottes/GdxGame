@@ -46,10 +46,8 @@ public class PlayerInputComponent extends InputComponent {
 		}
 
 		//Specifically for messages with 1 object payload
-		if(string.length == 2) {
-			if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
-				currentDirection = json.fromJson(Entity.Direction.class, string[1]);
-			}
+		if(string.length == 2 && string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
+			currentDirection = json.fromJson(Entity.Direction.class, string[1]);
 		}
 	}
 
@@ -117,6 +115,7 @@ public class PlayerInputComponent extends InputComponent {
 				break;
 			case Input.Keys.E:
 				this.interactPressed();
+				break;
 			case Input.Keys.O:
 				this.optionPressed();
 				break;
