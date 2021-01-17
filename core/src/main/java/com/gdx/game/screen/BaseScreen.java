@@ -1,6 +1,5 @@
 package com.gdx.game.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioManager;
@@ -32,15 +30,15 @@ public class BaseScreen implements Screen, AudioSubject {
     protected Viewport viewport;
     // main stage of each screen
     protected Stage stage;
-    protected String musicTheme;
+    protected AudioObserver.AudioTypeEvent musicTheme;
 
-    private Array<AudioObserver> _observers;
+    private Array<AudioObserver> observers;
 
     public BaseScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         this.gdxGame = gdxGame;
         this.resourceManager = resourceManager;
 
-        _observers = new Array<AudioObserver>();
+        observers = new Array<>();
         this.addObserver(AudioManager.getInstance());
 /*
         CameraManager cameraManager = new CameraManager();
@@ -51,7 +49,7 @@ public class BaseScreen implements Screen, AudioSubject {
         stage = new Stage(viewport, gdxGame.getBatch());*/
     }
 
-    public String getMusicTheme() {
+    public AudioObserver.AudioTypeEvent getMusicTheme() {
         return musicTheme;
     }
 
@@ -78,33 +76,24 @@ public class BaseScreen implements Screen, AudioSubject {
         table.row();
     }
 
-    public void playMusic(String musicPath) {
-        if (gdxGame.getPreferenceManager().isMusicEnabled()) {
-            resourceManager.playMusic(musicPath);
-            resourceManager.getMusic().setVolume(gdxGame.getPreferenceManager().getMusicVolume());
-        } else {
-            resourceManager.stopMusic();
-        }
-    }
-
     @Override
     public void addObserver(AudioObserver audioObserver) {
-        _observers.add(audioObserver);
+        observers.add(audioObserver);
     }
 
     @Override
     public void removeObserver(AudioObserver audioObserver) {
-        _observers.removeValue(audioObserver, true);
+        observers.removeValue(audioObserver, true);
     }
 
     @Override
     public void removeAllObservers() {
-        _observers.removeAll(_observers, true);
+        observers.removeAll(observers, true);
     }
 
     @Override
     public void notify(AudioObserver.AudioCommand command, AudioObserver.AudioTypeEvent event) {
-        for(AudioObserver observer: _observers){
+        for(AudioObserver observer: observers){
             observer.onNotify(command, event);
         }
     }

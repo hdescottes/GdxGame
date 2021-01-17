@@ -11,11 +11,12 @@ import com.gdx.game.map.Map;
 import com.gdx.game.map.MapFactory;
 import com.gdx.game.profile.ProfileManager;
 
+import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.TOPPLE_THEME;
+
 public class Topple extends Map {
 
     private static String mapPath = "asset/map/Topple.tmx";
     private Json json;
-    private static final String TOPPLE_THEME = AudioObserver.AudioTypeEvent.TOPPLE_THEME.getValue();
 
     public Topple() {
         super(MapFactory.MapType.TOPPLE, mapPath);
@@ -43,19 +44,19 @@ public class Topple extends Map {
         mapEntities.add(townfolk4);
     }
 
-    public String getMusicTheme() {
+    public AudioObserver.AudioTypeEvent getMusicTheme() {
         return TOPPLE_THEME;
     }
 
     @Override
     public void unloadMusic() {
-        notify(AudioObserver.AudioCommand.MUSIC_STOP, AudioObserver.AudioTypeEvent.TOPPLE_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_STOP, TOPPLE_THEME);
     }
 
     @Override
     public void loadMusic() {
-        notify(AudioObserver.AudioCommand.MUSIC_LOAD, AudioObserver.AudioTypeEvent.TOPPLE_THEME);
-        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, AudioObserver.AudioTypeEvent.TOPPLE_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_LOAD, TOPPLE_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, TOPPLE_THEME);
     }
 
     private void initSpecialEntityPosition(Entity entity) {

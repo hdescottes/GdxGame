@@ -19,13 +19,14 @@ import com.gdx.game.screen.transition.effects.TransitionEffect;
 
 import java.util.ArrayList;
 
+import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.MENU_THEME;
+
 public class MenuScreen extends BaseScreen {
 
     private Table table;
     private Stage menuStage = new Stage();
     private Animation<TextureRegion> flowAnimation;
     private float stateTime;
-    private static final String MENU_THEME = "music/Rising_Sun.mp3";
 
     public MenuScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
@@ -96,7 +97,9 @@ public class MenuScreen extends BaseScreen {
         menuStage.addActor(table);
         Gdx.input.setInputProcessor(menuStage);
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(resourceManager.cursor, 0, 0));
-        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, AudioObserver.AudioTypeEvent.MENU_THEME);
+
+        notify(AudioObserver.AudioCommand.MUSIC_LOAD, MENU_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, MENU_THEME);
     }
 
     @Override

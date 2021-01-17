@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.gdx.game.GdxGame;
+import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.manager.ResourceManager;
 
 public class BattleScreen extends BaseScreen {
@@ -15,7 +16,6 @@ public class BattleScreen extends BaseScreen {
     private AnimationManager animationManager = new AnimationManager();*/
     private TextureRegion[]  textureRegions;
     private Stage battleStage;
-    private static final String BATTLE_THEME = "music/Challenge.mp3";
 
     //To be able to come back to game screen
     //TODO: remove
@@ -24,8 +24,7 @@ public class BattleScreen extends BaseScreen {
 
     public BattleScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
-        super.musicTheme = BATTLE_THEME;
-
+        super.musicTheme = AudioObserver.AudioTypeEvent.BATTLE_THEME;
         this.viewport = new StretchViewport(getBattleCam().viewportWidth, getBattleCam().viewportHeight, getBattleCam());
         battleStage = new Stage(viewport, gdxGame.getBatch());
 /*
@@ -41,18 +40,13 @@ public class BattleScreen extends BaseScreen {
         }
     }*/
 
-    private void handleMusic() {
-        playMusic(BATTLE_THEME);
-    }
-
     @Override
     public void show() {
         /*CameraManager cameraManager = new CameraManager();
         controlManager = cameraManager.insertControl(getBattleCam());*/
 
         Gdx.input.setInputProcessor(battleStage);
-
-        handleMusic();
+        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, AudioObserver.AudioTypeEvent.BATTLE_THEME);
     }
 
     @Override

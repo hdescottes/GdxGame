@@ -14,6 +14,8 @@ public class AudioManager implements AudioObserver {
 
     private static AudioManager instance = null;
 
+    private Music currentMusic;
+
     private Hashtable<String, Music> queuedMusic;
 
     private AudioManager() {
@@ -28,6 +30,21 @@ public class AudioManager implements AudioObserver {
         return instance;
     }
 
+    public Music getCurrentMusic() {
+        return currentMusic;
+    }
+
+    public void setCurrentMusic(Music currentMusic) {
+        this.currentMusic = currentMusic;
+    }
+
+    private void checkMusicEnabled(Music music) {
+        if(!PreferenceManager.getInstance().isMusicEnabled()) {
+            music.stop();
+        } else {
+            music.play();
+        }
+    }
 
     @Override
     public void onNotify(AudioCommand command, AudioTypeEvent event) {
@@ -57,23 +74,23 @@ public class AudioManager implements AudioObserver {
         }
     }
 
-    private Music playMusic(boolean isLooping, String fullFilePath) {
+    private void playMusic(boolean isLooping, String fullFilePath) {
         Music music = queuedMusic.get(fullFilePath);
         if(music != null) {
             music.setLooping(isLooping);
-            music.play();
             music.setVolume(PreferenceManager.getMusicVolume());
+            checkMusicEnabled(music);
+            setCurrentMusic(music);
         } else if(ResourceManager.isAssetLoaded(fullFilePath)) {
             music = ResourceManager.getMusicAsset(fullFilePath);
             music.setLooping(isLooping);
-            music.play();
             music.setVolume(PreferenceManager.getMusicVolume());
+            checkMusicEnabled(music);
             queuedMusic.put(fullFilePath, music);
+            setCurrentMusic(music);
         } else {
             LOGGER.debug("Music not loaded");
-            return null;
         }
-        return music;
     }
 
     public void dispose() {

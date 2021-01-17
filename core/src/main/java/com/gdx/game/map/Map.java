@@ -66,7 +66,7 @@ public abstract class Map implements AudioSubject {
     protected Array<Entity> mapEntities;
     protected Array<Entity> mapQuestEntities;
 
-    private String musicTheme;
+    private AudioObserver.AudioTypeEvent musicTheme;
 
     public Map(MapFactory.MapType mapType, String fullMapPath) {
         json = new Json();
@@ -133,7 +133,7 @@ public abstract class Map implements AudioSubject {
         this.addObserver(AudioManager.getInstance());
     }
 
-    public String getMusicTheme() {
+    public AudioObserver.AudioTypeEvent getMusicTheme() {
         return musicTheme;
     }
 

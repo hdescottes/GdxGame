@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioManager;
+import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.component.Component;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
@@ -57,7 +58,7 @@ public class GameScreen extends BaseScreen {
 
     private Entity player;
 
-    private String musicTheme;
+    private AudioObserver.AudioTypeEvent musicTheme;
 
     public GameScreen(GdxGame game, ResourceManager resourceManager) {
         super(game, resourceManager);
@@ -83,7 +84,7 @@ public class GameScreen extends BaseScreen {
         Gdx.input.setInputProcessor(multiplexer);
     }
 
-    public String getMusicTheme() {
+    public AudioObserver.AudioTypeEvent getMusicTheme() {
         return musicTheme;
     }
 
@@ -144,8 +145,8 @@ public class GameScreen extends BaseScreen {
             ((PlayerInputComponent) player.getInputProcessor()).setOption(false);
         }
 
-        this.musicTheme = MapFactory.getMapTable().get(mapManager.getCurrentMapType()).getMusicTheme();
-        resourceManager.setMusic(ResourceManager.getMusicAsset(this.getMusicTheme()));
+        musicTheme = MapFactory.getMapTable().get(mapManager.getCurrentMapType()).getMusicTheme();
+        AudioManager.getInstance().setCurrentMusic(ResourceManager.getMusicAsset(musicTheme.getValue()));
     }
 
     @Override
