@@ -51,13 +51,13 @@ public class Topple extends Map {
 
     @Override
     public void unloadMusic() {
-        notify(AudioObserver.AudioCommand.MUSIC_STOP, TOPPLE_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_STOP, getMusicTheme());
     }
 
     @Override
     public void loadMusic() {
-        notify(AudioObserver.AudioCommand.MUSIC_LOAD, TOPPLE_THEME);
-        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, TOPPLE_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_LOAD, getMusicTheme());
+        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, getMusicTheme());
     }
 
     private void initSpecialEntityPosition(Entity entity) {

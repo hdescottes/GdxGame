@@ -80,7 +80,7 @@ public class MapManager implements ProfileObserver {
             return;
         }
 
-        if(currentMap != null) {
+        if(currentMap != null && currentMap.getMusicTheme() != map.getMusicTheme()) {
             currentMap.unloadMusic();
         }
 
