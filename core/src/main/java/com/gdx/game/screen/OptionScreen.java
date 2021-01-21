@@ -198,6 +198,8 @@ public class OptionScreen extends BaseScreen {
             musicStage.addActor(musicTable);
             Gdx.input.setInputProcessor(musicStage);
         } else {
+            controlStage.clear();
+            musicStage.clear();
             optionStage.addActor(optionTable);
             Gdx.input.setInputProcessor(optionStage);
         }
