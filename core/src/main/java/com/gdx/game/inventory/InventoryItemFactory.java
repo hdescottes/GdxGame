@@ -16,7 +16,7 @@ import static com.gdx.game.manager.ResourceManager.ITEMS_TEXTURE_ATLAS;
 public class InventoryItemFactory {
 
     private Json json = new Json();
-    private final String INVENTORY_ITEM = "scripts/inventory_items.json";
+    private static final String INVENTORY_ITEM = "scripts/inventory_items.json";
     private static InventoryItemFactory instance = null;
     private Hashtable<ItemTypeID,InventoryItem> inventoryItemList;
 
@@ -48,7 +48,7 @@ public class InventoryItemFactory {
     /*
     public void testAllItemLoad() {
         for(ItemTypeID itemTypeID : ItemTypeID.values()) {
-            InventoryItem item = new InventoryItem(_inventoryItemList.get(itemTypeID));
+            InventoryItem item = new InventoryItem(inventoryItemList.get(itemTypeID));
             item.setDrawable(new TextureRegionDrawable(PlayerHUD.itemsTextureAtlas.findRegion(item.getItemTypeID().toString())));
             item.setScaling(Scaling.none);
         }

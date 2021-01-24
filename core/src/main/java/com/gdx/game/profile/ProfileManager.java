@@ -79,7 +79,7 @@ public class ProfileManager extends ProfileSubject {
     }
 
     public void writeProfileToStorage(String profileName, String fileData, boolean overwrite) {
-        String fullFilename = profileName+SAVEGAME_SUFFIX;
+        String fullFilename = profileName + SAVEGAME_SUFFIX;
 
         boolean localFileExists = Gdx.files.local(fullFilename).exists();
 
@@ -124,7 +124,7 @@ public class ProfileManager extends ProfileSubject {
             saveProfile();
         }
 
-        String fullProfileFileName = profileName +SAVEGAME_SUFFIX;
+        String fullProfileFileName = profileName + SAVEGAME_SUFFIX;
         boolean doesProfileFileExist = Gdx.files.local(fullProfileFileName).exists();
 
         if(!doesProfileFileExist) {

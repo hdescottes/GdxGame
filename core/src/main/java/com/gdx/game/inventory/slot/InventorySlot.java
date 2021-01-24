@@ -165,19 +165,13 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     }
 
     private void checkVisibilityOfItemCount() {
-        if(numItemsVal < 2) {
-            numItemsLabel.setVisible(false);
-        } else {
-            numItemsLabel.setVisible(true);
-        }
+        numItemsLabel.setVisible(numItemsVal >= 2);
     }
 
     public boolean hasItem() {
         if(hasChildren()) {
             SnapshotArray<Actor> items = this.getChildren();
-            if(items.size > 2) {
-                return true;
-            }
+            return items.size > 2;
         }
         return false;
     }

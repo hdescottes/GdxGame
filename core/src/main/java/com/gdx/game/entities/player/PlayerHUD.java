@@ -1,0 +1,373 @@
+package com.gdx.game.entities.player;
+
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.gdx.game.audio.AudioManager;
+import com.gdx.game.audio.AudioObserver;
+import com.gdx.game.audio.AudioSubject;
+import com.gdx.game.component.Component;
+import com.gdx.game.component.ComponentObserver;
+import com.gdx.game.entities.Entity;
+import com.gdx.game.inventory.InventoryItem;
+import com.gdx.game.inventory.InventoryItemLocation;
+import com.gdx.game.inventory.InventoryObserver;
+import com.gdx.game.inventory.InventoryUI;
+import com.gdx.game.inventory.store.StoreInventoryObserver;
+import com.gdx.game.inventory.store.StoreInventoryUI;
+import com.gdx.game.map.MapManager;
+import com.gdx.game.profile.ProfileManager;
+import com.gdx.game.profile.ProfileObserver;
+import com.gdx.game.status.StatusObserver;
+import com.gdx.game.status.StatusUI;
+
+import static com.gdx.game.manager.ResourceManager.STATUS_UI_SKIN;
+
+public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ComponentObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
+
+    private Stage stage;
+    private Viewport viewport;
+    private Camera camera;
+    private Entity player;
+
+    private StatusUI statusUI;
+    private InventoryUI inventoryUI;
+    private StoreInventoryUI storeInventoryUI;
+
+    private Dialog messageBoxUI;
+    private Json json;
+    private MapManager mapManager;
+
+    private Array<AudioObserver> observers;
+
+    private static final String INVENTORY_FULL = "Your inventory is full!";
+
+    public PlayerHUD(Camera camera, Entity player, MapManager mapManager) {
+        this.camera = camera;
+        this.player = player;
+        this.mapManager = mapManager;
+        viewport = new ScreenViewport(this.camera);
+        stage = new Stage(viewport);
+        //_stage.setDebugAll(true);
+
+        observers = new Array<>();
+
+        json = new Json();
+        messageBoxUI = new Dialog("Message", STATUS_UI_SKIN, "solidbackground") {
+            {
+                button("OK");
+                text(INVENTORY_FULL);
+            }
+            @Override
+            protected void result(final Object object) {
+                cancel();
+                setVisible(false);
+            }
+
+        };
+
+        messageBoxUI.setVisible(false);
+        messageBoxUI.pack();
+        messageBoxUI.setPosition(stage.getWidth()/2 - messageBoxUI.getWidth()/2, stage.getHeight()/2 - messageBoxUI.getHeight()/2);
+
+        statusUI = new StatusUI();
+        statusUI.setVisible(true);
+        statusUI.setPosition(0, 0);
+        statusUI.setKeepWithinStage(false);
+        statusUI.setMovable(false);
+
+        inventoryUI = new InventoryUI();
+        inventoryUI.setKeepWithinStage(false);
+        inventoryUI.setMovable(false);
+        inventoryUI.setVisible(false);
+        inventoryUI.setPosition(statusUI.getWidth(), 0);
+
+        storeInventoryUI = new StoreInventoryUI();
+        storeInventoryUI.setMovable(false);
+        storeInventoryUI.setVisible(false);
+        storeInventoryUI.setPosition(0, 0);
+
+        stage.addActor(storeInventoryUI);
+        stage.addActor(messageBoxUI);
+        stage.addActor(statusUI);
+        stage.addActor(inventoryUI);
+
+        storeInventoryUI.validate();
+        messageBoxUI.validate();
+        statusUI.validate();
+        inventoryUI.validate();
+
+        //add tooltips to the stage
+        Array<Actor> actors = inventoryUI.getInventoryActors();
+        for(Actor actor : actors) {
+            stage.addActor(actor);
+        }
+
+        Array<Actor> storeActors = storeInventoryUI.getInventoryActors();
+        for(Actor actor : storeActors) {
+            stage.addActor(actor);
+        }
+
+        //Observers
+        player.registerObserver(this);
+        statusUI.addObserver(this);
+        storeInventoryUI.addObserver(this);
+        inventoryUI.addObserver(this);
+        this.addObserver(AudioManager.getInstance());
+
+        //Listeners
+        ImageButton inventoryButton = statusUI.getInventoryButton();
+        inventoryButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                inventoryUI.setVisible(!inventoryUI.isVisible());
+            }
+        });
+
+        storeInventoryUI.getCloseButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                storeInventoryUI.savePlayerInventory();
+                storeInventoryUI.cleanupStoreInventory();
+                storeInventoryUI.setVisible(false);
+                mapManager.clearCurrentSelectedMapEntity();
+            }
+        });
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void updateEntityObservers() {
+        mapManager.unregisterCurrentMapEntityObservers();
+        mapManager.registerCurrentMapEntityObservers(this);
+    }
+
+    @Override
+    public void onNotify(ProfileManager profileManager, ProfileEvent event) {
+        switch(event){
+            case PROFILE_LOADED:
+                boolean firstTime = profileManager.getIsNewProfile();
+
+                if(firstTime) {
+                    InventoryUI.clearInventoryItems(inventoryUI.getInventorySlotTable());
+                    InventoryUI.clearInventoryItems(inventoryUI.getEquipSlotTable());
+                    inventoryUI.resetEquipSlots();
+
+                    //add default items if first time
+                    Array<InventoryItem.ItemTypeID> items = player.getEntityConfig().getInventory();
+                    Array<InventoryItemLocation> itemLocations = new Array<>();
+                    for(int i = 0; i < items.size; i++) {
+                        itemLocations.add(new InventoryItemLocation(i, items.get(i).toString(), 1, InventoryUI.PLAYER_INVENTORY));
+                    }
+                    InventoryUI.populateInventory(inventoryUI.getInventorySlotTable(), itemLocations, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
+                    profileManager.setProperty("playerInventory", InventoryUI.getInventory(inventoryUI.getInventorySlotTable()));
+
+                    //start the player with some money
+                    statusUI.setGoldValue(20);
+                    statusUI.setStatusForLevel(1);
+                } else {
+                    int goldVal = profileManager.getProperty("currentPlayerGP", Integer.class);
+
+                    Array<InventoryItemLocation> inventory = profileManager.getProperty("playerInventory", Array.class);
+                    InventoryUI.populateInventory(inventoryUI.getInventorySlotTable(), inventory, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
+
+                    Array<InventoryItemLocation> equipInventory = profileManager.getProperty("playerEquipInventory", Array.class);
+                    if(equipInventory != null && equipInventory.size > 0) {
+                        inventoryUI.resetEquipSlots();
+                        InventoryUI.populateInventory(inventoryUI.getEquipSlotTable(), equipInventory, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
+                    }
+
+                    int xpMaxVal = profileManager.getProperty("currentPlayerXPMax", Integer.class);
+                    int xpVal = profileManager.getProperty("currentPlayerXP", Integer.class);
+
+                    int hpMaxVal = profileManager.getProperty("currentPlayerHPMax", Integer.class);
+                    int hpVal = profileManager.getProperty("currentPlayerHP", Integer.class);
+
+                    int mpMaxVal = profileManager.getProperty("currentPlayerMPMax", Integer.class);
+                    int mpVal = profileManager.getProperty("currentPlayerMP", Integer.class);
+
+                    int levelVal = profileManager.getProperty("currentPlayerLevel", Integer.class);
+
+                    //set the current max values first
+                    statusUI.setXPValueMax(xpMaxVal);
+                    statusUI.setHPValueMax(hpMaxVal);
+                    statusUI.setMPValueMax(mpMaxVal);
+
+                    statusUI.setXPValue(xpVal);
+                    statusUI.setHPValue(hpVal);
+                    statusUI.setMPValue(mpVal);
+
+                    //then add in current values
+                    statusUI.setGoldValue(goldVal);
+                    statusUI.setLevelValue(levelVal);
+                }
+            break;
+            case SAVING_PROFILE:
+                profileManager.setProperty("playerInventory", InventoryUI.getInventory(inventoryUI.getInventorySlotTable()));
+                profileManager.setProperty("playerEquipInventory", InventoryUI.getInventory(inventoryUI.getEquipSlotTable()));
+                profileManager.setProperty("currentPlayerGP", statusUI.getGoldValue() );
+                profileManager.setProperty("currentPlayerLevel", statusUI.getLevelValue() );
+                profileManager.setProperty("currentPlayerXP", statusUI.getXPValue() );
+                profileManager.setProperty("currentPlayerXPMax", statusUI.getXPValueMax() );
+                profileManager.setProperty("currentPlayerHP", statusUI.getHPValue() );
+                profileManager.setProperty("currentPlayerHPMax", statusUI.getHPValueMax() );
+                profileManager.setProperty("currentPlayerMP", statusUI.getMPValue() );
+                profileManager.setProperty("currentPlayerMPMax", statusUI.getMPValueMax() );
+                break;
+            case CLEAR_CURRENT_PROFILE:
+                profileManager.setProperty("playerInventory", new Array<InventoryItemLocation>());
+                profileManager.setProperty("playerEquipInventory", new Array<InventoryItemLocation>());
+                profileManager.setProperty("currentPlayerGP", 0 );
+                profileManager.setProperty("currentPlayerLevel",0 );
+                profileManager.setProperty("currentPlayerXP", 0 );
+                profileManager.setProperty("currentPlayerXPMax", 0 );
+                profileManager.setProperty("currentPlayerHP", 0 );
+                profileManager.setProperty("currentPlayerHPMax", 0 );
+                profileManager.setProperty("currentPlayerMP", 0 );
+                profileManager.setProperty("currentPlayerMPMax", 0 );
+                profileManager.setProperty("currentTime", 0);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNotify(String value, ComponentEvent event) {
+    }
+
+    @Override
+    public void onNotify(String value, StoreInventoryEvent event) {
+        switch (event) {
+            case PLAYER_GP_TOTAL_UPDATED:
+                int val = Integer.parseInt(value);
+                statusUI.setGoldValue(val);
+                //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_COIN_RUSTLE);
+                break;
+            case PLAYER_INVENTORY_UPDATED:
+                Array<InventoryItemLocation> items = json.fromJson(Array.class, value);
+                InventoryUI.populateInventory(inventoryUI.getInventorySlotTable(), items, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNotify(int value, StatusEvent event) {
+        switch(event) {
+            case UPDATED_GP:
+                storeInventoryUI.setPlayerGP(value);
+                ProfileManager.getInstance().setProperty("currentPlayerGP", statusUI.getGoldValue());
+                break;
+            case UPDATED_HP:
+                ProfileManager.getInstance().setProperty("currentPlayerHP", statusUI.getHPValue());
+                break;
+            case UPDATED_LEVEL:
+                ProfileManager.getInstance().setProperty("currentPlayerLevel", statusUI.getLevelValue());
+                break;
+            case UPDATED_MP:
+                ProfileManager.getInstance().setProperty("currentPlayerMP", statusUI.getMPValue());
+                break;
+            case UPDATED_XP:
+                ProfileManager.getInstance().setProperty("currentPlayerXP", statusUI.getXPValue());
+                break;
+            case LEVELED_UP:
+                //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void show() {
+    }
+
+    @Override
+    public void render(float delta) {
+        stage.act(delta);
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
+
+    @Override
+    public void onNotify(String value, InventoryEvent event) {
+        switch(event) {
+            case ITEM_CONSUMED:
+                String[] strings = value.split(Component.MESSAGE_TOKEN);
+                if(strings.length != 2) {
+                    return;
+                }
+
+                int type = Integer.parseInt(strings[0]);
+                int typeValue = Integer.parseInt(strings[1]);
+
+                if(InventoryItem.doesRestoreHP(type)) {
+                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_EATING);
+                    statusUI.addHPValue(typeValue);
+                } else if(InventoryItem.doesRestoreMP(type)) {
+                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_DRINKING);
+                    statusUI.addMPValue(typeValue);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void addObserver(AudioObserver audioObserver) {
+        observers.add(audioObserver);
+    }
+
+    @Override
+    public void removeObserver(AudioObserver audioObserver) {
+        observers.removeValue(audioObserver, true);
+    }
+
+    @Override
+    public void removeAllObservers() {
+        observers.removeAll(observers, true);
+    }
+
+    @Override
+    public void notify(AudioObserver.AudioCommand command, AudioObserver.AudioTypeEvent event) {
+        for(AudioObserver observer: observers) {
+            observer.onNotify(command, event);
+        }
+    }
+
+}

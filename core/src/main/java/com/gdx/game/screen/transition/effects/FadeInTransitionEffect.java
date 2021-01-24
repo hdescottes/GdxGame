@@ -16,7 +16,7 @@ public class FadeInTransitionEffect extends TransitionEffect {
 
     @Override
     public void render(Screen current, Screen next) {
-        next.show();
+        //next.show();
         next.render(Gdx.graphics.getDeltaTime());
         color.set(0f, 0f, 0f, 1f - getAlpha());
 

@@ -125,36 +125,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         playerSlotsTable.setBackground(new Image(new NinePatch(STATUS_UI_TEXTURE_ATLAS.createPatch("dialog"))).getDrawable());
 
         //layout
-        for(int i = 1; i <= NUM_SLOTS; i++) {
-            InventorySlot inventorySlot = new InventorySlot();
-            inventorySlot.addListener(new InventorySlotTooltipListener(inventorySlotTooltip));
-            dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
-
-            inventorySlotTable.add(inventorySlot).size(slotWidth, slotHeight);
-
-            inventorySlot.addListener(new ClickListener() {
-                @Override
-                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    super.touchUp(event, x, y, pointer, button);
-                    if(getTapCount() == 2) {
-                        InventorySlot slot = (InventorySlot)event.getListenerActor();
-                        if(slot.hasItem()) {
-                            InventoryItem item = slot.getTopInventoryItem();
-                            if(item.isConsumable()) {
-                                String itemInfo = item.getItemUseType() + MESSAGE_TOKEN + item.getItemUseTypeValue();
-                                InventoryUI.this.notify(itemInfo, InventoryObserver.InventoryEvent.ITEM_CONSUMED);
-                                slot.removeActor(item);
-                                slot.remove(item);
-                            }
-                        }
-                    }
-                }
-            });
-
-            if(i % lengthSlotRow == 0) {
-                inventorySlotTable.row();
-            }
-        }
+        handleLayoutInventorySlot();
 
         equipSlots.add();
         equipSlots.add(headSlot).size(slotWidth, slotHeight);
@@ -189,6 +160,39 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
 
     public Table getEquipSlotTable() {
         return equipSlots;
+    }
+
+    private void handleLayoutInventorySlot() {
+        for(int i = 1; i <= NUM_SLOTS; i++) {
+            InventorySlot inventorySlot = new InventorySlot();
+            inventorySlot.addListener(new InventorySlotTooltipListener(inventorySlotTooltip));
+            dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
+
+            inventorySlotTable.add(inventorySlot).size(slotWidth, slotHeight);
+
+            inventorySlot.addListener(new ClickListener() {
+                @Override
+                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                    if(getTapCount() == 2) {
+                        InventorySlot slot = (InventorySlot)event.getListenerActor();
+                        if(slot.hasItem()) {
+                            InventoryItem item = slot.getTopInventoryItem();
+                            if(item.isConsumable()) {
+                                String itemInfo = item.getItemUseType() + MESSAGE_TOKEN + item.getItemUseTypeValue();
+                                InventoryUI.this.notify(itemInfo, InventoryObserver.InventoryEvent.ITEM_CONSUMED);
+                                slot.removeActor(item);
+                                slot.remove(item);
+                            }
+                        }
+                    }
+                }
+            });
+
+            if(i % lengthSlotRow == 0) {
+                inventorySlotTable.row();
+            }
+        }
     }
 
     public void resetEquipSlots() {
@@ -247,7 +251,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                 inventorySlot.add(item);
                 if(item.getName().equalsIgnoreCase(defaultName)) {
                     draganddrop.addSource(new InventorySlotSource(inventorySlot, draganddrop));
-                } else if(disableNonDefaultItems == false) {
+                } else if(!disableNonDefaultItems) {
                     draganddrop.addSource(new InventorySlotSource(inventorySlot, draganddrop));
                 }
             }
@@ -418,6 +422,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                 if(addItem == null) {
                     return;
                 }
+
                 if(addItem.isInventoryItemOffensive()) {
                     APVal += addItem.getItemUseTypeValue();
                     APValLabel.setText(String.valueOf(APVal));
@@ -427,7 +432,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                         notify(String.valueOf(addItem.getItemUseTypeValue()), InventoryObserver.InventoryEvent.ADD_WAND_AP);
                     }
 
-                } else if( addItem.isInventoryItemDefensive()) {
+                } else if(addItem.isInventoryItemDefensive()) {
                     DPVal += addItem.getItemUseTypeValue();
                     DPValLabel.setText(String.valueOf(DPVal));
                     notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
@@ -438,6 +443,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                 if(removeItem == null) {
                     return;
                 }
+
                 if(removeItem.isInventoryItemOffensive()) {
                     APVal -= removeItem.getItemUseTypeValue();
                     APValLabel.setText(String.valueOf(APVal));
@@ -447,7 +453,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                         notify(String.valueOf(removeItem.getItemUseTypeValue()), InventoryObserver.InventoryEvent.REMOVE_WAND_AP);
                     }
 
-                } else if( removeItem.isInventoryItemDefensive()) {
+                } else if(removeItem.isInventoryItemDefensive()) {
                     DPVal -= removeItem.getItemUseTypeValue();
                     DPValLabel.setText(String.valueOf(DPVal));
                     notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);

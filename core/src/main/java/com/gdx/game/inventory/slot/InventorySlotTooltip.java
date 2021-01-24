@@ -52,11 +52,10 @@ public class InventorySlotTooltip extends Window {
             string.append(String.format("Trade Value: %s GP", item.getTradeValue()));
 
             description.setText(string);
-            this.pack();
         } else {
             description.setText("");
-            this.pack();
         }
+        this.pack();
 
     }
 }
