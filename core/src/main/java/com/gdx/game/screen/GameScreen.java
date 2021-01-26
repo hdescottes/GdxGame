@@ -15,6 +15,7 @@ import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.component.Component;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
+import com.gdx.game.entities.player.PlayerHUD;
 import com.gdx.game.entities.player.PlayerInputComponent;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.Map;
@@ -50,6 +51,7 @@ public class GameScreen extends BaseScreen {
     protected OrthogonalTiledMapRenderer mapRenderer = null;
     protected MapManager mapManager;
     protected OrthographicCamera camera;
+    protected OrthographicCamera hudCamera;
     private Stage gameStage = new Stage();
 
     private Json json;
@@ -57,6 +59,7 @@ public class GameScreen extends BaseScreen {
     private InputMultiplexer multiplexer;
 
     private Entity player;
+    private PlayerHUD playerHUD;
 
     private AudioObserver.AudioTypeEvent musicTheme;
 
@@ -79,7 +82,13 @@ public class GameScreen extends BaseScreen {
         mapManager.setPlayer(player);
         mapManager.setCamera(camera);
 
+        hudCamera = new OrthographicCamera();
+        hudCamera.setToOrtho(false, VIEWPORT.physicalWidth, VIEWPORT.physicalHeight);
+
+        playerHUD = new PlayerHUD(hudCamera, player, mapManager);
+
         multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(playerHUD.getStage());
         multiplexer.addProcessor(player.getInputProcessor());
         Gdx.input.setInputProcessor(multiplexer);
     }
@@ -92,14 +101,11 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         ProfileManager.getInstance().addObserver(mapManager);
+        ProfileManager.getInstance().addObserver(playerHUD);
 
-        //setGameState(GameState.LOADING);
+        setGameState(GameState.LOADING);
         setGameState(GameState.RUNNING);
         Gdx.input.setInputProcessor(multiplexer);
-
-        if(mapRenderer == null) {
-            mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getCurrentTiledMap(), Map.UNIT_SCALE);
-        }
     }
 
     @Override
@@ -114,8 +120,13 @@ public class GameScreen extends BaseScreen {
     @Override
     public void render(float delta) {
 
+        if(mapRenderer == null) {
+            mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getCurrentTiledMap(), Map.UNIT_SCALE);
+        }
+
         if(gameState == GameState.PAUSED) {
             player.updateInput(delta);
+            playerHUD.render(delta);
             return;
         }
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -133,12 +144,15 @@ public class GameScreen extends BaseScreen {
             camera.position.set(mapManager.getPlayerStartUnitScaled().x, mapManager.getPlayerStartUnitScaled().y, 0f);
             camera.update();
 
+            playerHUD.updateEntityObservers();
+
             mapManager.setMapChanged(false);
         }
 
         mapRenderer.render();
         mapManager.updateCurrentMapEntities(mapManager, mapRenderer.getBatch(), delta);
         player.update(mapManager, mapRenderer.getBatch(), delta);
+        playerHUD.render(delta);
 
         if(((PlayerInputComponent) player.getInputProcessor()).isOption()) {
             Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
@@ -154,16 +168,19 @@ public class GameScreen extends BaseScreen {
     public void resize(int width, int height) {
         setupViewport(15, 15);
         camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        playerHUD.resize((int) VIEWPORT.physicalWidth, (int) VIEWPORT.physicalHeight);
     }
 
     @Override
     public void pause() {
         setGameState(GameState.SAVING);
+        playerHUD.pause();
     }
 
     @Override
     public void resume() {
         setGameState(GameState.LOADING);
+        playerHUD.resume();
     }
 
     @Override

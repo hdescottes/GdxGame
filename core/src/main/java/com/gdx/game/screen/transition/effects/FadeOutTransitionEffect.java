@@ -16,7 +16,7 @@ public class FadeOutTransitionEffect extends TransitionEffect {
 
     @Override
     public void render(Screen current, Screen next) {
-        current.show();
+        //current.show();
         current.render(Gdx.graphics.getDeltaTime());
         color.set(0f, 0f, 0f, getAlpha());
 

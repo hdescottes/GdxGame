@@ -42,12 +42,12 @@ public class MapManager implements ProfileObserver {
                 loadMap(mapType);
 
                 Vector2 toppleRoad1MapStartPosition = profileManager.getProperty("toppleRoad1MapStartPosition", Vector2.class);
-                if( toppleRoad1MapStartPosition != null ){
+                if(toppleRoad1MapStartPosition != null) {
                     MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).setPlayerStart(toppleRoad1MapStartPosition);
                 }
 
                 Vector2 toppleMapStartPosition = profileManager.getProperty("toppleMapStartPosition", Vector2.class);
-                if( toppleMapStartPosition != null ){
+                if(toppleMapStartPosition != null) {
                     MapFactory.getMap(MapFactory.MapType.TOPPLE).setPlayerStart(toppleMapStartPosition);
                 }
 
@@ -57,15 +57,17 @@ public class MapManager implements ProfileObserver {
                     profileManager.setProperty("currentMapType", this.currentMap.currentMapType.toString());
                 }
 
-                profileManager.setProperty("toppleMapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE).getPlayerStart() );
+                profileManager.setProperty("toppleMapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE).getPlayerStart());
+                profileManager.setProperty("toppleRoad1MapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getPlayerStart() );
                 break;
             case CLEAR_CURRENT_PROFILE:
                 this.currentMap = null;
-                profileManager.setProperty("currentMapType", MapFactory.MapType.TOPPLE_ROAD_1.toString());
+                profileManager.setProperty("currentMapType", MapFactory.MapType.TOPPLE.toString());
 
                 MapFactory.clearCache();
 
-                profileManager.setProperty("toppleMapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE).getPlayerStart() );
+                profileManager.setProperty("toppleMapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE).getPlayerStart());
+                profileManager.setProperty("toppleRoad1MapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getPlayerStart() );
                 break;
             default:
                 break;
