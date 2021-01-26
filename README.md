@@ -18,15 +18,19 @@ The hero will soon be able to interact with NPCs with the "E" key.
 #### Battle Screen
 Currently, the battle screen only hold the background. <br>
 It has a timer of 3s before returning to the main game screen. <br>
-Soon, it will hold the player and enemy sprite and we will be able to properly "battle" in a turn-based battle.
+Soon, it will hold the player and enemy sprite, and we will be able to properly "battle" in a turn-based battle.
 
 #### Option Screen
 The option screen is divided into 3 buttons : <br>
 - The music settings (music is ok / sound is not implemented yet) <br>
-- The control settings (which will be add later) <br>
+- The control settings (which will be added later) <br>
 - A back input, so we can return to the previous screen <br>
 
 The option screen is triggered on the "O" key.
+
+#### Inventory
+The inventory can be displayed through the chest icon on the status UI. <br>
+You can drag and drop items and use consumables by double-clicking on them.
 
 -------
 <p align="center">
