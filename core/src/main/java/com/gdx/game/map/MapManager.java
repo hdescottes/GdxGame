@@ -1,5 +1,7 @@
 package com.gdx.game.map;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -51,23 +53,35 @@ public class MapManager implements ProfileObserver {
                     MapFactory.getMap(MapFactory.MapType.TOPPLE).setPlayerStart(toppleMapStartPosition);
                 }
 
+                Vector2 currentPlayerPosition = profileManager.getProperty("currentPlayerPosition", Vector2.class);
+                if(currentPlayerPosition != null && !currentPlayerPosition.equals(new Vector2(0, 0))) {
+                    Vector2 currentPositionOnMap = new Vector2(currentPlayerPosition.x*16, currentPlayerPosition.y*16);
+                    MapFactory.getMap(this.currentMap.currentMapType).setPlayerStart(currentPositionOnMap);
+                }
+
                 break;
             case SAVING_PROFILE:
                 if(this.currentMap != null) {
                     profileManager.setProperty("currentMapType", this.currentMap.currentMapType.toString());
                 }
 
+                profileManager.setProperty("currentPlayerPosition", player.getCurrentPosition());
                 profileManager.setProperty("toppleMapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE).getPlayerStart());
-                profileManager.setProperty("toppleRoad1MapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getPlayerStart() );
+                profileManager.setProperty("toppleRoad1MapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getPlayerStart());
+
+                if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+                    profileManager.setProperty("currentPlayerPosition", null);
+                }
                 break;
             case CLEAR_CURRENT_PROFILE:
                 this.currentMap = null;
+                profileManager.setProperty("currentPlayerPosition", null);
                 profileManager.setProperty("currentMapType", MapFactory.MapType.TOPPLE.toString());
 
                 MapFactory.clearCache();
 
                 profileManager.setProperty("toppleMapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE).getPlayerStart());
-                profileManager.setProperty("toppleRoad1MapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getPlayerStart() );
+                profileManager.setProperty("toppleRoad1MapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getPlayerStart());
                 break;
             default:
                 break;
