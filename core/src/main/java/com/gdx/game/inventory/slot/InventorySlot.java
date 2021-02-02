@@ -152,7 +152,6 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
         }
     }
 
-
     public void clearAllInventoryItems(boolean sendRemoveNotifications) {
         if(hasItem()) {
             SnapshotArray<Actor> arrayChildren = this.getChildren();

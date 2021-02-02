@@ -1,12 +1,11 @@
-package com.gdx.game;
+package com.gdx.game.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.gdx.game.manager.AnimationManager;
-import com.gdx.game.manager.ResourceManager;
+import com.gdx.game.GdxRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

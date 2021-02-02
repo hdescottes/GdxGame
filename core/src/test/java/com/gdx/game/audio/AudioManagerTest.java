@@ -1,7 +1,8 @@
-package com.gdx.game;
+package com.gdx.game.audio;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.gdx.game.GdxRunner;
 import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.manager.ResourceManager;

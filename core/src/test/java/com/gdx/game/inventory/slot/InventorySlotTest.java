@@ -1,8 +1,8 @@
-package com.gdx.game;
+package com.gdx.game.inventory.slot;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.gdx.game.manager.ResourceManager;
+import com.gdx.game.GdxRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,18 +11,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(GdxRunner.class)
-class ResourceManagerTest {
+public class InventorySlotTest {
 
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
+        Gdx.gl20 = mock(GL20.class);
     }
 
     @Test
-    void testResourceManager_ShouldSucceed() {
-        ResourceManager resourceManager = new ResourceManager();
+    public void testInventorySlot_ShouldSucceed() {
+        InventorySlot inventorySlot = new InventorySlot();
 
-        assertThat(resourceManager).isNotNull()
-                .hasFieldOrProperty("assetManager");
+        assertThat(inventorySlot).isNotNull();
+        assertThat(inventorySlot.hasItem()).isFalse();
     }
 }
