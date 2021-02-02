@@ -1,5 +1,6 @@
-package com.gdx.game;
+package com.gdx.game.screen.transition;
 
+import com.gdx.game.GdxRunner;
 import com.gdx.game.screen.transition.TimeTransition;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

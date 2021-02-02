@@ -56,6 +56,5 @@ public class InventorySlotTooltip extends Window {
             description.setText("");
         }
         this.pack();
-
     }
 }

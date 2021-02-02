@@ -6,9 +6,6 @@ public class InventoryItemLocation {
     private int numberItemsAtLocation;
     private String itemNameProperty;
 
-    public InventoryItemLocation() {
-    }
-
     public InventoryItemLocation( int locationIndex, String itemTypeAtLocation, int numberItemsAtLocation, String itemNameProperty) {
         this.locationIndex = locationIndex;
         this.itemTypeAtLocation = itemTypeAtLocation;

@@ -31,7 +31,7 @@ public class ProfileManager extends ProfileSubject {
         storeAllProfiles();
     }
 
-    public static final ProfileManager getInstance() {
+    public static ProfileManager getInstance() {
         if(profileManager == null) {
             profileManager = new ProfileManager();
         }

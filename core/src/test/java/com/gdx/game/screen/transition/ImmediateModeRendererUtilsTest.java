@@ -1,9 +1,10 @@
-package com.gdx.game;
+package com.gdx.game.screen.transition;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Matrix4;
+import com.gdx.game.GdxRunner;
 import com.gdx.game.screen.transition.ImmediateModeRendererUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
