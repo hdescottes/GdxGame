@@ -14,7 +14,6 @@ import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.profile.ProfileManager;
-import com.gdx.game.screen.transition.effects.FadeInTransitionEffect;
 import com.gdx.game.screen.transition.effects.FadeOutTransitionEffect;
 import com.gdx.game.screen.transition.effects.TransitionEffect;
 
