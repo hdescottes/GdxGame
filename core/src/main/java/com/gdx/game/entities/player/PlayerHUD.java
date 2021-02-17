@@ -17,7 +17,11 @@ import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.audio.AudioSubject;
 import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
+import com.gdx.game.dialog.ConversationGraph;
+import com.gdx.game.dialog.ConversationGraphObserver;
+import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.inventory.InventoryItem;
 import com.gdx.game.inventory.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
@@ -32,7 +36,7 @@ import com.gdx.game.status.StatusUI;
 
 import static com.gdx.game.manager.ResourceManager.STATUS_UI_SKIN;
 
-public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ComponentObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
+public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ComponentObserver, ConversationGraphObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
 
     private Stage stage;
     private Viewport viewport;
@@ -41,6 +45,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
 
     private StatusUI statusUI;
     private InventoryUI inventoryUI;
+    private ConversationUI conversationUI;
     private StoreInventoryUI storeInventoryUI;
 
     private Dialog messageBoxUI;
@@ -91,17 +96,26 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         inventoryUI.setVisible(false);
         inventoryUI.setPosition(statusUI.getWidth(), 0);
 
+        conversationUI = new ConversationUI();
+        conversationUI.setMovable(true);
+        conversationUI.setVisible(false);
+        conversationUI.setPosition(stage.getWidth() / 2, 0);
+        conversationUI.setWidth(stage.getWidth() / 2);
+        conversationUI.setHeight(stage.getHeight() / 2);
+
         storeInventoryUI = new StoreInventoryUI();
         storeInventoryUI.setMovable(false);
         storeInventoryUI.setVisible(false);
         storeInventoryUI.setPosition(0, 0);
 
         stage.addActor(storeInventoryUI);
+        stage.addActor(conversationUI);
         stage.addActor(messageBoxUI);
         stage.addActor(statusUI);
         stage.addActor(inventoryUI);
 
         storeInventoryUI.validate();
+        conversationUI.validate();
         messageBoxUI.validate();
         statusUI.validate();
         inventoryUI.validate();
@@ -130,6 +144,14 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 inventoryUI.setVisible(!inventoryUI.isVisible());
+            }
+        });
+
+        conversationUI.getCloseButton().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                conversationUI.setVisible(false);
+                mapManager.clearCurrentSelectedMapEntity();
             }
         });
 
@@ -245,6 +267,72 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
 
     @Override
     public void onNotify(String value, ComponentEvent event) {
+        switch(event) {
+            case LOAD_CONVERSATION:
+                EntityConfig config = json.fromJson(EntityConfig.class, value);
+
+                //Check to see if there is a version loading into properties
+                if(config.getItemTypeID().equalsIgnoreCase(InventoryItem.ItemTypeID.NONE.toString())) {
+                    EntityConfig configReturnProperty = ProfileManager.getInstance().getProperty(config.getEntityID(), EntityConfig.class);
+                    if(configReturnProperty != null) {
+                        config = configReturnProperty;
+                    }
+                }
+
+                conversationUI.loadConversation(config);
+                conversationUI.getCurrentConversationGraph().addObserver(this);
+                break;
+            case SHOW_CONVERSATION:
+                EntityConfig configShow = json.fromJson(EntityConfig.class, value);
+
+                if(configShow.getEntityID().equalsIgnoreCase(conversationUI.getCurrentEntityID())) {
+                    conversationUI.setVisible(true);
+                }
+                break;
+            case HIDE_CONVERSATION:
+                EntityConfig configHide = json.fromJson(EntityConfig.class, value);
+                if(configHide.getEntityID().equalsIgnoreCase(conversationUI.getCurrentEntityID())) {
+                    conversationUI.setVisible(false);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNotify(ConversationGraph graph, ConversationCommandEvent event) {
+        switch(event) {
+            case LOAD_STORE_INVENTORY:
+                Entity selectedEntity = mapManager.getCurrentSelectedMapEntity();
+                if(selectedEntity == null) {
+                    break;
+                }
+
+                Array<InventoryItemLocation> inventory =  InventoryUI.getInventory(inventoryUI.getInventorySlotTable());
+                storeInventoryUI.loadPlayerInventory(inventory);
+
+                Array<InventoryItem.ItemTypeID> items  = selectedEntity.getEntityConfig().getInventory();
+                Array<InventoryItemLocation> itemLocations = new Array<>();
+                for(int i = 0; i < items.size; i++) {
+                    itemLocations.add(new InventoryItemLocation(i, items.get(i).toString(), 1, InventoryUI.STORE_INVENTORY));
+                }
+
+                storeInventoryUI.loadStoreInventory(itemLocations);
+
+                conversationUI.setVisible(false);
+                storeInventoryUI.toFront();
+                storeInventoryUI.setVisible(true);
+                break;
+            case EXIT_CONVERSATION:
+                conversationUI.setVisible(false);
+                mapManager.clearCurrentSelectedMapEntity();
+                break;
+            case NONE:
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

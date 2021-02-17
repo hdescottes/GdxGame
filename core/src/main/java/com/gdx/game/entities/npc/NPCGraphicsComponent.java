@@ -24,7 +24,7 @@ public class NPCGraphicsComponent extends GraphicsComponent {
     private boolean wasSelected = false;
 
     private boolean sentShowConversationMessage = false;
-    private boolean sentHideCoversationMessage = false;
+    private boolean sentHideConversationMessage = false;
 
     public NPCGraphicsComponent() {
         // Nothing
@@ -89,12 +89,12 @@ public class NPCGraphicsComponent extends GraphicsComponent {
             if(!sentShowConversationMessage) {
                 notify(json.toJson(entity.getEntityConfig()), ComponentObserver.ComponentEvent.SHOW_CONVERSATION);
                 sentShowConversationMessage = true;
-                sentHideCoversationMessage = false;
+                sentHideConversationMessage = false;
             }
         } else {
-            if(!sentHideCoversationMessage) {
+            if(!sentHideConversationMessage) {
                 notify(json.toJson(entity.getEntityConfig()), ComponentObserver.ComponentEvent.HIDE_CONVERSATION);
-                sentHideCoversationMessage = true;
+                sentHideConversationMessage = true;
                 sentShowConversationMessage = false;
             }
         }

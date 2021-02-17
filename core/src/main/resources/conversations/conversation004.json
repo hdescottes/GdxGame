@@ -16,14 +16,14 @@ conversations: {
 associatedChoices: {
         1: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 1
                         destinationId: 2
                         choicePhrase: "Yes, of course I will help you!"
 						conversationCommandEvent: ACCEPT_QUEST
                 }
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 1
                         destinationId: 3
                         choicePhrase: "No, sorry, I can't help you."

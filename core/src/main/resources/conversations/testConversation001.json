@@ -20,7 +20,7 @@ conversations: {
 associatedChoices: {
         601: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 601
                         destinationId: 500
                         choicePhrase: Go to beginning!
@@ -30,14 +30,14 @@ associatedChoices: {
         250: []
         500: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 500
                         destinationId: 601
                         choicePhrase: YES
 						conversationCommandEvent: NONE
                 }
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 500
                         destinationId: 802
                         choicePhrase: NO
@@ -46,7 +46,7 @@ associatedChoices: {
         ]
         802: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 802
                         destinationId: 500
                         choicePhrase: Go to beginning!
