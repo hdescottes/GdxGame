@@ -110,8 +110,9 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
             Rectangle mapEntityBoundingBox = mapEntity.getCurrentBoundingBox();
             if(mapEntity.getCurrentBoundingBox().contains(mouseSelectCoordinates.x, mouseSelectCoordinates.y)) {
                 //Check distance
-                selectionRay.set(boundingBox.x, boundingBox.y, 0.0f, mapEntityBoundingBox.x, mapEntityBoundingBox.y, 0.0f);
-                float distance =  selectionRay.origin.dst(selectionRay.direction);
+                Vector3 vec3Player = new Vector3(boundingBox.x, boundingBox.y, 0);
+                Vector3 vec3Npc = new Vector3(mapEntityBoundingBox.x, mapEntityBoundingBox.y, 0);
+                float distance = vec3Player.dst(vec3Npc);
 
                 if(distance <= SELECT_RAY_MAXIMUM_DISTANCE) {
                     //We have a valid entity selection

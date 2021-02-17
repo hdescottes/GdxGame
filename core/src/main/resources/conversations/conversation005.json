@@ -16,14 +16,14 @@ conversations: {
 associatedChoices: {
         1: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 1
                         destinationId: 2
                         choicePhrase: Yes
 						conversationCommandEvent: ADD_ENTITY_TO_INVENTORY
                 }
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 1
                         destinationId: 3
                         choicePhrase: No

@@ -28,7 +28,7 @@ conversations: {
 associatedChoices: {
         1: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 1
                         destinationId: 2
                         choicePhrase: Next
@@ -37,28 +37,28 @@ associatedChoices: {
         ]
         2: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice,
                         sourceId: 2
                         destinationId: 3
                         choicePhrase: North
 						conversationCommandEvent: NONE
                 }
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice,
                         sourceId: 2
                         destinationId: 4
                         choicePhrase: East
 						conversationCommandEvent: NONE
                 }
 				{
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice,
                         sourceId: 2
                         destinationId: 5
                         choicePhrase: West
 						conversationCommandEvent: NONE
                 }
 				{
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice,
                         sourceId: 2
                         destinationId: 6
                         choicePhrase: South
@@ -67,7 +67,7 @@ associatedChoices: {
         ]
         3: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 3
                         destinationId: 1
                         choicePhrase: Go to beginning!
@@ -76,7 +76,7 @@ associatedChoices: {
         ]
 		4: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 4
                         destinationId: 1
                         choicePhrase: Go to beginning!
@@ -85,7 +85,7 @@ associatedChoices: {
         ]
 		5: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 5
                         destinationId: 1
                         choicePhrase: Go to beginning!
@@ -94,7 +94,7 @@ associatedChoices: {
         ]
 		6: [
                 {
-                        class: com.packtpub.libgdx.bludbourne.dialog.ConversationChoice
+                        class: com.gdx.game.dialog.ConversationChoice
                         sourceId: 6
                         destinationId: 1
                         choicePhrase: Go to beginning!
