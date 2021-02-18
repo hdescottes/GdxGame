@@ -1,7 +1,5 @@
 package com.gdx.game.dialog;
 
-import com.badlogic.gdx.utils.Json;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Set;
@@ -21,9 +19,7 @@ public class ConversationGraph extends ConversationGraphSubject {
     }
 
     public void setConversations(Hashtable<String, Conversation> conversations) {
-        if(conversations.size() < 0) {
-            throw new IllegalArgumentException("Can't have a negative amount of conversations");
-        }
+        conversations.size();
 
         this.conversations = conversations;
         this.associatedChoices = new Hashtable<>(conversations.size());
@@ -63,9 +59,6 @@ public class ConversationGraph extends ConversationGraphSubject {
 
     public boolean isReachable(String sourceID, String sinkID) {
         if(!isValid(sourceID) || !isValid(sinkID)) {
-            return false;
-        }
-        if(conversations.get(sourceID) == null) {
             return false;
         }
 
@@ -125,11 +118,6 @@ public class ConversationGraph extends ConversationGraphSubject {
         outputString.append(System.getProperty("line.separator"));
 
         return outputString.toString();
-    }
-
-    public String toJson() {
-        Json json = new Json();
-        return json.prettyPrint(this);
     }
 
 }
