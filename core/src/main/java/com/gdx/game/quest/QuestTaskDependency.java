@@ -4,7 +4,9 @@ public class QuestTaskDependency {
     private String sourceId;
     private String destinationId;
 
-    public QuestTaskDependency(){}
+    public QuestTaskDependency() {
+
+    }
 
     public String getSourceId() {
         return sourceId;
