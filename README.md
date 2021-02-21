@@ -15,7 +15,7 @@ The edition was made with Tiled.exe in order to build layers.
 The hero moves freely in the maps with the arrow keys or with "WASD". <br>
 The hero will soon be able to interact with NPCs with the "E" key.
 - NPCs are also animated 2D sprites. <br>
-You can interact with them by clicking on them at a proper distance. Some have conversations (and quests soon).
+You can interact with them by clicking on them at a proper distance. Some have conversations and quests.
 
 #### Battle Screen (disabled until battle system is done)
 Currently, the battle screen only hold the background. <br>

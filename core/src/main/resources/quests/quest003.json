@@ -52,7 +52,7 @@ questTasks: {
 questTaskDependencies: {
 	1: [
 		{
-			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			class: com.gdx.game.quest.QuestTaskDependency
 			sourceId: 1
 			destinationId: 2
 		}

@@ -94,26 +94,26 @@ questTaskDependencies: {
 	4: []
 	3: [
 		{
-			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			class: com.gdx.game.quest.QuestTaskDependency
 			sourceId: 3
 			destinationId: 4
 		}
 	]
 	2: [
 		{
-			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			class: com.gdx.game.quest.QuestTaskDependency
 			sourceId: 2
 			destinationId: 4
 		}
 	]
 	1: [
 		{
-			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			class: com.gdx.game.quest.QuestTaskDependency
 			sourceId: 1
 			destinationId: 2
 		}
 		{
-			class: com.packtpub.libgdx.bludbourne.quest.QuestTaskDependency
+			class: com.gdx.game.quest.QuestTaskDependency
 			sourceId: 1
 			destinationId: 3
 		}
