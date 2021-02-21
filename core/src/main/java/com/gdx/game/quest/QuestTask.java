@@ -14,7 +14,7 @@ public class QuestTask {
         DISCOVER
     }
 
-    public enum QuestTaskPropertyType{
+    public enum QuestTaskPropertyType {
         IS_TASK_COMPLETE,
         TARGET_TYPE,
         TARGET_NUM,
@@ -63,7 +63,7 @@ public class QuestTask {
         this.taskProperties = taskProperties;
     }
 
-    public boolean isTaskComplete(){
+    public boolean isTaskComplete() {
         if(!taskProperties.containsKey(QuestTaskPropertyType.IS_TASK_COMPLETE.toString())) {
             setPropertyValue(QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "false");
             return false;
@@ -87,7 +87,7 @@ public class QuestTask {
     public String getPropertyValue(String key) {
         Object propertyVal = taskProperties.get(key);
         if(propertyVal == null) {
-            return new String();
+            return "";
         }
         return propertyVal.toString();
     }
