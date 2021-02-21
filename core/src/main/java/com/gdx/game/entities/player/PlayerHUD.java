@@ -31,6 +31,8 @@ import com.gdx.game.inventory.store.StoreInventoryUI;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.profile.ProfileObserver;
+import com.gdx.game.quest.QuestGraph;
+import com.gdx.game.quest.QuestUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
@@ -47,6 +49,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
     private InventoryUI inventoryUI;
     private ConversationUI conversationUI;
     private StoreInventoryUI storeInventoryUI;
+    private QuestUI questUI;
 
     private Dialog messageBoxUI;
     private Json json;
@@ -108,12 +111,22 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         storeInventoryUI.setVisible(false);
         storeInventoryUI.setPosition(0, 0);
 
+        questUI = new QuestUI();
+        questUI.setMovable(false);
+        questUI.setVisible(false);
+        questUI.setKeepWithinStage(false);
+        questUI.setPosition(0, stage.getHeight() / 2);
+        questUI.setWidth(stage.getWidth());
+        questUI.setHeight(stage.getHeight() / 2);
+
+        stage.addActor(questUI);
         stage.addActor(storeInventoryUI);
         stage.addActor(conversationUI);
         stage.addActor(messageBoxUI);
         stage.addActor(statusUI);
         stage.addActor(inventoryUI);
 
+        questUI.validate();
         storeInventoryUI.validate();
         conversationUI.validate();
         messageBoxUI.validate();
@@ -144,6 +157,13 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 inventoryUI.setVisible(!inventoryUI.isVisible());
+            }
+        });
+
+        ImageButton questButton = statusUI.getQuestButton();
+        questButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                questUI.setVisible(questUI.isVisible() ? false : true);
             }
         });
 
@@ -186,6 +206,8 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                     InventoryUI.clearInventoryItems(inventoryUI.getEquipSlotTable());
                     inventoryUI.resetEquipSlots();
 
+                    questUI.setQuests(new Array<>());
+
                     //add default items if first time
                     Array<InventoryItem.ItemTypeID> items = player.getEntityConfig().getInventory();
                     Array<InventoryItemLocation> itemLocations = new Array<>();
@@ -209,6 +231,9 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                         inventoryUI.resetEquipSlots();
                         InventoryUI.populateInventory(inventoryUI.getEquipSlotTable(), equipInventory, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
                     }
+
+                    Array<QuestGraph> quests = profileManager.getProperty("playerQuests", Array.class);
+                    questUI.setQuests(quests);
 
                     int xpMaxVal = profileManager.getProperty("currentPlayerXPMax", Integer.class);
                     int xpVal = profileManager.getProperty("currentPlayerXP", Integer.class);
@@ -236,6 +261,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 }
             break;
             case SAVING_PROFILE:
+                profileManager.setProperty("playerQuests", questUI.getQuests());
                 profileManager.setProperty("playerInventory", InventoryUI.getInventory(inventoryUI.getInventorySlotTable()));
                 profileManager.setProperty("playerEquipInventory", InventoryUI.getInventory(inventoryUI.getEquipSlotTable()));
                 profileManager.setProperty("currentPlayerGP", statusUI.getGoldValue() );
@@ -295,6 +321,14 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                     conversationUI.setVisible(false);
                 }
                 break;
+            case QUEST_LOCATION_DISCOVERED:
+                String[] string = value.split(Component.MESSAGE_TOKEN);
+                String questID = string[0];
+                String questTaskID = string[1];
+
+                questUI.questTaskComplete(questID, questTaskID);
+                updateEntityObservers();
+                break;
             default:
                 break;
         }
@@ -327,6 +361,72 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             case EXIT_CONVERSATION:
                 conversationUI.setVisible(false);
                 mapManager.clearCurrentSelectedMapEntity();
+                break;
+            case ACCEPT_QUEST:
+                Entity currentlySelectedEntity = mapManager.getCurrentSelectedMapEntity();
+                if(currentlySelectedEntity == null) {
+                    break;
+                }
+                EntityConfig config = currentlySelectedEntity.getEntityConfig();
+                QuestGraph questGraph = questUI.loadQuest(config.getQuestConfigPath());
+
+                if(questGraph != null) {
+                    //Update conversation dialog
+                    config.setConversationConfigPath(QuestUI.RETURN_QUEST);
+                    config.setCurrentQuestID(questGraph.getQuestID());
+                    ProfileManager.getInstance().setProperty(config.getEntityID(), config);
+                    updateEntityObservers();
+                }
+
+                conversationUI.setVisible(false);
+                mapManager.clearCurrentSelectedMapEntity();
+                break;
+            case RETURN_QUEST:
+                Entity returnEntity = mapManager.getCurrentSelectedMapEntity();
+                if(returnEntity == null) {
+                    break;
+                }
+                EntityConfig configReturn = returnEntity.getEntityConfig();
+
+                EntityConfig configReturnProperty = ProfileManager.getInstance().getProperty(configReturn.getEntityID(), EntityConfig.class);
+                if(configReturnProperty == null) {
+                    return;
+                }
+
+                String questID = configReturnProperty.getCurrentQuestID();
+
+                if(questUI.isQuestReadyForReturn(questID)) {
+                    //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
+                    QuestGraph quest = questUI.getQuestByID(questID);
+                    statusUI.addXPValue(quest.getXpReward());
+                    statusUI.addGoldValue(quest.getGoldReward());
+                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_COIN_RUSTLE);
+                    inventoryUI.removeQuestItemFromInventory(questID);
+                    configReturnProperty.setConversationConfigPath(QuestUI.FINISHED_QUEST);
+                    ProfileManager.getInstance().setProperty(configReturnProperty.getEntityID(), configReturnProperty);
+                }
+
+                conversationUI.setVisible(false);
+                mapManager.clearCurrentSelectedMapEntity();
+                break;
+            case ADD_ENTITY_TO_INVENTORY:
+                Entity entity = mapManager.getCurrentSelectedMapEntity();
+                if(entity == null) {
+                    break;
+                }
+
+                if(inventoryUI.doesInventoryHaveSpace()) {
+                    inventoryUI.addEntityToInventory(entity, entity.getEntityConfig().getCurrentQuestID());
+                    mapManager.clearCurrentSelectedMapEntity();
+                    conversationUI.setVisible(false);
+                    entity.unregisterObservers();
+                    mapManager.removeMapQuestEntity(entity);
+                    questUI.updateQuests(mapManager);
+                } else {
+                    mapManager.clearCurrentSelectedMapEntity();
+                    conversationUI.setVisible(false);
+                    messageBoxUI.setVisible(true);
+                }
                 break;
             case NONE:
                 break;
