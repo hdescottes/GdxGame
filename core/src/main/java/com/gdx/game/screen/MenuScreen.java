@@ -13,9 +13,6 @@ import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.manager.AnimationManager;
 import com.gdx.game.manager.ResourceManager;
-import com.gdx.game.profile.ProfileManager;
-import com.gdx.game.screen.transition.effects.FadeOutTransitionEffect;
-import com.gdx.game.screen.transition.effects.TransitionEffect;
 
 import java.util.ArrayList;
 
@@ -23,7 +20,7 @@ import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.MENU_THEME;
 
 public class MenuScreen extends BaseScreen {
 
-    private Table table;
+    private Table menuTable;
     private Stage menuStage = new Stage();
     private Animation<TextureRegion> flowAnimation;
     private float stateTime;
@@ -32,15 +29,12 @@ public class MenuScreen extends BaseScreen {
         super(gdxGame, resourceManager);
         super.musicTheme = MENU_THEME;
 
-        createTable();
+        menuTable = createTable();
         handleBackground();
-        handlePlayButton();
+        handleNewButton();
+        handleLoadButton();
         handleOptionButton();
-    }
-
-    private void createTable() {
-        table = new Table();
-        table.setBounds(0,0, (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
+        handleExitButton();
     }
 
     private void handleBackground() {
@@ -65,10 +59,22 @@ public class MenuScreen extends BaseScreen {
         flowAnimation = animationManager.setAnimation(flowFrames);
     }
 
-    private void handleOptionButton() {
-        createButton("Options", 0, table.getHeight()/10, table);
+    private void handleExitButton() {
+        createButton("Exit", 0, menuTable.getHeight()/9, menuTable);
 
-        Actor optionButton = table.getCells().get(1).getActor();
+        Actor exitButton = menuTable.getCells().get(3).getActor();
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent even, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+    }
+
+    private void handleOptionButton() {
+        createButton("Options", 0, menuTable.getHeight()/10, menuTable);
+
+        Actor optionButton = menuTable.getCells().get(2).getActor();
         optionButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
@@ -77,26 +83,33 @@ public class MenuScreen extends BaseScreen {
         });
     }
 
-    private void handlePlayButton() {
-        createButton("Play", 0, table.getHeight()/9, table);
+    private void handleNewButton() {
+        createButton("New Game", 0, menuTable.getHeight()/10, menuTable);
 
-        Actor playButton = table.getCells().get(0).getActor();
-        playButton.addListener(new ClickListener() {
+        Actor newButton = menuTable.getCells().get(0).getActor();
+        newButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-                ProfileManager.getInstance().setIsNewProfile(true);
+                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new MenuNewGameScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), resourceManager), new ArrayList<>());
+            }
+        });
+    }
 
-                ArrayList<TransitionEffect> effects = new ArrayList<>();
-                effects.add(new FadeOutTransitionEffect(1f));
-                //effects.add(new FadeInTransitionEffect(1f)); TODO: Issue with fadein effect
-                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), effects);
+    private void handleLoadButton() {
+        createButton("Load Game", 0, menuTable.getHeight()/15, menuTable);
+
+        Actor loadButton = menuTable.getCells().get(1).getActor();
+        loadButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent even, float x, float y) {
+                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new MenuLoadGameScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), resourceManager), new ArrayList<>());
             }
         });
     }
 
     @Override
     public void show() {
-        menuStage.addActor(table);
+        menuStage.addActor(menuTable);
         Gdx.input.setInputProcessor(menuStage);
         Gdx.graphics.setCursor(Gdx.graphics.newCursor(resourceManager.cursor, 0, 0));
 
@@ -113,7 +126,7 @@ public class MenuScreen extends BaseScreen {
         gdxGame.getBatch().draw(currentFrame, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         gdxGame.getBatch().end();
 
-        if (!resourceManager.isOptionScreen()) {
+        if (!resourceManager.isOptionScreen() && !resourceManager.isMenuNewGameScreen() && !resourceManager.isMenuLoadGameScreen()) {
             menuStage.act(delta);
             menuStage.draw();
         }
@@ -122,6 +135,6 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        table.remove();
+        menuTable.remove();
     }
 }

@@ -34,6 +34,10 @@ The option screen is triggered on the "O" key.
 The inventory can be displayed through the chest icon on the status UI. <br>
 You can drag and drop items and use consumables by double-clicking on them.
 
+#### Profiles
+The game is saved automatically when a specific action is down (change map, get quest, ...). <br>
+You can chose to start a new game or load an existing profile on the menu screen.
+
 -------
 <p align="center">
     <img src="desktop/src/main/resources/demo/demo.gif" width="396" height="315">
