@@ -67,12 +67,6 @@ public class OptionScreen extends BaseScreen {
         handleBackButton();
     }
 
-    private Table createTable() {
-        Table table = new Table();
-        table.setBounds(0,0, (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
-        return table;
-    }
-
     private void handleControlButton() {
         createButton("Control",0, optionTable.getHeight()/10, optionTable);
 

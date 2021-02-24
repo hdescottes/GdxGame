@@ -22,6 +22,8 @@ public class ResourceManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceManager.class);
 
     protected boolean isOptionScreen;
+    protected boolean isMenuNewGameScreen;
+    protected boolean isMenuLoadGameScreen;
     private static InternalFileHandleResolver filePathResolver =  new InternalFileHandleResolver();
     private final static String ITEMS_TEXTURE_ATLAS_PATH = "skins/items.atlas";
 
@@ -104,6 +106,22 @@ public class ResourceManager {
 
     public void setOptionScreen(boolean optionScreen) {
         isOptionScreen = optionScreen;
+    }
+
+    public boolean isMenuNewGameScreen() {
+        return isMenuNewGameScreen;
+    }
+
+    public void setMenuNewGameScreen(boolean menuNewGameScreen) {
+        isMenuNewGameScreen = menuNewGameScreen;
+    }
+
+    public boolean isMenuLoadGameScreen() {
+        return isMenuLoadGameScreen;
+    }
+
+    public void setMenuLoadGameScreen(boolean menuLoadGameScreen) {
+        isMenuLoadGameScreen = menuLoadGameScreen;
     }
 
     public static void loadMapAsset(String mapFilenamePath) {
