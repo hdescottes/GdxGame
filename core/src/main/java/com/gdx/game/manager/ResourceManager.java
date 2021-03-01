@@ -51,7 +51,7 @@ public class ResourceManager {
     public BitmapFont pixel10;
 
     // SETTINGS
-    public Skin skin;
+    public static Skin skin;
 
     // ENTITIES
     public Texture rabite;

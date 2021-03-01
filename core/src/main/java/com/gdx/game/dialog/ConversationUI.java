@@ -30,20 +30,20 @@ public class ConversationUI extends Window {
     private Json json;
 
     public ConversationUI() {
-        super("dialog", ResourceManager.STATUS_UI_SKIN, "solidbackground");
+        super("dialog", ResourceManager.skin);
 
         json = new Json();
         graph = new ConversationGraph();
 
         //create
-        dialogText = new Label("No Conversation", ResourceManager.STATUS_UI_SKIN);
+        dialogText = new Label("No Conversation", ResourceManager.skin);
         dialogText.setWrap(true);
         dialogText.setAlignment(Align.center);
-        listItems = new List<ConversationChoice>(ResourceManager.STATUS_UI_SKIN);
+        listItems = new List<ConversationChoice>(ResourceManager.skin);
 
-        closeButton = new TextButton("X", ResourceManager.STATUS_UI_SKIN);
+        closeButton = new TextButton("X", ResourceManager.skin);
 
-        ScrollPane scrollPane = new ScrollPane(listItems, ResourceManager.STATUS_UI_SKIN, "inventoryPane");
+        ScrollPane scrollPane = new ScrollPane(listItems, ResourceManager.skin);
         scrollPane.setOverscroll(false, false);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);

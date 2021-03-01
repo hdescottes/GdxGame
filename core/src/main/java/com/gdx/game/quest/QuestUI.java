@@ -32,25 +32,25 @@ public class QuestUI extends Window {
     private Label tasksLabel;
 
     public QuestUI() {
-        super("Quest Log", ResourceManager.STATUS_UI_SKIN, "solidbackground");
+        super("Quest Log", ResourceManager.skin);
 
         json = new Json();
         quests = new Array<>();
 
         //create
-        questLabel = new Label("Quests:", ResourceManager.STATUS_UI_SKIN);
-        tasksLabel = new Label("Tasks:", ResourceManager.STATUS_UI_SKIN);
+        questLabel = new Label("Quests:", ResourceManager.skin);
+        tasksLabel = new Label("Tasks:", ResourceManager.skin);
 
-        listQuests = new List<QuestGraph>(ResourceManager.STATUS_UI_SKIN);
+        listQuests = new List<QuestGraph>(ResourceManager.skin);
 
-        ScrollPane scrollPane = new ScrollPane(listQuests, ResourceManager.STATUS_UI_SKIN, "inventoryPane");
+        ScrollPane scrollPane = new ScrollPane(listQuests, ResourceManager.skin);
         scrollPane.setOverscroll(false, false);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setForceScroll(true, false);
 
-        listTasks = new List<QuestTask>(ResourceManager.STATUS_UI_SKIN);
+        listTasks = new List<QuestTask>(ResourceManager.skin);
 
-        ScrollPane scrollPaneTasks = new ScrollPane(listTasks, ResourceManager.STATUS_UI_SKIN, "inventoryPane");
+        ScrollPane scrollPaneTasks = new ScrollPane(listTasks, ResourceManager.skin);
         scrollPaneTasks.setOverscroll(false, false);
         scrollPaneTasks.setFadeScrollBars(false);
         scrollPaneTasks.setForceScroll(true, false);

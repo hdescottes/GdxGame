@@ -14,7 +14,7 @@ public class InventorySlotTooltip extends Window {
         super("", skin);
         this.skin = skin;
 
-        description = new Label("", skin, "inventory-item-count");
+        description = new Label("", skin);
 
         this.add(description);
         this.padLeft(5).padRight(5);

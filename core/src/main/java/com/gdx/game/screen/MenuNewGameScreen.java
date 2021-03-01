@@ -38,8 +38,8 @@ public class MenuNewGameScreen extends BaseScreen {
 
         resourceManager.setMenuNewGameScreen(true);
 
-        Label profileName = new Label("Enter Profile Name: ", resourceManager.skin);
-        profileText = new TextField("default", resourceManager.skin);
+        Label profileName = new Label("Enter Profile Name: ", ResourceManager.skin);
+        profileText = new TextField("default", ResourceManager.skin);
         profileText.setMaxLength(20);
 
         newTable = createTable();
@@ -62,8 +62,8 @@ public class MenuNewGameScreen extends BaseScreen {
     }
 
     private void createOverwriteDialog() {
-        overwriteDialog = new Dialog("Overwrite?", resourceManager.skin);
-        Label overwriteLabel = new Label("Overwrite existing profile name?", resourceManager.skin);
+        overwriteDialog = new Dialog("Overwrite?", ResourceManager.skin);
+        Label overwriteLabel = new Label("Overwrite existing profile name?", ResourceManager.skin);
 
         overwriteDialog.setKeepWithinStage(true);
         overwriteDialog.setModal(true);

@@ -19,10 +19,10 @@ import com.gdx.game.inventory.slot.InventorySlotSource;
 import com.gdx.game.inventory.slot.InventorySlotTarget;
 import com.gdx.game.inventory.slot.InventorySlotTooltip;
 import com.gdx.game.inventory.slot.InventorySlotTooltipListener;
+import com.gdx.game.manager.ResourceManager;
 
 import static com.gdx.game.component.Component.MESSAGE_TOKEN;
 import static com.gdx.game.manager.ResourceManager.ITEMS_TEXTURE_ATLAS;
-import static com.gdx.game.manager.ResourceManager.STATUS_UI_SKIN;
 import static com.gdx.game.manager.ResourceManager.STATUS_UI_TEXTURE_ATLAS;
 
 public class InventoryUI extends Window implements InventorySubject, InventorySlotObserver {
@@ -51,7 +51,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     private InventorySlotTooltip inventorySlotTooltip;
 
     public InventoryUI() {
-        super("Inventory", STATUS_UI_SKIN, "solidbackground");
+        super("Inventory", ResourceManager.skin);
 
         observers = new Array<>();
 
@@ -67,13 +67,13 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         equipSlots.setName("Equipment_Slot_Table");
 
         equipSlots.defaults().space(10);
-        inventorySlotTooltip = new InventorySlotTooltip(STATUS_UI_SKIN);
+        inventorySlotTooltip = new InventorySlotTooltip(ResourceManager.skin);
 
-        Label DPLabel = new Label("Defense: ", STATUS_UI_SKIN);
-        DPValLabel = new Label(String.valueOf(DPVal), STATUS_UI_SKIN);
+        Label DPLabel = new Label("Defense: ", ResourceManager.skin);
+        DPValLabel = new Label(String.valueOf(DPVal), ResourceManager.skin);
 
-        Label APLabel = new Label("Attack : ", STATUS_UI_SKIN);
-        APValLabel = new Label(String.valueOf(APVal), STATUS_UI_SKIN);
+        Label APLabel = new Label("Attack : ", ResourceManager.skin);
+        APValLabel = new Label(String.valueOf(APVal), ResourceManager.skin);
 
         Table labelTable = new Table();
         labelTable.add(DPLabel).align(Align.left);
