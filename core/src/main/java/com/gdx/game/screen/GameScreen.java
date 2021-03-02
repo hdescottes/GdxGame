@@ -63,9 +63,9 @@ public class GameScreen extends BaseScreen {
 
     private AudioObserver.AudioTypeEvent musicTheme;
 
-    public GameScreen(GdxGame game, ResourceManager resourceManager) {
-        super(game, resourceManager);
-        this.game = game;
+    public GameScreen(GdxGame gdxGame, ResourceManager resourceManager) {
+        super(gdxGame, resourceManager);
+        game = gdxGame;
         mapManager = new MapManager();
         json = new Json();
 
@@ -104,8 +104,12 @@ public class GameScreen extends BaseScreen {
         ProfileManager.getInstance().addObserver(playerHUD);
 
         setGameState(GameState.LOADING);
-        setGameState(GameState.RUNNING);
         Gdx.input.setInputProcessor(multiplexer);
+
+        if(mapRenderer == null) {
+            mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getCurrentTiledMap(), Map.UNIT_SCALE);
+        }
+
     }
 
     @Override
@@ -119,11 +123,6 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
-
-        if(mapRenderer == null) {
-            mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getCurrentTiledMap(), Map.UNIT_SCALE);
-        }
-
         if(gameState == GameState.PAUSED) {
             player.updateInput(delta);
             playerHUD.render(delta);
@@ -156,7 +155,7 @@ public class GameScreen extends BaseScreen {
 
         if(((PlayerInputComponent) player.getInputProcessor()).isOption()) {
             Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
-            gdxGame.setScreen(new OptionScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), screenShot, resourceManager));
+            game.setScreen(new OptionScreen(game, (BaseScreen) game.getScreen(), screenShot, resourceManager));
             ((PlayerInputComponent) player.getInputProcessor()).setOption(false);
         }
 
@@ -199,31 +198,31 @@ public class GameScreen extends BaseScreen {
         MapFactory.clearCache();
     }
 
-    public static void setGameState(GameState gameState) {
-        switch(gameState) {
+    public static void setGameState(GameState state) {
+        switch(state) {
             case RUNNING:
-                GameScreen.gameState = GameState.RUNNING;
+                gameState = GameState.RUNNING;
                 break;
             case LOADING:
                 ProfileManager.getInstance().loadProfile();
-                GameScreen.gameState = GameState.RUNNING;
+                gameState = GameState.RUNNING;
                 break;
             case SAVING:
                 ProfileManager.getInstance().saveProfile();
-                GameScreen.gameState = GameState.PAUSED;
+                gameState = GameState.PAUSED;
                 break;
             case PAUSED:
-                if( GameScreen.gameState == GameState.PAUSED ){
-                    GameScreen.gameState = GameState.RUNNING;
-                }else if( GameScreen.gameState == GameState.RUNNING ){
-                    GameScreen.gameState = GameState.PAUSED;
+                if(gameState == GameState.PAUSED) {
+                    gameState = GameState.RUNNING;
+                } else if(gameState == GameState.RUNNING) {
+                    gameState = GameState.PAUSED;
                 }
                 break;
             case GAME_OVER:
-                GameScreen.gameState = GameState.GAME_OVER;
+                gameState = GameState.GAME_OVER;
                 break;
             default:
-                GameScreen.gameState = GameState.RUNNING;
+                gameState = GameState.RUNNING;
                 break;
         }
 

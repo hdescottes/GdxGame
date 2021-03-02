@@ -1,5 +1,6 @@
 package com.gdx.game.entities.player;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -28,6 +30,7 @@ import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.InventoryUI;
 import com.gdx.game.inventory.store.StoreInventoryObserver;
 import com.gdx.game.inventory.store.StoreInventoryUI;
+import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.profile.ProfileObserver;
@@ -35,8 +38,6 @@ import com.gdx.game.quest.QuestGraph;
 import com.gdx.game.quest.QuestUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
-
-import static com.gdx.game.manager.ResourceManager.STATUS_UI_SKIN;
 
 public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ComponentObserver, ConversationGraphObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
 
@@ -59,18 +60,18 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
 
     private static final String INVENTORY_FULL = "Your inventory is full!";
 
-    public PlayerHUD(Camera camera, Entity player, MapManager mapManager) {
-        this.camera = camera;
-        this.player = player;
-        this.mapManager = mapManager;
-        viewport = new ScreenViewport(this.camera);
+    public PlayerHUD(Camera cameraHUD, Entity entityPlayer, MapManager mapMgr) {
+        camera = cameraHUD;
+        player = entityPlayer;
+        mapManager = mapMgr;
+        viewport = new ScreenViewport(camera);
         stage = new Stage(viewport);
         //_stage.setDebugAll(true);
 
         observers = new Array<>();
 
         json = new Json();
-        messageBoxUI = new Dialog("Message", STATUS_UI_SKIN, "solidbackground") {
+        messageBoxUI = new Dialog("Message", ResourceManager.skin) {
             {
                 button("OK");
                 text(INVENTORY_FULL);
@@ -163,7 +164,8 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         ImageButton questButton = statusUI.getQuestButton();
         questButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                questUI.setVisible(questUI.isVisible() ? false : true);
+                questUI.setVisible(!questUI.isVisible());
+                setInputUI(questUI);
             }
         });
 
@@ -192,7 +194,16 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
 
     public void updateEntityObservers() {
         mapManager.unregisterCurrentMapEntityObservers();
+        questUI.initQuests(mapManager);
         mapManager.registerCurrentMapEntityObservers(this);
+    }
+
+    private void setInputUI(Window ui) {
+        if(ui.isVisible()) {
+            Gdx.input.setInputProcessor(stage);
+        } else {
+            Gdx.input.setInputProcessor(player.getInputProcessor());
+        }
     }
 
     @Override
@@ -313,12 +324,14 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
 
                 if(configShow.getEntityID().equalsIgnoreCase(conversationUI.getCurrentEntityID())) {
                     conversationUI.setVisible(true);
+                    setInputUI(conversationUI);
                 }
                 break;
             case HIDE_CONVERSATION:
                 EntityConfig configHide = json.fromJson(EntityConfig.class, value);
                 if(configHide.getEntityID().equalsIgnoreCase(conversationUI.getCurrentEntityID())) {
                     conversationUI.setVisible(false);
+                    setInputUI(conversationUI);
                 }
                 break;
             case QUEST_LOCATION_DISCOVERED:
@@ -355,11 +368,13 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 storeInventoryUI.loadStoreInventory(itemLocations);
 
                 conversationUI.setVisible(false);
+                setInputUI(conversationUI);
                 storeInventoryUI.toFront();
                 storeInventoryUI.setVisible(true);
                 break;
             case EXIT_CONVERSATION:
                 conversationUI.setVisible(false);
+                setInputUI(conversationUI);
                 mapManager.clearCurrentSelectedMapEntity();
                 break;
             case ACCEPT_QUEST:
@@ -379,6 +394,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 }
 
                 conversationUI.setVisible(false);
+                setInputUI(conversationUI);
                 mapManager.clearCurrentSelectedMapEntity();
                 break;
             case RETURN_QUEST:
@@ -407,6 +423,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 }
 
                 conversationUI.setVisible(false);
+                setInputUI(conversationUI);
                 mapManager.clearCurrentSelectedMapEntity();
                 break;
             case ADD_ENTITY_TO_INVENTORY:
@@ -419,12 +436,14 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                     inventoryUI.addEntityToInventory(entity, entity.getEntityConfig().getCurrentQuestID());
                     mapManager.clearCurrentSelectedMapEntity();
                     conversationUI.setVisible(false);
+                    setInputUI(conversationUI);
                     entity.unregisterObservers();
                     mapManager.removeMapQuestEntity(entity);
                     questUI.updateQuests(mapManager);
                 } else {
                     mapManager.clearCurrentSelectedMapEntity();
                     conversationUI.setVisible(false);
+                    setInputUI(conversationUI);
                     messageBoxUI.setVisible(true);
                 }
                 break;
