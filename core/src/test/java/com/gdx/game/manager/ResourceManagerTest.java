@@ -24,6 +24,6 @@ class ResourceManagerTest {
         ResourceManager resourceManager = new ResourceManager();
 
         assertThat(resourceManager).isNotNull()
-                .hasFieldOrProperty("assetManager");
+                .hasFieldOrPropertyWithValue("isOptionScreen", false);
     }
 }

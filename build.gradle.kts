@@ -1,9 +1,9 @@
-val gdxVersion by extra {"1.9.12"}
+val gdxVersion by extra {"1.9.13"}
 val gdxVfxVersion by extra {"0.5.0"}
-val jUnitPlatformVersion by extra {"1.7.0"}
-val jUnitJupiterVersion by extra {"5.7.0"}
-val mockitoVersion by extra {"3.6.0"}
-val assertJVersion by extra {"3.18.1"}
+val jUnitPlatformVersion by extra {"1.7.1"}
+val jUnitJupiterVersion by extra {"5.7.1"}
+val mockitoVersion by extra {"3.8.0"}
+val assertJVersion by extra {"3.19.0"}
 val logbackVersion by extra {"1.3.0-alpha5"}
 
 plugins {
@@ -13,7 +13,7 @@ plugins {
 
 allprojects {
 
-    version = "1.0"
+    version = "2.0"
 
     apply(plugin = "java")
     apply(plugin = "java-library")
