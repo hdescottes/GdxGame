@@ -101,19 +101,19 @@ public class Entity {
 		return this;
 	}
 
-	public Entity(InputComponent inputComponent, PhysicsComponent physicsComponent, GraphicsComponent graphicsComponent) {
+	public Entity(InputComponent inputCpnt, PhysicsComponent physicsCpnt, GraphicsComponent graphicsCpnt) {
 		entityConfig = new EntityConfig();
 		json = new Json();
 
 		components = new Array<>(MAX_COMPONENTS);
 
-		this.inputComponent = inputComponent;
-		this.physicsComponent = physicsComponent;
-		this.graphicsComponent = graphicsComponent;
+		inputComponent = inputCpnt;
+		physicsComponent = physicsCpnt;
+		graphicsComponent = graphicsCpnt;
 
-		components.add(this.inputComponent);
-		components.add(this.physicsComponent);
-		components.add(this.graphicsComponent);
+		components.add(inputComponent);
+		components.add(physicsComponent);
+		components.add(graphicsComponent);
 	}
 
 	public EntityConfig getEntityConfig() {
