@@ -6,6 +6,7 @@ import com.gdx.game.GdxRunner;
 import com.gdx.game.entities.npc.NPCInputComponent;
 import com.gdx.game.entities.player.PlayerInputComponent;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -28,34 +29,31 @@ public class EntityFactoryTest {
         assertThat(entityFactory).isNotNull();
     }
 
+    @Disabled
     @Test
     public void testGetEntity_ShouldSucceedWithPlayer() {
-        Gdx.app.postRunnable(() -> {
-            Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.PLAYER);
+        Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.PLAYER);
 
-            assertThat(entity).isNotNull();
-            assertThat(entity.getEntityConfig().getEntityID()).isEqualTo(Entity.getEntityConfig(EntityFactory.PLAYER_CONFIG).getEntityID());
-            assertThat(entity.getInputProcessor()).isInstanceOf(PlayerInputComponent.class);
-        });
+        assertThat(entity).isNotNull();
+        assertThat(entity.getEntityConfig().getEntityID()).isEqualTo(Entity.getEntityConfig(EntityFactory.PLAYER_CONFIG).getEntityID());
+        assertThat(entity.getInputProcessor()).isInstanceOf(PlayerInputComponent.class);
     }
 
+    @Disabled
     @Test
     public void testGetEntity_ShouldSucceedWithNPC() {
-        Gdx.app.postRunnable(() -> {
-            Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+        Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
 
-            assertThat(entity).isNotNull();
-            assertThat(entity.getInputProcessor()).isInstanceOf(NPCInputComponent.class);
-        });
+        assertThat(entity).isNotNull();
+        assertThat(entity.getInputProcessor()).isInstanceOf(NPCInputComponent.class);
     }
 
+    @Disabled
     @Test
     public void testGetEntityByName_ShouldSucceed() {
-        Gdx.app.postRunnable(() -> {
-            Entity entity = EntityFactory.getInstance().getEntityByName(EntityFactory.EntityName.TOWN_BLACKSMITH);
+        Entity entity = EntityFactory.getInstance().getEntityByName(EntityFactory.EntityName.TOWN_BLACKSMITH);
 
-            assertThat(entity).isNotNull();
-            assertThat(entity.getInputProcessor()).isInstanceOf(NPCInputComponent.class);
-        });
+        assertThat(entity).isNotNull();
+        assertThat(entity.getInputProcessor()).isInstanceOf(NPCInputComponent.class);
     }
 }

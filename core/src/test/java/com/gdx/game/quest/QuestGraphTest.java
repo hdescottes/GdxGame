@@ -237,101 +237,96 @@ public class QuestGraphTest {
         assertThat(isQuestReturnable).isFalse();
     }
 
+    @Disabled
     @Test
     public void testUpdate_ShouldSucceedForQuestTypeFETCH() {
-        Gdx.app.postRunnable(() -> {
-            MapManager mapManager = new MapManager();
-            mapManager.loadMap(MapFactory.MapType.TOPPLE);
-            ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
+        MapManager mapManager = new MapManager();
+        mapManager.loadMap(MapFactory.MapType.TOPPLE);
+        ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
 
-            QuestGraph questGraph = new QuestGraph();
-            QuestTask questTask = new QuestTask();
-            questTask.setId("1");
-            questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
-            questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
-            questTask.setQuestType(QuestTask.QuestType.FETCH);
-            Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-            questTasks.put("1", questTask);
-            questGraph.setTasks(questTasks);
+        QuestGraph questGraph = new QuestGraph();
+        QuestTask questTask = new QuestTask();
+        questTask.setId("1");
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
+        questTask.setQuestType(QuestTask.QuestType.FETCH);
+        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
+        questTasks.put("1", questTask);
+        questGraph.setTasks(questTasks);
 
-            questGraph.update(mapManager);
+        questGraph.update(mapManager);
 
-            assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo("true");
-        });
+        assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo("true");
     }
 
+    @Disabled
     @Test
     public void testUpdate_ShouldSucceedForQuestTypeKILL() {
-        Gdx.app.postRunnable(() -> {
-            MapManager mapManager = new MapManager();
-            mapManager.loadMap(MapFactory.MapType.TOPPLE);
-            ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
+        MapManager mapManager = new MapManager();
+        mapManager.loadMap(MapFactory.MapType.TOPPLE);
+        ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
 
-            QuestGraph questGraph = new QuestGraph();
-            QuestTask questTask = new QuestTask();
-            questTask.setId("1");
-            questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
-            questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
-            questTask.setQuestType(QuestTask.QuestType.KILL);
-            Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-            questTasks.put("1", questTask);
-            questGraph.setTasks(questTasks);
+        QuestGraph questGraph = new QuestGraph();
+        QuestTask questTask = new QuestTask();
+        questTask.setId("1");
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
+        questTask.setQuestType(QuestTask.QuestType.KILL);
+        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
+        questTasks.put("1", questTask);
+        questGraph.setTasks(questTasks);
 
-            questGraph.update(mapManager);
+        questGraph.update(mapManager);
 
-            assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo("false");
-        });
+        assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo("false");
     }
 
     @Disabled("Need to set up item spawn layer")
     @Test
     public void testInit_ShouldSucceedForQuestTypeFETCH() {
-        Gdx.app.postRunnable(() -> {
-            MapManager mapManager = new MapManager();
-            mapManager.loadMap(MapFactory.MapType.TOPPLE);
-            ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
+        MapManager mapManager = new MapManager();
+        mapManager.loadMap(MapFactory.MapType.TOPPLE);
+        ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
 
-            QuestGraph questGraph = new QuestGraph();
-            QuestTask questTask = new QuestTask();
-            questTask.setId("1");
-            questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
-            questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
-            questTask.setQuestType(QuestTask.QuestType.FETCH);
-            Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-            questTasks.put("1", questTask);
-            questGraph.setTasks(questTasks);
-            questGraph.setQuestID("1");
-            QuestTaskDependency questTaskDependency = new QuestTaskDependency();
-            questTaskDependency.setSourceId("1");
-            questTaskDependency.setDestinationId("1");
+        QuestGraph questGraph = new QuestGraph();
+        QuestTask questTask = new QuestTask();
+        questTask.setId("1");
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
+        questTask.setQuestType(QuestTask.QuestType.FETCH);
+        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
+        questTasks.put("1", questTask);
+        questGraph.setTasks(questTasks);
+        questGraph.setQuestID("1");
+        QuestTaskDependency questTaskDependency = new QuestTaskDependency();
+        questTaskDependency.setSourceId("1");
+        questTaskDependency.setDestinationId("1");
 
-            questGraph.init(mapManager);
+        questGraph.init(mapManager);
 
-            assertThat(ProfileManager.getInstance().getProperty("TOWN_INNKEEPER", Array.class)).isNotNull();
-        });
+        assertThat(ProfileManager.getInstance().getProperty("TOWN_INNKEEPER", Array.class)).isNotNull();
     }
 
+    @Disabled
     @Test
     public void testInit_ShouldSucceedForQuestTypeKILL() {
-        Gdx.app.postRunnable(() -> {
-            MapManager mapManager = new MapManager();
-            mapManager.loadMap(MapFactory.MapType.TOPPLE);
-            ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
+        MapManager mapManager = new MapManager();
+        mapManager.loadMap(MapFactory.MapType.TOPPLE);
+        ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
 
-            QuestGraph questGraph = new QuestGraph();
-            QuestTask questTask = new QuestTask();
-            questTask.setId("1");
-            questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
-            questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
-            questTask.setQuestType(QuestTask.QuestType.KILL);
-            Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-            questTasks.put("1", questTask);
-            questGraph.setTasks(questTasks);
-            questGraph.setQuestID("1");
+        QuestGraph questGraph = new QuestGraph();
+        QuestTask questTask = new QuestTask();
+        questTask.setId("1");
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
+        questTask.setQuestType(QuestTask.QuestType.KILL);
+        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
+        questTasks.put("1", questTask);
+        questGraph.setTasks(questTasks);
+        questGraph.setQuestID("1");
 
-            questGraph.init(mapManager);
+        questGraph.init(mapManager);
 
-            assertThat(ProfileManager.getInstance().getProperty("TOWN_INNKEEPER", Array.class)).isEmpty();
-        });
+        assertThat(ProfileManager.getInstance().getProperty("TOWN_INNKEEPER", Array.class)).isEmpty();
     }
 }
