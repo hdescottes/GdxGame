@@ -2,13 +2,19 @@ package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioObserver;
+import com.gdx.game.battle.BattleObserver;
+import com.gdx.game.battle.BattleState;
+import com.gdx.game.entities.Entity;
 import com.gdx.game.manager.ResourceManager;
 
-public class BattleScreen extends BaseScreen {
+public class BattleScreen extends BaseScreen implements BattleObserver {
 
 /*    private Box2dWorld box2d;
     private ControlManager controlManager;
@@ -17,10 +23,24 @@ public class BattleScreen extends BaseScreen {
     private TextureRegion[]  textureRegions;
     private Stage battleStage;
 
-    //To be able to come back to game screen
-    //TODO: remove
-    private float lifeTime;
-    private Long delay = 3L;
+    //private AnimatedImage image;
+
+    private final int enemyWidth = 96;
+    private final int enemyHeight = 96;
+
+    private BattleState battleState = null;
+    private TextButton attackButton = null;
+    private TextButton runButton = null;
+    private Label damageValLabel = null;
+
+    private float battleTimer = 0;
+    private final float checkTimer = 1;
+
+    /*private ShakeCamera battleShakeCam = null;
+    private Array<ParticleEffect> effects;*/
+
+    private float origDamageValLabelY = 0;
+    private Vector2 currentImagePosition;
 
     public BattleScreen(GdxGame gdxGame, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
@@ -39,6 +59,60 @@ public class BattleScreen extends BaseScreen {
             textureRegions = animationManager.setTextureRegions(hero.getTexture(), 32, 37);
         }
     }*/
+
+    @Override
+    public void onNotify(Entity entity, BattleEvent event) {
+        /*switch(event){
+            case PLAYER_TURN_START:
+                runButton.setDisabled(true);
+                runButton.setTouchable(Touchable.disabled);
+                attackButton.setDisabled(true);
+                attackButton.setTouchable(Touchable.disabled);
+                break;
+            case OPPONENT_ADDED:
+                image.setEntity(entity);
+                image.setCurrentAnimation(Entity.AnimationType.IMMOBILE);
+                image.setSize(enemyWidth, enemyHeight);
+                image.setPosition(this.getCell(image).getActorX(), this.getCell(image).getActorY());
+
+                currentImagePosition.set(image.getX(), image.getY());
+                if( battleShakeCam == null ){
+                    battleShakeCam = new ShakeCamera(currentImagePosition.x, currentImagePosition.y, 30.0f);
+                }
+
+                //Gdx.app.debug(TAG, "Image position: " + _image.getX() + "," + _image.getY() );
+
+                //this.getTitleLabel().setText("Level " + battleState.getCurrentZoneLevel() + " " + entity.getEntityConfig().getEntityID());
+                break;
+            case OPPONENT_HIT_DAMAGE:
+                int damage = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
+                damageValLabel.setText(String.valueOf(damage));
+                damageValLabel.setY(origDamageValLabelY);
+                battleShakeCam.startShaking();
+                damageValLabel.setVisible(true);
+                break;
+            case OPPONENT_DEFEATED:
+                damageValLabel.setVisible(false);
+                damageValLabel.setY(origDamageValLabelY);
+                break;
+            case OPPONENT_TURN_DONE:
+                attackButton.setDisabled(false);
+                attackButton.setTouchable(Touchable.enabled);
+                runButton.setDisabled(false);
+                runButton.setTouchable(Touchable.enabled);
+                break;
+            case PLAYER_TURN_DONE:
+                battleState.opponentAttacks();
+                break;
+            case PLAYER_USED_MAGIC:
+                float x = currentImagePosition.x + (enemyWidth/2);
+                float y = currentImagePosition.y + (enemyHeight/2);
+                //effects.add(ParticleEffectFactory.getParticleEffect(ParticleEffectFactory.ParticleEffectType.WAND_ATTACK, x,y));
+                break;
+            default:
+                break;
+        }*/
+    }
 
     @Override
     public void show() {
