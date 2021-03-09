@@ -11,6 +11,7 @@ import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.component.PhysicsComponent;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.map.Map;
 import com.gdx.game.map.MapFactory;
 import com.gdx.game.map.MapManager;
@@ -64,6 +65,8 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
             } else if(string[0].equalsIgnoreCase(Component.MESSAGE.INIT_SELECT_ENTITY.toString())) {
                 mouseSelectCoordinates = json.fromJson(Vector3.class, string[1]);
                 isMouseSelectEnabled = true;
+            } else if(string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_ENTITY.toString())) {
+                entityEncounteredType = json.fromJson(EntityFactory.EntityName.class, string[1]);
             }
         }
     }

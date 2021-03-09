@@ -209,6 +209,28 @@ public class MapManager implements ProfileObserver {
         ProfileManager.getInstance().setProperty(entity.getEntityConfig().getEntityID(), positions);
     }
 
+    public void addMapEntity(Entity entity) {
+        currentMap.getMapEntities().add(entity);
+    }
+
+    public void removeMapEntity(Entity entity) {
+        entity.unregisterObservers();
+
+        Array<Vector2> positions = ProfileManager.getInstance().getProperty(entity.getEntityConfig().getEntityID(), Array.class);
+        if(positions == null) {
+            return;
+        }
+
+        for(Vector2 position : positions) {
+            if(position.x == entity.getCurrentPosition().x && position.y == entity.getCurrentPosition().y) {
+                positions.removeValue(position, true);
+                break;
+            }
+        }
+        currentMap.getMapEntities().removeValue(entity, true);
+        ProfileManager.getInstance().setProperty(entity.getEntityConfig().getEntityID(), positions);
+    }
+
     public void clearAllMapQuestEntities() {
         currentMap.getMapQuestEntities().clear();
     }

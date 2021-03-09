@@ -164,6 +164,14 @@ public class Entity {
 		return physicsComponent.boundingBox;
 	}
 
+	public EntityFactory.EntityName getEntityEncounteredType() {
+		return physicsComponent.entityEncounteredType;
+	}
+
+	public void setEntityEncounteredType(EntityFactory.EntityName entityName) {
+		this.physicsComponent.entityEncounteredType = entityName;
+	}
+
 	public Vector2 getCurrentPosition() {
 		return graphicsComponent.getCurrentPosition();
 	}

@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.map.Map;
 import com.gdx.game.map.MapManager;
 import org.slf4j.Logger;
@@ -24,6 +25,7 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
     protected Vector2 nextEntityPosition;
     protected Vector2 currentEntityPosition;
     protected Entity.Direction currentDirection;
+    public EntityFactory.EntityName entityEncounteredType;
     protected Json json;
     protected Vector2 velocity;
 
@@ -66,7 +68,7 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
             Rectangle targetRect = mapEntity.getCurrentBoundingBox();
             if(boundingBox.overlaps(targetRect)){
                 //Collision
-                entity.sendMessage(MESSAGE.COLLISION_WITH_ENTITY);
+                entity.sendMessage(MESSAGE.COLLISION_WITH_ENTITY, mapEntity.getEntityConfig().getEntityID()); //TODO: to generalize
                 isCollisionWithMapEntities = true;
                 break;
             }
