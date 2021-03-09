@@ -1,6 +1,7 @@
 package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,6 +14,7 @@ import com.gdx.game.battle.BattleObserver;
 import com.gdx.game.battle.BattleState;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.manager.ResourceManager;
+import com.gdx.game.map.MapManager;
 
 public class BattleScreen extends BaseScreen implements BattleObserver {
 
@@ -21,7 +23,9 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     private Hero hero;
     private AnimationManager animationManager = new AnimationManager();*/
     private TextureRegion[]  textureRegions;
+    private OrthographicCamera camera;
     private Stage battleStage;
+    private MapManager mapManager;
 
     //private AnimatedImage image;
 
@@ -42,10 +46,20 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     private float origDamageValLabelY = 0;
     private Vector2 currentImagePosition;
 
-    public BattleScreen(GdxGame gdxGame, ResourceManager resourceManager) {
+    //To be able to come back to game screen
+    //TODO: remove
+    private float lifeTime;
+    private Long delay = 3L;
+
+    public BattleScreen(GdxGame gdxGame, MapManager mapManager, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
         super.musicTheme = AudioObserver.AudioTypeEvent.BATTLE_THEME;
-        this.viewport = new StretchViewport(getBattleCam().viewportWidth, getBattleCam().viewportHeight, getBattleCam());
+        this.mapManager = mapManager;
+        //this.viewport = new StretchViewport(getBattleCam().viewportWidth, getBattleCam().viewportHeight, getBattleCam());
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight, camera);
         battleStage = new Stage(viewport, gdxGame.getBatch());
 /*
         box2d = new Box2dWorld();
@@ -125,7 +139,7 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     @Override
     public void render(float delta) {
-        gdxGame.getBatch().setProjectionMatrix(getBattleCam().combined);
+        gdxGame.getBatch().setProjectionMatrix(camera.combined);
 
         gdxGame.getBatch().begin();
         gdxGame.getBatch().draw(resourceManager.battleBackgroundMeadow, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -137,12 +151,19 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
         //To be able to come back to game screen
         //TODO: remove
-       /* lifeTime += Gdx.graphics.getDeltaTime();
-        if (lifeTime > delay) {
-            hero.collision(hero.getEntityCollision(), false);
-            gdxGame.setScreen(gdxGame.getGameScreen());
+        lifeTime += Gdx.graphics.getDeltaTime();
+        if(lifeTime > delay) {
+            /*Array<Entity> entities = mapManager.getCurrentMapEntities();
+            for(Entity entity: entities) {
+                if(entity.getEntityConfig().getEntityID().equals(mapManager.getPlayer().getEntityEncounteredType().toString())) {
+                    mapManager.removeMapEntity(entity);
+                }
+            }*/
+            mapManager.getPlayer().setEntityEncounteredType(null);
+            Gdx.app.exit();
+            //gdxGame.setScreen(gdxGame.getGameScreen());
         }
 
-        box2d.tick(getBattleCam(), controlManager);*/
+        //box2d.tick(getBattleCam(), controlManager);
     }
 }

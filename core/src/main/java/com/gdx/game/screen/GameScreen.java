@@ -153,6 +153,10 @@ public class GameScreen extends BaseScreen {
         player.update(mapManager, mapRenderer.getBatch(), delta);
         playerHUD.render(delta);
 
+        if(player.getEntityEncounteredType() == EntityFactory.EntityName.RABITE) {
+            game.setScreen(new BattleScreen(game, mapManager, resourceManager));
+        }
+
         if(((PlayerInputComponent) player.getInputProcessor()).isOption()) {
             Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
             game.setScreen(new OptionScreen(game, (BaseScreen) game.getScreen(), screenShot, resourceManager));
