@@ -7,7 +7,6 @@ import com.gdx.game.screen.transition.effects.TransitionEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Optional;
 
 public class TransitionScreen extends BaseScreen {
 
@@ -29,6 +28,14 @@ public class TransitionScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
+        if(next.getClass() != OptionScreen.class) {
+            Arrays.stream(AudioObserver.AudioTypeEvent.values())
+                    .filter(e -> e.equals(current.getMusicTheme()))
+                    .findFirst()
+                    .filter(a -> !a.equals(next.getMusicTheme()))
+                    .ifPresent(a -> notify(AudioObserver.AudioCommand.MUSIC_STOP, a));
+        }
+
         if(currentTransitionEffect >= transitionEffects.size()) {
             game.setScreen(next);
             return;
@@ -41,12 +48,6 @@ public class TransitionScreen extends BaseScreen {
             currentTransitionEffect++;
         }
 
-        if(next.getClass() != OptionScreen.class) {
-            Optional<AudioObserver.AudioTypeEvent> audioEvent = Arrays.stream(AudioObserver.AudioTypeEvent.values())
-                    .filter(e -> e.equals(current.getMusicTheme()))
-                    .findFirst();
-            audioEvent.ifPresent(audioTypeEvent -> notify(AudioObserver.AudioCommand.MUSIC_STOP, audioTypeEvent));
-        }
     }
 
     @Override

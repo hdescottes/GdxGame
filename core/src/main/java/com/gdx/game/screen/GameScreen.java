@@ -25,6 +25,8 @@ import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+
 public class GameScreen extends BaseScreen {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameScreen.class);
@@ -154,7 +156,7 @@ public class GameScreen extends BaseScreen {
         playerHUD.render(delta);
 
         if(player.getEntityEncounteredType() == EntityFactory.EntityName.RABITE) {
-            game.setScreen(new BattleScreen(game, mapManager, resourceManager));
+            setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, mapManager, resourceManager), new ArrayList<>());
         }
 
         if(((PlayerInputComponent) player.getInputProcessor()).isOption()) {
