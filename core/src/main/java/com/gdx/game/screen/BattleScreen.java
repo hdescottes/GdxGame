@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioObserver;
@@ -16,12 +17,12 @@ import com.gdx.game.entities.Entity;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
 
+import java.util.ArrayList;
+
+import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.BATTLE_THEME;
+
 public class BattleScreen extends BaseScreen implements BattleObserver {
 
-/*    private Box2dWorld box2d;
-    private ControlManager controlManager;
-    private Hero hero;
-    private AnimationManager animationManager = new AnimationManager();*/
     private TextureRegion[]  textureRegions;
     private OrthographicCamera camera;
     private Stage battleStage;
@@ -53,26 +54,24 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     public BattleScreen(GdxGame gdxGame, MapManager mapManager, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
-        super.musicTheme = AudioObserver.AudioTypeEvent.BATTLE_THEME;
+        super.musicTheme = BATTLE_THEME;
         this.mapManager = mapManager;
-        //this.viewport = new StretchViewport(getBattleCam().viewportWidth, getBattleCam().viewportHeight, getBattleCam());
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight, camera);
         battleStage = new Stage(viewport, gdxGame.getBatch());
-/*
-        box2d = new Box2dWorld();
-        handleEntities();*/
     }
-/*
-    private void handleEntities() {
-        if(gdxGame.getEntityMap() != null) {
-            hero = (Hero) gdxGame.getEntityMap().get("hero");
-            hero.setTexture(resourceManager.heroWalkRight);
-            textureRegions = animationManager.setTextureRegions(hero.getTexture(), 32, 37);
+
+    private void removeEntities() {
+        Array<Entity> entities = mapManager.getCurrentMapEntities();
+        for(Entity entity: entities) {
+            if(entity.getEntityConfig().getEntityID().equals(mapManager.getPlayer().getEntityEncounteredType().toString())) {
+                mapManager.removeMapEntity(entity);
+            }
         }
-    }*/
+        mapManager.getPlayer().setEntityEncounteredType(null);
+    }
 
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
@@ -130,11 +129,9 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     @Override
     public void show() {
-        /*CameraManager cameraManager = new CameraManager();
-        controlManager = cameraManager.insertControl(getBattleCam());*/
-
         Gdx.input.setInputProcessor(battleStage);
-        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, AudioObserver.AudioTypeEvent.BATTLE_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_LOAD, BATTLE_THEME);
+        notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, BATTLE_THEME);
     }
 
     @Override
@@ -153,16 +150,9 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         //TODO: remove
         lifeTime += Gdx.graphics.getDeltaTime();
         if(lifeTime > delay) {
-            /*Array<Entity> entities = mapManager.getCurrentMapEntities();
-            for(Entity entity: entities) {
-                if(entity.getEntityConfig().getEntityID().equals(mapManager.getPlayer().getEntityEncounteredType().toString())) {
-                    mapManager.removeMapEntity(entity);
-                }
-            }*/
-            mapManager.getPlayer().setEntityEncounteredType(null);
-            Gdx.app.exit();
-            //gdxGame.setScreen(gdxGame.getGameScreen());
-        }
+            setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
+            removeEntities();
+        } //TODO: little bug on input when battle is done
 
         //box2d.tick(getBattleCam(), controlManager);
     }
