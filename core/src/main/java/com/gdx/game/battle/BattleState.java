@@ -13,6 +13,7 @@ public class BattleState extends BattleSubject implements InventoryObserver {
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleState.class);
 
     private Entity currentOpponent;
+    private Entity player;
     private int currentZoneLevel = 0;
     private int currentPlayerAP;
     private int currentPlayerDP;
@@ -64,17 +65,25 @@ public class BattleState extends BattleSubject implements InventoryObserver {
             return false;
         }
     }
-/*
-    public void setCurrentOpponent() {
+
+    public void setCurrentOpponent(Entity entity) {
         LOGGER.debug("Entered BATTLE ZONE: " + currentZoneLevel);
-        Entity entity = MonsterFactory.getInstance().getRandomMonster(currentZoneLevel);
+        //Entity entity = MonsterFactory.getInstance().getRandomMonster(currentZoneLevel);
         if(entity == null) {
             return;
         }
         this.currentOpponent = entity;
         notify(entity, BattleObserver.BattleEvent.OPPONENT_ADDED);
     }
-*/
+
+    public void setPlayer(Entity entity) {
+        if(entity == null) {
+            return;
+        }
+        this.player = entity;
+        notify(entity, BattleObserver.BattleEvent.PLAYER_ADDED);
+    }
+
     public void playerAttacks() {
         if(currentOpponent == null) {
             return;

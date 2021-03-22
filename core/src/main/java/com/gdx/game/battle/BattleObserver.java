@@ -8,6 +8,7 @@ public interface BattleObserver {
         OPPONENT_HIT_DAMAGE,
         OPPONENT_DEFEATED,
         OPPONENT_TURN_DONE,
+        PLAYER_ADDED,
         PLAYER_HIT_DAMAGE,
         PLAYER_RUNNING,
         PLAYER_TURN_DONE,
