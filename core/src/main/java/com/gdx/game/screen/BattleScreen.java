@@ -5,15 +5,18 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.gdx.game.GdxGame;
+import com.gdx.game.animation.AnimatedImage;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.battle.BattleObserver;
 import com.gdx.game.battle.BattleState;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
 
@@ -27,13 +30,16 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     private OrthographicCamera camera;
     private Stage battleStage;
     private MapManager mapManager;
+    private Entity player;
+    private AnimatedImage image;
+    private Entity enemy;
 
     //private AnimatedImage image;
 
-    private final int enemyWidth = 96;
-    private final int enemyHeight = 96;
+    private final int enemyWidth = 50;
+    private final int enemyHeight = 50;
 
-    private BattleState battleState = null;
+    private BattleState battleState;
     private TextButton attackButton = null;
     private TextButton runButton = null;
     private Label damageValLabel = null;
@@ -45,7 +51,8 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     private Array<ParticleEffect> effects;*/
 
     private float origDamageValLabelY = 0;
-    private Vector2 currentImagePosition;
+    private Vector2 currentImagePosition = new Vector2(0,0);
+    private Vector2 playerPosition;
 
     //To be able to come back to game screen
     //TODO: remove
@@ -57,10 +64,18 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         super.musicTheme = BATTLE_THEME;
         this.mapManager = mapManager;
 
+        battleState = new BattleState();
+        battleState.addObserver(this);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight, camera);
         battleStage = new Stage(viewport, gdxGame.getBatch());
+
+        player = mapManager.getPlayer();
+        image = new AnimatedImage();
+        image.setTouchable(Touchable.disabled);
+        enemy = EntityFactory.getInstance().getEntityByName(mapManager.getPlayer().getEntityEncounteredType());
+        battleState.setCurrentOpponent(enemy);
     }
 
     private void removeEntities() {
@@ -75,29 +90,29 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
-        /*switch(event){
-            case PLAYER_TURN_START:
+        switch(event) {
+            /*case PLAYER_TURN_START:
                 runButton.setDisabled(true);
                 runButton.setTouchable(Touchable.disabled);
                 attackButton.setDisabled(true);
                 attackButton.setTouchable(Touchable.disabled);
-                break;
+                break;*/
             case OPPONENT_ADDED:
                 image.setEntity(entity);
                 image.setCurrentAnimation(Entity.AnimationType.IMMOBILE);
                 image.setSize(enemyWidth, enemyHeight);
-                image.setPosition(this.getCell(image).getActorX(), this.getCell(image).getActorY());
+                image.setPosition(600, 200);
 
                 currentImagePosition.set(image.getX(), image.getY());
-                if( battleShakeCam == null ){
+                /*if( battleShakeCam == null ){
                     battleShakeCam = new ShakeCamera(currentImagePosition.x, currentImagePosition.y, 30.0f);
-                }
+                }*/
 
                 //Gdx.app.debug(TAG, "Image position: " + _image.getX() + "," + _image.getY() );
 
                 //this.getTitleLabel().setText("Level " + battleState.getCurrentZoneLevel() + " " + entity.getEntityConfig().getEntityID());
                 break;
-            case OPPONENT_HIT_DAMAGE:
+            /*case OPPONENT_HIT_DAMAGE:
                 int damage = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
                 damageValLabel.setText(String.valueOf(damage));
                 damageValLabel.setY(origDamageValLabelY);
@@ -123,8 +138,8 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
                 //effects.add(ParticleEffectFactory.getParticleEffect(ParticleEffectFactory.ParticleEffectType.WAND_ATTACK, x,y));
                 break;
             default:
-                break;
-        }*/
+                break;*/
+        }
     }
 
     @Override
@@ -145,6 +160,9 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         }
 
         gdxGame.getBatch().end();
+
+        battleStage.addActor(image);
+        battleStage.draw();
 
         //To be able to come back to game screen
         //TODO: remove
