@@ -1,4 +1,4 @@
-val gdxVersion by extra {"1.9.13"}
+val gdxVersion by extra {"1.10.0"}
 val gdxVfxVersion by extra {"0.5.0"}
 val jUnitPlatformVersion by extra {"1.7.1"}
 val jUnitJupiterVersion by extra {"5.7.1"}
@@ -23,7 +23,7 @@ allprojects {
     }
 
     repositories {
-        mavenCentral()
+        mavenCentral() //keep an eye on this, see libgdx 1.10.0
     }
 
     dependencies {
