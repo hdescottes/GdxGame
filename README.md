@@ -1,7 +1,6 @@
 # GdxGame
 
 ## Description
-
 <p>This project is based on https://github.com/patrickhoey/BludBourne using LibGDX library.<br>
 It is a roguelike RPG 2D base game.</p>
 
@@ -39,6 +38,51 @@ The game is saved automatically when a specific action is down (change map, get 
 You can chose to start a new game or load an existing profile on the menu screen.
 
 -------
+## Demo
 <p align="center">
     <img src="desktop/src/main/resources/demo/demo.gif" width="396" height="315">
 </p>
+
+-------
+## Game idea
+- [ ] possibility to custom controls / default control schema
+- [ ] add sounds & sounds settings
+
+- [ ] leveling system (includes stats)
+
+- [ ] character class system
+
+- [ ] battle feature
+    - [ ] setup battle screen when colision with enemy entity
+    - [ ] entities' entries animation before battle begin
+    - [ ] battle system
+    - [ ] remove entity when battle is done
+
+- [ ] crafting feature
+
+- [ ] cutscenes feature
+
+- [ ] game over screen
+
+- [ ] improve AI
+
+-------
+## Bugs
+
+- FadeIn effect not working when transition [menu &#8594; game]
+- Drag and drop selection issue on item's render (items are far from mouse when picking them)
+- Cant open quest ui or inventory ui when clicking on quest ui once (reset with option screen) &#8680; setInputUI (PlayerHUD) <br>
+  &ensp;&ensp;&ensp; &#8594; try to trigger those ui by key input instead of click event
+- Blur effect on menu screen when option is triggered ?
+
+-------
+## To improve
+
+- More tests (find a way to initialize GL20, some tests don't work anymore with 1.9.13)
+- More transition effect
+- Z sorting
+- Improve collision with Box2D
+- Don't show outer map / camera not on player if too close to map's border (clamp)
+- Animations on map (opening doors, water, ...)
+
+- Change characters/items/UI sprites to fit seiken densetsu's
