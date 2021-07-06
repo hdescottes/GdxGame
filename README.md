@@ -53,10 +53,10 @@ You can chose to start a new game or load an existing profile on the menu screen
 - [ ] character class system
 
 - [ ] battle feature
-    - [ ] setup battle screen when colision with enemy entity
-    - [ ] entities' entries animation before battle begin
+    - [x] setup battle screen when collision with enemy entity
+    - [ ] entities' entries animation before battle begin ---------------------IN PROGRESS
     - [ ] battle system
-    - [ ] remove entity when battle is done
+    - [x] remove entity when battle is done
 
 - [ ] crafting feature
 
