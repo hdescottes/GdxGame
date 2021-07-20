@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.entities.EntityConfig;
+import com.gdx.game.manager.ResourceManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,7 @@ public class ConversationUITest {
     void init() {
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
+        new ResourceManager();
     }
 
     @Test
