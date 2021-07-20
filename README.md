@@ -1,4 +1,5 @@
 # GdxGame
+![build workflow](https://github.com/hdescottes/GdxGame/actions/workflows/build.yml/badge.svg)
 
 ## Description
 <p>This project is based on https://github.com/patrickhoey/BludBourne using LibGDX library.<br>
