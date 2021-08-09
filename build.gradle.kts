@@ -1,10 +1,10 @@
 val gdxVersion by extra {"1.10.0"}
 val gdxVfxVersion by extra {"0.5.0"}
-val jUnitPlatformVersion by extra {"1.7.1"}
-val jUnitJupiterVersion by extra {"5.7.1"}
-val mockitoVersion by extra {"3.8.0"}
-val assertJVersion by extra {"3.19.0"}
-val logbackVersion by extra {"1.3.0-alpha5"}
+val jUnitPlatformVersion by extra {"1.8.0-M1"}
+val jUnitJupiterVersion by extra {"5.8.0-M1"}
+val mockitoVersion by extra {"3.11.2"}
+val assertJVersion by extra {"3.20.2"}
+val logbackVersion by extra {"1.3.0-alpha6"}
 
 plugins {
     java
