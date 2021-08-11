@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.audio.AudioSubject;
+import com.gdx.game.battle.BattleObserver;
 import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.dialog.ConversationGraph;
@@ -39,7 +40,7 @@ import com.gdx.game.quest.QuestUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
-public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ComponentObserver, ConversationGraphObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
+public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ComponentObserver, ConversationGraphObserver, BattleObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
 
     private Stage stage;
     private Viewport viewport;
@@ -149,7 +150,9 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         player.registerObserver(this);
         statusUI.addObserver(this);
         storeInventoryUI.addObserver(this);
+        //inventoryUI.addObserver(battleUI.getCurrentState());
         inventoryUI.addObserver(this);
+        //battleUI.getCurrentState().addObserver(this);
         this.addObserver(AudioManager.getInstance());
 
         //Listeners
@@ -275,26 +278,28 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 profileManager.setProperty("playerQuests", questUI.getQuests());
                 profileManager.setProperty("playerInventory", InventoryUI.getInventory(inventoryUI.getInventorySlotTable()));
                 profileManager.setProperty("playerEquipInventory", InventoryUI.getInventory(inventoryUI.getEquipSlotTable()));
-                profileManager.setProperty("currentPlayerGP", statusUI.getGoldValue() );
-                profileManager.setProperty("currentPlayerLevel", statusUI.getLevelValue() );
-                profileManager.setProperty("currentPlayerXP", statusUI.getXPValue() );
-                profileManager.setProperty("currentPlayerXPMax", statusUI.getXPValueMax() );
-                profileManager.setProperty("currentPlayerHP", statusUI.getHPValue() );
-                profileManager.setProperty("currentPlayerHPMax", statusUI.getHPValueMax() );
-                profileManager.setProperty("currentPlayerMP", statusUI.getMPValue() );
-                profileManager.setProperty("currentPlayerMPMax", statusUI.getMPValueMax() );
+                profileManager.setProperty("currentPlayerGP", statusUI.getGoldValue());
+                profileManager.setProperty("currentPlayerLevel", statusUI.getLevelValue());
+                profileManager.setProperty("currentPlayerXP", statusUI.getXPValue());
+                profileManager.setProperty("currentPlayerXPMax", statusUI.getXPValueMax());
+                profileManager.setProperty("currentPlayerHP", statusUI.getHPValue());
+                profileManager.setProperty("currentPlayerHPMax", statusUI.getHPValueMax());
+                profileManager.setProperty("currentPlayerMP", statusUI.getMPValue());
+                profileManager.setProperty("currentPlayerMPMax", statusUI.getMPValueMax());
                 break;
             case CLEAR_CURRENT_PROFILE:
                 profileManager.setProperty("playerInventory", new Array<InventoryItemLocation>());
                 profileManager.setProperty("playerEquipInventory", new Array<InventoryItemLocation>());
-                profileManager.setProperty("currentPlayerGP", 0 );
-                profileManager.setProperty("currentPlayerLevel",0 );
-                profileManager.setProperty("currentPlayerXP", 0 );
-                profileManager.setProperty("currentPlayerXPMax", 0 );
-                profileManager.setProperty("currentPlayerHP", 0 );
-                profileManager.setProperty("currentPlayerHPMax", 0 );
-                profileManager.setProperty("currentPlayerMP", 0 );
-                profileManager.setProperty("currentPlayerMPMax", 0 );
+                profileManager.setProperty("currentPlayerGP", 0);
+                profileManager.setProperty("currentPlayerLevel",0);
+                profileManager.setProperty("currentPlayerXP", 0);
+                profileManager.setProperty("currentPlayerXPMax", 0);
+                profileManager.setProperty("currentPlayerHP", 0);
+                profileManager.setProperty("currentPlayerHPMax", 0);
+                profileManager.setProperty("currentPlayerMP", 0);
+                profileManager.setProperty("currentPlayerMPMax", 0);
+                profileManager.setProperty("currentPlayerAP", 0);
+                profileManager.setProperty("currentPlayerDP", 0);
                 profileManager.setProperty("currentTime", 0);
                 break;
             default:
@@ -528,6 +533,24 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public void onNotify(Entity enemyEntity, BattleEvent event) {
+        switch (event) {
+            case OPPONENT_DEFEATED:
+                int goldReward = Integer.parseInt(enemyEntity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_GP_REWARD.toString()));
+                statusUI.addGoldValue(goldReward);
+                int xpReward = Integer.parseInt(enemyEntity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_XP_REWARD.toString()));
+                statusUI.addXPValue(xpReward);
+                break;
+            case PLAYER_HIT_DAMAGE:
+                int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
+                statusUI.setHPValue(hpVal);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

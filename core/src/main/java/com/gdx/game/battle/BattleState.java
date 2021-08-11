@@ -4,12 +4,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
-import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BattleState extends BattleSubject implements InventoryObserver {
+public class BattleState extends BattleSubject {
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleState.class);
 
     private Entity currentOpponent;
@@ -29,6 +28,9 @@ public class BattleState extends BattleSubject implements InventoryObserver {
         playerAttackCalculations = getPlayerAttackCalculationTimer();
         opponentAttackCalculations = getOpponentAttackCalculationTimer();
         checkPlayerMagicUse = getPlayerMagicUseCheckTimer();
+
+        currentPlayerAP = ProfileManager.getInstance().getProperty("currentPlayerAP", Integer.class);
+        currentPlayerDP = ProfileManager.getInstance().getProperty("currentPlayerDP", Integer.class);
     }
 
     public void resetDefaults() {
@@ -175,6 +177,7 @@ public class BattleState extends BattleSubject implements InventoryObserver {
                 int damage = MathUtils.clamp(currentOpponentAP - currentPlayerDP, 0, currentOpponentAP);
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 hpVal = MathUtils.clamp( hpVal - damage, 0, hpVal);
+                player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(damage));
                 ProfileManager.getInstance().setProperty("currentPlayerHP", hpVal);
 
                 if(damage > 0) {
@@ -194,34 +197,6 @@ public class BattleState extends BattleSubject implements InventoryObserver {
             notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_RUNNING);
         } else if(randomVal > criticalChance) {
             opponentAttacks();
-        }
-    }
-
-    @Override
-    public void onNotify(String value, InventoryEvent event) {
-        switch(event) {
-            case UPDATED_AP:
-                int apVal = Integer.parseInt(value);
-                currentPlayerAP = apVal;
-                //Gdx.app.debug(TAG, "APVAL: " + _currentPlayerAP);
-                break;
-            case UPDATED_DP:
-                int dpVal = Integer.parseInt(value);
-                currentPlayerDP = dpVal;
-                //Gdx.app.debug(TAG, "DPVAL: " + _currentPlayerDP);
-                break;
-            case ADD_WAND_AP:
-                int wandAP = Integer.parseInt(value);
-                currentPlayerWandAPPoints += wandAP;
-                LOGGER.debug("WandAP: " + currentPlayerWandAPPoints);
-                break;
-            case REMOVE_WAND_AP:
-                int removeWandAP = Integer.parseInt(value);
-                currentPlayerWandAPPoints -= removeWandAP;
-                LOGGER.debug("WandAP: " + currentPlayerWandAPPoints);
-                break;
-            default:
-                break;
         }
     }
 }
