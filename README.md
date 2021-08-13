@@ -18,10 +18,10 @@ The hero will soon be able to interact with NPCs with the "E" key.
 - NPCs are also animated 2D sprites. <br>
 You can interact with them by clicking on them at a proper distance. Some have conversations and quests.
 
-#### Battle Screen (disabled until battle system is done)
-Currently, the battle screen only hold the background. <br>
-It has a timer of 3s before returning to the main game screen. <br>
-Soon, it will hold the player and enemy sprite, and we will be able to properly "battle" in a turn-based battle.
+#### Battle Screen
+The battle system is a turn based fight. <br>
+The screen displays the amount of damage taken and inflicted by the player. <br>
+For now, you can only do a basic attack. Later you will be able to choose between a various set of attacks and be able to use objects in fight. <br>
 
 #### Option Screen
 The option screen is divided into 3 buttons : <br>
@@ -42,8 +42,13 @@ You can chose to start a new game or load an existing profile on the menu screen
 -------
 ## Demo
 <p align="center">
-    <img src="desktop/src/main/resources/demo/demo.gif" width="396" height="315">
+  <img src="desktop/src/main/resources/demo/demo.gif" width="396" height="315">
 </p>
+<p align="center">gameplay demo</p>
+<p align="center">
+  <img src="desktop/src/main/resources/demo/battle_demo.gif" width="396" height="315">
+</p>
+<p align="center">battle demo</p>
 
 -------
 ## Game idea
@@ -55,12 +60,8 @@ You can chose to start a new game or load an existing profile on the menu screen
 - [ ] character class system
 
 - [ ] battle feature
-    - [x] setup battle screen when collision with enemy entity
     - [ ] entities' entries animation before battle begin
-    - [x] set entities on screen
-    - [ ] create HUD for battle's actions -------------------------------------IN PROGRESS
-    - [ ] battle system
-    - [x] remove entity when battle is done
+    - [ ] entities' animation while attacking
 
 - [ ] crafting feature
 
