@@ -3,23 +3,15 @@ package com.gdx.game.inventory;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.game.entities.Entity;
-import com.gdx.game.inventory.slot.InventorySlot;
-import com.gdx.game.inventory.slot.InventorySlotObserver;
-import com.gdx.game.inventory.slot.InventorySlotSource;
-import com.gdx.game.inventory.slot.InventorySlotTarget;
-import com.gdx.game.inventory.slot.InventorySlotTooltip;
-import com.gdx.game.inventory.slot.InventorySlotTooltipListener;
+import com.gdx.game.inventory.slot.*;
 import com.gdx.game.manager.ResourceManager;
+import com.gdx.game.profile.ProfileManager;
 
 import static com.gdx.game.component.Component.MESSAGE_TOKEN;
 import static com.gdx.game.manager.ResourceManager.ITEMS_TEXTURE_ATLAS;
@@ -428,6 +420,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                     APValLabel.setText(String.valueOf(APVal));
                     notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
 
+                    ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
+
                     if(addItem.isInventoryItemOffensiveWand()) {
                         notify(String.valueOf(addItem.getItemUseTypeValue()), InventoryObserver.InventoryEvent.ADD_WAND_AP);
                     }
@@ -436,6 +430,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                     DPVal += addItem.getItemUseTypeValue();
                     DPValLabel.setText(String.valueOf(DPVal));
                     notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
+
+                    ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 }
                 break;
             case REMOVED_ITEM:
@@ -449,6 +445,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                     APValLabel.setText(String.valueOf(APVal));
                     notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
 
+                    ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
+
                     if(removeItem.isInventoryItemOffensiveWand()) {
                         notify(String.valueOf(removeItem.getItemUseTypeValue()), InventoryObserver.InventoryEvent.REMOVE_WAND_AP);
                     }
@@ -457,6 +455,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                     DPVal -= removeItem.getItemUseTypeValue();
                     DPValLabel.setText(String.valueOf(DPVal));
                     notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
+
+                    ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 }
                 break;
             default:

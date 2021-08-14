@@ -14,7 +14,7 @@
 		}
 		ENTITY_ATTACK_POINTS: {
 			class: java.lang.String
-			value: 40
+			value: 6
 		}
 		ENTITY_DEFENSE_POINTS: {
 			class: java.lang.String
