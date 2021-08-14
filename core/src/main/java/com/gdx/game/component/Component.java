@@ -8,6 +8,7 @@ public interface Component {
     enum MESSAGE {
         CURRENT_POSITION,
         INIT_START_POSITION,
+        RESET_POSITION,
         CURRENT_DIRECTION,
         CURRENT_STATE,
         COLLISION_WITH_MAP,
@@ -21,5 +22,6 @@ public interface Component {
     }
 
     void dispose();
+
     void receiveMessage(String message);
 }

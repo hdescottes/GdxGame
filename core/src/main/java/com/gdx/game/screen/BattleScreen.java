@@ -24,6 +24,8 @@ import com.gdx.game.entities.player.PlayerHUD;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
+import com.gdx.game.screen.transition.effects.FadeOutTransitionEffect;
+import com.gdx.game.screen.transition.effects.TransitionEffect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +69,8 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     private float origDmgPlayerValLabelY = 0;
     private float origDmgOpponentValLabelY = 0;
+    private Table tableDmgPlayerLabel = new Table();
+    private Table tableDmgOpponentLabel = new Table();
     private Vector2 currentOpponentImagePosition = new Vector2(0,0);
     private Vector2 currentPlayerImagePosition = new Vector2(0,0);
     private Vector2 playerPosition;
@@ -110,14 +114,10 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
         battleUI.validate();
 
-        Table tableDmgPlayerLabel = new Table();
         tableDmgPlayerLabel.add(dmgPlayerValLabel).padLeft(playerWidth / 2).padBottom(playerHeight * 4);
         tableDmgPlayerLabel.setPosition(currentPlayerImagePosition.x, currentPlayerImagePosition.y);
-        Table tableDmgOpponentLabel = new Table();
         tableDmgOpponentLabel.add(dmgOpponentValLabel).padLeft(enemyWidth / 2).padBottom(enemyHeight * 4);
         tableDmgOpponentLabel.setPosition(currentOpponentImagePosition.x, currentOpponentImagePosition.y);
-        this.battleStage.addActor(tableDmgPlayerLabel);
-        this.battleStage.addActor(tableDmgOpponentLabel);
     }
 
     public BattleState getCurrentState(){
@@ -132,6 +132,15 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
             }
         }
         mapManager.getPlayer().setEntityEncounteredType(null);
+    }
+
+    private void setupGameOver() {
+        dmgOpponentValLabel.setVisible(false);
+        dmgPlayerValLabel.setVisible(false);
+        battleUI.setVisible(false);
+        ArrayList<TransitionEffect> effects = new ArrayList<>();
+        effects.add(new FadeOutTransitionEffect(1f));
+        setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new GameOverScreen(gdxGame, mapManager, resourceManager), effects);
     }
 
     @Override
@@ -198,6 +207,10 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
                 battleUI.setVisible(true);
                 battleUI.setTouchable(Touchable.enabled);
                 LOGGER.debug("Opponent turn done");
+
+                if(GameScreen.getGameState() == GameScreen.GameState.GAME_OVER) {
+                    setupGameOver();
+                }
                 break;
             case PLAYER_TURN_DONE:
                 battleState.opponentAttacks();
@@ -218,6 +231,8 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         battleStage.addActor(opponentImage);
         battleStage.addActor(playerImage);
         battleStage.addActor(battleUI);
+        battleStage.addActor(tableDmgPlayerLabel);
+        battleStage.addActor(tableDmgOpponentLabel);
         Gdx.input.setInputProcessor(battleStage);
 
         notify(AudioObserver.AudioCommand.MUSIC_LOAD, BATTLE_THEME);
@@ -244,5 +259,11 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         battleStage.draw();
 
         //box2d.tick(getBattleCam(), controlManager);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        battleUI.remove();
     }
 }

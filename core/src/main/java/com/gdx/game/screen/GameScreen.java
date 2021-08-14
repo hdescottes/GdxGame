@@ -204,6 +204,10 @@ public class GameScreen extends BaseScreen {
         MapFactory.clearCache();
     }
 
+    public static GameState getGameState() {
+        return gameState;
+    }
+
     public static void setGameState(GameState state) {
         switch(state) {
             case RUNNING:
