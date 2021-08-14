@@ -29,6 +29,12 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
             return;
         }
 
+        if(string.length == 1) {
+            if(string[0].equalsIgnoreCase(MESSAGE.RESET_POSITION.toString())) {
+                currentPosition = null;
+            }
+        }
+
         //Specifically for messages with 1 object payload
         if(string.length == 2) {
             if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_POSITION.toString())) {
