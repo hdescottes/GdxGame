@@ -37,6 +37,7 @@ import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.profile.ProfileObserver;
 import com.gdx.game.quest.QuestGraph;
 import com.gdx.game.quest.QuestUI;
+import com.gdx.game.screen.GameScreen;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
@@ -282,7 +283,9 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 profileManager.setProperty("currentPlayerLevel", statusUI.getLevelValue());
                 profileManager.setProperty("currentPlayerXP", statusUI.getXPValue());
                 profileManager.setProperty("currentPlayerXPMax", statusUI.getXPValueMax());
-                profileManager.setProperty("currentPlayerHP", statusUI.getHPValue());
+                if(statusUI.getHPValue() != 0) {
+                    profileManager.setProperty("currentPlayerHP", statusUI.getHPValue());
+                }
                 profileManager.setProperty("currentPlayerHPMax", statusUI.getHPValueMax());
                 profileManager.setProperty("currentPlayerMP", statusUI.getMPValue());
                 profileManager.setProperty("currentPlayerMPMax", statusUI.getMPValueMax());
@@ -547,6 +550,10 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             case PLAYER_HIT_DAMAGE:
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 statusUI.setHPValue(hpVal);
+
+                if(hpVal <= 0){
+                    GameScreen.setGameState(GameScreen.GameState.GAME_OVER);
+                }
                 break;
             default:
                 break;
