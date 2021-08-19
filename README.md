@@ -86,7 +86,6 @@ You can chose to start a new game or load an existing profile on the menu screen
 - More transition effect
 - Z sorting
 - Improve collision with Box2D
-- Don't show outer map / camera not on player if too close to map's border (clamp)
 - Animations on map (opening doors, water, ...)
 
 - Change characters/items/UI sprites to fit seiken densetsu's
