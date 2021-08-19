@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
+import com.gdx.game.camera.CameraStyles;
 import com.gdx.game.component.Component;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
@@ -62,6 +63,13 @@ public class GameScreen extends BaseScreen {
 
     private Entity player;
     private PlayerHUD playerHUD;
+
+    private float startX;
+    private float startY;
+    private float levelWidth;
+    private float levelHeight;
+    private float endX;
+    private float endY;
 
     private AudioObserver.AudioTypeEvent musicTheme;
 
@@ -153,6 +161,15 @@ public class GameScreen extends BaseScreen {
         mapRenderer.render();
         mapManager.updateCurrentMapEntities(mapManager, mapRenderer.getBatch(), delta);
         player.update(mapManager, mapRenderer.getBatch(), delta);
+
+        startX = camera.viewportWidth / 2;
+        startY = camera.viewportHeight / 2;
+        levelWidth = mapManager.getCurrentTiledMap().getProperties().get("width", Integer.class);
+        levelHeight = mapManager.getCurrentTiledMap().getProperties().get("height", Integer.class);
+        endX = levelWidth * ResourceManager.SQUARE_TILE_SIZE * Map.UNIT_SCALE - startX * 2;
+        endY = levelHeight * ResourceManager.SQUARE_TILE_SIZE * Map.UNIT_SCALE - startY * 2;
+        CameraStyles.boundaries(camera, startX, startY, endX, endY);
+
         playerHUD.render(delta);
 
         if(player.getEntityEncounteredType() == EntityFactory.EntityName.RABITE) {

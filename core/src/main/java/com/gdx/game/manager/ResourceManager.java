@@ -27,6 +27,9 @@ public class ResourceManager {
     private static InternalFileHandleResolver filePathResolver =  new InternalFileHandleResolver();
     private final static String ITEMS_TEXTURE_ATLAS_PATH = "skins/items.atlas";
 
+    // MAP
+    public final static int SQUARE_TILE_SIZE = 32;
+
     // ATLAS
     public TextureAtlas atlas;
 
