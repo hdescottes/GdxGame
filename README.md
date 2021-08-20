@@ -74,8 +74,6 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - FadeIn effect not working when transition [menu &#8594; game]
 - Drag and drop selection issue on item's render (items are far from mouse when picking them)
-- Cant open quest ui or inventory ui when clicking on quest ui once (reset with option screen) &#8680; setInputUI (PlayerHUD) <br>
-  &ensp;&ensp;&ensp; &#8594; try to trigger those ui by key input instead of click event
 - Blur effect on menu screen when option is triggered ?
 - Reset position when gameover is not properly set (should be at the beginning of the current zone)
 

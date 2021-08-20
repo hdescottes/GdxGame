@@ -1,6 +1,8 @@
 package com.gdx.game.entities.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -60,6 +62,8 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
 
     private Array<AudioObserver> observers;
 
+    private Actor stageKeyboardFocus;
+
     private static final String INVENTORY_FULL = "Your inventory is full!";
 
     public PlayerHUD(Camera cameraHUD, Entity entityPlayer, MapManager mapMgr) {
@@ -68,6 +72,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         mapManager = mapMgr;
         viewport = new ScreenViewport(camera);
         stage = new Stage(viewport);
+        stageKeyboardFocus = stage.getKeyboardFocus();
         //_stage.setDebugAll(true);
 
         observers = new Array<>();
@@ -206,7 +211,11 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         if(ui.isVisible()) {
             Gdx.input.setInputProcessor(stage);
         } else {
-            Gdx.input.setInputProcessor(player.getInputProcessor());
+            stage.setKeyboardFocus(stageKeyboardFocus);
+            InputMultiplexer inputMultiplexer = new InputMultiplexer();
+            inputMultiplexer.addProcessor(stage);
+            inputMultiplexer.addProcessor(player.getInputProcessor());
+            Gdx.input.setInputProcessor(inputMultiplexer);
         }
     }
 
