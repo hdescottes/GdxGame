@@ -5,11 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.crashinvaders.vfx.VfxManager;
@@ -59,7 +55,9 @@ public class OptionScreen extends BaseScreen {
     private void loadContents() {
         vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
         vfxEffect = new GaussianBlurEffect();
-        vfxManager.addEffect(vfxEffect);
+        if(previousScreen.getClass() != MenuScreen.class) {
+            vfxManager.addEffect(vfxEffect);
+        }
 
         optionTable = createTable();
         handleControlButton();
