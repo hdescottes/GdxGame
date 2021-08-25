@@ -57,11 +57,14 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [ ] leveling system (includes stats)
 
+- [ ] character selection screen
+
 - [ ] character class system
 
 - [ ] battle feature
     - [ ] entities' entries animation before battle begin
     - [ ] entities' animation while attacking
+    - [ ] battle HUD with status and stats
 
 - [ ] crafting feature
 
