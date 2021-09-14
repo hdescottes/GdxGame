@@ -78,6 +78,7 @@ You can chose to start a new game or load an existing profile on the menu screen
 - FadeIn effect not working when transition [menu &#8594; game]
 - Drag and drop selection issue on item's render (items are far from mouse when picking them)
 - Reset position when gameover is not properly set (should be at the beginning of the current zone)
+- When a fight is win, the player is moving on his own until you press the direction key
 
 -------
 ## To improve
