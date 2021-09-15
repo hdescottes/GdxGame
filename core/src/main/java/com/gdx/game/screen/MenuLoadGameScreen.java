@@ -139,6 +139,8 @@ public class MenuLoadGameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         loadTable.remove();
+        topTable.remove();
+        bottomTable.remove();
     }
 
     @Override
