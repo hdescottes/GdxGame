@@ -27,6 +27,7 @@ import com.gdx.game.dialog.ConversationGraphObserver;
 import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
+import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.inventory.InventoryItem;
 import com.gdx.game.inventory.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
@@ -288,6 +289,9 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 profileManager.setProperty("playerQuests", questUI.getQuests());
                 profileManager.setProperty("playerInventory", InventoryUI.getInventory(inventoryUI.getInventorySlotTable()));
                 profileManager.setProperty("playerEquipInventory", InventoryUI.getInventory(inventoryUI.getEquipSlotTable()));
+                if(mapManager.getPlayer() != null) {
+                    profileManager.setProperty("playerCharacter", EntityFactory.EntityType.valueOf(mapManager.getPlayer().getEntityConfig().getEntityID()));
+                }
                 profileManager.setProperty("currentPlayerGP", statusUI.getGoldValue());
                 profileManager.setProperty("currentPlayerLevel", statusUI.getLevelValue());
                 profileManager.setProperty("currentPlayerXP", statusUI.getXPValue());
@@ -302,6 +306,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             case CLEAR_CURRENT_PROFILE:
                 profileManager.setProperty("playerInventory", new Array<InventoryItemLocation>());
                 profileManager.setProperty("playerEquipInventory", new Array<InventoryItemLocation>());
+                profileManager.setProperty("playerCharacter", null);
                 profileManager.setProperty("currentPlayerGP", 0);
                 profileManager.setProperty("currentPlayerLevel",0);
                 profileManager.setProperty("currentPlayerXP", 0);

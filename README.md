@@ -57,8 +57,6 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [ ] leveling system (includes stats)
 
-- [ ] character selection screen
-
 - [ ] character class system
 
 - [ ] battle feature
