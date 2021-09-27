@@ -87,6 +87,8 @@ public class MenuLoadGameScreen extends BaseScreen {
                     FileHandle file = ProfileManager.getInstance().getProfileFile(fileName);
                     if(file != null) {
                         ProfileManager.getInstance().setCurrentProfile(fileName);
+                        ProfileManager.getInstance().loadProfile();
+                        gdxGame.setGameScreen(new GameScreen(gdxGame, resourceManager));
 
                         ArrayList<TransitionEffect> effects = new ArrayList<>();
                         effects.add(new FadeOutTransitionEffect(1f));
@@ -137,6 +139,8 @@ public class MenuLoadGameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         loadTable.remove();
+        topTable.remove();
+        bottomTable.remove();
     }
 
     @Override

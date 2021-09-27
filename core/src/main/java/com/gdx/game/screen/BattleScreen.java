@@ -69,8 +69,8 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     private float origDmgPlayerValLabelY = 0;
     private float origDmgOpponentValLabelY = 0;
-    private Table tableDmgPlayerLabel = new Table();
-    private Table tableDmgOpponentLabel = new Table();
+    private Table dmgPlayerLabelTable = new Table();
+    private Table dmgOpponentLabelTable = new Table();
     private Vector2 currentOpponentImagePosition = new Vector2(0,0);
     private Vector2 currentPlayerImagePosition = new Vector2(0,0);
     private Vector2 playerPosition;
@@ -114,10 +114,10 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
         battleUI.validate();
 
-        tableDmgPlayerLabel.add(dmgPlayerValLabel).padLeft(playerWidth / 2).padBottom(playerHeight * 4);
-        tableDmgPlayerLabel.setPosition(currentPlayerImagePosition.x, currentPlayerImagePosition.y);
-        tableDmgOpponentLabel.add(dmgOpponentValLabel).padLeft(enemyWidth / 2).padBottom(enemyHeight * 4);
-        tableDmgOpponentLabel.setPosition(currentOpponentImagePosition.x, currentOpponentImagePosition.y);
+        dmgPlayerLabelTable.add(dmgPlayerValLabel).padLeft(playerWidth / 2).padBottom(playerHeight * 4);
+        dmgPlayerLabelTable.setPosition(currentPlayerImagePosition.x, currentPlayerImagePosition.y);
+        dmgOpponentLabelTable.add(dmgOpponentValLabel).padLeft(enemyWidth / 2).padBottom(enemyHeight * 4);
+        dmgOpponentLabelTable.setPosition(currentOpponentImagePosition.x, currentOpponentImagePosition.y);
     }
 
     public BattleState getCurrentState(){
@@ -231,8 +231,8 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         battleStage.addActor(opponentImage);
         battleStage.addActor(playerImage);
         battleStage.addActor(battleUI);
-        battleStage.addActor(tableDmgPlayerLabel);
-        battleStage.addActor(tableDmgOpponentLabel);
+        battleStage.addActor(dmgPlayerLabelTable);
+        battleStage.addActor(dmgOpponentLabelTable);
         Gdx.input.setInputProcessor(battleStage);
 
         notify(AudioObserver.AudioCommand.MUSIC_LOAD, BATTLE_THEME);
@@ -265,5 +265,9 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     public void dispose() {
         super.dispose();
         battleUI.remove();
+        dmgPlayerLabelTable.remove();
+        dmgOpponentLabelTable.remove();
+        playerImage.remove();
+        opponentImage.remove();
     }
 }

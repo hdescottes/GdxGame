@@ -63,6 +63,7 @@ public class GameOverScreen extends BaseScreen {
         notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, GAME_OVER_THEME);
     }
 
+    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor( 0, 0, 0, 0 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
@@ -72,5 +73,11 @@ public class GameOverScreen extends BaseScreen {
         gdxGame.getBatch().end();
 
         gameOverStage.draw();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        gameOverTable.remove();
     }
 }

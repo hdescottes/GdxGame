@@ -20,6 +20,7 @@ public class EntityFactory {
 
     public enum EntityType {
         PLAYER,
+        PLAYER2,
         PLAYER_DEMO,
         ENEMY,
         NPC
@@ -38,6 +39,7 @@ public class EntityFactory {
     }
 
     public static final String PLAYER_CONFIG = "scripts/player.json";
+    public static final String PLAYER2_CONFIG = "scripts/player2.json";
     public static final String TOWN_GUARD_WALKING_CONFIG = "scripts/town_guard_walking.json";
     public static final String TOWN_BLACKSMITH_CONFIG = "scripts/town_blacksmith.json";
     public static final String TOWN_MAGE_CONFIG = "scripts/town_mage.json";
@@ -84,6 +86,11 @@ public class EntityFactory {
             case PLAYER:
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_CONFIG));
+                entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
+                return entity;
+            case PLAYER2:
+                entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
+                entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER2_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
             case PLAYER_DEMO:

@@ -88,7 +88,7 @@ public class GameScreen extends BaseScreen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
-        player = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.PLAYER);
+        player = EntityFactory.getEntity(ProfileManager.getInstance().getProperty("playerCharacter", EntityFactory.EntityType.class));
         mapManager.setPlayer(player);
         mapManager.setCamera(camera);
 
@@ -119,7 +119,6 @@ public class GameScreen extends BaseScreen {
         if(mapRenderer == null) {
             mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getCurrentTiledMap(), Map.UNIT_SCALE);
         }
-
     }
 
     @Override

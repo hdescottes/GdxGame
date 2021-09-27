@@ -133,7 +133,7 @@ public class MenuNewGameScreen extends BaseScreen {
                 ArrayList<TransitionEffect> effects = new ArrayList<>();
                 effects.add(new FadeOutTransitionEffect(1f));
                 //effects.add(new FadeInTransitionEffect(1f)); TODO: Issue with fadein effect
-                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), effects);
+                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getCharacterSelectionScreen(), effects);
             }
 
         });

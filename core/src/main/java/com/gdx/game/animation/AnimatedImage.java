@@ -21,6 +21,10 @@ public class AnimatedImage extends Image {
         super();
     }
 
+    public Entity getEntity() {
+        return entity;
+    }
+
     public void setEntity(Entity entity) {
         this.entity = entity;
         //set default
