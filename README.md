@@ -59,7 +59,10 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [ ] character class system
 
-- [ ] battle feature
+- [x] character selection screen
+    - [ ] add character's specificities
+
+- [x] battle feature
     - [ ] entities' entries animation before battle begin
     - [ ] entities' animation while attacking
     - [ ] battle HUD with status and stats
