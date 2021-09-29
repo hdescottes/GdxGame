@@ -173,6 +173,7 @@ public class GameScreen extends BaseScreen {
 
         if(player.getEntityEncounteredType() == EntityFactory.EntityName.RABITE) {
             setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, playerHUD, mapManager, resourceManager), new ArrayList<>());
+            PlayerInputComponent.clear();
         }
 
         if(((PlayerInputComponent) player.getInputProcessor()).isOption()) {
