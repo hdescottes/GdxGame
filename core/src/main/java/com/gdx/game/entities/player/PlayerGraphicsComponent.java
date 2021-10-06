@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.component.GraphicsComponent;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
@@ -74,7 +73,6 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
 
         //Player has moved
         if(previousPosition.x != currentPosition.x || previousPosition.y != currentPosition.y) {
-            notify("", ComponentObserver.ComponentEvent.PLAYER_HAS_MOVED);
             previousPosition = currentPosition.cpy();
         }
 
