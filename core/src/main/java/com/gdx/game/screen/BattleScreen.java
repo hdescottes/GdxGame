@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -155,9 +157,10 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
                 playerImage.setEntity(entity);
                 playerImage.setCurrentAnimation(Entity.AnimationType.WALK_RIGHT);
                 playerImage.setSize(playerWidth, playerHeight);
-                playerImage.setPosition(200, 200);
+                playerImage.setPosition(0, 200);
+                playerImage.addAction(Actions.moveTo(200, 200, 2));
 
-                currentPlayerImagePosition.set(playerImage.getX(), playerImage.getY());
+                currentPlayerImagePosition.set(((MoveToAction) playerImage.getActions().get(0)).getX(), playerImage.getY());
                 LOGGER.debug("Player added on battle map");
                 break;
             case OPPONENT_ADDED:
@@ -256,7 +259,12 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         }
 
         gdxGame.getBatch().end();
+        battleStage.act(Gdx.graphics.getDeltaTime());
         battleStage.draw();
+
+        if (playerImage.getActions().size == 0 && !playerImage.getCurrentAnimationType().equals(Entity.AnimationType.LOOK_RIGHT)) {
+            playerImage.setCurrentAnimation(Entity.AnimationType.LOOK_RIGHT);
+        }
 
         //box2d.tick(getBattleCam(), controlManager);
     }

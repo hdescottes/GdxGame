@@ -2,6 +2,7 @@ package com.gdx.game.animation;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -31,6 +32,10 @@ public class AnimatedImage extends Image {
         setCurrentAnimation(Entity.AnimationType.IDLE);
     }
 
+    public Entity.AnimationType getCurrentAnimationType() {
+        return this.currentAnimationType;
+    }
+
     public void setCurrentAnimation(Entity.AnimationType animationType){
         Animation<TextureRegion> animation = entity.getAnimation(animationType);
         if( animation == null ){
@@ -42,24 +47,25 @@ public class AnimatedImage extends Image {
         this.setDrawable(new TextureRegionDrawable(animation.getKeyFrame(0)));
         this.setScaling(Scaling.stretch);
         this.setAlign(Align.center);
-        this.setSize(this.getPrefWidth(), this.getPrefHeight());
     }
 
     @Override
     public void act(float delta) {
+        super.act(delta);
+
         Drawable drawable = this.getDrawable();
         if(drawable == null) {
             //Gdx.app.debug(TAG, "Drawable is NULL!");
             return;
         }
         frameTime = (frameTime + delta)%5;
-        TextureRegion region = entity.getAnimation(currentAnimationType).getKeyFrame(frameTime, true);
+        TextureRegion currentRegion = entity.getAnimation(currentAnimationType).getKeyFrame(frameTime, true);
         //Gdx.app.debug(TAG, "Keyframe number is " + _animation.getKeyFrameIndex(_frameTime));
-        ((TextureRegionDrawable) drawable).setRegion(region);
-        super.act(delta);
+        ((TextureRegionDrawable) drawable).setRegion(currentRegion);
+
+        for (Action action : this.getActions()) {
+            action.act(delta);
+        }
     }
-
-
-
 
 }

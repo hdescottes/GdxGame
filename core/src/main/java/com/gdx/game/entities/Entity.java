@@ -64,7 +64,8 @@ public class Entity {
 		WALK_UP,
 		WALK_DOWN,
 		IDLE,
-		IMMOBILE
+		IMMOBILE,
+		LOOK_RIGHT
 	}
 
 	public static final int FRAME_WIDTH = 16;
