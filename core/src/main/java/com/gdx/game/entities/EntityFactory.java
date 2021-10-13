@@ -19,8 +19,7 @@ public class EntityFactory {
     private Hashtable<String, EntityConfig> entities;
 
     public enum EntityType {
-        PLAYER,
-        PLAYER2,
+        WARRIOR,
         MAGE,
         ROGUE,
         GENERIC,
@@ -42,8 +41,7 @@ public class EntityFactory {
         FIRE
     }
 
-    public static final String PLAYER_CONFIG = "scripts/player.json";
-    public static final String PLAYER2_CONFIG = "scripts/player2.json";
+    public static final String PLAYER_CONFIG = "scripts/player_warrior.json";
     public static final String PLAYER_MAGE_CONFIG = "scripts/player_mage.json";
     public static final String PLAYER_ROGUE_CONFIG = "scripts/player_rogue.json";
     public static final String PLAYER_GENERIC_CONFIG = "scripts/player_generic.json";
@@ -92,14 +90,9 @@ public class EntityFactory {
     public static Entity getEntity(EntityType entityType) {
         Entity entity;
         switch(entityType) {
-            case PLAYER:
+            case WARRIOR:
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_CONFIG));
-                entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
-                return entity;
-            case PLAYER2:
-                entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
-                entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER2_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
             case MAGE:

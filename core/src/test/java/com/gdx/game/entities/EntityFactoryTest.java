@@ -32,7 +32,7 @@ public class EntityFactoryTest {
     @Disabled
     @Test
     public void testGetEntity_ShouldSucceedWithPlayer() {
-        Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.PLAYER);
+        Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.WARRIOR);
 
         assertThat(entity).isNotNull();
         assertThat(entity.getEntityConfig().getEntityID()).isEqualTo(Entity.getEntityConfig(EntityFactory.PLAYER_CONFIG).getEntityID());

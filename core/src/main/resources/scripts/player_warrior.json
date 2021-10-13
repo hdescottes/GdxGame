@@ -1,5 +1,5 @@
 {
-	entityID : PLAYER
+	entityID : WARRIOR
 	state : IDLE
 	direction : DOWN
 	conversationConfigPath : ""

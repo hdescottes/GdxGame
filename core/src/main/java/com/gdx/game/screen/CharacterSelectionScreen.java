@@ -49,8 +49,7 @@ public class CharacterSelectionScreen extends BaseScreen {
 
     private void createCharacterMap() {
         playerSprites = new HashMap<>();
-        playerSprites.put(CharacterRecord.CHAR_NAME_HUMAN, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.PLAYER));
-        playerSprites.put(CharacterRecord.CHAR_NAME_HUMAN2, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.PLAYER2));
+        playerSprites.put(CharacterRecord.CHAR_NAME_WARRIOR, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR));
         playerSprites.put(CharacterRecord.CHAR_NAME_MAGE, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.MAGE));
         playerSprites.put(CharacterRecord.CHAR_NAME_ROGUE, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.ROGUE));
         playerSprites.put(CharacterRecord.CHAR_NAME_GENERIC, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.GENERIC));
