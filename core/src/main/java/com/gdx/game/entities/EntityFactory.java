@@ -19,8 +19,11 @@ public class EntityFactory {
     private Hashtable<String, EntityConfig> entities;
 
     public enum EntityType {
-        PLAYER,
-        PLAYER2,
+        WARRIOR,
+        MAGE,
+        ROGUE,
+        GENERIC,
+        ENGINEER,
         PLAYER_DEMO,
         ENEMY,
         NPC
@@ -38,8 +41,12 @@ public class EntityFactory {
         FIRE
     }
 
-    public static final String PLAYER_CONFIG = "scripts/player.json";
-    public static final String PLAYER2_CONFIG = "scripts/player2.json";
+    public static final String PLAYER_CONFIG = "scripts/player_warrior.json";
+    public static final String PLAYER_MAGE_CONFIG = "scripts/player_mage.json";
+    public static final String PLAYER_ROGUE_CONFIG = "scripts/player_rogue.json";
+    public static final String PLAYER_GENERIC_CONFIG = "scripts/player_generic.json";
+    public static final String PLAYER_ENGINEER_CONFIG = "scripts/player_engineer.json";
+
     public static final String TOWN_GUARD_WALKING_CONFIG = "scripts/town_guard_walking.json";
     public static final String TOWN_BLACKSMITH_CONFIG = "scripts/town_blacksmith.json";
     public static final String TOWN_MAGE_CONFIG = "scripts/town_mage.json";
@@ -83,14 +90,29 @@ public class EntityFactory {
     public static Entity getEntity(EntityType entityType) {
         Entity entity;
         switch(entityType) {
-            case PLAYER:
+            case WARRIOR:
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
-            case PLAYER2:
+            case MAGE:
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
-                entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER2_CONFIG));
+                entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_MAGE_CONFIG));
+                entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
+                return entity;
+            case ROGUE:
+                entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
+                entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_ROGUE_CONFIG));
+                entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
+                return entity;
+            case GENERIC:
+                entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
+                entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_GENERIC_CONFIG));
+                entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
+                return entity;
+            case ENGINEER:
+                entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
+                entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_ENGINEER_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
             case PLAYER_DEMO:
