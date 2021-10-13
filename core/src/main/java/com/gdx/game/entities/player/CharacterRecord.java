@@ -20,10 +20,19 @@ public class CharacterRecord {
 
     public static String CHAR_NAME_HUMAN = "Human";
     public static String CHAR_NAME_HUMAN2 = "Human2";
+    public static String CHAR_NAME_MAGE = "Mage";
+    public static String CHAR_NAME_ROGUE = "Rogue";
+    public static String CHAR_NAME_GENERIC = "Generic";
+    public static String CHAR_NAME_ENGINEER = "Engineer";
 
     public static CharacterRecord CHARACTERS[] =
             {
                     new CharacterRecord(2, 2, 4, 4, CHAR_NAME_HUMAN),
                     new CharacterRecord(3, 6, 3, 3, CHAR_NAME_HUMAN2),
+                    new CharacterRecord(3, 6, 3, 3, CHAR_NAME_MAGE),
+                    new CharacterRecord(3, 6, 3, 3, CHAR_NAME_ROGUE),
+                    new CharacterRecord(3, 6, 3, 3, CHAR_NAME_GENERIC),
+                    new CharacterRecord(3, 6, 3, 3, CHAR_NAME_ENGINEER)
+
             };
 }
