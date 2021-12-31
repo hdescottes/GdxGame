@@ -64,7 +64,6 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [x] battle feature
     - [ ] entities' animation while attacking
-    - [ ] battle HUD with status and stats
 
 - [ ] crafting feature
 
