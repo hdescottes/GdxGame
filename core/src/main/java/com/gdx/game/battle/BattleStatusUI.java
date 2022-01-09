@@ -40,7 +40,9 @@ public class BattleStatusUI extends Window implements StatusSubject {
     int levelVal = profileManager.getProperty("currentPlayerLevel", Integer.class);
 
     private Label hpValLabel;
+    private Label hpValLabelMax;
     private Label mpValLabel;
+    private Label mpValLabelMax;
     private Label xpValLabel;
     private Label levelValLabel;
 
@@ -99,6 +101,8 @@ public class BattleStatusUI extends Window implements StatusSubject {
 
         Label hpLabel = new Label(" hp: ", STATUS_UI_SKIN);
         hpValLabel = new Label(String.valueOf(hpVal), STATUS_UI_SKIN);
+        Label separator = new Label("/", STATUS_UI_SKIN);
+        hpValLabelMax = new Label(String.valueOf(hpCurrentMax), STATUS_UI_SKIN);
 
         hpBar.setPosition(3, 6);
 
@@ -107,7 +111,9 @@ public class BattleStatusUI extends Window implements StatusSubject {
 
         this.add(group).size(bar.getWidth(), bar.getHeight()).padRight(10);
         this.add(hpLabel);
-        this.add(hpValLabel).align(Align.left);
+        this.add(hpValLabel);
+        this.add(separator);
+        this.add(hpValLabelMax);
         this.row();
     }
 
@@ -119,6 +125,8 @@ public class BattleStatusUI extends Window implements StatusSubject {
 
         Label mpLabel = new Label(" mp: ", STATUS_UI_SKIN);
         mpValLabel = new Label(String.valueOf(mpVal), STATUS_UI_SKIN);
+        Label separator = new Label("/", STATUS_UI_SKIN);
+        mpValLabelMax = new Label(String.valueOf(mpCurrentMax), STATUS_UI_SKIN);
 
         mpBar.setPosition(3, 6);
 
@@ -127,7 +135,9 @@ public class BattleStatusUI extends Window implements StatusSubject {
 
         this.add(group2).size(bar2.getWidth(), bar2.getHeight()).padRight(10);
         this.add(mpLabel);
-        this.add(mpValLabel).align(Align.left);
+        this.add(mpValLabel);
+        this.add(separator);
+        this.add(mpValLabelMax);
         this.row();
     }
 
@@ -271,6 +281,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
 
     public void setHPValueMax(int maxHPValue) {
         this.hpCurrentMax = maxHPValue;
+        hpValLabelMax.setText(String.valueOf(hpCurrentMax));
     }
 
     public int getHPValueMax() {
@@ -311,6 +322,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
 
     public void setMPValueMax(int maxMPValue) {
         this.mpCurrentMax = maxMPValue;
+        mpValLabelMax.setText(String.valueOf(mpCurrentMax));
     }
 
     public int getMPValueMax() {
