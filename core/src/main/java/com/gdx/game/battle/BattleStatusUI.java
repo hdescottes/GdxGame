@@ -1,39 +1,43 @@
-package com.gdx.game.status;
+package com.gdx.game.battle;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.gdx.game.profile.ProfileManager;
+import com.gdx.game.status.LevelTable;
+import com.gdx.game.status.StatusObserver;
+import com.gdx.game.status.StatusSubject;
 
 import static com.gdx.game.manager.ResourceManager.STATUS_UI_SKIN;
 import static com.gdx.game.manager.ResourceManager.STATUS_UI_TEXTURE_ATLAS;
 
-public class StatusUI extends Window implements StatusSubject {
+public class BattleStatusUI extends Window implements StatusSubject {
+
+    private ProfileManager profileManager = ProfileManager.getInstance();
+
     private Image hpBar;
     private Image mpBar;
     private Image xpBar;
 
-    private ImageButton inventoryButton;
-    private ImageButton questButton;
-    private Array<StatusObserver> observers;
-
     private Array<LevelTable> levelTables;
+    private Array<StatusObserver> observers;
     private static final String LEVEL_TABLE_CONFIG = "scripts/level_tables.json";
 
     //Attributes
-    private int levelVal = -1;
-    private int goldVal = -1;
-    private int hpVal = -1;
-    private int mpVal = -1;
-    private int xpVal = 0;
+    int xpCurrentMax = profileManager.getProperty("currentPlayerXPMax", Integer.class);
+    int xpVal = profileManager.getProperty("currentPlayerXP", Integer.class);
 
-    private int xpCurrentMax = -1;
-    private int hpCurrentMax = -1;
-    private int mpCurrentMax = -1;
+    int hpCurrentMax = profileManager.getProperty("currentPlayerHPMax", Integer.class);
+    int hpVal = profileManager.getProperty("currentPlayerHP", Integer.class);
+
+    int mpCurrentMax = profileManager.getProperty("currentPlayerMPMax", Integer.class);
+    int mpVal = profileManager.getProperty("currentPlayerMP", Integer.class);
+
+    int levelVal = profileManager.getProperty("currentPlayerLevel", Integer.class);
 
     private Label hpValLabel;
     private Label hpValLabelMax;
@@ -41,13 +45,12 @@ public class StatusUI extends Window implements StatusSubject {
     private Label mpValLabelMax;
     private Label xpValLabel;
     private Label levelValLabel;
-    private Label goldValLabel;
 
     private float barWidth = 0;
     private float barHeight = 0;
 
-    public StatusUI(){
-        super("stats", STATUS_UI_SKIN);
+    public BattleStatusUI() {
+        super("", STATUS_UI_SKIN);
 
         levelTables = LevelTable.getLevelTables(LEVEL_TABLE_CONFIG);
 
@@ -56,27 +59,38 @@ public class StatusUI extends Window implements StatusSubject {
         //Add to layout
         defaults().expand().fill();
 
-        //account for the title padding
-        this.pad(this.getPadTop() + 10, 10, 10, 10);
-
         this.add();
-        handleQuestButton();
-        handleInventoryButton();
         this.row();
-
+        handleLevelLabel();
         handleHpBar();
         handleMpBar();
         handleXpBar();
 
-        handleLevelLabel();
-        this.row();
-        handleGoldLabel();
+        barWidth = hpBar.getWidth();
+        barHeight = hpBar.getHeight();
+
+        //set the current max values first
+        this.setXPValueMax(xpCurrentMax);
+        this.setHPValueMax(hpCurrentMax);
+        this.setMPValueMax(mpCurrentMax);
+
+        this.setXPValue(xpVal);
+        this.setHPValue(hpVal);
+        this.setMPValue(mpVal);
+
+        this.setLevelValue(levelVal);
 
         //this.debug();
         this.pack();
+    }
 
-        barWidth = hpBar.getWidth();
-        barHeight = hpBar.getHeight();
+    private void handleLevelLabel() {
+        Label levelLabel = new Label(" lv: ", STATUS_UI_SKIN);
+        levelValLabel = new Label(String.valueOf(levelVal), STATUS_UI_SKIN);
+
+        this.add(levelLabel).align(Align.left);
+        this.add(levelValLabel).align(Align.left);
+        this.row();
     }
 
     private void handleHpBar() {
@@ -144,45 +158,6 @@ public class StatusUI extends Window implements StatusSubject {
         this.add(group3).size(bar3.getWidth(), bar3.getHeight()).padRight(10);
         this.add(xpLabel);
         this.add(xpValLabel).align(Align.left).padRight(20);
-        this.row();
-    }
-
-    private void handleLevelLabel() {
-        Label levelLabel = new Label(" lv: ", STATUS_UI_SKIN);
-        levelValLabel = new Label(String.valueOf(levelVal), STATUS_UI_SKIN);
-
-        this.add(levelLabel).align(Align.left);
-        this.add(levelValLabel).align(Align.left);
-    }
-
-    private void handleGoldLabel() {
-        Label goldLabel = new Label(" gp: ", STATUS_UI_SKIN);
-        goldValLabel = new Label(String.valueOf(goldVal), STATUS_UI_SKIN);
-
-        this.add(goldLabel);
-        this.add(goldValLabel).align(Align.left);
-    }
-
-    private void handleInventoryButton() {
-        inventoryButton = new ImageButton(STATUS_UI_SKIN, "inventory-button");
-        inventoryButton.getImageCell().size(32, 32);
-
-        this.add(inventoryButton).align(Align.right);
-    }
-
-    private void handleQuestButton() {
-        questButton = new ImageButton(STATUS_UI_SKIN, "quest-button");
-        questButton.getImageCell().size(32,32);
-
-        this.add(questButton).align(Align.center);
-    }
-
-    public ImageButton getInventoryButton() {
-        return inventoryButton;
-    }
-
-    public ImageButton getQuestButton() {
-        return questButton;
     }
 
     public int getLevelValue() {
@@ -192,23 +167,7 @@ public class StatusUI extends Window implements StatusSubject {
     public void setLevelValue(int levelValue) {
         this.levelVal = levelValue;
         levelValLabel.setText(String.valueOf(levelVal));
-        notify(levelVal, StatusObserver.StatusEvent.UPDATED_LEVEL);
-    }
-
-    public int getGoldValue() {
-        return goldVal;
-    }
-
-    public void setGoldValue(int goldValue) {
-        this.goldVal = goldValue;
-        goldValLabel.setText(String.valueOf(goldVal));
-        notify(goldVal, StatusObserver.StatusEvent.UPDATED_GP);
-    }
-
-    public void addGoldValue(int goldValue) {
-        this.goldVal += goldValue;
-        goldValLabel.setText(String.valueOf(goldVal));
-        notify(goldVal, StatusObserver.StatusEvent.UPDATED_GP);
+        //notify(levelVal, StatusObserver.StatusEvent.UPDATED_LEVEL);
     }
 
     public int getXPValue() {
@@ -240,7 +199,7 @@ public class StatusUI extends Window implements StatusSubject {
 
         updateBar(xpBar, xpVal, xpCurrentMax);
 
-        notify(xpVal, StatusObserver.StatusEvent.UPDATED_XP);
+        //notify(xpVal, StatusObserver.StatusEvent.UPDATED_XP);
     }
 
     public void setXPValueMax(int maxXPValue) {
@@ -317,7 +276,7 @@ public class StatusUI extends Window implements StatusSubject {
 
         updateBar(hpBar, hpVal, hpCurrentMax);
 
-        notify(hpVal, StatusObserver.StatusEvent.UPDATED_HP);
+        //notify(hpVal, StatusObserver.StatusEvent.UPDATED_HP);
     }
 
     public void setHPValueMax(int maxHPValue) {
@@ -358,7 +317,7 @@ public class StatusUI extends Window implements StatusSubject {
 
         updateBar(mpBar, mpVal, mpCurrentMax);
 
-        notify(mpVal, StatusObserver.StatusEvent.UPDATED_MP);
+        //notify(mpVal, StatusObserver.StatusEvent.UPDATED_MP);
     }
 
     public void setMPValueMax(int maxMPValue) {
@@ -400,5 +359,4 @@ public class StatusUI extends Window implements StatusSubject {
             observer.onNotify(value, event);
         }
     }
-
 }

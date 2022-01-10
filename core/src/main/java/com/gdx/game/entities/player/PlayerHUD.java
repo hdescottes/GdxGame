@@ -2,7 +2,6 @@ package com.gdx.game.entities.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,6 +19,7 @@ import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.audio.AudioSubject;
 import com.gdx.game.battle.BattleObserver;
+import com.gdx.game.battle.BattleStatusUI;
 import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.dialog.ConversationGraph;
@@ -52,6 +52,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
     private Entity player;
 
     private StatusUI statusUI;
+    private BattleStatusUI battleStatusUI;
     private InventoryUI inventoryUI;
     private ConversationUI conversationUI;
     private StoreInventoryUI storeInventoryUI;
@@ -564,6 +565,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             case PLAYER_HIT_DAMAGE:
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 statusUI.setHPValue(hpVal);
+                battleStatusUI.setHPValue(hpVal);
 
                 if(hpVal <= 0){
                     GameScreen.setGameState(GameScreen.GameState.GAME_OVER);
@@ -621,4 +623,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         }
     }
 
+    public void setBattleStatusUI(BattleStatusUI battleStatusUI) {
+        this.battleStatusUI = battleStatusUI;
+    }
 }
