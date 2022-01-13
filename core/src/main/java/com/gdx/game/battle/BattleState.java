@@ -100,8 +100,7 @@ public class BattleState extends BattleSubject {
                 Timer.schedule(playerAttackCalculations, 1);
             }
         } else if(currentPlayerWandAPPoints > mpVal) {
-            BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
-            return;
+            notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
         } else {
             if(!checkPlayerMagicUse.isScheduled() && !playerAttackCalculations.isScheduled()) {
                 Timer.schedule(checkPlayerMagicUse, .5f);
