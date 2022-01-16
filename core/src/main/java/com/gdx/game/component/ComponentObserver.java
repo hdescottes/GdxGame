@@ -5,6 +5,8 @@ public interface ComponentObserver {
         LOAD_CONVERSATION,
         SHOW_CONVERSATION,
         HIDE_CONVERSATION,
+        LOAD_RESUME,
+        SHOW_RESUME,
         QUEST_LOCATION_DISCOVERED,
         ENEMY_SPAWN_LOCATION_CHANGED,
     }

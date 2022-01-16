@@ -2,17 +2,21 @@ package com.gdx.game.battle;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
 import com.gdx.game.animation.AnimatedImage;
+import com.gdx.game.component.ComponentObserver;
+import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.entities.player.PlayerHUD;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
@@ -20,7 +24,7 @@ import com.gdx.game.screen.GameScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BattleHUD implements Screen, BattleObserver {
+public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
 
     private static  final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
 
@@ -28,14 +32,16 @@ public class BattleHUD implements Screen, BattleObserver {
 
     private BattleUI battleUI;
     private BattleStatusUI battleStatusUI;
+    private ConversationUI conversationUI;
 
+    private Json json;
     private MapManager mapManager;
-    private PlayerHUD playerHUD;
     private AnimatedImage playerImage;
     private Entity player;
     private AnimatedImage opponentImage;
     private Entity enemy;
     private BattleState battleState;
+    private BattleConversation battleConversation;
 
     private final int enemyWidth = 50;
     private final int enemyHeight = 50;
@@ -50,15 +56,21 @@ public class BattleHUD implements Screen, BattleObserver {
     private Table dmgOpponentLabelTable = new Table();
     private Vector2 currentOpponentImagePosition = new Vector2(0,0);
     private Vector2 currentPlayerImagePosition = new Vector2(0,0);
+    private boolean opponentDefeated = false;
+    private float fadeTimeAlpha = 1;
 
     public BattleHUD(MapManager mapManager_, Stage battleStage, BattleState battleState_) {
         this.mapManager = mapManager_;
         this.battleState = battleState_;
 
+        json = new Json();
+        player = mapManager.getPlayer();
+        battleConversation = new BattleConversation();
+
         battleState.addObserver(this);
+        battleConversation.addObserver(this);
 
         battleHUDStage = new Stage(battleStage.getViewport());
-        player = mapManager.getPlayer();
         playerImage = new AnimatedImage();
         playerImage.setTouchable(Touchable.disabled);
         enemy = EntityFactory.getInstance().getEntityByName(mapManager.getPlayer().getEntityEncounteredType());
@@ -89,8 +101,27 @@ public class BattleHUD implements Screen, BattleObserver {
         battleUI.setWidth(battleStage.getWidth() / 2);
         battleUI.setHeight(battleStage.getHeight() / 4);
 
+        conversationUI = new ConversationUI();
+        conversationUI.removeActor(conversationUI.findActor("scrollPane"));
+        conversationUI.getCloseButton().setVisible(false);
+        conversationUI.getCloseButton().setTouchable(Touchable.disabled);
+        conversationUI.setTitle("");
+        conversationUI.setMovable(false);
+        conversationUI.setVisible(false);
+        conversationUI.setPosition(0, 0);
+        conversationUI.setWidth(battleHUDStage.getWidth());
+        conversationUI.setHeight(battleHUDStage.getHeight() / 5);
+        conversationUI.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                conversationUI.setVisible(false);
+                battleState.resumeOver();
+            }
+        });
+
         battleUI.validate();
         battleStatusUI.validate();
+        conversationUI.validate();
 
         dmgPlayerLabelTable.add(dmgPlayerValLabel).padLeft(playerWidth / 2).padBottom(playerHeight * 4);
         dmgPlayerLabelTable.setPosition(currentPlayerImagePosition.x, currentPlayerImagePosition.y);
@@ -103,6 +134,7 @@ public class BattleHUD implements Screen, BattleObserver {
         battleHUDStage.addActor(dmgOpponentLabelTable);
         battleHUDStage.addActor(battleUI);
         battleHUDStage.addActor(battleStatusUI);
+        battleHUDStage.addActor(conversationUI);
     }
 
     @Override
@@ -164,8 +196,13 @@ public class BattleHUD implements Screen, BattleObserver {
             case OPPONENT_DEFEATED:
                 dmgOpponentValLabel.setVisible(false);
                 dmgOpponentValLabel.setY(origDmgOpponentValLabelY);
-                //opponentImage.setVisible(false);
+                setOpponentDefeated();
                 LOGGER.debug("Opponent is defeated");
+
+                battleUI.setVisible(false);
+                battleUI.setTouchable(Touchable.disabled);
+                battleStatusUI.setVisible(false);
+                battleConversation.notifBattleResume(enemy);
                 break;
             case OPPONENT_TURN_DONE:
                 if(GameScreen.getGameState() != GameScreen.GameState.GAME_OVER) {
@@ -183,6 +220,25 @@ public class BattleHUD implements Screen, BattleObserver {
                 float y = currentImagePosition.y + (enemyHeight/2);
                 //effects.add(ParticleEffectFactory.getParticleEffect(ParticleEffectFactory.ParticleEffectType.WAND_ATTACK, x,y));
                 break;*/
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNotify(String value, ComponentEvent event) {
+        switch(event) {
+            case LOAD_RESUME:
+                EntityConfig config = json.fromJson(EntityConfig.class, value);
+                conversationUI.loadResume(config);
+                break;
+            case SHOW_RESUME:
+                EntityConfig configShow = json.fromJson(EntityConfig.class, value);
+
+                if (configShow.getEntityID().equalsIgnoreCase(conversationUI.getCurrentEntityID())) {
+                    conversationUI.setVisible(true);
+                }
+                break;
             default:
                 break;
         }
@@ -208,6 +264,10 @@ public class BattleHUD implements Screen, BattleObserver {
         return dmgOpponentValLabel;
     }
 
+    private void setOpponentDefeated() {
+        this.opponentDefeated = true;
+    }
+
     @Override
     public void show() {
 
@@ -227,6 +287,11 @@ public class BattleHUD implements Screen, BattleObserver {
 
         if (playerImage.getActions().size == 0 && !playerImage.getCurrentAnimationType().equals(Entity.AnimationType.LOOK_RIGHT)) {
             playerImage.setCurrentAnimation(Entity.AnimationType.LOOK_RIGHT);
+        }
+
+        if (opponentDefeated) {
+            fadeTimeAlpha -= (1f / 60f) / 2;
+            opponentImage.setColor(1.0f, 1.0f, 1.0f, fadeTimeAlpha);
         }
     }
 
@@ -257,6 +322,7 @@ public class BattleHUD implements Screen, BattleObserver {
         enemy.dispose();
         battleUI.remove();
         battleStatusUI.remove();
+        conversationUI.remove();
         playerImage.remove();
         opponentImage.remove();
         dmgPlayerLabelTable.remove();

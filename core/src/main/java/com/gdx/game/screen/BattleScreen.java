@@ -35,10 +35,10 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     private BattleState battleState;
 
-    public BattleScreen(GdxGame gdxGame, PlayerHUD playerHUD_, MapManager mapManager, ResourceManager resourceManager) {
+    public BattleScreen(GdxGame gdxGame, PlayerHUD playerHUD_, MapManager mapManager_, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
         super.musicTheme = BATTLE_THEME;
-        this.mapManager = mapManager;
+        this.mapManager = mapManager_;
         this.playerHUD = playerHUD_;
 
         battleState = new BattleState();
@@ -49,6 +49,9 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         viewport = new StretchViewport(camera.viewportWidth, camera.viewportHeight, camera);
         battleStage = new Stage(viewport, gdxGame.getBatch());
         battleHUD = new BattleHUD(mapManager, battleStage, battleState);
+
+        multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(battleHUD.getBattleHUDStage());
     }
 
     private void removeEntities() {
@@ -76,7 +79,7 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
         switch(event) {
-            case OPPONENT_DEFEATED:
+            case RESUME_OVER:
                 setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
                 removeEntities();
                 break;
@@ -92,6 +95,8 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(multiplexer);
+
         notify(AudioObserver.AudioCommand.MUSIC_LOAD, BATTLE_THEME);
         notify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, BATTLE_THEME);
     }
@@ -111,10 +116,6 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         battleStage.draw();
 
         battleHUD.render(delta);
-
-        multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(battleHUD.getBattleHUDStage());
-        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
