@@ -42,8 +42,10 @@ public class ConversationUI extends Window {
         listItems = new List<ConversationChoice>(ResourceManager.skin);
 
         closeButton = new TextButton("X", ResourceManager.skin);
+        closeButton.setName("closeButton");
 
         ScrollPane scrollPane = new ScrollPane(listItems, ResourceManager.skin);
+        scrollPane.setName("scrollPane");
         scrollPane.setOverscroll(false, false);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
@@ -77,6 +79,10 @@ public class ConversationUI extends Window {
         });
     }
 
+    public void setTitle(String title) {
+        this.getTitleLabel().setText(title);
+    }
+
     public TextButton getCloseButton() {
         return closeButton;
     }
@@ -101,6 +107,18 @@ public class ConversationUI extends Window {
 
         ConversationGraph graph = json.fromJson(ConversationGraph.class, Gdx.files.internal(fullFilenamePath));
         setConversationGraph(graph);
+    }
+
+    public void loadResume(EntityConfig entityConfig) {
+        String fullResumePath = entityConfig.getResumeConfigPath();
+        String resume = fullResumePath.replace("<xp>", entityConfig.getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_XP_REWARD.name()))
+                .replace("<gold>", entityConfig.getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_GP_REWARD.name()));
+        this.getTitleLabel().setText("");
+
+        clearDialog();
+
+        currentEntityID = entityConfig.getEntityID();
+        dialogText.setText(resume);
     }
 
     public void setConversationGraph(ConversationGraph graph) {

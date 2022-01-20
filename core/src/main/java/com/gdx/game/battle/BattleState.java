@@ -100,8 +100,7 @@ public class BattleState extends BattleSubject {
                 Timer.schedule(playerAttackCalculations, 1);
             }
         } else if(currentPlayerWandAPPoints > mpVal) {
-            BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
-            return;
+            notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
         } else {
             if(!checkPlayerMagicUse.isScheduled() && !playerAttackCalculations.isScheduled()) {
                 Timer.schedule(checkPlayerMagicUse, .5f);
@@ -115,9 +114,14 @@ public class BattleState extends BattleSubject {
             return;
         }
 
-        if(!opponentAttackCalculations.isScheduled()) {
+        int currentOpponentHP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString()));
+        if(!opponentAttackCalculations.isScheduled() && currentOpponentHP > 0) {
             Timer.schedule(opponentAttackCalculations, 1);
         }
+    }
+
+    public void resumeOver() {
+        notify(currentOpponent, BattleObserver.BattleEvent.RESUME_OVER);
     }
 
     private Timer.Task getPlayerMagicUseCheckTimer() {
@@ -166,13 +170,6 @@ public class BattleState extends BattleSubject {
         return new Timer.Task() {
             @Override
             public void run() {
-                int currentOpponentHP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString()));
-
-                if(currentOpponentHP <= 0) {
-                    BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.OPPONENT_TURN_DONE);
-                    return;
-                }
-
                 int currentOpponentAP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.toString()));
                 int damage = MathUtils.clamp(currentOpponentAP - currentPlayerDP, 0, currentOpponentAP);
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);

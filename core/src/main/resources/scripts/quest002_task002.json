@@ -1,26 +1,27 @@
 {
-entityID : QUEST002_TASK002
-state : IMMOBILE
-direction : DOWN
-conversationConfigPath : "conversations/conversation005.json"
-questConfigPath : ""
-currentQuestID : ""
-itemTypeID: HERB001
-inventory : [
+	entityID : QUEST002_TASK002
+	state : IMMOBILE
+	direction : DOWN
+	conversationConfigPath : "conversations/conversation005.json"
+	resumeConfigPath : ""
+	questConfigPath : ""
+	currentQuestID : ""
+	itemTypeID: HERB001
+	inventory : [
 	]
-animationConfig: [
-	{
-	    frameDuration: 1.0
-		animationType: IMMOBILE
-		texturePaths: [
+	animationConfig: [
+		{
+			frameDuration: 1.0
+			animationType: IMMOBILE
+			texturePaths: [
 				sprites/items/Food.png
-		]
-		gridPoints: [
-			{
-				x: 3
-				y: 2
-			}
-		]
-	}
-]
+			]
+			gridPoints: [
+				{
+					x: 3
+					y: 2
+				}
+			]
+		}
+	]
 }	

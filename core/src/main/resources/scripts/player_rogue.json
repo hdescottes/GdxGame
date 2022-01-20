@@ -3,6 +3,7 @@
 	state : IDLE
 	direction : DOWN
 	conversationConfigPath : ""
+	resumeConfigPath : ""
 	questConfigPath : ""
 	currentQuestID : ""
 	itemTypeID: NONE

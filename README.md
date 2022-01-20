@@ -65,7 +65,6 @@ You can chose to start a new game or load an existing profile on the menu screen
 - [x] battle feature
     - [ ] entities' animation while attacking
     - [ ] possibility to use objects
-    - [ ] add dialog at the end of the battle for loots and xp
 
 - [ ] crafting feature
 

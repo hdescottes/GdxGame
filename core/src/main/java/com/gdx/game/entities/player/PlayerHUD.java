@@ -19,6 +19,7 @@ import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.audio.AudioSubject;
 import com.gdx.game.battle.BattleObserver;
+import com.gdx.game.battle.BattleState;
 import com.gdx.game.battle.BattleStatusUI;
 import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
@@ -40,7 +41,6 @@ import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.profile.ProfileObserver;
 import com.gdx.game.quest.QuestGraph;
 import com.gdx.game.quest.QuestUI;
-import com.gdx.game.screen.GameScreen;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
@@ -50,6 +50,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
     private Viewport viewport;
     private Camera camera;
     private Entity player;
+    private BattleState battleState;
 
     private StatusUI statusUI;
     private BattleStatusUI battleStatusUI;
@@ -219,6 +220,11 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             inputMultiplexer.addProcessor(player.getInputProcessor());
             Gdx.input.setInputProcessor(inputMultiplexer);
         }
+    }
+
+    public void setBattleState(BattleState battleState) {
+        this.battleState = battleState;
+        this.battleState.addObserver(this);
     }
 
     @Override
@@ -561,15 +567,12 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 statusUI.addGoldValue(goldReward);
                 int xpReward = Integer.parseInt(enemyEntity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_XP_REWARD.toString()));
                 statusUI.addXPValue(xpReward);
+
+                ProfileManager.getInstance().saveProfile();
                 break;
             case PLAYER_HIT_DAMAGE:
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 statusUI.setHPValue(hpVal);
-                battleStatusUI.setHPValue(hpVal);
-
-                if(hpVal <= 0){
-                    GameScreen.setGameState(GameScreen.GameState.GAME_OVER);
-                }
                 break;
             default:
                 break;
@@ -621,9 +624,5 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         for(AudioObserver observer: observers) {
             observer.onNotify(command, event);
         }
-    }
-
-    public void setBattleStatusUI(BattleStatusUI battleStatusUI) {
-        this.battleStatusUI = battleStatusUI;
     }
 }

@@ -4,6 +4,7 @@
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
+		resumeConfigPath : "You gained <xp> XP and <gold> Gold"
 		questConfigPath : ""
 		currentQuestID : ""
 		itemTypeID: NONE
@@ -75,6 +76,7 @@
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
+		resumeConfigPath : "You gained <xp> XP and <gold> Gold"
 		questConfigPath : ""
 		currentQuestID : ""
 		itemTypeID: NONE
@@ -93,7 +95,7 @@
 			}
 			ENTITY_XP_REWARD: {
 				class: java.lang.String
-				value: 5
+				value: 6
 			}
 			ENTITY_GP_REWARD: {
 				class: java.lang.String
