@@ -20,7 +20,6 @@ import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.audio.AudioSubject;
 import com.gdx.game.battle.BattleObserver;
 import com.gdx.game.battle.BattleState;
-import com.gdx.game.battle.BattleStatusUI;
 import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.dialog.ConversationGraph;
@@ -53,7 +52,6 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
     private BattleState battleState;
 
     private StatusUI statusUI;
-    private BattleStatusUI battleStatusUI;
     private InventoryUI inventoryUI;
     private ConversationUI conversationUI;
     private StoreInventoryUI storeInventoryUI;
@@ -202,6 +200,14 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
 
     public Stage getStage() {
         return stage;
+    }
+
+    public StatusUI getStatusUI() {
+        return statusUI;
+    }
+
+    public InventoryUI getInventoryUI() {
+        return inventoryUI;
     }
 
     public void updateEntityObservers() {
@@ -567,8 +573,6 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 statusUI.addGoldValue(goldReward);
                 int xpReward = Integer.parseInt(enemyEntity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_XP_REWARD.toString()));
                 statusUI.addXPValue(xpReward);
-
-                ProfileManager.getInstance().saveProfile();
                 break;
             case PLAYER_HIT_DAMAGE:
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);

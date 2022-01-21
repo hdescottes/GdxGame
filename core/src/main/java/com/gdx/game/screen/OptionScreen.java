@@ -72,7 +72,6 @@ public class OptionScreen extends BaseScreen {
         controlButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-                //TODO: To be completed
                 controlClickListener = true;
                 controlTable = createTable();
                 handleControlBackButton();

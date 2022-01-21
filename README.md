@@ -53,6 +53,7 @@ You can chose to start a new game or load an existing profile on the menu screen
 -------
 ## Game idea
 - [ ] possibility to custom controls / default control schema
+
 - [ ] add sounds & sounds settings
 
 - [ ] leveling system (includes stats)
@@ -64,7 +65,6 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [x] battle feature
     - [ ] entities' animation while attacking
-    - [ ] possibility to use objects
 
 - [ ] crafting feature
 

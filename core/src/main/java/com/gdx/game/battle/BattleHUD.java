@@ -2,6 +2,7 @@ package com.gdx.game.battle;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -10,21 +11,27 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.animation.AnimatedImage;
+import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
+import com.gdx.game.inventory.InventoryItem;
+import com.gdx.game.inventory.InventoryItemLocation;
+import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.screen.GameScreen;
+import com.gdx.game.status.StatusObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
+public class BattleHUD implements Screen, BattleObserver, ComponentObserver, InventoryObserver, StatusObserver {
 
     private static  final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
 
@@ -33,6 +40,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
     private BattleUI battleUI;
     private BattleStatusUI battleStatusUI;
     private ConversationUI conversationUI;
+    private BattleInventoryUI battleInventoryUI;
 
     private Json json;
     private MapManager mapManager;
@@ -93,7 +101,14 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
         battleStatusUI.setWidth(battleStage.getWidth() / 2);
         battleStatusUI.setHeight(battleStage.getHeight() / 4);
 
-        battleUI = new BattleUI(battleState);
+        battleInventoryUI = new BattleInventoryUI();
+        battleInventoryUI.setKeepWithinStage(false);
+        battleInventoryUI.setMovable(true);
+        battleInventoryUI.setVisible(false);
+        battleInventoryUI.setPosition(battleStage.getWidth() / 4, battleStage.getHeight() / 4);
+        fillInventory();
+
+        battleUI = new BattleUI(battleState, battleInventoryUI);
         battleUI.setMovable(false);
         battleUI.setVisible(true);
         battleUI.setKeepWithinStage(false);
@@ -122,6 +137,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
         battleUI.validate();
         battleStatusUI.validate();
         conversationUI.validate();
+        battleInventoryUI.validate();
 
         dmgPlayerLabelTable.add(dmgPlayerValLabel).padLeft(playerWidth / 2).padBottom(playerHeight * 4);
         dmgPlayerLabelTable.setPosition(currentPlayerImagePosition.x, currentPlayerImagePosition.y);
@@ -135,6 +151,15 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
         battleHUDStage.addActor(battleUI);
         battleHUDStage.addActor(battleStatusUI);
         battleHUDStage.addActor(conversationUI);
+        battleHUDStage.addActor(battleInventoryUI);
+
+        Array<Actor> actors = battleInventoryUI.getInventoryActors();
+        for(Actor actor : actors) {
+            battleHUDStage.addActor(actor);
+        }
+
+        battleStatusUI.addObserver(this);
+        battleInventoryUI.addObserver(this);
     }
 
     @Override
@@ -244,6 +269,54 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
         }
     }
 
+    @Override
+    public void onNotify(String value, InventoryEvent event) {
+        switch(event) {
+            case ITEM_CONSUMED:
+                String[] strings = value.split(Component.MESSAGE_TOKEN);
+                if(strings.length != 2) {
+                    return;
+                }
+
+                int type = Integer.parseInt(strings[0]);
+                int typeValue = Integer.parseInt(strings[1]);
+
+                if(InventoryItem.doesRestoreHP(type)) {
+                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_EATING);
+                    battleStatusUI.addHPValue(typeValue);
+                } else if(InventoryItem.doesRestoreMP(type)) {
+                    //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_DRINKING);
+                    battleStatusUI.addMPValue(typeValue);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNotify(int value, StatusObserver.StatusEvent event) {
+        switch(event) {
+            case UPDATED_HP:
+                ProfileManager.getInstance().setProperty("currentPlayerHP", battleStatusUI.getHPValue());
+                break;
+            case UPDATED_LEVEL:
+                ProfileManager.getInstance().setProperty("currentPlayerLevel", battleStatusUI.getLevelValue());
+                break;
+            case UPDATED_MP:
+                ProfileManager.getInstance().setProperty("currentPlayerMP", battleStatusUI.getMPValue());
+                break;
+            case UPDATED_XP:
+                ProfileManager.getInstance().setProperty("currentPlayerXP", battleStatusUI.getXPValue());
+                break;
+            case LEVELED_UP:
+                //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
+                break;
+            default:
+                break;
+        }
+    }
+
     public Stage getBattleHUDStage() {
         return battleHUDStage;
     }
@@ -256,6 +329,10 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
         return battleStatusUI;
     }
 
+    public BattleInventoryUI getBattleInventoryUI() {
+        return battleInventoryUI;
+    }
+
     public Label getDmgPlayerValLabel() {
         return dmgPlayerValLabel;
     }
@@ -266,6 +343,11 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
 
     private void setOpponentDefeated() {
         this.opponentDefeated = true;
+    }
+
+    private void fillInventory() {
+        Array<InventoryItemLocation> inventory = ProfileManager.getInstance().getProperty("playerInventory", Array.class);
+        BattleInventoryUI.populateInventory(battleInventoryUI.getInventorySlotTable(), inventory, battleInventoryUI.getDragAndDrop(), BattleInventoryUI.PLAYER_INVENTORY, false);
     }
 
     @Override
@@ -323,6 +405,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver {
         battleUI.remove();
         battleStatusUI.remove();
         conversationUI.remove();
+        battleInventoryUI.remove();
         playerImage.remove();
         opponentImage.remove();
         dmgPlayerLabelTable.remove();
