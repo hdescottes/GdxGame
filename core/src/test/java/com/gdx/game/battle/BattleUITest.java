@@ -29,7 +29,8 @@ public class BattleUITest {
         profileManager.setProperty("currentPlayerDP", 5);
 
         BattleState battleState = new BattleState();
-        BattleUI battleUI = new BattleUI(battleState);
+        BattleInventoryUI battleInventoryUI = new BattleInventoryUI();
+        BattleUI battleUI = new BattleUI(battleState, battleInventoryUI);
 
         assertThat(battleUI).isNotNull();
         assertThat(battleUI.getChildren()).hasSize(2);

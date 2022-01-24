@@ -10,12 +10,16 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.battle.BattleHUD;
+import com.gdx.game.battle.BattleInventoryUI;
 import com.gdx.game.battle.BattleObserver;
 import com.gdx.game.battle.BattleState;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.player.PlayerHUD;
+import com.gdx.game.inventory.InventoryItemLocation;
+import com.gdx.game.inventory.InventoryUI;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
+import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.screen.transition.effects.FadeOutTransitionEffect;
 import com.gdx.game.screen.transition.effects.TransitionEffect;
 
@@ -76,10 +80,23 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new GameOverScreen(gdxGame, mapManager, resourceManager), effects);
     }
 
+    private void refreshStatus() {
+        playerHUD.getStatusUI().setHPValue(battleHUD.getBattleStatusUI().getHPValue());
+        playerHUD.getStatusUI().setMPValue(battleHUD.getBattleStatusUI().getMPValue());
+    }
+
+    private void refreshInventory() {
+        Array<InventoryItemLocation> inventory = BattleInventoryUI.getInventory(battleHUD.getBattleInventoryUI().getInventorySlotTable());
+        InventoryUI.populateInventory(playerHUD.getInventoryUI().getInventorySlotTable(), inventory, playerHUD.getInventoryUI().getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
+    }
+
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
         switch(event) {
             case RESUME_OVER:
+                refreshStatus();
+                refreshInventory();
+                ProfileManager.getInstance().saveProfile();
                 setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
                 removeEntities();
                 break;

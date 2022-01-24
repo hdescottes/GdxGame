@@ -17,11 +17,13 @@ public class BattleUI extends Window {
     private Table topTable;
     private Table bottomTable;
     private Table attackTable;
+    private BattleInventoryUI battleInventoryUI;
 
-    public BattleUI(BattleState battleState) {
+    public BattleUI(BattleState battleState, BattleInventoryUI battleInventoryUI) {
         super("battle", ResourceManager.skin);
 
         this.battleState = battleState;
+        this.battleInventoryUI = battleInventoryUI;
 
         topTable = new Table();
         bottomTable = new Table();
@@ -42,6 +44,7 @@ public class BattleUI extends Window {
         atkOptButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                battleInventoryUI.setVisible(false);
                 toAtkHUD();
             }
         });
@@ -54,6 +57,7 @@ public class BattleUI extends Window {
         objOptButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                battleInventoryUI.setVisible(!battleInventoryUI.isVisible());
             }
         });
     }
