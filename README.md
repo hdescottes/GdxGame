@@ -21,7 +21,7 @@ You can interact with them by clicking on them at a proper distance. Some have c
 #### Battle Screen
 The battle system is a turn based fight. <br>
 The screen displays the amount of damage taken and inflicted by the player. <br>
-For now, you can only do a basic attack. Later you will be able to choose between a various set of attacks and be able to use objects in fight. <br>
+For now, you can do a basic attack and use objects to restore your health and magic. Later you will be able to choose between a various set of attacks. <br>
 
 #### Option Screen
 The option screen is divided into 3 buttons : <br>
