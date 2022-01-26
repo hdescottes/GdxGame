@@ -172,6 +172,7 @@ public class GameScreen extends BaseScreen {
         playerHUD.render(delta);
 
         if(player.getEntityEncounteredType() == EntityFactory.EntityName.RABITE) {
+            setGameState(GameState.SAVING);
             setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, playerHUD, mapManager, resourceManager), new ArrayList<>());
             PlayerInputComponent.clear();
         }
