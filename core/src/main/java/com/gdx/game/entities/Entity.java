@@ -230,7 +230,7 @@ public class Entity {
 
 	public static Entity initEntity(EntityConfig entityConfig, Vector2 position) {
 		Json json = new Json();
-		Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+		Entity entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.NPC);
 		entity.setEntityConfig(entityConfig);
 
 		entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
@@ -245,7 +245,7 @@ public class Entity {
 		Json json = new Json();
 		Hashtable<String, Entity > entities = new Hashtable<>();
 		for(EntityConfig config: configs ) {
-			Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+			Entity entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.NPC);
 
 			entity.setEntityConfig(config);
 			entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
@@ -261,7 +261,7 @@ public class Entity {
 
 	public static Entity initEntity(EntityConfig entityConfig) {
 		Json json = new Json();
-		Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+		Entity entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.NPC);
 		entity.setEntityConfig(entityConfig);
 
 		entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));

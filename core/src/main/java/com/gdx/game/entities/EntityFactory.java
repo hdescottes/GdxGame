@@ -87,7 +87,7 @@ public class EntityFactory {
         return instance;
     }
 
-    public static Entity getEntity(EntityType entityType) {
+    public Entity getEntity(EntityType entityType) {
         Entity entity;
         switch(entityType) {
             case WARRIOR:

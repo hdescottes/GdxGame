@@ -60,11 +60,9 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [ ] character class system
 
-- [x] character selection screen
-    - [ ] add character's specificities
-
 - [x] battle feature
     - [ ] entities' animation while attacking
+    - [ ] implement speed stat
 
 - [ ] crafting feature
 

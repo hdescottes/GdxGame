@@ -102,7 +102,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         statusUI.setKeepWithinStage(false);
         statusUI.setMovable(false);
 
-        inventoryUI = new InventoryUI();
+        inventoryUI = new InventoryUI(player);
         inventoryUI.setKeepWithinStage(false);
         inventoryUI.setMovable(false);
         inventoryUI.setVisible(false);
@@ -315,6 +315,8 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 profileManager.setProperty("currentPlayerHPMax", statusUI.getHPValueMax());
                 profileManager.setProperty("currentPlayerMP", statusUI.getMPValue());
                 profileManager.setProperty("currentPlayerMPMax", statusUI.getMPValueMax());
+                profileManager.setProperty("currentPlayerAP", inventoryUI.getAPVal());
+                profileManager.setProperty("currentPlayerDP", inventoryUI.getDPVal());
                 break;
             case CLEAR_CURRENT_PROFILE:
                 profileManager.setProperty("playerInventory", new Array<InventoryItemLocation>());
