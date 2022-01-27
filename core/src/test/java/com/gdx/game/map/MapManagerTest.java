@@ -77,7 +77,7 @@ public class MapManagerTest {
     @Test
     public void testOnNotify_ShouldSucceedWithSavingProfile() {
         ProfileManager profileManager = new ProfileManager();
-        Entity player = EntityFactory.getEntity(EntityFactory.EntityType.WARRIOR);
+        Entity player = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR);
         MapManager mapManager = new MapManager();
         mapManager.setPlayer(player);
 
@@ -99,7 +99,7 @@ public class MapManagerTest {
     @Test
     public void testOnNotify_ShouldSucceedWithSavingProfileAndMapLoaded() {
         ProfileManager profileManager = new ProfileManager();
-        Entity player = EntityFactory.getEntity(EntityFactory.EntityType.WARRIOR);
+        Entity player = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR);
         MapManager mapManager = new MapManager();
         mapManager.setPlayer(player);
 

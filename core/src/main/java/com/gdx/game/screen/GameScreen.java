@@ -88,7 +88,7 @@ public class GameScreen extends BaseScreen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
-        player = EntityFactory.getEntity(ProfileManager.getInstance().getProperty("playerCharacter", EntityFactory.EntityType.class));
+        player = EntityFactory.getInstance().getEntity(ProfileManager.getInstance().getProperty("playerCharacter", EntityFactory.EntityType.class));
         mapManager.setPlayer(player);
         mapManager.setCamera(camera);
 
@@ -172,6 +172,7 @@ public class GameScreen extends BaseScreen {
         playerHUD.render(delta);
 
         if(player.getEntityEncounteredType() == EntityFactory.EntityName.RABITE) {
+            setGameState(GameState.SAVING);
             setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, playerHUD, mapManager, resourceManager), new ArrayList<>());
             PlayerInputComponent.clear();
         }

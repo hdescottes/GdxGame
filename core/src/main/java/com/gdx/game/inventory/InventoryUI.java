@@ -3,13 +3,23 @@ package com.gdx.game.inventory;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.game.entities.Entity;
-import com.gdx.game.inventory.slot.*;
+import com.gdx.game.entities.EntityConfig;
+import com.gdx.game.inventory.slot.InventorySlot;
+import com.gdx.game.inventory.slot.InventorySlotObserver;
+import com.gdx.game.inventory.slot.InventorySlotSource;
+import com.gdx.game.inventory.slot.InventorySlotTarget;
+import com.gdx.game.inventory.slot.InventorySlotTooltip;
+import com.gdx.game.inventory.slot.InventorySlotTooltipListener;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.profile.ProfileManager;
 
@@ -23,6 +33,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     public static final String PLAYER_INVENTORY = "Player_Inventory";
     public static final String STORE_INVENTORY = "Store_Inventory";
 
+    private Entity player;
     private int lengthSlotRow = 10;
     private Table inventorySlotTable;
     private Table playerSlotsTable;
@@ -31,9 +42,9 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     private Array<Actor> inventoryActors;
 
     private Label DPValLabel;
-    private int DPVal = 0;
+    private int DPVal;
     private Label APValLabel;
-    private int APVal = 0;
+    private int APVal;
 
     private final int slotWidth = 52;
     private final int slotHeight = 52;
@@ -42,13 +53,17 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
 
     private InventorySlotTooltip inventorySlotTooltip;
 
-    public InventoryUI() {
+    public InventoryUI(Entity player_) {
         super("Inventory", ResourceManager.skin);
+        this.player = player_;
 
         observers = new Array<>();
 
         dragAndDrop = new DragAndDrop();
         inventoryActors = new Array<>();
+
+        APVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name()));
+        DPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name()));
 
         //create
         inventorySlotTable = new Table();
@@ -142,6 +157,14 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         this.pack();
     }
 
+    public int getDPVal() {
+        return DPVal;
+    }
+
+    public int getAPVal() {
+        return APVal;
+    }
+
     public DragAndDrop getDragAndDrop() {
         return dragAndDrop;
     }
@@ -188,8 +211,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     }
 
     public void resetEquipSlots() {
-        DPVal = 0;
-        APVal = 0;
+        APVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name()));
+        DPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name()));
 
         DPValLabel.setText(String.valueOf(DPVal));
         notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);

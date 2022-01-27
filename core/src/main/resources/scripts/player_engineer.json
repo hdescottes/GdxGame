@@ -7,6 +7,16 @@
 	questConfigPath : ""
 	currentQuestID : ""
 	itemTypeID: NONE
+	entityProperties: {
+		ENTITY_ATTACK_POINTS: {
+			class: java.lang.String
+			value: 4
+		}
+		ENTITY_DEFENSE_POINTS: {
+			class: java.lang.String
+			value: 5
+		}
+	}
 	inventory : [
 		{
 			value: ARMOR04

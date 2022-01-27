@@ -6,12 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.gdx.game.GdxGame;
 import com.gdx.game.animation.AnimatedImage;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.player.CharacterRecord;
 import com.gdx.game.manager.ResourceManager;
@@ -20,7 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CharacterSelectionScreen extends BaseScreen {
 
@@ -29,11 +34,14 @@ public class CharacterSelectionScreen extends BaseScreen {
     private Stage characterSelectionStage = new Stage();
     private Table characterSelectionTable;
     private AnimatedImage playerImage;
+    private Label characterClass;
+    private Label atkStat;
+    private Label defStat;
     private TextButton startBtn;
     private TextButton nextBtn;
     private TextButton prevBtn;
 
-    public HashMap<String, Entity> playerSprites;
+    public Map<String, Entity> playerSprites;
     private Entity player;
     private int currentCharacter = 0;
 
@@ -48,16 +56,12 @@ public class CharacterSelectionScreen extends BaseScreen {
     }
 
     private void createCharacterMap() {
-        playerSprites = new HashMap<>();
-        playerSprites.put(CharacterRecord.CHAR_NAME_WARRIOR, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR));
-        playerSprites.put(CharacterRecord.CHAR_NAME_MAGE, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.MAGE));
-        playerSprites.put(CharacterRecord.CHAR_NAME_ROGUE, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.ROGUE));
-        playerSprites.put(CharacterRecord.CHAR_NAME_GENERIC, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.GENERIC));
-        playerSprites.put(CharacterRecord.CHAR_NAME_ENGINEER, EntityFactory.getInstance().getEntity(EntityFactory.EntityType.ENGINEER));
+        playerSprites = CharacterRecord.charactersList.stream()
+                .collect(Collectors.toMap(EntityFactory.EntityType::name, EntityFactory.getInstance()::getEntity));
     }
 
     private void handleCharacterImage() {
-        player = playerSprites.get(CharacterRecord.CHARACTERS[currentCharacter].name);
+        player = playerSprites.get(CharacterRecord.CHARACTERS[currentCharacter].getName());
         playerImage = new AnimatedImage();
         playerImage.setWidth(16);
         playerImage.setHeight(16);
@@ -68,7 +72,7 @@ public class CharacterSelectionScreen extends BaseScreen {
         playerImage.setPosition((characterSelectionStage.getWidth() - playerImage.getWidth()) / 2,
                 (characterSelectionStage.getHeight() - playerImage.getHeight()) / 2);
 
-        if(characterSelectionTable.getChildren().size == 4) {
+        if(characterSelectionTable.getChildren().size == 7) {
             characterSelectionTable.removeActorAt(3, false);
         }
         characterSelectionTable.addActor(playerImage);
@@ -81,6 +85,8 @@ public class CharacterSelectionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 ProfileManager.getInstance().setProperty("playerCharacter", EntityFactory.EntityType.valueOf(player.getEntityConfig().getEntityID()));
+                ProfileManager.getInstance().setProperty("currentPlayerAP", Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name())));
+                ProfileManager.getInstance().setProperty("currentPlayerDP", Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name())));
 
                 gdxGame.setGameScreen(new GameScreen(gdxGame, resourceManager));
                 LOGGER.info("Character " + playerImage.getEntity().getEntityConfig().getEntityID() + " selected");
@@ -125,6 +131,36 @@ public class CharacterSelectionScreen extends BaseScreen {
         characterSelectionTable.addActor(prevBtn);
     }
 
+    private void handleStatDisplay() {
+        characterClass = prepareStatLabel(CharacterRecord.CHARACTERS[currentCharacter].getName(),
+                3 * characterSelectionStage.getWidth() / 4, 5 * characterSelectionStage.getHeight() / 6,
+                ResourceManager.skin);
+
+        atkStat = prepareStatLabel("ATK: " + CharacterRecord.CHARACTERS[currentCharacter].getBaseAttack(),
+                characterClass.getX(), 3 * characterSelectionStage.getHeight() / 4,
+                ResourceManager.skin);
+
+        defStat = prepareStatLabel("DEF: " + CharacterRecord.CHARACTERS[currentCharacter].getBaseDefense(),
+                atkStat.getX(), atkStat.getY() - 30,
+                ResourceManager.skin);
+
+        if(characterSelectionTable.getChildren().size == 7) {
+            characterSelectionTable.removeActorAt(3, false);
+            characterSelectionTable.removeActorAt(3, false);
+            characterSelectionTable.removeActorAt(3, false);
+        }
+        characterSelectionTable.addActor(characterClass);
+        characterSelectionTable.addActor(atkStat);
+        characterSelectionTable.addActor(defStat);
+    }
+
+    private Label prepareStatLabel(String text, float x, float y, Skin skin) {
+        Label lbl = new Label(text, skin);
+        lbl.setAlignment(Align.left);
+        lbl.setPosition(x, y);
+        return lbl;
+    }
+
     @Override
     public void show() {
         characterSelectionStage.addActor(characterSelectionTable);
@@ -137,6 +173,7 @@ public class CharacterSelectionScreen extends BaseScreen {
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 
         handleCharacterImage();
+        handleStatDisplay();
 
         gdxGame.getBatch().begin();
         //gdxGame.getBatch().draw();

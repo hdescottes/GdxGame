@@ -32,7 +32,7 @@ public class EntityFactoryTest {
     @Disabled
     @Test
     public void testGetEntity_ShouldSucceedWithPlayer() {
-        Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.WARRIOR);
+        Entity entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR);
 
         assertThat(entity).isNotNull();
         assertThat(entity.getEntityConfig().getEntityID()).isEqualTo(Entity.getEntityConfig(EntityFactory.PLAYER_CONFIG).getEntityID());
@@ -42,7 +42,7 @@ public class EntityFactoryTest {
     @Disabled
     @Test
     public void testGetEntity_ShouldSucceedWithNPC() {
-        Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+        Entity entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.NPC);
 
         assertThat(entity).isNotNull();
         assertThat(entity.getInputProcessor()).isInstanceOf(NPCInputComponent.class);
