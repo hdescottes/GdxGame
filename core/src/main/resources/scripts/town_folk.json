@@ -1,6 +1,7 @@
 [
 	{
 		entityID : TOWN_FOLK1
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : "conversations/conversation004.json"
@@ -51,6 +52,7 @@
 	},
 	{
 		entityID : TOWN_FOLK2
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : "conversations/conversation006.json"
@@ -100,6 +102,7 @@
 	},
 	{
 		entityID : TOWN_FOLK3
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -149,6 +152,7 @@
 	},
 	{
 		entityID : TOWN_FOLK4
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : "conversations/conversation007.json"
@@ -198,6 +202,7 @@
 	},
 	{
 		entityID : TOWN_FOLK5
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -247,6 +252,7 @@
 	},
 	{
 		entityID : TOWN_FOLK6
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -296,6 +302,7 @@
 	},
 	{
 		entityID : TOWN_FOLK7
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -345,6 +352,7 @@
 	},
 	{
 		entityID : TOWN_FOLK8
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -394,6 +402,7 @@
 	},
 	{
 		entityID : TOWN_FOLK9
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -443,6 +452,7 @@
 	},
 	{
 		entityID : TOWN_FOLK10
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : "conversations/conversation001.json"
@@ -492,6 +502,7 @@
 	},
 	{
 		entityID : TOWN_FOLK11
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -541,6 +552,7 @@
 	},
 	{
 		entityID : TOWN_FOLK12
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -590,6 +602,7 @@
 	},
 	{
 		entityID : TOWN_FOLK13
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -639,6 +652,7 @@
 	},
 	{
 		entityID : TOWN_FOLK14
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -688,6 +702,7 @@
 	},
 	{
 		entityID : TOWN_FOLK15
+		entityStatus : VILLAGER
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""

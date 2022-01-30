@@ -14,6 +14,7 @@ import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.camera.CameraStyles;
 import com.gdx.game.component.Component;
+import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.player.PlayerHUD;
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-public class GameScreen extends BaseScreen {
+public class GameScreen extends BaseScreen implements ComponentObserver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameScreen.class);
 
@@ -89,6 +90,8 @@ public class GameScreen extends BaseScreen {
         camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
 
         player = EntityFactory.getInstance().getEntity(ProfileManager.getInstance().getProperty("playerCharacter", EntityFactory.EntityType.class));
+        player.registerObserver(this);
+
         mapManager.setPlayer(player);
         mapManager.setCamera(camera);
 
@@ -171,20 +174,23 @@ public class GameScreen extends BaseScreen {
 
         playerHUD.render(delta);
 
-        if(player.getEntityEncounteredType() == EntityFactory.EntityName.RABITE) {
-            setGameState(GameState.SAVING);
-            setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, playerHUD, mapManager, resourceManager), new ArrayList<>());
-            PlayerInputComponent.clear();
-        }
-
-        if(((PlayerInputComponent) player.getInputProcessor()).isOption()) {
-            Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
-            game.setScreen(new OptionScreen(game, (BaseScreen) game.getScreen(), screenShot, resourceManager));
-            ((PlayerInputComponent) player.getInputProcessor()).setOption(false);
-        }
+        checkOptionInput();
 
         musicTheme = MapFactory.getMapTable().get(mapManager.getCurrentMapType()).getMusicTheme();
         AudioManager.getInstance().setCurrentMusic(ResourceManager.getMusicAsset(musicTheme.getValue()));
+    }
+
+    @Override
+    public void onNotify(String value, ComponentEvent event) {
+        switch(event) {
+            case START_BATTLE:
+                setGameState(GameState.SAVING);
+                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, playerHUD, mapManager, resourceManager), new ArrayList<>());
+                PlayerInputComponent.clear();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -220,6 +226,14 @@ public class GameScreen extends BaseScreen {
 
         AudioManager.getInstance().dispose();
         MapFactory.clearCache();
+    }
+
+    private void checkOptionInput() {
+        if(((PlayerInputComponent) player.getInputProcessor()).isOption()) {
+            Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
+            game.setScreen(new OptionScreen(game, (BaseScreen) game.getScreen(), screenShot, resourceManager));
+            ((PlayerInputComponent) player.getInputProcessor()).setOption(false);
+        }
     }
 
     public static GameState getGameState() {

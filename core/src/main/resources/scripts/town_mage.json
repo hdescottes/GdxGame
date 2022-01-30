@@ -1,5 +1,6 @@
 {
 	entityID : TOWN_MAGE
+	entityStatus : VILLAGER
 	state : IMMOBILE
 	direction : DOWN
 	conversationConfigPath : "conversations/conversation003.json"

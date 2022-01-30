@@ -1,5 +1,6 @@
 {
 	entityID : TOWN_INNKEEPER
+	entityStatus : VILLAGER
 	state : IMMOBILE
 	direction : DOWN
 	conversationConfigPath : ""

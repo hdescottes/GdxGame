@@ -1,5 +1,6 @@
 {
 	entityID : TOWN_GUARD
+	entityStatus : GUARD
 	state : IDLE
 	direction : DOWN
 	conversationConfigPath : "conversations/conversation002.json"

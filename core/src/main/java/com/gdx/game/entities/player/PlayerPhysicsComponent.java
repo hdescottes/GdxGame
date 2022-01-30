@@ -67,6 +67,9 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
                 isMouseSelectEnabled = true;
             } else if(string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_ENTITY.toString())) {
                 entityEncounteredType = json.fromJson(EntityFactory.EntityName.class, string[1]);
+            } else if(string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_FOE.toString())) {
+                entityEncounteredType = json.fromJson(EntityFactory.EntityName.class, string[1]);
+                notify(entityEncounteredType.name(), ComponentObserver.ComponentEvent.START_BATTLE);
             }
         }
     }

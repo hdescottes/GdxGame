@@ -11,6 +11,7 @@ public class EntityConfig {
     private Entity.State state = Entity.State.IDLE;
     private Entity.Direction direction = Entity.Direction.DOWN;
     private String entityID;
+    private String entityStatus;
     private String conversationConfigPath;
     private String resumeConfigPath;
     private String questConfigPath;
@@ -38,6 +39,7 @@ public class EntityConfig {
         state = config.getState();
         direction = config.getDirection();
         entityID = config.getEntityID();
+        entityStatus = config.getEntityStatus();
         conversationConfigPath = config.getConversationConfigPath();
         resumeConfigPath = config.getResumeConfigPath();
         questConfigPath = config.getQuestConfigPath();
@@ -120,6 +122,14 @@ public class EntityConfig {
 
     public void setEntityID(String entityID) {
         this.entityID = entityID;
+    }
+
+    public String getEntityStatus() {
+        return entityStatus;
+    }
+
+    public void setEntityStatus(String entityStatus) {
+        this.entityStatus = entityStatus;
     }
 
     public Entity.Direction getDirection() {

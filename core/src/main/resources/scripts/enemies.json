@@ -1,6 +1,7 @@
 [
 	{
 		entityID : RABITE
+		entityStatus : FOE
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""
@@ -73,6 +74,7 @@
 	},
 	{
 		entityID : RABITE2
+		entityStatus : FOE
 		state : IMMOBILE
 		direction : DOWN
 		conversationConfigPath : ""

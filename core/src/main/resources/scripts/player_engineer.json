@@ -1,5 +1,6 @@
 {
 	entityID : ENGINEER
+	entityStatus : PLAYER
 	state : IDLE
 	direction : DOWN
 	conversationConfigPath : ""

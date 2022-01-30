@@ -68,7 +68,11 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
             Rectangle targetRect = mapEntity.getCurrentBoundingBox();
             if(boundingBox.overlaps(targetRect)){
                 //Collision
-                entity.sendMessage(MESSAGE.COLLISION_WITH_ENTITY, mapEntity.getEntityConfig().getEntityID()); //TODO: to generalize
+                if("FOE".equals(mapEntity.getEntityConfig().getEntityStatus())) {
+                    entity.sendMessage(MESSAGE.COLLISION_WITH_FOE, mapEntity.getEntityConfig().getEntityID());
+                } else {
+                    entity.sendMessage(MESSAGE.COLLISION_WITH_ENTITY, mapEntity.getEntityConfig().getEntityID());
+                }
                 isCollisionWithMapEntities = true;
                 break;
             }

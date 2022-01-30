@@ -13,6 +13,7 @@ public interface Component {
         CURRENT_STATE,
         COLLISION_WITH_MAP,
         COLLISION_WITH_ENTITY,
+        COLLISION_WITH_FOE,
         LOAD_ANIMATIONS,
         INIT_DIRECTION,
         INIT_STATE,
