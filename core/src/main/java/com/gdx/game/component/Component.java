@@ -19,7 +19,8 @@ public interface Component {
         INIT_STATE,
         INIT_SELECT_ENTITY,
         ENTITY_SELECTED,
-        ENTITY_DESELECTED
+        ENTITY_DESELECTED,
+        OPTION_INPUT
     }
 
     void dispose();

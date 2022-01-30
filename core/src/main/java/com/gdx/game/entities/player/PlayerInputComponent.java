@@ -3,6 +3,7 @@ package com.gdx.game.entities.player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
+import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.component.InputComponent;
 import com.gdx.game.entities.Entity;
 
@@ -12,7 +13,6 @@ public class PlayerInputComponent extends InputComponent {
 
 	// ACTIONS
 	private boolean interact;
-	private boolean option;
 
 	// DEBUG
 	private boolean debug;
@@ -29,20 +29,16 @@ public class PlayerInputComponent extends InputComponent {
 		this.interact = interact;
 	}
 
-	public boolean isOption() {
-		return option;
-	}
-
-	public void setOption(boolean option) {
-		this.option = option;
-	}
-
 	@Override
 	public void receiveMessage(String message) {
 		String[] string = message.split(MESSAGE_TOKEN);
 
 		if(string.length == 0) {
 			return;
+		}
+
+		if(string.length == 1 && string[0].equalsIgnoreCase(MESSAGE.OPTION_INPUT.toString())) {
+			notify("", ComponentObserver.ComponentEvent.OPTION_INPUT);
 		}
 
 		//Specifically for messages with 1 object payload
@@ -78,8 +74,8 @@ public class PlayerInputComponent extends InputComponent {
 			interactReleased();
 			interact = true;
 		} else if(keys.get(Keys.OPTION)) {
+			entity.sendMessage(MESSAGE.OPTION_INPUT, "");
 			optionReleased();
-			option = true;
 		} else {
 			entity.sendMessage(MESSAGE.CURRENT_STATE, json.toJson(Entity.State.IDLE));
 			if(currentDirection == null) {
