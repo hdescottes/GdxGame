@@ -9,7 +9,8 @@ public interface ComponentObserver {
         SHOW_RESUME,
         QUEST_LOCATION_DISCOVERED,
         ENEMY_SPAWN_LOCATION_CHANGED,
-        START_BATTLE
+        START_BATTLE,
+        OPTION_INPUT
     }
 
     void onNotify(final String value, ComponentEvent event);

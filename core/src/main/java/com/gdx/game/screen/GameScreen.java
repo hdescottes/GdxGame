@@ -174,8 +174,6 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
         playerHUD.render(delta);
 
-        checkOptionInput();
-
         musicTheme = MapFactory.getMapTable().get(mapManager.getCurrentMapType()).getMusicTheme();
         AudioManager.getInstance().setCurrentMusic(ResourceManager.getMusicAsset(musicTheme.getValue()));
     }
@@ -187,6 +185,10 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
                 setGameState(GameState.SAVING);
                 setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, playerHUD, mapManager, resourceManager), new ArrayList<>());
                 PlayerInputComponent.clear();
+                break;
+            case OPTION_INPUT:
+                Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
+                game.setScreen(new OptionScreen(game, (BaseScreen) game.getScreen(), screenShot, resourceManager));
                 break;
             default:
                 break;
@@ -226,14 +228,6 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
         AudioManager.getInstance().dispose();
         MapFactory.clearCache();
-    }
-
-    private void checkOptionInput() {
-        if(((PlayerInputComponent) player.getInputProcessor()).isOption()) {
-            Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
-            game.setScreen(new OptionScreen(game, (BaseScreen) game.getScreen(), screenShot, resourceManager));
-            ((PlayerInputComponent) player.getInputProcessor()).setOption(false);
-        }
     }
 
     public static GameState getGameState() {
