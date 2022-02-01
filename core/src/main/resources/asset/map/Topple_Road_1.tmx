@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="2020.12.18" orientation="orthogonal" renderorder="right-down" width="14" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="131">
+<map version="1.4" tiledversion="2020.12.18" orientation="orthogonal" renderorder="right-down" width="14" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="132">
  <tileset firstgid="1" source="swordofmana_map1.tsx"/>
  <layer id="1" name="Map_Layer" width="14" height="15" offsetx="24" offsety="-3">
   <data encoding="csv">
@@ -125,6 +125,7 @@
  </objectgroup>
  <objectgroup id="5" name="MAP_ENEMY_SPAWN_LAYER">
   <object id="15" name="RABITE" x="128.667" y="256.667" width="31.3333" height="31.3333"/>
+  <object id="131" name="RABITE2" x="219.398" y="159.742" width="31.3333" height="31.3333"/>
  </objectgroup>
  <objectgroup id="6" name="MAP_PORTAL_LAYER">
   <object id="130" name="TOPPLE" x="436.667" y="369" width="10" height="57.6667"/>
