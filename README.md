@@ -56,9 +56,9 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [ ] add sounds & sounds settings
 
-- [ ] leveling system (includes stats)
-
-- [ ] character class system
+- [ ] leveling system
+  - [ ] custom gain stats UI when lvl up
+  - [ ] class tree
 
 - [x] battle feature
     - [ ] entities' animation while attacking
