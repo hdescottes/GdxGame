@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.game.entities.Entity;
-import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.inventory.slot.InventorySlot;
 import com.gdx.game.inventory.slot.InventorySlotObserver;
 import com.gdx.game.inventory.slot.InventorySlotSource;
@@ -62,8 +61,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         dragAndDrop = new DragAndDrop();
         inventoryActors = new Array<>();
 
-        APVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name()));
-        DPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name()));
+        APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+        DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
 
         //create
         inventorySlotTable = new Table();
@@ -211,14 +210,22 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     }
 
     public void resetEquipSlots() {
-        APVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name()));
-        DPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name()));
+        APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+        DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
 
         DPValLabel.setText(String.valueOf(DPVal));
         notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
 
         APValLabel.setText(String.valueOf(APVal));
         notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
+    }
+
+    public void refreshStats() {
+        APVal = ProfileManager.getInstance().getProperty("currentPlayerAP", Integer.class);
+        DPVal = ProfileManager.getInstance().getProperty("currentPlayerDP", Integer.class);
+
+        DPValLabel.setText(String.valueOf(DPVal));
+        APValLabel.setText(String.valueOf(APVal));
     }
 
     public static void clearInventoryItems(Table targetTable) {

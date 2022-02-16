@@ -451,7 +451,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 if(questUI.isQuestReadyForReturn(questID)) {
                     //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
                     QuestGraph quest = questUI.getQuestByID(questID);
-                    statusUI.addXPValue(quest.getXpReward());
+                    statusUI.addXPValue(quest.getXpReward()); //TODO: should trigger statsUpUI if lvl up
                     statusUI.addGoldValue(quest.getGoldReward());
                     //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_COIN_RUSTLE);
                     inventoryUI.removeQuestItemFromInventory(questID);
