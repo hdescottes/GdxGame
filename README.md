@@ -57,7 +57,7 @@ You can chose to start a new game or load an existing profile on the menu screen
 - [ ] add sounds & sounds settings
 
 - [ ] leveling system
-  - [ ] custom gain stats UI when lvl up
+  - [ ] stats UI when lvl up with quest
   - [ ] class tree
 
 - [x] battle feature

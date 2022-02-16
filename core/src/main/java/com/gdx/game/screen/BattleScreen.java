@@ -83,6 +83,7 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     private void refreshStatus() {
         playerHUD.getStatusUI().setHPValue(battleHUD.getBattleStatusUI().getHPValue());
         playerHUD.getStatusUI().setMPValue(battleHUD.getBattleStatusUI().getMPValue());
+        playerHUD.getInventoryUI().refreshStats();
     }
 
     private void refreshInventory() {

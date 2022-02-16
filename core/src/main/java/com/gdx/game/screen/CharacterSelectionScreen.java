@@ -84,9 +84,13 @@ public class CharacterSelectionScreen extends BaseScreen {
         startBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                int APVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name()));
+                int DPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name()));
                 ProfileManager.getInstance().setProperty("playerCharacter", EntityFactory.EntityType.valueOf(player.getEntityConfig().getEntityID()));
-                ProfileManager.getInstance().setProperty("currentPlayerAP", Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name())));
-                ProfileManager.getInstance().setProperty("currentPlayerDP", Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name())));
+                ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
+                ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
+                ProfileManager.getInstance().setProperty("currentPlayerCharacterAP", APVal);
+                ProfileManager.getInstance().setProperty("currentPlayerCharacterDP", DPVal);
 
                 gdxGame.setGameScreen(new GameScreen(gdxGame, resourceManager));
                 LOGGER.info("Character " + playerImage.getEntity().getEntityConfig().getEntityID() + " selected");

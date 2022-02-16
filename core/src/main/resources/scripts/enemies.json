@@ -24,7 +24,7 @@
 			}
 			ENTITY_XP_REWARD: {
 				class: java.lang.String
-				value: 5
+				value: 10
 			}
 			ENTITY_GP_REWARD: {
 				class: java.lang.String
@@ -97,7 +97,7 @@
 			}
 			ENTITY_XP_REWARD: {
 				class: java.lang.String
-				value: 10
+				value: 205
 			}
 			ENTITY_GP_REWARD: {
 				class: java.lang.String

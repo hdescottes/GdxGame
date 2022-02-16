@@ -27,6 +27,7 @@ import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.screen.GameScreen;
+import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
     private BattleStatusUI battleStatusUI;
     private ConversationUI conversationUI;
     private BattleInventoryUI battleInventoryUI;
+    private StatsUpUI statsUpUI;
 
     private Json json;
     private MapManager mapManager;
@@ -94,6 +96,14 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         dmgOpponentValLabel.setVisible(false);
         origDmgOpponentValLabelY = dmgOpponentValLabel.getY() + enemyHeight;
 
+        statsUpUI = new StatsUpUI(player);
+        statsUpUI.setPosition(battleHUDStage.getWidth() / 4, battleHUDStage.getHeight() / 4);
+        statsUpUI.setKeepWithinStage(false);
+        statsUpUI.setVisible(false);
+        statsUpUI.setWidth(battleHUDStage.getWidth() / 2);
+        statsUpUI.setHeight(battleHUDStage.getHeight() / 2);
+        statsUpUI.setMovable(false);
+
         battleStatusUI = new BattleStatusUI();
         battleStatusUI.setKeepWithinStage(false);
         battleStatusUI.setVisible(true);
@@ -135,6 +145,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         });
 
         battleUI.validate();
+        statsUpUI.validate();
         battleStatusUI.validate();
         conversationUI.validate();
         battleInventoryUI.validate();
@@ -149,6 +160,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         battleHUDStage.addActor(dmgPlayerLabelTable);
         battleHUDStage.addActor(dmgOpponentLabelTable);
         battleHUDStage.addActor(battleUI);
+        battleHUDStage.addActor(statsUpUI);
         battleHUDStage.addActor(battleStatusUI);
         battleHUDStage.addActor(conversationUI);
         battleHUDStage.addActor(battleInventoryUI);
@@ -223,6 +235,9 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
                 dmgOpponentValLabel.setY(origDmgOpponentValLabelY);
                 setOpponentDefeated();
                 LOGGER.debug("Opponent is defeated");
+
+                int xpReward = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_XP_REWARD.toString()));
+                battleStatusUI.addXPValue(xpReward);
 
                 battleUI.setVisible(false);
                 battleUI.setTouchable(Touchable.disabled);
@@ -302,6 +317,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
                 break;
             case UPDATED_LEVEL:
                 ProfileManager.getInstance().setProperty("currentPlayerLevel", battleStatusUI.getLevelValue());
+                statsUpUI.setVisible(true);
                 break;
             case UPDATED_MP:
                 ProfileManager.getInstance().setProperty("currentPlayerMP", battleStatusUI.getMPValue());
@@ -403,6 +419,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         player.dispose();
         enemy.dispose();
         battleUI.remove();
+        statsUpUI.remove();
         battleStatusUI.remove();
         conversationUI.remove();
         battleInventoryUI.remove();
