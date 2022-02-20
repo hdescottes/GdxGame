@@ -4,7 +4,7 @@
 
 ## Description
 <p>This project is based on https://github.com/patrickhoey/BludBourne using LibGDX library.<br>
-It is a roguelike RPG 2D base game.</p>
+It is a RPG 2D base game.</p>
 
 #### Map
 <p>The maps are from the Sword of Mana game (GBA) and influenced by the seiken densetsu serie. <br>
@@ -35,6 +35,10 @@ The option screen is triggered on the "O" key.
 The inventory can be displayed through the chest icon on the status UI. <br>
 You can drag and drop items and use consumables by double-clicking on them.
 
+#### Level Up
+When you level up in battle, you will be able to display some more extra points to your base stats. <br>
+This feature will soon be available when you level up through quests.
+
 #### Profiles
 The game is saved automatically when a specific action is down (change map, get quest, ...). <br>
 You can chose to start a new game or load an existing profile on the menu screen.
@@ -56,7 +60,7 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [ ] add sounds & sounds settings
 
-- [ ] leveling system
+- [x] leveling system
   - [ ] stats UI when lvl up with quest
   - [ ] class tree
 
