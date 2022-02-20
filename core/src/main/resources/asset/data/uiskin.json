@@ -12,11 +12,15 @@
   },
   ButtonStyle: {
     default: { down: default-round-down, up: default-round, disabled: default-round },
-    toggle: { parent: default, checked: default-round-down }
+    toggle: { parent: default, checked: default-round-down },
   },
   TextButtonStyle: {
     default: { parent: default, font: default-font, fontColor: white, disabledFontColor: gray },
     toggle: { parent: default, checked: default-round-down, downFontColor: red }
+  },
+  ImageButtonStyle: {
+    plus: { down: default-round-down, up: default-round, imageUp: tree-plus },
+    minus: { down: default-round-down, up: default-round, imageUp: tree-minus }
   },
   ScrollPaneStyle: {
     default: { vScroll: default-scroll, hScrollKnob: default-round-large, background: default-rect, hScroll: default-scroll, vScrollKnob: default-round-large }
