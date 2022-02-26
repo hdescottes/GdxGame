@@ -1,4 +1,4 @@
-package com.gdx.game.inventory;
+package com.gdx.game.status;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,11 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Arrays;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(GdxRunner.class)
-public class InventoryUITest {
+public class StatsUpUITest {
 
     @BeforeEach
     void init() {
@@ -23,14 +25,15 @@ public class InventoryUITest {
     }
 
     @Test
-    public void testInventoryUI_ShouldSucceed() {
+    public void testStatsUpUI_ShouldSucceed() {
         ProfileManager profileManager = ProfileManager.getInstance();
         profileManager.setProperty("currentPlayerCharacterAP", 5);
         profileManager.setProperty("currentPlayerCharacterDP", 5);
 
-        InventoryUI inventoryUI = new InventoryUI();
+        StatsUpUI statsUpUI = new StatsUpUI();
 
-        assertThat(inventoryUI).isNotNull();
-        assertThat(inventoryUI.getDragAndDrop()).isNotNull();
+        assertThat(statsUpUI).isNotNull();
+        assertThat(statsUpUI.getChildren().size).isEqualTo(16);
+        assertThat(Arrays.stream(statsUpUI.getChildren().items).count()).isEqualTo(24);
     }
 }

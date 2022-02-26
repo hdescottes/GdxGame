@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.gdx.game.entities.Entity;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
@@ -16,7 +15,6 @@ public class StatsUpUI extends Window {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatsUpUI.class);
 
-    private Entity player;
     private TextButton validateBtn;
 
     private final int maxPoint = 5;
@@ -33,9 +31,8 @@ public class StatsUpUI extends Window {
     private int bonusAPAdded = 0;
     private final int APValInit;
 
-    public StatsUpUI(Entity player_) {
+    public StatsUpUI() {
         super("stats up", ResourceManager.skin);
-        this.player = player_;
 
         PVal = maxPoint;
         APValInit = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);

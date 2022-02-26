@@ -102,7 +102,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         statusUI.setKeepWithinStage(false);
         statusUI.setMovable(false);
 
-        inventoryUI = new InventoryUI(player);
+        inventoryUI = new InventoryUI();
         inventoryUI.setKeepWithinStage(false);
         inventoryUI.setMovable(false);
         inventoryUI.setVisible(false);

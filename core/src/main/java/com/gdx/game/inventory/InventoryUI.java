@@ -32,7 +32,6 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     public static final String PLAYER_INVENTORY = "Player_Inventory";
     public static final String STORE_INVENTORY = "Store_Inventory";
 
-    private Entity player;
     private int lengthSlotRow = 10;
     private Table inventorySlotTable;
     private Table playerSlotsTable;
@@ -52,9 +51,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
 
     private InventorySlotTooltip inventorySlotTooltip;
 
-    public InventoryUI(Entity player_) {
+    public InventoryUI() {
         super("Inventory", ResourceManager.skin);
-        this.player = player_;
 
         observers = new Array<>();
 

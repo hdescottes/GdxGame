@@ -96,7 +96,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         dmgOpponentValLabel.setVisible(false);
         origDmgOpponentValLabelY = dmgOpponentValLabel.getY() + enemyHeight;
 
-        statsUpUI = new StatsUpUI(player);
+        statsUpUI = new StatsUpUI();
         statsUpUI.setPosition(battleHUDStage.getWidth() / 4, battleHUDStage.getHeight() / 4);
         statsUpUI.setKeepWithinStage(false);
         statsUpUI.setVisible(false);
