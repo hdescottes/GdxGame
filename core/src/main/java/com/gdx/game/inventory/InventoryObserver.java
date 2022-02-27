@@ -7,6 +7,7 @@ public interface InventoryObserver {
         ITEM_CONSUMED,
         ADD_WAND_AP,
         REMOVE_WAND_AP,
+        REFRESH_STATS,
         NONE
     }
 

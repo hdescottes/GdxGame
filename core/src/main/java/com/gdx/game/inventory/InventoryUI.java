@@ -218,14 +218,6 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
     }
 
-    public void refreshStats() {
-        APVal = ProfileManager.getInstance().getProperty("currentPlayerAP", Integer.class);
-        DPVal = ProfileManager.getInstance().getProperty("currentPlayerDP", Integer.class);
-
-        DPValLabel.setText(String.valueOf(DPVal));
-        APValLabel.setText(String.valueOf(APVal));
-    }
-
     public static void clearInventoryItems(Table targetTable) {
         Array<Cell> cells = targetTable.getCells();
         for(int i = 0; i < cells.size; i++) {

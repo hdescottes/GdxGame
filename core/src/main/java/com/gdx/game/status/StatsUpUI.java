@@ -6,16 +6,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
+import com.gdx.game.inventory.InventoryObserver;
+import com.gdx.game.inventory.InventorySubject;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StatsUpUI extends Window {
+public class StatsUpUI extends Window implements InventorySubject {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatsUpUI.class);
 
     private TextButton validateBtn;
+    private Array<InventoryObserver> observers;
 
     private final int maxPoint = 5;
     private Label PValLabel;
@@ -33,6 +37,8 @@ public class StatsUpUI extends Window {
 
     public StatsUpUI() {
         super("stats up", ResourceManager.skin);
+
+        observers = new Array<>();
 
         PVal = maxPoint;
         APValInit = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
@@ -157,6 +163,7 @@ public class StatsUpUI extends Window {
                 LOGGER.info("Attack bonus point : " + bonusAPAdded);
                 LOGGER.info("Defense bonus point : " + bonusDPAdded);
                 setVisible(false);
+                StatsUpUI.this.notify("", InventoryObserver.InventoryEvent.REFRESH_STATS);
             }
         });
 
@@ -176,5 +183,29 @@ public class StatsUpUI extends Window {
         }
         PValLabel.setText(String.valueOf(PVal));
         validateBtn.setVisible(PVal == 0);
+    }
+
+    @Override
+    public void addObserver(InventoryObserver inventoryObserver) {
+        observers.add(inventoryObserver);
+    }
+
+    @Override
+    public void removeObserver(InventoryObserver inventoryObserver) {
+        observers.removeValue(inventoryObserver, true);
+    }
+
+    @Override
+    public void removeAllObservers() {
+        for(InventoryObserver observer: observers) {
+            observers.removeValue(observer, true);
+        }
+    }
+
+    @Override
+    public void notify(String value, InventoryObserver.InventoryEvent event) {
+        for(InventoryObserver observer: observers) {
+            observer.onNotify(value, event);
+        }
     }
 }

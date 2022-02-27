@@ -189,10 +189,14 @@ public class StatusUI extends Window implements StatusSubject {
         return levelVal;
     }
 
-    public void setLevelValue(int levelValue) {
+    public void setLevelValue(int levelValue, boolean isFromQuest) {
         this.levelVal = levelValue;
         levelValLabel.setText(String.valueOf(levelVal));
-        notify(levelVal, StatusObserver.StatusEvent.UPDATED_LEVEL);
+        if(isFromQuest) {
+            notify(levelVal, StatusObserver.StatusEvent.UPDATED_LEVEL_FROM_QUEST);
+        } else {
+            notify(levelVal, StatusObserver.StatusEvent.UPDATED_LEVEL);
+        }
     }
 
     public int getGoldValue() {
@@ -215,11 +219,11 @@ public class StatusUI extends Window implements StatusSubject {
         return xpVal;
     }
 
-    public void addXPValue(int xpValue) {
+    public void addXPValue(int xpValue, boolean isFromQuest) {
         this.xpVal += xpValue;
 
         if(xpVal > xpCurrentMax) {
-            updateToNewLevel();
+            updateToNewLevel(isFromQuest);
         }
 
         xpValLabel.setText(String.valueOf(xpVal));
@@ -233,7 +237,7 @@ public class StatusUI extends Window implements StatusSubject {
         this.xpVal = xpValue;
 
         if(xpVal > xpCurrentMax) {
-            updateToNewLevel();
+            updateToNewLevel(false);
         }
 
         xpValLabel.setText(String.valueOf(xpVal));
@@ -259,13 +263,13 @@ public class StatusUI extends Window implements StatusSubject {
                 setMPValueMax(table.getMpMax());
                 setMPValue(table.getMpMax());
 
-                setLevelValue(Integer.parseInt(table.getLevelID()));
+                setLevelValue(Integer.parseInt(table.getLevelID()), false);
                 return;
             }
         }
     }
 
-    public void updateToNewLevel(){
+    public void updateToNewLevel(boolean isFromQuest){
         for(LevelTable table: levelTables) {
             //System.out.println("XPVAL " + _xpVal + " table XPMAX " + table.getXpMax() );
             if(xpVal <= table.getXpMax()) {
@@ -277,7 +281,7 @@ public class StatusUI extends Window implements StatusSubject {
                 setMPValueMax(table.getMpMax());
                 setMPValue(table.getMpMax());
 
-                setLevelValue(Integer.parseInt(table.getLevelID()));
+                setLevelValue(Integer.parseInt(table.getLevelID()), isFromQuest);
                 notify(levelVal, StatusObserver.StatusEvent.LEVELED_UP);
                 return;
             }

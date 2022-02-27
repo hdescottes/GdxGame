@@ -40,6 +40,7 @@ import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.profile.ProfileObserver;
 import com.gdx.game.quest.QuestGraph;
 import com.gdx.game.quest.QuestUI;
+import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
@@ -56,6 +57,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
     private ConversationUI conversationUI;
     private StoreInventoryUI storeInventoryUI;
     private QuestUI questUI;
+    private StatsUpUI statsUpUI;
 
     private Dialog messageBoxUI;
     private Json json;
@@ -102,6 +104,14 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         statusUI.setKeepWithinStage(false);
         statusUI.setMovable(false);
 
+        statsUpUI = new StatsUpUI();
+        statsUpUI.setPosition(stage.getWidth() / 4, stage.getHeight() / 4);
+        statsUpUI.setKeepWithinStage(false);
+        statsUpUI.setVisible(false);
+        statsUpUI.setWidth(stage.getWidth() / 2);
+        statsUpUI.setHeight(stage.getHeight() / 2);
+        statsUpUI.setMovable(false);
+
         inventoryUI = new InventoryUI();
         inventoryUI.setKeepWithinStage(false);
         inventoryUI.setMovable(false);
@@ -134,6 +144,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         stage.addActor(messageBoxUI);
         stage.addActor(statusUI);
         stage.addActor(inventoryUI);
+        stage.addActor(statsUpUI);
 
         questUI.validate();
         storeInventoryUI.validate();
@@ -141,6 +152,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         messageBoxUI.validate();
         statusUI.validate();
         inventoryUI.validate();
+        statsUpUI.validate();
 
         //add tooltips to the stage
         Array<Actor> actors = inventoryUI.getInventoryActors();
@@ -159,6 +171,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         storeInventoryUI.addObserver(this);
         //inventoryUI.addObserver(battleUI.getCurrentState());
         inventoryUI.addObserver(this);
+        statsUpUI.addObserver(this);
         //battleUI.getCurrentState().addObserver(this);
         this.addObserver(AudioManager.getInstance());
 
@@ -295,7 +308,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
 
                     //then add in current values
                     statusUI.setGoldValue(goldVal);
-                    statusUI.setLevelValue(levelVal);
+                    statusUI.setLevelValue(levelVal, false);
                 }
             break;
             case SAVING_PROFILE:
@@ -451,7 +464,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 if(questUI.isQuestReadyForReturn(questID)) {
                     //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
                     QuestGraph quest = questUI.getQuestByID(questID);
-                    statusUI.addXPValue(quest.getXpReward()); //TODO: should trigger statsUpUI if lvl up
+                    statusUI.addXPValue(quest.getXpReward(), true);
                     statusUI.addGoldValue(quest.getGoldReward());
                     //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_COIN_RUSTLE);
                     inventoryUI.removeQuestItemFromInventory(questID);
@@ -522,6 +535,10 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             case UPDATED_LEVEL:
                 ProfileManager.getInstance().setProperty("currentPlayerLevel", statusUI.getLevelValue());
                 break;
+            case UPDATED_LEVEL_FROM_QUEST:
+                ProfileManager.getInstance().setProperty("currentPlayerLevel", statusUI.getLevelValue());
+                statsUpUI.setVisible(true);
+                break;
             case UPDATED_MP:
                 ProfileManager.getInstance().setProperty("currentPlayerMP", statusUI.getMPValue());
                 break;
@@ -575,7 +592,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 int goldReward = Integer.parseInt(enemyEntity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_GP_REWARD.toString()));
                 statusUI.addGoldValue(goldReward);
                 int xpReward = Integer.parseInt(enemyEntity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_XP_REWARD.toString()));
-                statusUI.addXPValue(xpReward);
+                statusUI.addXPValue(xpReward, false);
                 break;
             case PLAYER_HIT_DAMAGE:
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
@@ -606,6 +623,8 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                     statusUI.addMPValue(typeValue);
                 }
                 break;
+            case REFRESH_STATS:
+                inventoryUI.resetEquipSlots();
             default:
                 break;
         }
