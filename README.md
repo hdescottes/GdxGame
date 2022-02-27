@@ -61,6 +61,7 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [x] leveling system
   - [ ] class tree
+  - [ ] allow multiple lvl up at once (nbr bonus points must be consistent)
 
 - [x] battle feature
     - [ ] entities' animation while attacking

@@ -229,6 +229,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
             //System.out.println("XPVAL " + _xpVal + " table XPMAX " + table.getXpMax() );
             if(xpVal <= table.getXpMax()) {
                 setXPValueMax(table.getXpMax());
+                setXPValue(0);
 
                 setHPValueMax(table.getHpMax());
                 setHPValue(table.getHpMax());
