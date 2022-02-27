@@ -37,7 +37,7 @@ public class StatusUITest {
     @Test
     public void testSetLevelValue_ShouldSucceed() {
         StatusUI statusUI = new StatusUI();
-        statusUI.setLevelValue(1);
+        statusUI.setLevelValue(1, false);
 
         assertThat(statusUI).isNotNull();
         assertThat(statusUI.getLevelValue()).isEqualTo(1);
@@ -55,7 +55,7 @@ public class StatusUITest {
     @Test
     public void testSetXpValue_ShouldSucceedWithoutLevelUp() {
         StatusUI statusUI = new StatusUI();
-        statusUI.setLevelValue(1);
+        statusUI.setLevelValue(1, false);
         statusUI.setXPValue(1);
 
         assertThat(statusUI).isNotNull();
@@ -66,7 +66,7 @@ public class StatusUITest {
     @Test
     public void testSetXpValue_ShouldSucceedWithLevelUp() {
         StatusUI statusUI = new StatusUI();
-        statusUI.setLevelValue(1);
+        statusUI.setLevelValue(1, false);
         statusUI.setXPValue(210);
 
         assertThat(statusUI).isNotNull();
