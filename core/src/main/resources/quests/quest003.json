@@ -21,7 +21,7 @@ questTasks: {
 			}
 			TARGET_LOCATION: {
 				class: java.lang.String
-				value: "TOWN"
+				value: "TOPPLE"
 			}
 			
 		}
@@ -41,7 +41,7 @@ questTasks: {
 			}
 			TARGET_LOCATION: {
 				class: java.lang.String
-				value: "TOWN"
+				value: "TOPPLE"
 			}
 		}
 		id: 1

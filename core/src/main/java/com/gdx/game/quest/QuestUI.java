@@ -108,6 +108,16 @@ public class QuestUI extends Window {
         return graph;
     }
 
+    public QuestGraph removeQuest(QuestGraph graph) {
+        if(doesQuestExist(graph.getQuestID())) {
+            clearDialog();
+            quests.removeValue(graph, true);
+            updateQuestItemList();
+        }
+
+        return graph;
+    }
+
     public boolean isQuestReadyForReturn(String questID) {
         if(questID.isEmpty()) {
             LOGGER.debug("Quest ID not valid");

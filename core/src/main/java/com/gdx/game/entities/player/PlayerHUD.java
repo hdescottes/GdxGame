@@ -455,6 +455,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                     statusUI.addGoldValue(quest.getGoldReward());
                     //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_COIN_RUSTLE);
                     inventoryUI.removeQuestItemFromInventory(questID);
+                    questUI.removeQuest(quest);
                     configReturnProperty.setConversationConfigPath(QuestUI.FINISHED_QUEST);
                     ProfileManager.getInstance().setProperty(configReturnProperty.getEntityID(), configReturnProperty);
                 }
