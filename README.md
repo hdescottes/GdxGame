@@ -61,7 +61,6 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [x] leveling system
   - [ ] class tree
-  - [ ] allow multiple lvl up at once (nbr bonus points must be consistent)
 
 - [x] battle feature
     - [ ] entities' animation while attacking
@@ -79,6 +78,7 @@ You can chose to start a new game or load an existing profile on the menu screen
 - FadeIn effect not working when transition [menu &#8594; game]
 - Drag and drop selection issue on item's render (items are far from mouse when picking them)
 - Sometimes current hp/mp on status HUD add a blank space before the max player's hp/mp
+- If we equip weapon before completing quest, values in inventory not consistent
 
 &#8855; _Reset position when exiting the game is not properly set when you close the game with the X window button (it is fine when exiting with the ESCAPE key)_
 

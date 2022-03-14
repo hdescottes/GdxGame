@@ -21,7 +21,8 @@ public class StatsUpUI extends Window implements InventorySubject {
     private TextButton validateBtn;
     private Array<InventoryObserver> observers;
 
-    private final int maxPoint = 5;
+    private final int pointPerLvl = 5;
+    private int maxPoint;
     private Label PValLabel;
     private int PVal;
     private Label DPValLabel;
@@ -35,8 +36,9 @@ public class StatsUpUI extends Window implements InventorySubject {
     private int bonusAPAdded = 0;
     private final int APValInit;
 
-    public StatsUpUI() {
+    public StatsUpUI(int nbrLevelUp) {
         super("stats up", ResourceManager.skin);
+        this.maxPoint = nbrLevelUp * pointPerLvl;
 
         observers = new Array<>();
 
@@ -164,6 +166,7 @@ public class StatsUpUI extends Window implements InventorySubject {
                 LOGGER.info("Defense bonus point : " + bonusDPAdded);
                 setVisible(false);
                 StatsUpUI.this.notify("", InventoryObserver.InventoryEvent.REFRESH_STATS);
+                remove();
             }
         });
 

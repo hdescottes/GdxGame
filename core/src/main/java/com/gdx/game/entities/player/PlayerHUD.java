@@ -104,14 +104,6 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         statusUI.setKeepWithinStage(false);
         statusUI.setMovable(false);
 
-        statsUpUI = new StatsUpUI();
-        statsUpUI.setPosition(stage.getWidth() / 4, stage.getHeight() / 4);
-        statsUpUI.setKeepWithinStage(false);
-        statsUpUI.setVisible(false);
-        statsUpUI.setWidth(stage.getWidth() / 2);
-        statsUpUI.setHeight(stage.getHeight() / 2);
-        statsUpUI.setMovable(false);
-
         inventoryUI = new InventoryUI();
         inventoryUI.setKeepWithinStage(false);
         inventoryUI.setMovable(false);
@@ -144,7 +136,6 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         stage.addActor(messageBoxUI);
         stage.addActor(statusUI);
         stage.addActor(inventoryUI);
-        stage.addActor(statsUpUI);
 
         questUI.validate();
         storeInventoryUI.validate();
@@ -152,7 +143,6 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         messageBoxUI.validate();
         statusUI.validate();
         inventoryUI.validate();
-        statsUpUI.validate();
 
         //add tooltips to the stage
         Array<Actor> actors = inventoryUI.getInventoryActors();
@@ -171,7 +161,6 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         storeInventoryUI.addObserver(this);
         //inventoryUI.addObserver(battleUI.getCurrentState());
         inventoryUI.addObserver(this);
-        statsUpUI.addObserver(this);
         //battleUI.getCurrentState().addObserver(this);
         this.addObserver(AudioManager.getInstance());
 
@@ -278,8 +267,8 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                     InventoryUI.populateInventory(inventoryUI.getInventorySlotTable(), inventory, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
 
                     Array<InventoryItemLocation> equipInventory = profileManager.getProperty("playerEquipInventory", Array.class);
+                    inventoryUI.resetEquipSlots();
                     if(equipInventory != null && equipInventory.size > 0) {
-                        inventoryUI.resetEquipSlots();
                         InventoryUI.populateInventory(inventoryUI.getEquipSlotTable(), equipInventory, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
                     }
 
@@ -537,7 +526,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 break;
             case UPDATED_LEVEL_FROM_QUEST:
                 ProfileManager.getInstance().setProperty("currentPlayerLevel", statusUI.getLevelValue());
-                statsUpUI.setVisible(true);
+                createStatsUpUI(statusUI.getNbrLevelUp());
                 break;
             case UPDATED_MP:
                 ProfileManager.getInstance().setProperty("currentPlayerMP", statusUI.getMPValue());
@@ -551,6 +540,19 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
             default:
                 break;
         }
+    }
+
+    private void createStatsUpUI(int nbrLevelUp) {
+        statsUpUI = new StatsUpUI(nbrLevelUp);
+        statsUpUI.setPosition(stage.getWidth() / 4, stage.getHeight() / 4);
+        statsUpUI.setKeepWithinStage(false);
+        statsUpUI.setWidth(stage.getWidth() / 2);
+        statsUpUI.setHeight(stage.getHeight() / 2);
+        statsUpUI.setMovable(false);
+
+        statsUpUI.validate();
+        statsUpUI.addObserver(this);
+        stage.addActor(statsUpUI);
     }
 
     @Override

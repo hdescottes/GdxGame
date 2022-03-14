@@ -30,7 +30,7 @@ public class StatsUpUITest {
         profileManager.setProperty("currentPlayerCharacterAP", 5);
         profileManager.setProperty("currentPlayerCharacterDP", 5);
 
-        StatsUpUI statsUpUI = new StatsUpUI();
+        StatsUpUI statsUpUI = new StatsUpUI(1);
 
         assertThat(statsUpUI).isNotNull();
         assertThat(statsUpUI.getChildren().size).isEqualTo(16);

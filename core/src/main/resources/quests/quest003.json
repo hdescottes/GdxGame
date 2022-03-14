@@ -2,7 +2,7 @@
 questTitle : "Give Me My Baby Back!"
 questID : 3
 goldReward : 20
-xpReward : 205
+xpReward : 605
 isQuestComplete : FALSE
 questTasks: {
 	2: {

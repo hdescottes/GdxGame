@@ -96,14 +96,6 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         dmgOpponentValLabel.setVisible(false);
         origDmgOpponentValLabelY = dmgOpponentValLabel.getY() + enemyHeight;
 
-        statsUpUI = new StatsUpUI();
-        statsUpUI.setPosition(battleHUDStage.getWidth() / 4, battleHUDStage.getHeight() / 4);
-        statsUpUI.setKeepWithinStage(false);
-        statsUpUI.setVisible(false);
-        statsUpUI.setWidth(battleHUDStage.getWidth() / 2);
-        statsUpUI.setHeight(battleHUDStage.getHeight() / 2);
-        statsUpUI.setMovable(false);
-
         battleStatusUI = new BattleStatusUI();
         battleStatusUI.setKeepWithinStage(false);
         battleStatusUI.setVisible(true);
@@ -145,7 +137,6 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         });
 
         battleUI.validate();
-        statsUpUI.validate();
         battleStatusUI.validate();
         conversationUI.validate();
         battleInventoryUI.validate();
@@ -160,7 +151,6 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         battleHUDStage.addActor(dmgPlayerLabelTable);
         battleHUDStage.addActor(dmgOpponentLabelTable);
         battleHUDStage.addActor(battleUI);
-        battleHUDStage.addActor(statsUpUI);
         battleHUDStage.addActor(battleStatusUI);
         battleHUDStage.addActor(conversationUI);
         battleHUDStage.addActor(battleInventoryUI);
@@ -317,7 +307,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
                 break;
             case UPDATED_LEVEL:
                 ProfileManager.getInstance().setProperty("currentPlayerLevel", battleStatusUI.getLevelValue());
-                statsUpUI.setVisible(true);
+                createStatsUpUI(battleStatusUI.getNbrLevelUp());
                 break;
             case UPDATED_MP:
                 ProfileManager.getInstance().setProperty("currentPlayerMP", battleStatusUI.getMPValue());
@@ -331,6 +321,18 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
             default:
                 break;
         }
+    }
+
+    private void createStatsUpUI(int nbrLevelUp) {
+        statsUpUI = new StatsUpUI(nbrLevelUp);
+        statsUpUI.setPosition(battleHUDStage.getWidth() / 4, battleHUDStage.getHeight() / 4);
+        statsUpUI.setKeepWithinStage(false);
+        statsUpUI.setWidth(battleHUDStage.getWidth() / 2);
+        statsUpUI.setHeight(battleHUDStage.getHeight() / 2);
+        statsUpUI.setMovable(false);
+
+        statsUpUI.validate();
+        battleHUDStage.addActor(statsUpUI);
     }
 
     public Stage getBattleHUDStage() {
@@ -419,7 +421,6 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         player.dispose();
         enemy.dispose();
         battleUI.remove();
-        statsUpUI.remove();
         battleStatusUI.remove();
         conversationUI.remove();
         battleInventoryUI.remove();

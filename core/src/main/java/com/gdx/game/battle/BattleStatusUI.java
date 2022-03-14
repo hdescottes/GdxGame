@@ -48,6 +48,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
 
     private float barWidth = 0;
     private float barHeight = 0;
+    private int nbrLevelUp = 0;
 
     public BattleStatusUI() {
         super("", STATUS_UI_SKIN);
@@ -170,6 +171,14 @@ public class BattleStatusUI extends Window implements StatusSubject {
         notify(levelVal, StatusObserver.StatusEvent.UPDATED_LEVEL);
     }
 
+    public int getNbrLevelUp() {
+        return nbrLevelUp;
+    }
+
+    public void setNbrLevelUp(int nbrLevelUp) {
+        this.nbrLevelUp = nbrLevelUp;
+    }
+
     public int getXPValue() {
         return xpVal;
     }
@@ -225,11 +234,11 @@ public class BattleStatusUI extends Window implements StatusSubject {
     }
 
     public void updateToNewLevel(){
+        int xpRemain = xpVal;
         for(LevelTable table: levelTables) {
-            //System.out.println("XPVAL " + _xpVal + " table XPMAX " + table.getXpMax() );
-            if(xpVal <= table.getXpMax()) {
+            if(xpRemain <= table.getXpMax()) {
                 setXPValueMax(table.getXpMax());
-                setXPValue(0);
+                setXPValue(xpRemain);
 
                 setHPValueMax(table.getHpMax());
                 setHPValue(table.getHpMax());
@@ -237,9 +246,13 @@ public class BattleStatusUI extends Window implements StatusSubject {
                 setMPValueMax(table.getMpMax());
                 setMPValue(table.getMpMax());
 
+                setNbrLevelUp(Integer.parseInt(table.getLevelID()) - levelVal);
                 setLevelValue(Integer.parseInt(table.getLevelID()));
                 notify(levelVal, StatusObserver.StatusEvent.LEVELED_UP);
                 return;
+            }
+            if(levelVal <= Integer.parseInt(table.getLevelID())) {
+                xpRemain = xpRemain - table.getXpMax();
             }
         }
     }
