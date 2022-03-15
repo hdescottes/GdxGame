@@ -459,7 +459,9 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                     inventoryUI.removeQuestItemFromInventory(questID);
                     questUI.removeQuest(quest);
                     configReturnProperty.setConversationConfigPath(QuestUI.FINISHED_QUEST);
+
                     ProfileManager.getInstance().setProperty(configReturnProperty.getEntityID(), configReturnProperty);
+                    ProfileManager.getInstance().saveProfile();
                 }
 
                 conversationUI.setVisible(false);
@@ -626,7 +628,11 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
                 }
                 break;
             case REFRESH_STATS:
+                Array<InventoryItemLocation> equipInventory = ProfileManager.getInstance().getProperty("playerEquipInventory", Array.class);
                 inventoryUI.resetEquipSlots();
+                if(equipInventory != null && equipInventory.size > 0) {
+                    InventoryUI.populateInventory(inventoryUI.getEquipSlotTable(), equipInventory, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
+                }
             default:
                 break;
         }
