@@ -13,7 +13,7 @@ plugins {
 
 allprojects {
 
-    version = "2.5.1"
+    version = "2.5.2"
 
     apply(plugin = "java")
     apply(plugin = "java-library")
