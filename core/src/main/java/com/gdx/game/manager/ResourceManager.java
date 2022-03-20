@@ -72,12 +72,7 @@ public class ResourceManager {
         assetManager.load("asset/background/battleBackground_meadow.png", Texture.class);
 
         // ENTITIES
-        assetManager.load("entities/enemies/rabite.png", Texture.class);
-
         assetManager.load("entities/hero/hero_1_walking_up.png", Texture.class);
-
-
-        assetManager.load("entities/enemies/rabite_walking_down.png", Texture.class);
 
         assetManager.finishLoading();
 
@@ -98,9 +93,7 @@ public class ResourceManager {
         skin = new Skin(Gdx.files.internal("asset/data/uiskin.json"));
 
         // ENTITIES
-        rabite = assetManager.get("entities/enemies/rabite.png");
         heroWalkUp = assetManager.get("entities/hero/hero_1_walking_up.png");
-        rabiteWalkDown = assetManager.get("entities/enemies/rabite_walking_down.png");
     }
 
     public boolean isOptionScreen() {
@@ -241,8 +234,5 @@ public class ResourceManager {
         battleBackgroundMeadow.dispose();
 
         pixel10.dispose();
-
-        rabite.dispose();
-        rabiteWalkDown.dispose();
     }
 }
