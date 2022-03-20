@@ -20,6 +20,9 @@ import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
+import com.gdx.game.entities.player.characterClass.ClassObserver;
+import com.gdx.game.entities.player.characterClass.tree.Node;
+import com.gdx.game.entities.player.characterClass.tree.Tree;
 import com.gdx.game.inventory.InventoryItem;
 import com.gdx.game.inventory.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
@@ -32,7 +35,7 @@ import com.gdx.game.status.StatusObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BattleHUD implements Screen, BattleObserver, ComponentObserver, InventoryObserver, StatusObserver {
+public class BattleHUD implements Screen, BattleObserver, ClassObserver, ComponentObserver, InventoryObserver, StatusObserver {
 
     private static  final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
 
@@ -40,7 +43,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
 
     private BattleUI battleUI;
     private BattleStatusUI battleStatusUI;
-    private ConversationUI conversationUI;
+    private ConversationUI notificationUI;
     private BattleInventoryUI battleInventoryUI;
     private StatsUpUI statsUpUI;
 
@@ -118,27 +121,27 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         battleUI.setWidth(battleStage.getWidth() / 2);
         battleUI.setHeight(battleStage.getHeight() / 4);
 
-        conversationUI = new ConversationUI();
-        conversationUI.removeActor(conversationUI.findActor("scrollPane"));
-        conversationUI.getCloseButton().setVisible(false);
-        conversationUI.getCloseButton().setTouchable(Touchable.disabled);
-        conversationUI.setTitle("");
-        conversationUI.setMovable(false);
-        conversationUI.setVisible(false);
-        conversationUI.setPosition(0, 0);
-        conversationUI.setWidth(battleHUDStage.getWidth());
-        conversationUI.setHeight(battleHUDStage.getHeight() / 5);
-        conversationUI.addListener(new ClickListener() {
+        notificationUI = new ConversationUI();
+        notificationUI.removeActor(notificationUI.findActor("scrollPane"));
+        notificationUI.getCloseButton().setVisible(false);
+        notificationUI.getCloseButton().setTouchable(Touchable.disabled);
+        notificationUI.setTitle("");
+        notificationUI.setMovable(false);
+        notificationUI.setVisible(false);
+        notificationUI.setPosition(0, 0);
+        notificationUI.setWidth(battleHUDStage.getWidth());
+        notificationUI.setHeight(battleHUDStage.getHeight() / 5);
+        notificationUI.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                conversationUI.setVisible(false);
+                notificationUI.setVisible(false);
                 battleState.resumeOver();
             }
         });
 
         battleUI.validate();
         battleStatusUI.validate();
-        conversationUI.validate();
+        notificationUI.validate();
         battleInventoryUI.validate();
 
         dmgPlayerLabelTable.add(dmgPlayerValLabel).padLeft(playerWidth / 2).padBottom(playerHeight * 4);
@@ -152,7 +155,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         battleHUDStage.addActor(dmgOpponentLabelTable);
         battleHUDStage.addActor(battleUI);
         battleHUDStage.addActor(battleStatusUI);
-        battleHUDStage.addActor(conversationUI);
+        battleHUDStage.addActor(notificationUI);
         battleHUDStage.addActor(battleInventoryUI);
 
         Array<Actor> actors = battleInventoryUI.getInventoryActors();
@@ -260,13 +263,13 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         switch(event) {
             case LOAD_RESUME:
                 EntityConfig config = json.fromJson(EntityConfig.class, value);
-                conversationUI.loadResume(config);
+                notificationUI.loadResume(config);
                 break;
             case SHOW_RESUME:
                 EntityConfig configShow = json.fromJson(EntityConfig.class, value);
 
-                if (configShow.getEntityID().equalsIgnoreCase(conversationUI.getCurrentEntityID())) {
-                    conversationUI.setVisible(true);
+                if (configShow.getEntityID().equalsIgnoreCase(notificationUI.getCurrentEntityID())) {
+                    notificationUI.setVisible(true);
                 }
                 break;
             default:
@@ -323,6 +326,27 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         }
     }
 
+    @Override
+    public void onNotify(String value, ClassObserver.ClassEvent event) {
+        switch(event) {
+            case CHECK_UPGRADE_TREE_CLASS:
+                String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
+                int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+                int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+                String configFilePath = player.getEntityConfig().getClassTreePath();
+                Tree tree = Tree.buildClassTree(configFilePath);
+                Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
+                Tree.saveNewClass(node);
+
+                if(node != null) {
+                    notificationUI.loadUpgradeClass(node.getClassId());
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     private void createStatsUpUI(int nbrLevelUp) {
         statsUpUI = new StatsUpUI(nbrLevelUp);
         statsUpUI.setPosition(battleHUDStage.getWidth() / 4, battleHUDStage.getHeight() / 4);
@@ -332,6 +356,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         statsUpUI.setMovable(false);
 
         statsUpUI.validate();
+        statsUpUI.addObserver((ClassObserver) this);
         battleHUDStage.addActor(statsUpUI);
     }
 
@@ -422,7 +447,7 @@ public class BattleHUD implements Screen, BattleObserver, ComponentObserver, Inv
         enemy.dispose();
         battleUI.remove();
         battleStatusUI.remove();
-        conversationUI.remove();
+        notificationUI.remove();
         battleInventoryUI.remove();
         playerImage.remove();
         opponentImage.remove();

@@ -13,6 +13,7 @@ public class EntityConfig {
     private String entityID;
     private String entityStatus;
     private String conversationConfigPath;
+    private String classTreePath;
     private String resumeConfigPath;
     private String questConfigPath;
     private String currentQuestID;
@@ -41,6 +42,7 @@ public class EntityConfig {
         entityID = config.getEntityID();
         entityStatus = config.getEntityStatus();
         conversationConfigPath = config.getConversationConfigPath();
+        classTreePath = config.getClassTreePath();
         resumeConfigPath = config.getResumeConfigPath();
         questConfigPath = config.getQuestConfigPath();
         currentQuestID = config.getCurrentQuestID();
@@ -106,6 +108,14 @@ public class EntityConfig {
 
     public void setConversationConfigPath(String conversationConfigPath) {
         this.conversationConfigPath = conversationConfigPath;
+    }
+
+    public String getClassTreePath() {
+        return classTreePath;
+    }
+
+    public void setClassTreePath(String classTreePath) {
+        this.classTreePath = classTreePath;
     }
 
     public String getResumeConfigPath() {

@@ -121,6 +121,14 @@ public class ConversationUI extends Window {
         dialogText.setText(resume);
     }
 
+    public void loadUpgradeClass(String playerClass) {
+        clearDialog();
+
+        String resume = "Your character class was upgraded to " + playerClass;
+        dialogText.setText(resume);
+        LOGGER.info("Class upgraded to {}", playerClass);
+    }
+
     public void setConversationGraph(ConversationGraph graph) {
         if(this.graph != null) {
             this.graph.removeAllObservers();

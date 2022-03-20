@@ -35,7 +35,7 @@ public class EntityFactoryTest {
         Entity entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR);
 
         assertThat(entity).isNotNull();
-        assertThat(entity.getEntityConfig().getEntityID()).isEqualTo(Entity.getEntityConfig(EntityFactory.PLAYER_CONFIG).getEntityID());
+        assertThat(entity.getEntityConfig().getEntityID()).isEqualTo(Entity.getEntityConfig(EntityFactory.PLAYER_WARRIOR_CONFIG).getEntityID());
         assertThat(entity.getInputProcessor()).isInstanceOf(PlayerInputComponent.class);
     }
 

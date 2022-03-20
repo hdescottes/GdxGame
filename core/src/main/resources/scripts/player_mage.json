@@ -2,7 +2,8 @@
 	entityID : MAGE
 	entityStatus : PLAYER
 	state : IDLE
-	direction : DOWN
+	direction : DOWN,
+	classTreePath : "classes/tree_mage.json",
 	conversationConfigPath : ""
 	resumeConfigPath : ""
 	questConfigPath : ""

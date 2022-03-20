@@ -3,6 +3,7 @@
 	entityStatus : PLAYER
 	state : IDLE
 	direction : DOWN
+	classTreePath : "classes/tree_warrior.json"
 	conversationConfigPath : ""
 	resumeConfigPath : ""
 	questConfigPath : ""
