@@ -1,8 +1,9 @@
 {
-	entityID : ROGUE
+	entityID : CLERIC
 	entityStatus : PLAYER
 	state : IDLE
-	direction : DOWN
+	direction : DOWN,
+	classTreePath : "classes/tree_cleric.json",
 	conversationConfigPath : ""
 	resumeConfigPath : ""
 	questConfigPath : ""
@@ -15,7 +16,7 @@
 		}
 		ENTITY_DEFENSE_POINTS: {
 			class: java.lang.String
-			value: 4
+			value: 5
 		}
 	}
 	inventory : [
@@ -64,7 +65,7 @@
 			frameDuration: 0.15
 			animationType: IDLE
 			texturePaths: [
-				sprites/characters/Rogue.png
+				sprites/characters/Cleric.png
 			]
 			gridPoints: [
 				{
@@ -89,7 +90,7 @@
 			frameDuration: 0.15
 			animationType: WALK_DOWN
 			texturePaths: [
-				sprites/characters/Rogue.png
+				sprites/characters/Cleric.png
 			]
 			gridPoints: [
 				{
@@ -114,7 +115,7 @@
 			frameDuration: 0.15
 			animationType: WALK_LEFT
 			texturePaths: [
-				sprites/characters/Rogue.png
+				sprites/characters/Cleric.png
 			]
 			gridPoints: [
 				{
@@ -139,7 +140,7 @@
 			frameDuration: 0.15
 			animationType: WALK_RIGHT
 			texturePaths: [
-				sprites/characters/Rogue.png
+				sprites/characters/Cleric.png
 			]
 			gridPoints: [
 				{
@@ -164,7 +165,7 @@
 			frameDuration: 0.15
 			animationType: WALK_UP
 			texturePaths: [
-				sprites/characters/Rogue.png
+				sprites/characters/Cleric.png
 			]
 			gridPoints: [
 				{
@@ -189,7 +190,7 @@
 			frameDuration: 0.15
 			animationType: LOOK_RIGHT
 			texturePaths: [
-				sprites/characters/Rogue.png
+				sprites/characters/Cleric.png
 			]
 			gridPoints: [
 				{

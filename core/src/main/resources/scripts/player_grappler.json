@@ -1,8 +1,9 @@
 {
-	entityID : GENERIC
+	entityID : GRAPPLER
 	entityStatus : PLAYER
 	state : IDLE
-	direction : DOWN
+	direction : DOWN,
+	classTreePath : "classes/tree_grappler.json",
 	conversationConfigPath : ""
 	resumeConfigPath : ""
 	questConfigPath : ""
@@ -64,7 +65,7 @@
 			frameDuration: 0.15
 			animationType: IDLE
 			texturePaths: [
-				sprites/characters/Generic.png
+				sprites/characters/Grappler.png
 			]
 			gridPoints: [
 				{
@@ -89,7 +90,7 @@
 			frameDuration: 0.15
 			animationType: WALK_DOWN
 			texturePaths: [
-				sprites/characters/Generic.png
+				sprites/characters/Grappler.png
 			]
 			gridPoints: [
 				{
@@ -114,7 +115,7 @@
 			frameDuration: 0.15
 			animationType: WALK_LEFT
 			texturePaths: [
-				sprites/characters/Generic.png
+				sprites/characters/Grappler.png
 			]
 			gridPoints: [
 				{
@@ -139,7 +140,7 @@
 			frameDuration: 0.15
 			animationType: WALK_RIGHT
 			texturePaths: [
-				sprites/characters/Generic.png
+				sprites/characters/Grappler.png
 			]
 			gridPoints: [
 				{
@@ -164,7 +165,7 @@
 			frameDuration: 0.15
 			animationType: WALK_UP
 			texturePaths: [
-				sprites/characters/Generic.png
+				sprites/characters/Grappler.png
 			]
 			gridPoints: [
 				{
@@ -189,7 +190,7 @@
 			frameDuration: 0.15
 			animationType: LOOK_RIGHT
 			texturePaths: [
-				sprites/characters/Generic.png
+				sprites/characters/Grappler.png
 			]
 			gridPoints: [
 				{

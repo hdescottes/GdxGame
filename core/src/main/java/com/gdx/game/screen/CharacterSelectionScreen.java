@@ -87,6 +87,7 @@ public class CharacterSelectionScreen extends BaseScreen {
                 int APVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name()));
                 int DPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name()));
                 ProfileManager.getInstance().setProperty("playerCharacter", EntityFactory.EntityType.valueOf(player.getEntityConfig().getEntityID()));
+                ProfileManager.getInstance().setProperty("characterClass", player.getEntityConfig().getEntityID());
                 ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
                 ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 ProfileManager.getInstance().setProperty("currentPlayerCharacterAP", APVal);

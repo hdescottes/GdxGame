@@ -1,0 +1,118 @@
+{
+  id : 1
+  classId : GRAPPLER
+  classUpgrade: [
+    {
+      id : 2
+      classId: MONK
+      requirements : {
+        ENTITY_ATTACK_POINTS: {
+          class: java.lang.String
+          value: 15
+        }
+        ENTITY_DEFENSE_POINTS: {
+          class: java.lang.String
+          value: 15
+        }
+      }
+      bonus : {
+        character : {},
+        weapon : {}
+      },
+      classUpgrade : [
+        {
+          id : 4
+          classId : WARRIOR_MONK
+          requirements : {
+            ENTITY_ATTACK_POINTS: {
+              class: java.lang.String
+              value: 35
+            }
+            ENTITY_DEFENSE_POINTS: {
+              class: java.lang.String
+              value: 35
+            }
+          }
+          bonus : {
+            character : {},
+            weapon : {}
+          }
+        },
+        {
+          id : 5
+          classId : GODHAND
+          requirements : {
+            ENTITY_ATTACK_POINTS: {
+              class: java.lang.String
+              value: 45
+            }
+            ENTITY_DEFENSE_POINTS: {
+              class: java.lang.String
+              value: 25
+            }
+          }
+          bonus : {
+            character : {},
+            weapon : {}
+          }
+        }
+      ]
+    },
+    {
+      id : 3
+      classId : BASHKAR
+      requirements : {
+        ENTITY_ATTACK_POINTS: {
+          class: java.lang.String
+          value: 20
+        }
+        ENTITY_DEFENSE_POINTS: {
+          class: java.lang.String
+          value: 10
+        }
+      }
+      bonus : {
+        character : {},
+        weapon : {}
+      }
+      classUpgrade : [
+        {
+          id : 6
+          classId : DERVISH
+          requirements : {
+            ENTITY_ATTACK_POINTS: {
+              class: java.lang.String
+              value: 50
+            }
+            ENTITY_DEFENSE_POINTS: {
+              class: java.lang.String
+              value: 20
+            }
+          }
+          bonus : {
+            character : {},
+            weapon : {}
+          }
+        },
+        {
+          id : 7
+          classId : DEATHHAND
+          requirements : {
+            ENTITY_ATTACK_POINTS: {
+              class: java.lang.String
+              value: 40
+            }
+            ENTITY_DEFENSE_POINTS: {
+              class: java.lang.String
+              value: 30
+            }
+          }
+          bonus : {
+            character : {},
+            weapon : {}
+          }
+        }
+      ]
+    }
+  ]
+}

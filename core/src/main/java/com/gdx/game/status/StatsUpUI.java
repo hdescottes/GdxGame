@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.gdx.game.entities.player.characterClass.ClassObserver;
+import com.gdx.game.entities.player.characterClass.ClassSubject;
 import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.InventorySubject;
 import com.gdx.game.manager.ResourceManager;
@@ -14,12 +16,13 @@ import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StatsUpUI extends Window implements InventorySubject {
+public class StatsUpUI extends Window implements ClassSubject, InventorySubject {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StatsUpUI.class);
 
     private TextButton validateBtn;
     private Array<InventoryObserver> observers;
+    private Array<ClassObserver> classObservers;
 
     private final int pointPerLvl = 5;
     private int maxPoint;
@@ -41,6 +44,7 @@ public class StatsUpUI extends Window implements InventorySubject {
         this.maxPoint = nbrLevelUp * pointPerLvl;
 
         observers = new Array<>();
+        classObservers = new Array<>();
 
         PVal = maxPoint;
         APValInit = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
@@ -165,6 +169,8 @@ public class StatsUpUI extends Window implements InventorySubject {
                 LOGGER.info("Attack bonus point : " + bonusAPAdded);
                 LOGGER.info("Defense bonus point : " + bonusDPAdded);
                 setVisible(false);
+
+                StatsUpUI.this.notify("", ClassObserver.ClassEvent.CHECK_UPGRADE_TREE_CLASS);
                 StatsUpUI.this.notify("", InventoryObserver.InventoryEvent.REFRESH_STATS);
                 remove();
             }
@@ -208,6 +214,23 @@ public class StatsUpUI extends Window implements InventorySubject {
     @Override
     public void notify(String value, InventoryObserver.InventoryEvent event) {
         for(InventoryObserver observer: observers) {
+            observer.onNotify(value, event);
+        }
+    }
+
+    @Override
+    public void addObserver(ClassObserver classObserver) {
+        classObservers.add(classObserver);
+    }
+
+    @Override
+    public void removeObserver(ClassObserver classObserver) {
+        classObservers.removeValue(classObserver, true);
+    }
+
+    @Override
+    public void notify(String value, ClassObserver.ClassEvent event) {
+        for(ClassObserver observer: classObservers) {
             observer.onNotify(value, event);
         }
     }

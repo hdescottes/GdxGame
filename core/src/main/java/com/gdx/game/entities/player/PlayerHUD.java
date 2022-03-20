@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -28,6 +29,9 @@ import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
+import com.gdx.game.entities.player.characterClass.ClassObserver;
+import com.gdx.game.entities.player.characterClass.tree.Node;
+import com.gdx.game.entities.player.characterClass.tree.Tree;
 import com.gdx.game.inventory.InventoryItem;
 import com.gdx.game.inventory.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
@@ -44,7 +48,7 @@ import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
-public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ComponentObserver, ConversationGraphObserver, BattleObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
+public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassObserver, ComponentObserver, ConversationGraphObserver, BattleObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
 
     private Stage stage;
     private Viewport viewport;
@@ -55,6 +59,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
     private StatusUI statusUI;
     private InventoryUI inventoryUI;
     private ConversationUI conversationUI;
+    private ConversationUI notificationUI;
     private StoreInventoryUI storeInventoryUI;
     private QuestUI questUI;
     private StatsUpUI statsUpUI;
@@ -117,6 +122,24 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         conversationUI.setWidth(stage.getWidth() / 2);
         conversationUI.setHeight(stage.getHeight() / 2);
 
+        notificationUI = new ConversationUI();
+        notificationUI.removeActor(notificationUI.findActor("scrollPane"));
+        notificationUI.getCloseButton().setVisible(false);
+        notificationUI.getCloseButton().setTouchable(Touchable.disabled);
+        notificationUI.setTitle("");
+        notificationUI.setMovable(false);
+        notificationUI.setVisible(false);
+        notificationUI.setPosition(0, 0);
+        notificationUI.setWidth(stage.getWidth());
+        notificationUI.setHeight(stage.getHeight() / 5);
+        notificationUI.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                notificationUI.setVisible(false);
+                statusUI.setVisible(true);
+            }
+        });
+
         storeInventoryUI = new StoreInventoryUI();
         storeInventoryUI.setMovable(false);
         storeInventoryUI.setVisible(false);
@@ -133,6 +156,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         stage.addActor(questUI);
         stage.addActor(storeInventoryUI);
         stage.addActor(conversationUI);
+        stage.addActor(notificationUI);
         stage.addActor(messageBoxUI);
         stage.addActor(statusUI);
         stage.addActor(inventoryUI);
@@ -140,6 +164,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         questUI.validate();
         storeInventoryUI.validate();
         conversationUI.validate();
+        notificationUI.validate();
         messageBoxUI.validate();
         statusUI.validate();
         inventoryUI.validate();
@@ -544,6 +569,29 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         }
     }
 
+    @Override
+    public void onNotify(String value, ClassObserver.ClassEvent event) {
+        switch(event) {
+            case CHECK_UPGRADE_TREE_CLASS:
+                String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
+                int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+                int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+                String configFilePath = player.getEntityConfig().getClassTreePath();
+                Tree tree = Tree.buildClassTree(configFilePath);
+                Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
+                Tree.saveNewClass(node);
+
+                if(node != null) {
+                    statusUI.setVisible(false);
+                    notificationUI.setVisible(true);
+                    notificationUI.loadUpgradeClass(node.getClassId());
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     private void createStatsUpUI(int nbrLevelUp) {
         statsUpUI = new StatsUpUI(nbrLevelUp);
         statsUpUI.setPosition(stage.getWidth() / 4, stage.getHeight() / 4);
@@ -553,7 +601,8 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, Compone
         statsUpUI.setMovable(false);
 
         statsUpUI.validate();
-        statsUpUI.addObserver(this);
+        statsUpUI.addObserver((ClassObserver) this);
+        statsUpUI.addObserver((InventoryObserver) this);
         stage.addActor(statsUpUI);
     }
 

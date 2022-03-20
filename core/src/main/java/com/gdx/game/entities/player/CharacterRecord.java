@@ -8,10 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import static com.gdx.game.entities.EntityFactory.EntityType.ENGINEER;
-import static com.gdx.game.entities.EntityFactory.EntityType.GENERIC;
+import static com.gdx.game.entities.EntityFactory.EntityType.CLERIC;
+import static com.gdx.game.entities.EntityFactory.EntityType.GRAPPLER;
 import static com.gdx.game.entities.EntityFactory.EntityType.MAGE;
-import static com.gdx.game.entities.EntityFactory.EntityType.ROGUE;
+import static com.gdx.game.entities.EntityFactory.EntityType.THIEF;
 import static com.gdx.game.entities.EntityFactory.EntityType.WARRIOR;
 
 public class CharacterRecord {
@@ -22,8 +22,8 @@ public class CharacterRecord {
     private final int baseDefense;
     private final String name;
 
-    public static final List<EntityFactory.EntityType> charactersList = Arrays.asList(WARRIOR, MAGE, ROGUE, GENERIC,
-            ENGINEER);
+    public static final List<EntityFactory.EntityType> charactersList = Arrays.asList(WARRIOR, MAGE, THIEF, GRAPPLER,
+            CLERIC);
 
     public static CharacterRecord[] CHARACTERS = charactersList.stream()
             .map(c -> new CharacterRecord(2, 2, loadAPStats(c.name()), loadDPStats(c.name()), c.name()))

@@ -42,6 +42,22 @@ When you level up (battle, quest), you will be able to display some more extra p
 The game is saved automatically when a specific action is down (change map, get quest, ...). <br>
 You can chose to start a new game or load an existing profile on the menu screen.
 
+#### Class system
+
+Base class can evolve if you meet the requirements. Each class can upgrade into 2 different classes, which themselves give 2 possible classes <br>
+Upgrading class will grant you different bonuses, from bonus on character stats to weapons stats. <br>
+Example of the class tree system for the warrior :
+
+```mermaid
+graph TD;
+    WARRIOR-->KNIGHT;
+    WARRIOR-->GLADIATOR;
+    KNIGHT-->PALADIN;
+    KNIGHT-->WARLORD;
+    GLADIATOR-->DUELIST;
+    GLADIATOR-->WEAPON_MASTER;
+```
+
 -------
 ## Demo
 <p align="center">
@@ -59,11 +75,9 @@ You can chose to start a new game or load an existing profile on the menu screen
 
 - [ ] add sounds & sounds settings
 
-- [x] leveling system
-  - [ ] class tree
-
 - [x] battle feature
     - [ ] entities' animation while attacking
+    - [ ] implement bonus gained by class
     - [ ] implement speed stat
 
 - [ ] crafting feature
