@@ -4,7 +4,7 @@
 
 ## Description
 <p>This project is based on https://github.com/patrickhoey/BludBourne using LibGDX library.<br>
-It is a RPG 2D base game.</p>
+It is an RPG 2D base game.</p>
 
 #### Map
 <p>The maps are from the Sword of Mana game (GBA) and influenced by the seiken densetsu serie. <br>
@@ -78,7 +78,7 @@ graph TD;
 - [x] battle feature
     - [ ] entities' animation while attacking
     - [ ] implement bonus gained by class
-    - [ ] implement speed stat
+    - [ ] implement speed, magic, resist, ... stats
 
 - [ ] crafting feature
 
@@ -104,4 +104,4 @@ graph TD;
 - Improve collision with Box2D
 - Animations on map (opening doors, water, ...)
 
-- Change characters/items/UI sprites to fit seiken densetsu's
+- Change characters/items/maps/UI sprites

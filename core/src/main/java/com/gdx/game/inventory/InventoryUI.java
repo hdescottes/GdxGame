@@ -39,6 +39,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     private DragAndDrop dragAndDrop;
     private Array<Actor> inventoryActors;
 
+    private Label classValLabel;
+    private String classVal;
     private Label DPValLabel;
     private int DPVal;
     private Label APValLabel;
@@ -59,6 +61,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         dragAndDrop = new DragAndDrop();
         inventoryActors = new Array<>();
 
+        classVal = ProfileManager.getInstance().getProperty("characterClass", String.class);
         APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
         DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
 
@@ -73,6 +76,9 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         equipSlots.defaults().space(10);
         inventorySlotTooltip = new InventorySlotTooltip(ResourceManager.skin);
 
+        Label classLabel = new Label("Class: ", ResourceManager.skin);
+        classValLabel = new Label(classVal, ResourceManager.skin);
+
         Label DPLabel = new Label("Defense: ", ResourceManager.skin);
         DPValLabel = new Label(String.valueOf(DPVal), ResourceManager.skin);
 
@@ -80,6 +86,10 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         APValLabel = new Label(String.valueOf(APVal), ResourceManager.skin);
 
         Table labelTable = new Table();
+        labelTable.add(classLabel).align(Align.left);
+        labelTable.add(classValLabel).align(Align.center);
+        labelTable.row();
+        labelTable.row();
         labelTable.add(DPLabel).align(Align.left);
         labelTable.add(DPValLabel).align(Align.center);
         labelTable.row();
@@ -208,8 +218,11 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     }
 
     public void resetEquipSlots() {
+        classVal = ProfileManager.getInstance().getProperty("characterClass", String.class);
         APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
         DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+
+        classValLabel.setText(String.valueOf(classVal));
 
         DPValLabel.setText(String.valueOf(DPVal));
         notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
