@@ -79,6 +79,7 @@ graph TD;
     - [ ] entities' animation while attacking
     - [ ] implement bonus gained by class
     - [ ] implement speed, magic, resist, ... stats
+    - [ ] implements drops from enemies
 
 - [ ] crafting feature
 
