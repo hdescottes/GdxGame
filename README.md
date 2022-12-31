@@ -43,7 +43,6 @@ The game is saved automatically when a specific action is down (change map, get 
 You can chose to start a new game or load an existing profile on the menu screen.
 
 #### Class system
-
 Base class can evolve if you meet the requirements. Each class can upgrade into 2 different classes, which themselves give 2 possible classes <br>
 Upgrading class will grant you different bonuses, from bonus on character stats to weapons stats. <br>
 Example of the class tree system for the warrior :
@@ -68,6 +67,11 @@ graph TD;
   <img src="desktop/src/main/resources/demo/battle_demo.gif" width="396" height="315">
 </p>
 <p align="center">battle demo</p>
+<p align="center">
+  <img src="desktop/src/main/resources/demo/demo_new_DA.gif" width="396" height="315">
+  <img src="desktop/src/main/resources/demo/demo_new_DA_battle.gif" width="396" height="315">
+</p>
+<p align="center">demo with the new DA (can't show it on a public repo)</p>
 
 -------
 ## Game idea
@@ -104,5 +108,3 @@ graph TD;
 - Z sorting
 - Improve collision with Box2D
 - Animations on map (opening doors, water, ...)
-
-- Change characters/items/maps/UI sprites
