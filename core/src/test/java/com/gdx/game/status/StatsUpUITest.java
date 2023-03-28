@@ -29,11 +29,12 @@ public class StatsUpUITest {
         ProfileManager profileManager = ProfileManager.getInstance();
         profileManager.setProperty("currentPlayerCharacterAP", 5);
         profileManager.setProperty("currentPlayerCharacterDP", 5);
+        profileManager.setProperty("currentPlayerCharacterSPDP", 5);
 
         StatsUpUI statsUpUI = new StatsUpUI(1);
 
         assertThat(statsUpUI).isNotNull();
-        assertThat(statsUpUI.getChildren().size).isEqualTo(16);
+        assertThat(statsUpUI.getChildren().size).isEqualTo(22);
         assertThat(Arrays.stream(statsUpUI.getChildren().items).count()).isEqualTo(24);
     }
 }

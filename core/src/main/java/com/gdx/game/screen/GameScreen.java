@@ -181,17 +181,17 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
     @Override
     public void onNotify(String value, ComponentEvent event) {
         switch(event) {
-            case START_BATTLE:
+            case START_BATTLE -> {
                 setGameState(GameState.SAVING);
                 setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, playerHUD, mapManager, resourceManager), new ArrayList<>());
                 PlayerInputComponent.clear();
-                break;
-            case OPTION_INPUT:
+            }
+            case OPTION_INPUT -> {
                 Image screenShot = new Image(ScreenUtils.getFrameBufferTexture());
                 game.setScreen(new OptionScreen(game, (BaseScreen) game.getScreen(), screenShot, resourceManager));
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 

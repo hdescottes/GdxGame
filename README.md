@@ -82,8 +82,10 @@ graph TD;
 - [x] battle feature
     - [ ] entities' animation while attacking
     - [ ] implement bonus gained by class
-    - [ ] implement speed, magic, resist, ... stats
+    - [ ] implement magic, resist, ... stats
     - [ ] implements drops from enemies
+
+- [ ] armor sets
 
 - [ ] crafting feature
 

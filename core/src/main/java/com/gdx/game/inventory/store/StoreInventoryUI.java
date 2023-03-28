@@ -232,32 +232,32 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
     @Override
     public void onNotify(InventorySlot slot, SlotEvent event) {
         switch(event) {
-            case ADDED_ITEM:
+            case ADDED_ITEM -> {
                 //moving from player inventory to store inventory to sell
-                if(slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY) &&
+                if (slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY) &&
                         slot.getName().equalsIgnoreCase(InventoryUI.STORE_INVENTORY)) {
                     tradeInVal += slot.getTopInventoryItem().getTradeValue();
                     sellTotalLabel.setText(SELL + " : " + tradeInVal + GP);
                 }
                 //moving from store inventory to player inventory to buy
-                if(slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.STORE_INVENTORY) &&
+                if (slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.STORE_INVENTORY) &&
                         slot.getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY)) {
                     fullValue += slot.getTopInventoryItem().getItemValue();
                     buyTotalLabel.setText(BUY + " : " + fullValue + GP);
                 }
-                break;
-            case REMOVED_ITEM:
-                if(slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY) &&
+            }
+            case REMOVED_ITEM -> {
+                if (slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY) &&
                         slot.getName().equalsIgnoreCase(InventoryUI.STORE_INVENTORY)) {
                     tradeInVal -= slot.getTopInventoryItem().getTradeValue();
                     sellTotalLabel.setText(SELL + " : " + tradeInVal + GP);
                 }
-                if(slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.STORE_INVENTORY) &&
+                if (slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.STORE_INVENTORY) &&
                         slot.getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY)) {
                     fullValue -= slot.getTopInventoryItem().getItemValue();
                     buyTotalLabel.setText(BUY + " : " + fullValue + GP);
                 }
-                break;
+            }
         }
         checkButtonStates();
     }

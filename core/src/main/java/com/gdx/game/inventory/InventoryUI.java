@@ -45,6 +45,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     private int DPVal;
     private Label APValLabel;
     private int APVal;
+    private Label SPDPValLabel;
+    private int SPDPVal;
 
     private final int slotWidth = 52;
     private final int slotHeight = 52;
@@ -64,6 +66,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         classVal = ProfileManager.getInstance().getProperty("characterClass", String.class);
         APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
         DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+        SPDPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterSPDP", Integer.class);
 
         //create
         inventorySlotTable = new Table();
@@ -85,6 +88,9 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         Label APLabel = new Label("Attack : ", ResourceManager.skin);
         APValLabel = new Label(String.valueOf(APVal), ResourceManager.skin);
 
+        Label SPDPLabel = new Label("Speed : ", ResourceManager.skin);
+        SPDPValLabel = new Label(String.valueOf(SPDPVal), ResourceManager.skin);
+
         Table labelTable = new Table();
         labelTable.add(classLabel).align(Align.left);
         labelTable.add(classValLabel).align(Align.center);
@@ -96,6 +102,10 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         labelTable.row();
         labelTable.add(APLabel).align(Align.left);
         labelTable.add(APValLabel).align(Align.center);
+        labelTable.row();
+        labelTable.row();
+        labelTable.add(SPDPLabel).align(Align.left);
+        labelTable.add(SPDPValLabel).align(Align.center);
 
         InventorySlot headSlot = new InventorySlot(InventoryItem.ItemUseType.ARMOR_HELMET.getValue(),
                 new Image(ITEMS_TEXTURE_ATLAS.findRegion("inv_helmet")));
@@ -172,6 +182,10 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         return APVal;
     }
 
+    public int getSPDPVal() {
+        return SPDPVal;
+    }
+
     public DragAndDrop getDragAndDrop() {
         return dragAndDrop;
     }
@@ -221,6 +235,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         classVal = ProfileManager.getInstance().getProperty("characterClass", String.class);
         APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
         DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+        SPDPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterSPDP", Integer.class);
 
         classValLabel.setText(String.valueOf(classVal));
 
@@ -229,6 +244,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
 
         APValLabel.setText(String.valueOf(APVal));
         notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
+
+        SPDPValLabel.setText(String.valueOf(SPDPVal));
     }
 
     public static void clearInventoryItems(Table targetTable) {
@@ -442,58 +459,56 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     @Override
     public void onNotify(InventorySlot slot, SlotEvent event) {
         switch(event) {
-            case ADDED_ITEM:
+            case ADDED_ITEM -> {
                 InventoryItem addItem = slot.getTopInventoryItem();
-                if(addItem == null) {
+                if (addItem == null) {
                     return;
                 }
-
-                if(addItem.isInventoryItemOffensive()) {
+                if (addItem.isInventoryItemOffensive()) {
                     APVal += addItem.getItemUseTypeValue();
                     APValLabel.setText(String.valueOf(APVal));
                     notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
 
                     ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
 
-                    if(addItem.isInventoryItemOffensiveWand()) {
+                    if (addItem.isInventoryItemOffensiveWand()) {
                         notify(String.valueOf(addItem.getItemUseTypeValue()), InventoryObserver.InventoryEvent.ADD_WAND_AP);
                     }
 
-                } else if(addItem.isInventoryItemDefensive()) {
+                } else if (addItem.isInventoryItemDefensive()) {
                     DPVal += addItem.getItemUseTypeValue();
                     DPValLabel.setText(String.valueOf(DPVal));
                     notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
 
                     ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 }
-                break;
-            case REMOVED_ITEM:
+            }
+            case REMOVED_ITEM -> {
                 InventoryItem removeItem = slot.getTopInventoryItem();
-                if(removeItem == null) {
+                if (removeItem == null) {
                     return;
                 }
-
-                if(removeItem.isInventoryItemOffensive()) {
+                if (removeItem.isInventoryItemOffensive()) {
                     APVal -= removeItem.getItemUseTypeValue();
                     APValLabel.setText(String.valueOf(APVal));
                     notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
 
                     ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
 
-                    if(removeItem.isInventoryItemOffensiveWand()) {
+                    if (removeItem.isInventoryItemOffensiveWand()) {
                         notify(String.valueOf(removeItem.getItemUseTypeValue()), InventoryObserver.InventoryEvent.REMOVE_WAND_AP);
                     }
 
-                } else if(removeItem.isInventoryItemDefensive()) {
+                } else if (removeItem.isInventoryItemDefensive()) {
                     DPVal -= removeItem.getItemUseTypeValue();
                     DPValLabel.setText(String.valueOf(DPVal));
                     notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
 
                     ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 }
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 

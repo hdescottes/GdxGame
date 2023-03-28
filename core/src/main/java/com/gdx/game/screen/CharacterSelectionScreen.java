@@ -37,6 +37,7 @@ public class CharacterSelectionScreen extends BaseScreen {
     private Label characterClass;
     private Label atkStat;
     private Label defStat;
+    private Label spdStat;
     private TextButton startBtn;
     private TextButton nextBtn;
     private TextButton prevBtn;
@@ -72,7 +73,7 @@ public class CharacterSelectionScreen extends BaseScreen {
         playerImage.setPosition((characterSelectionStage.getWidth() - playerImage.getWidth()) / 2,
                 (characterSelectionStage.getHeight() - playerImage.getHeight()) / 2);
 
-        if(characterSelectionTable.getChildren().size == 7) {
+        if (characterSelectionTable.getChildren().size == 7) {
             characterSelectionTable.removeActorAt(3, false);
         }
         characterSelectionTable.addActor(playerImage);
@@ -84,17 +85,20 @@ public class CharacterSelectionScreen extends BaseScreen {
         startBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                int APVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.name()));
-                int DPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.name()));
+                int APVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
+                int DPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
+                int SPDPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_SPEED_POINTS.name()));
                 ProfileManager.getInstance().setProperty("playerCharacter", EntityFactory.EntityType.valueOf(player.getEntityConfig().getEntityID()));
                 ProfileManager.getInstance().setProperty("characterClass", player.getEntityConfig().getEntityID());
                 ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
                 ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
+                ProfileManager.getInstance().setProperty("currentPlayerSPDP", SPDPVal);
                 ProfileManager.getInstance().setProperty("currentPlayerCharacterAP", APVal);
                 ProfileManager.getInstance().setProperty("currentPlayerCharacterDP", DPVal);
+                ProfileManager.getInstance().setProperty("currentPlayerCharacterSPDP", SPDPVal);
 
                 gdxGame.setGameScreen(new GameScreen(gdxGame, resourceManager));
-                LOGGER.info("Character " + playerImage.getEntity().getEntityConfig().getEntityID() + " selected");
+                LOGGER.info("Character {} selected", playerImage.getEntity().getEntityConfig().getEntityID());
                 setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
             }
         });
@@ -110,7 +114,7 @@ public class CharacterSelectionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 currentCharacter += 1;
-                if(currentCharacter == CharacterRecord.CHARACTERS.length) {
+                if (currentCharacter == CharacterRecord.CHARACTERS.length) {
                     currentCharacter = 0;
                 }
             }
@@ -127,7 +131,7 @@ public class CharacterSelectionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 currentCharacter -= 1;
-                if(currentCharacter < 0) {
+                if (currentCharacter < 0) {
                     currentCharacter = CharacterRecord.CHARACTERS.length - 1;
                 }
             }
@@ -149,7 +153,13 @@ public class CharacterSelectionScreen extends BaseScreen {
                 atkStat.getX(), atkStat.getY() - 30,
                 ResourceManager.skin);
 
-        if(characterSelectionTable.getChildren().size == 7) {
+        spdStat = prepareStatLabel("SPD: " + CharacterRecord.CHARACTERS[currentCharacter].getBaseSpeed(),
+                defStat.getX(), defStat.getY() - 30,
+                ResourceManager.skin);
+
+        if (characterSelectionTable.getChildren().size == 9) {
+            characterSelectionTable.removeActorAt(3, false);
+            characterSelectionTable.removeActorAt(3, false);
             characterSelectionTable.removeActorAt(3, false);
             characterSelectionTable.removeActorAt(3, false);
             characterSelectionTable.removeActorAt(3, false);
@@ -157,6 +167,7 @@ public class CharacterSelectionScreen extends BaseScreen {
         characterSelectionTable.addActor(characterClass);
         characterSelectionTable.addActor(atkStat);
         characterSelectionTable.addActor(defStat);
+        characterSelectionTable.addActor(spdStat);
     }
 
     private Label prepareStatLabel(String text, float x, float y, Skin skin) {

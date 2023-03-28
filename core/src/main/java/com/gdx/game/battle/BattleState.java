@@ -13,6 +13,8 @@ public class BattleState extends BattleSubject {
 
     private Entity currentOpponent;
     private Entity player;
+    private float speedRatioInit = 0;
+    private float speedRatio = 0;
     private int currentZoneLevel = 0;
     private int currentPlayerAP;
     private int currentPlayerDP;
@@ -23,11 +25,13 @@ public class BattleState extends BattleSubject {
     private Timer.Task playerAttackCalculations;
     private Timer.Task opponentAttackCalculations;
     private Timer.Task checkPlayerMagicUse;
+    private Timer.Task determineTurn;
 
     public BattleState() {
         playerAttackCalculations = getPlayerAttackCalculationTimer();
         opponentAttackCalculations = getOpponentAttackCalculationTimer();
         checkPlayerMagicUse = getPlayerMagicUseCheckTimer();
+        determineTurn = getTurnTimer();
 
         currentPlayerAP = ProfileManager.getInstance().getProperty("currentPlayerAP", Integer.class);
         currentPlayerDP = ProfileManager.getInstance().getProperty("currentPlayerDP", Integer.class);
@@ -42,6 +46,7 @@ public class BattleState extends BattleSubject {
         playerAttackCalculations.cancel();
         opponentAttackCalculations.cancel();
         checkPlayerMagicUse.cancel();
+        determineTurn.cancel();
     }
 
     public void setCurrentZoneLevel(int zoneLevel) {
@@ -86,6 +91,15 @@ public class BattleState extends BattleSubject {
         notify(entity, BattleObserver.BattleEvent.PLAYER_ADDED);
     }
 
+    public void setSpeedRatio(float speedRatio) {
+        this.speedRatioInit = speedRatio;
+        this.speedRatio = speedRatio;
+    }
+
+    public void determineTurn() {
+        Timer.schedule(determineTurn, 1);
+    }
+
     public void playerAttacks() {
         if(currentOpponent == null) {
             return;
@@ -93,7 +107,7 @@ public class BattleState extends BattleSubject {
 
         //Check for magic if used in attack; If we don't have enough MP, then return
         int mpVal = ProfileManager.getInstance().getProperty("currentPlayerMP", Integer.class);
-        notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_START);
+        notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_ATTACK_START);
 
         if(currentPlayerWandAPPoints == 0) {
             if(!playerAttackCalculations.isScheduled()) {
@@ -120,8 +134,27 @@ public class BattleState extends BattleSubject {
         }
     }
 
+    public void startPlayerTurn() {
+        notify(player, BattleObserver.BattleEvent.PLAYER_TURN_START);
+    }
+
     public void resumeOver() {
         notify(currentOpponent, BattleObserver.BattleEvent.RESUME_OVER);
+    }
+
+    private Timer.Task getTurnTimer() {
+        return new Timer.Task() {
+            @Override
+            public void run() {
+                if(speedRatio < 1) {
+                    speedRatio += speedRatioInit;
+                    opponentAttacks();
+                } else {
+                    speedRatio--;
+                    startPlayerTurn();
+                }
+            }
+        };
     }
 
     private Timer.Task getPlayerMagicUseCheckTimer() {
@@ -141,7 +174,7 @@ public class BattleState extends BattleSubject {
             @Override
             public void run() {
                 int currentOpponentHP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString()));
-                int currentOpponentDP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.toString()));
+                int currentOpponentDP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.toString()));
 
                 int damage = MathUtils.clamp(currentPlayerAP - currentOpponentDP, 0, currentPlayerAP);
 
@@ -170,7 +203,7 @@ public class BattleState extends BattleSubject {
         return new Timer.Task() {
             @Override
             public void run() {
-                int currentOpponentAP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.toString()));
+                int currentOpponentAP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.toString()));
                 int damage = MathUtils.clamp(currentOpponentAP - currentPlayerDP, 0, currentOpponentAP);
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 hpVal = MathUtils.clamp( hpVal - damage, 0, hpVal);
