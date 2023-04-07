@@ -11,9 +11,6 @@ public class BattleUI extends Window {
 
     private BattleState battleState;
 
-    private TextButton atkOptButton;
-    private TextButton objOptButton;
-    private TextButton endTurnButton;
     private Table topTable;
     private Table bottomTable;
     private Table attackTable;
@@ -31,14 +28,14 @@ public class BattleUI extends Window {
 
         handleAttackButton();
         handleObjectButton();
-        handleEndTurnButton();
+        handleEscapeButton();
         createAttackHUD();
 
         createBattleHUD();
     }
 
     private void handleAttackButton() {
-        atkOptButton = new TextButton("Attack", ResourceManager.skin);
+        TextButton atkOptButton = new TextButton("Attack", ResourceManager.skin);
         topTable.add(atkOptButton).expand().fill();
 
         atkOptButton.addListener(new ClickListener() {
@@ -51,7 +48,7 @@ public class BattleUI extends Window {
     }
 
     private void handleObjectButton() {
-        objOptButton = new TextButton("Object", ResourceManager.skin);
+        TextButton objOptButton = new TextButton("Object", ResourceManager.skin);
         topTable.add(objOptButton).expand().fill();
 
         objOptButton.addListener(new ClickListener() {
@@ -62,13 +59,14 @@ public class BattleUI extends Window {
         });
     }
 
-    private void handleEndTurnButton() {
-        endTurnButton = new TextButton("End Turn", ResourceManager.skin);
-        bottomTable.add(endTurnButton).expand().fill();
+    private void handleEscapeButton() {
+        TextButton escapeButton = new TextButton("Escape", ResourceManager.skin);
+        bottomTable.add(escapeButton).expand().fill();
 
-        endTurnButton.addListener(new ClickListener() {
+        escapeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                battleState.playerRuns();
             }
         });
     }

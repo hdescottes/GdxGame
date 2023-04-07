@@ -49,33 +49,8 @@ public class BattleState extends BattleSubject {
         determineTurn.cancel();
     }
 
-    public void setCurrentZoneLevel(int zoneLevel) {
-        currentZoneLevel = zoneLevel;
-    }
-
-    public int getCurrentZoneLevel() {
-        return currentZoneLevel;
-    }
-
-    public boolean isOpponentReady() {
-        if(currentZoneLevel == 0) {
-            return false;
-        }
-        int randomVal = MathUtils.random(1,100);
-
-        //Gdx.app.debug(TAG, "CHANGE OF ATTACK: " + _chanceOfAttack + " randomval: " + randomVal);
-
-        if(chanceOfAttack > randomVal) {
-            //setCurrentOpponent();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public void setCurrentOpponent(Entity entity) {
-        LOGGER.debug("Entered BATTLE ZONE: " + currentZoneLevel);
-        //Entity entity = MonsterFactory.getInstance().getRandomMonster(currentZoneLevel);
+        LOGGER.debug("Entered BATTLE ZONE: {}", currentZoneLevel);
         if(entity == null) {
             return;
         }
@@ -107,7 +82,7 @@ public class BattleState extends BattleSubject {
 
         //Check for magic if used in attack; If we don't have enough MP, then return
         int mpVal = ProfileManager.getInstance().getProperty("currentPlayerMP", Integer.class);
-        notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_ATTACK_START);
+        notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_PHASE_START);
 
         if(currentPlayerWandAPPoints == 0) {
             if(!playerAttackCalculations.isScheduled()) {
@@ -178,12 +153,12 @@ public class BattleState extends BattleSubject {
 
                 int damage = MathUtils.clamp(currentPlayerAP - currentOpponentDP, 0, currentPlayerAP);
 
-                LOGGER.debug("ENEMY HAS " + currentOpponentHP + " hit with damage: " + damage);
+                LOGGER.debug("ENEMY HAS {} hit with damage: {}", currentOpponentHP, damage);
 
                 currentOpponentHP = MathUtils.clamp(currentOpponentHP - damage, 0, currentOpponentHP);
                 currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString(), String.valueOf(currentOpponentHP));
 
-                LOGGER.debug("Player attacks " + currentOpponent.getEntityConfig().getEntityID() + " leaving it with HP: " + currentOpponentHP);
+                LOGGER.debug("Player attacks {} leaving it with HP: {}", currentOpponent.getEntityConfig().getEntityID(), currentOpponentHP);
 
                 currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(damage));
                 if(damage > 0) {
@@ -214,7 +189,7 @@ public class BattleState extends BattleSubject {
                     BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_HIT_DAMAGE);
                 }
 
-                LOGGER.debug("Player HIT for " + damage + " BY " + currentOpponent.getEntityConfig().getEntityID() + " leaving player with HP: " + hpVal);
+                LOGGER.debug("Player HIT for {} BY {} leaving player with HP: {}", damage, currentOpponent.getEntityConfig().getEntityID(), hpVal);
 
                 BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.OPPONENT_TURN_DONE);
             }
@@ -222,11 +197,16 @@ public class BattleState extends BattleSubject {
     }
 
     public void playerRuns() {
-        int randomVal = MathUtils.random(1,100);
-        if(chanceOfEscape > randomVal) {
+        notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_PHASE_START);
+
+        float escapeChance = BattleUtils.escapeChance(speedRatio);
+        float randomVal = (float) MathUtils.random(1, 100) /100;
+
+        if(escapeChance < randomVal) {
+            notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
+        } else {
+            LOGGER.debug("Player flees with {}% escape chance", escapeChance * 100);
             notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_RUNNING);
-        } else if(randomVal > criticalChance) {
-            opponentAttacks();
         }
     }
 }

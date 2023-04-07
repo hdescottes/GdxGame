@@ -103,6 +103,12 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
                     setupGameOver();
                 }
             }
+            case PLAYER_RUNNING -> {
+                refreshStatus();
+                refreshInventory();
+                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
+                removeEntities();
+            }
             default -> {
             }
         }

@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 
 public class BattleHUD implements Screen, BattleObserver, ClassObserver, ComponentObserver, InventoryObserver, StatusObserver {
 
-    private static  final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
 
     private Stage battleHUDStage;
 
@@ -178,8 +178,8 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                     battleUI.setTouchable(Touchable.enabled);
                 }
             }
-            case PLAYER_ATTACK_START -> {
-                LOGGER.debug("Player attack start");
+            case PLAYER_PHASE_START -> {
+                LOGGER.debug("Player phase start");
                 battleUI.setVisible(false);
                 battleUI.setTouchable(Touchable.disabled);
             }
@@ -225,7 +225,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 dmgOpponentValLabel.setY(origDmgOpponentValLabelY);
                 //battleShakeCam.startShaking();
                 dmgOpponentValLabel.setVisible(true);
-                LOGGER.debug("Player deals " + damageEnemy + " damages");
+                LOGGER.debug("Player deals {} damages", damageEnemy);
             }
             case OPPONENT_DEFEATED -> {
                 dmgOpponentValLabel.setVisible(false);
