@@ -33,16 +33,16 @@ public class PlayerInputComponent extends InputComponent {
 	public void receiveMessage(String message) {
 		String[] string = message.split(MESSAGE_TOKEN);
 
-		if(string.length == 0) {
+		if (string.length == 0) {
 			return;
 		}
 
-		if(string.length == 1 && string[0].equalsIgnoreCase(MESSAGE.OPTION_INPUT.toString())) {
+		if (string.length == 1 && string[0].equalsIgnoreCase(MESSAGE.OPTION_INPUT.toString())) {
 			notify("", ComponentObserver.ComponentEvent.OPTION_INPUT);
 		}
 
 		//Specifically for messages with 1 object payload
-		if(string.length == 2 && string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
+		if (string.length == 2 && string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
 			currentDirection = json.fromJson(Entity.Direction.class, string[1]);
 		}
 	}
@@ -55,36 +55,36 @@ public class PlayerInputComponent extends InputComponent {
 	@Override
 	public void update(Entity entity, float delta) {
 		//Keyboard input
-		if(keys.get(Keys.LEFT)) {
+		if (keys.get(Keys.LEFT)) {
 			entity.sendMessage(MESSAGE.CURRENT_STATE, json.toJson(Entity.State.WALKING));
 			entity.sendMessage(MESSAGE.CURRENT_DIRECTION, json.toJson(Entity.Direction.LEFT));
-		} else if(keys.get(Keys.RIGHT)) {
+		} else if (keys.get(Keys.RIGHT)) {
 			entity.sendMessage(MESSAGE.CURRENT_STATE, json.toJson(Entity.State.WALKING));
 			entity.sendMessage(MESSAGE.CURRENT_DIRECTION, json.toJson(Entity.Direction.RIGHT));
-		} else if(keys.get(Keys.UP)) {
+		} else if (keys.get(Keys.UP)) {
 			entity.sendMessage(MESSAGE.CURRENT_STATE, json.toJson(Entity.State.WALKING));
 			entity.sendMessage(MESSAGE.CURRENT_DIRECTION, json.toJson(Entity.Direction.UP));
-		} else if(keys.get(Keys.DOWN)) {
+		} else if (keys.get(Keys.DOWN)) {
 			entity.sendMessage(MESSAGE.CURRENT_STATE, json.toJson(Entity.State.WALKING));
 			entity.sendMessage(MESSAGE.CURRENT_DIRECTION, json.toJson(Entity.Direction.DOWN));
-		} else if(keys.get(Keys.QUIT)) {
+		} else if (keys.get(Keys.QUIT)) {
 			quitReleased();
 			Gdx.app.exit();
-		} else if(keys.get(Keys.INTERACT)) {
+		} else if (keys.get(Keys.INTERACT)) {
 			interactReleased();
 			interact = true;
-		} else if(keys.get(Keys.OPTION)) {
+		} else if (keys.get(Keys.OPTION)) {
 			entity.sendMessage(MESSAGE.OPTION_INPUT, "");
 			optionReleased();
 		} else {
 			entity.sendMessage(MESSAGE.CURRENT_STATE, json.toJson(Entity.State.IDLE));
-			if(currentDirection == null) {
+			if (currentDirection == null) {
 				entity.sendMessage(MESSAGE.CURRENT_DIRECTION, json.toJson(Entity.Direction.DOWN));
 			}
 		}
 
 		//Mouse input
-		if(mouseButtons.get(Mouse.SELECT)) {
+		if (mouseButtons.get(Mouse.SELECT)) {
 			entity.sendMessage(MESSAGE.INIT_SELECT_ENTITY, json.toJson(lastMouseCoordinates));
 			mouseButtons.put(Mouse.SELECT, false);
 		}
@@ -169,15 +169,15 @@ public class PlayerInputComponent extends InputComponent {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-		if(button == Input.Buttons.LEFT || button == Input.Buttons.RIGHT) {
+		if (button == Input.Buttons.LEFT || button == Input.Buttons.RIGHT) {
 			this.setClickedMouseCoordinates(screenX, screenY);
 		}
 
 		//left is selection, right is context menu
-		if(button == Input.Buttons.LEFT) {
+		if (button == Input.Buttons.LEFT) {
 			this.selectMouseButtonPressed(screenX, screenY);
 		}
-		if(button == Input.Buttons.RIGHT) {
+		if (button == Input.Buttons.RIGHT) {
 			this.doActionMouseButtonPressed(screenX, screenY);
 		}
 		return true;
@@ -186,10 +186,10 @@ public class PlayerInputComponent extends InputComponent {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		//left is selection, right is context menu
-		if(button == Input.Buttons.LEFT) {
+		if (button == Input.Buttons.LEFT) {
 			this.selectMouseButtonReleased(screenX, screenY);
 		}
-		if(button == Input.Buttons.RIGHT) {
+		if (button == Input.Buttons.RIGHT) {
 			this.doActionMouseButtonReleased(screenX, screenY);
 		}
 		return true;

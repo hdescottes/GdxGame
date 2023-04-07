@@ -59,7 +59,7 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     private void removeEntities() {
         Array<Entity> entities = mapManager.getCurrentMapEntities();
         for(Entity entity: entities) {
-            if(entity.getEntityConfig().getEntityID().equals(mapManager.getPlayer().getEntityEncounteredType().toString())) {
+            if (entity.getEntityConfig().getEntityID().equals(mapManager.getPlayer().getEntityEncounteredType().toString())) {
                 mapManager.removeMapEntity(entity);
             }
         }
@@ -90,7 +90,7 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
-        switch(event) {
+        switch (event) {
             case RESUME_OVER -> {
                 refreshStatus();
                 refreshInventory();

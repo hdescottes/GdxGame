@@ -33,70 +33,62 @@ public class MapManager implements ProfileObserver {
     @Override
     public void onNotify(ProfileManager profileManager, ProfileEvent event) {
         switch (event) {
-            case PROFILE_LOADED:
+            case PROFILE_LOADED -> {
                 String currentMap = profileManager.getProperty("currentMapType", String.class);
                 MapFactory.MapType mapType;
-                if(currentMap == null || currentMap.isEmpty()) {
+                if (currentMap == null || currentMap.isEmpty()) {
                     mapType = MapFactory.MapType.TOPPLE;
                 } else {
                     mapType = MapFactory.MapType.valueOf(currentMap);
                 }
                 loadMap(mapType);
-
                 Vector2 toppleRoad1MapStartPosition = profileManager.getProperty("toppleRoad1MapStartPosition", Vector2.class);
-                if(toppleRoad1MapStartPosition != null) {
+                if (toppleRoad1MapStartPosition != null) {
                     MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).setPlayerStart(toppleRoad1MapStartPosition);
                 }
-
                 Vector2 toppleMapStartPosition = profileManager.getProperty("toppleMapStartPosition", Vector2.class);
-                if(toppleMapStartPosition != null) {
+                if (toppleMapStartPosition != null) {
                     MapFactory.getMap(MapFactory.MapType.TOPPLE).setPlayerStart(toppleMapStartPosition);
                 }
-
                 Vector2 currentPlayerPosition = profileManager.getProperty("currentPlayerPosition", Vector2.class);
-                if(currentPlayerPosition != null && !currentPlayerPosition.equals(new Vector2(0, 0))) {
-                    Vector2 currentPositionOnMap = new Vector2(currentPlayerPosition.x*16, currentPlayerPosition.y*16);
+                if (currentPlayerPosition != null && !currentPlayerPosition.equals(new Vector2(0, 0))) {
+                    Vector2 currentPositionOnMap = new Vector2(currentPlayerPosition.x * 16, currentPlayerPosition.y * 16);
                     MapFactory.getMap(this.currentMap.currentMapType).setPlayerStart(currentPositionOnMap);
                 }
-
-                break;
-            case SAVING_PROFILE:
-                if(this.currentMap != null) {
+            }
+            case SAVING_PROFILE -> {
+                if (this.currentMap != null) {
                     profileManager.setProperty("currentMapType", this.currentMap.currentMapType.toString());
                 }
-
                 profileManager.setProperty("currentPlayerPosition", player.getCurrentPosition());
                 profileManager.setProperty("toppleMapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE).getPlayerStart());
                 profileManager.setProperty("toppleRoad1MapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getPlayerStart());
-
-                if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+                if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
                     profileManager.setProperty("currentPlayerPosition", null);
                 }
-                break;
-            case CLEAR_CURRENT_PROFILE:
+            }
+            case CLEAR_CURRENT_PROFILE -> {
                 this.currentMap = null;
                 profileManager.setProperty("currentPlayerPosition", null);
                 profileManager.setProperty("currentMapType", MapFactory.MapType.TOPPLE.toString());
-
                 MapFactory.clearCache();
-
                 profileManager.setProperty("toppleMapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE).getPlayerStart());
                 profileManager.setProperty("toppleRoad1MapStartPosition", MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getPlayerStart());
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 
     public void loadMap(MapFactory.MapType mapType) {
         Map map = MapFactory.getMap(mapType);
 
-        if(map == null) {
+        if (map == null) {
             LOGGER.debug("Map does not exist!");
             return;
         }
 
-        if(currentMap != null && currentMap.getMusicTheme() != map.getMusicTheme()) {
+        if (currentMap != null && currentMap.getMusicTheme() != map.getMusicTheme()) {
             currentMap.unloadMusic();
         }
 
@@ -105,11 +97,11 @@ public class MapManager implements ProfileObserver {
         currentMap = map;
         mapChanged = true;
         clearCurrentSelectedMapEntity();
-        LOGGER.debug("Player Start: (" + currentMap.getPlayerStart().x + "," + currentMap.getPlayerStart().y + ")");
+        LOGGER.debug("Player Start: ({},{})", currentMap.getPlayerStart().x, currentMap.getPlayerStart().y);
     }
 
     public void unregisterCurrentMapEntityObservers() {
-        if(currentMap != null) {
+        if (currentMap != null) {
             Array<Entity> entities = currentMap.getMapEntities();
             for(Entity entity: entities) {
                 entity.unregisterObservers();
@@ -123,7 +115,7 @@ public class MapManager implements ProfileObserver {
     }
 
     public void registerCurrentMapEntityObservers(ComponentObserver observer) {
-        if(currentMap != null) {
+        if (currentMap != null) {
             Array<Entity> entities = currentMap.getMapEntities();
             for(Entity entity: entities) {
                 entity.registerObserver(observer);
@@ -169,7 +161,7 @@ public class MapManager implements ProfileObserver {
     }
 
     public TiledMap getCurrentTiledMap() {
-        if(currentMap == null) {
+        if (currentMap == null) {
             loadMap(MapFactory.MapType.TOPPLE);
         }
         return currentMap.getCurrentTiledMap();
@@ -195,12 +187,12 @@ public class MapManager implements ProfileObserver {
         entity.unregisterObservers();
 
         Array<Vector2> positions = ProfileManager.getInstance().getProperty(entity.getEntityConfig().getEntityID(), Array.class);
-        if(positions == null) {
+        if (positions == null) {
             return;
         }
 
         for(Vector2 position : positions) {
-            if(position.x == entity.getCurrentPosition().x && position.y == entity.getCurrentPosition().y) {
+            if (position.x == entity.getCurrentPosition().x && position.y == entity.getCurrentPosition().y) {
                 positions.removeValue(position, true);
                 break;
             }
@@ -217,7 +209,7 @@ public class MapManager implements ProfileObserver {
         entity.unregisterObservers();
 
         Vector2 position = entity.getCurrentPosition();
-        if(position == null) {
+        if (position == null) {
             return;
         }
 
@@ -237,7 +229,7 @@ public class MapManager implements ProfileObserver {
     }
 
     public void clearCurrentSelectedMapEntity() {
-        if(currentSelectedEntity == null) {
+        if (currentSelectedEntity == null) {
             return;
         }
         currentSelectedEntity.sendMessage(Component.MESSAGE.ENTITY_DESELECTED);

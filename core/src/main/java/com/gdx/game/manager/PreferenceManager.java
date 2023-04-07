@@ -14,7 +14,7 @@ public class PreferenceManager {
     private static final String PREFS_NAME = "gdxGame";
 
     public static PreferenceManager getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new PreferenceManager();
         }
 

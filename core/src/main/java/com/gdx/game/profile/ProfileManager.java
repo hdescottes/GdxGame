@@ -32,7 +32,7 @@ public class ProfileManager extends ProfileSubject {
     }
 
     public static ProfileManager getInstance() {
-        if(profileManager == null) {
+        if (profileManager == null) {
             profileManager = new ProfileManager();
         }
         return profileManager;
@@ -55,14 +55,14 @@ public class ProfileManager extends ProfileSubject {
     }
 
     public FileHandle getProfileFile(String profile) {
-        if(!doesProfileExist(profile)) {
+        if (!doesProfileExist(profile)) {
             return null;
         }
         return profiles.get(profile);
     }
 
     public void storeAllProfiles() {
-        if(Gdx.files.isLocalStorageAvailable()) {
+        if (Gdx.files.isLocalStorageAvailable()) {
             FileHandle[] files = Gdx.files.local(".").list(SAVEGAME_SUFFIX);
 
             for(FileHandle file: files) {
@@ -84,13 +84,13 @@ public class ProfileManager extends ProfileSubject {
         boolean localFileExists = Gdx.files.local(fullFilename).exists();
 
         //If we cannot overwrite and the file exists, exit
-        if(localFileExists && !overwrite) {
+        if (localFileExists && !overwrite) {
             return;
         }
 
         FileHandle file =  null;
 
-        if(Gdx.files.isLocalStorageAvailable()) {
+        if (Gdx.files.isLocalStorageAvailable()) {
             file = Gdx.files.local(fullFilename);
             String encodedString = Base64Coder.encodeString(fileData);
             file.writeString(encodedString, !overwrite);
@@ -105,7 +105,7 @@ public class ProfileManager extends ProfileSubject {
 
     public <T extends Object> T getProperty(String key, Class<T> type){
         T property = null;
-        if(!profileProperties.containsKey(key)) {
+        if (!profileProperties.containsKey(key)) {
             return property;
         }
         property = (T) profileProperties.get(key);
@@ -119,7 +119,7 @@ public class ProfileManager extends ProfileSubject {
     }
 
     public void loadProfile() {
-        if(isNewProfile) {
+        if (isNewProfile) {
             notify(this, ProfileObserver.ProfileEvent.CLEAR_CURRENT_PROFILE);
             saveProfile();
         }
@@ -127,7 +127,7 @@ public class ProfileManager extends ProfileSubject {
         String fullProfileFileName = profileName + SAVEGAME_SUFFIX;
         boolean doesProfileFileExist = Gdx.files.local(fullProfileFileName).exists();
 
-        if(!doesProfileFileExist) {
+        if (!doesProfileFileExist) {
             return;
         }
 
@@ -142,7 +142,7 @@ public class ProfileManager extends ProfileSubject {
     }
 
     public void setCurrentProfile(String profileName) {
-        if(doesProfileExist(profileName)) {
+        if (doesProfileExist(profileName)) {
             this.profileName = profileName;
         } else {
             this.profileName = DEFAULT_PROFILE;

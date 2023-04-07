@@ -45,22 +45,22 @@ public class Tree {
 
     private Node addRecursive(Node current, Node newNode) {
 
-        if(current == null) {
+        if (current == null) {
             return new Node(newNode.getId(), newNode.getClassId(), newNode.getClassUpgrade(), newNode.getRequirements(), newNode.getBonus());
         }
 
-        if(newNode.getId() % 2 == 0) {
-            if(newNode.getId() / 2 == current.getId()) {
+        if (newNode.getId() % 2 == 0) {
+            if (newNode.getId() / 2 == current.getId()) {
                 current.setLeft(addRecursive(current.getLeft(), newNode));
-            } else if(newNode.getId() / 2 == current.getLeft().getId()){
+            } else if (newNode.getId() / 2 == current.getLeft().getId()){
                 current.setLeft(addRecursive(current.getLeft(), newNode));
             } else {
                 current.setRight(addRecursive(current.getRight(), newNode));
             }
         } else {
-            if(newNode.getId() / 2 == current.getId()) {
+            if (newNode.getId() / 2 == current.getId()) {
                 current.setRight(addRecursive(current.getRight(), newNode));
-            } else if(newNode.getId() / 2 == current.getLeft().getId()) {
+            } else if (newNode.getId() / 2 == current.getLeft().getId()) {
                 current.setLeft(addRecursive(current.getLeft(), newNode));
             } else {
                 current.setRight(addRecursive(current.getRight(), newNode));
@@ -72,7 +72,7 @@ public class Tree {
 
     private List<Node> findToWhichClassesUpgrade(String currentClassId) {
 
-        if(root == null) {
+        if (root == null) {
             return null;
         }
 
@@ -83,22 +83,22 @@ public class Tree {
 
             Node node = nodes.remove();
 
-            if(node.getClassId().equals(currentClassId)) {
+            if (node.getClassId().equals(currentClassId)) {
                 return Arrays.asList(node.getLeft(), node.getRight());
             }
 
-            if(node.getLeft() != null) {
+            if (node.getLeft() != null) {
                 nodes.add(node.getLeft());
-                if(node.getLeft().getClassId().equals(currentClassId)) {
+                if (node.getLeft().getClassId().equals(currentClassId)) {
                     return node.getLeft().getLeft() != null && node.getLeft().getRight() != null ?
                             Arrays.asList(node.getLeft().getLeft(), node.getLeft().getRight())
                             : Collections.emptyList();
                 }
             }
 
-            if(node.getRight() != null) {
+            if (node.getRight() != null) {
                 nodes.add(node.getRight());
-                if(node.getRight().getClassId().equals(currentClassId)) {
+                if (node.getRight().getClassId().equals(currentClassId)) {
                     return node.getRight().getLeft() != null && node.getRight().getRight() != null ?
                             Arrays.asList(node.getRight().getLeft(), node.getRight().getRight())
                             : Collections.emptyList();
@@ -111,13 +111,13 @@ public class Tree {
     public Node checkForClassUpgrade(String currentClassId, int currentPlayerCharacterAP, int currentPlayerCharacterDP) {
         List<Node> nodes = findToWhichClassesUpgrade(currentClassId);
 
-        if(nodes != null && nodes.size() == 2) {
+        if (nodes != null && nodes.size() == 2) {
             int AP0 = Integer.parseInt(nodes.get(0).getRequirements().get("ENTITY_PHYSICAL_ATTACK_POINTS"));
             int DP0 = Integer.parseInt(nodes.get(0).getRequirements().get("ENTITY_PHYSICAL_DEFENSE_POINTS"));
             int AP1 = Integer.parseInt(nodes.get(1).getRequirements().get("ENTITY_PHYSICAL_ATTACK_POINTS"));
             int DP1 = Integer.parseInt(nodes.get(1).getRequirements().get("ENTITY_PHYSICAL_DEFENSE_POINTS"));
 
-            if(currentPlayerCharacterAP >= AP0 && currentPlayerCharacterDP >= DP0) {
+            if (currentPlayerCharacterAP >= AP0 && currentPlayerCharacterDP >= DP0) {
                 return nodes.get(0);
             } else if (currentPlayerCharacterAP >= AP1 && currentPlayerCharacterDP >= DP1) {
                 return nodes.get(1);
@@ -128,7 +128,7 @@ public class Tree {
     }
 
     public static void saveNewClass(Node newClass) {
-        if(newClass != null) {
+        if (newClass != null) {
             ProfileManager.getInstance().setProperty("characterClass", newClass.getClassId());
             ProfileManager.getInstance().setProperty("classBonus", newClass.getBonus());
         }

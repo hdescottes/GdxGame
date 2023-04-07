@@ -35,11 +35,11 @@ public class Entity {
 		}
 
 		public Direction getOpposite() {
-			if(this == LEFT) {
+			if (this == LEFT) {
 				return RIGHT;
-			} else if(this == RIGHT) {
+			} else if (this == RIGHT) {
 				return LEFT;
-			} else if(this == UP) {
+			} else if (this == UP) {
 				return DOWN;
 			} else {
 				return UP;
@@ -88,7 +88,7 @@ public class Entity {
 		graphicsComponent = entity.graphicsComponent;
 		physicsComponent = entity.physicsComponent;
 
-		if(components == null) {
+		if (components == null) {
 			components = new Array<>(MAX_COMPONENTS);
 		}
 		components.clear();
@@ -211,7 +211,7 @@ public class Entity {
 		EntityConfig entityConfig = Entity.getEntityConfig(entityConfigPath);
 		EntityConfig serializedConfig = ProfileManager.getInstance().getProperty(entityConfig.getEntityID(), EntityConfig.class);
 
-		if(serializedConfig == null) {
+		if (serializedConfig == null) {
 			return entityConfig;
 		} else {
 			return serializedConfig;
@@ -221,7 +221,7 @@ public class Entity {
 	public static EntityConfig loadEntityConfig(EntityConfig entityConfig) {
 		EntityConfig serializedConfig = ProfileManager.getInstance().getProperty(entityConfig.getEntityID(), EntityConfig.class);
 
-		if(serializedConfig == null) {
+		if (serializedConfig == null) {
 			return entityConfig;
 		} else {
 			return serializedConfig;

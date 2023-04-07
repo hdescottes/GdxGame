@@ -21,7 +21,7 @@ public class InventoryItemFactory {
     private Hashtable<ItemTypeID,InventoryItem> inventoryItemList;
 
     public static InventoryItemFactory getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new InventoryItemFactory();
         }
 

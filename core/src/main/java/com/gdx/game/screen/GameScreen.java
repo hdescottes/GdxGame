@@ -119,14 +119,14 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
         setGameState(GameState.LOADING);
         Gdx.input.setInputProcessor(multiplexer);
 
-        if(mapRenderer == null) {
+        if (mapRenderer == null) {
             mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getCurrentTiledMap(), Map.UNIT_SCALE);
         }
     }
 
     @Override
     public void hide() {
-        if(gameState != GameState.GAME_OVER) {
+        if (gameState != GameState.GAME_OVER) {
             setGameState(GameState.SAVING);
         }
 
@@ -135,7 +135,7 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
     @Override
     public void render(float delta) {
-        if(gameState == GameState.PAUSED) {
+        if (gameState == GameState.PAUSED) {
             player.updateInput(delta);
             playerHUD.render(delta);
             return;
@@ -148,7 +148,7 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
         mapRenderer.getBatch().enableBlending();
         mapRenderer.getBatch().setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        if(mapManager.hasMapChanged()) {
+        if (mapManager.hasMapChanged()) {
             mapRenderer.setMap(mapManager.getCurrentTiledMap());
             player.sendMessage(Component.MESSAGE.INIT_START_POSITION, json.toJson(mapManager.getPlayerStartUnitScaled()));
 
@@ -180,7 +180,7 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
     @Override
     public void onNotify(String value, ComponentEvent event) {
-        switch(event) {
+        switch (event) {
             case START_BATTLE -> {
                 setGameState(GameState.SAVING);
                 setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new BattleScreen(game, playerHUD, mapManager, resourceManager), new ArrayList<>());
@@ -217,12 +217,12 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
     @Override
     public void dispose() {
         super.dispose();
-        if(player != null) {
+        if (player != null) {
             player.unregisterObservers();
             player.dispose();
         }
 
-        if(mapRenderer != null) {
+        if (mapRenderer != null) {
             mapRenderer.dispose();
         }
 
@@ -235,31 +235,25 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
     }
 
     public static void setGameState(GameState state) {
-        switch(state) {
-            case RUNNING:
-                gameState = GameState.RUNNING;
-                break;
-            case LOADING:
+        switch (state) {
+            case RUNNING -> gameState = GameState.RUNNING;
+            case LOADING -> {
                 ProfileManager.getInstance().loadProfile();
                 gameState = GameState.RUNNING;
-                break;
-            case SAVING:
+            }
+            case SAVING -> {
                 ProfileManager.getInstance().saveProfile();
                 gameState = GameState.PAUSED;
-                break;
-            case PAUSED:
-                if(gameState == GameState.PAUSED) {
+            }
+            case PAUSED -> {
+                if (gameState == GameState.PAUSED) {
                     gameState = GameState.RUNNING;
-                } else if(gameState == GameState.RUNNING) {
+                } else if (gameState == GameState.RUNNING) {
                     gameState = GameState.PAUSED;
                 }
-                break;
-            case GAME_OVER:
-                gameState = GameState.GAME_OVER;
-                break;
-            default:
-                gameState = GameState.RUNNING;
-                break;
+            }
+            case GAME_OVER -> gameState = GameState.GAME_OVER;
+            default -> gameState = GameState.RUNNING;
         }
 
     }
@@ -281,7 +275,7 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
         VIEWPORT.aspectRatio = (VIEWPORT.virtualWidth / VIEWPORT.virtualHeight);
 
         //update viewport if there could be skewing
-        if(VIEWPORT.physicalWidth / VIEWPORT.physicalHeight >= VIEWPORT.aspectRatio) {
+        if (VIEWPORT.physicalWidth / VIEWPORT.physicalHeight >= VIEWPORT.aspectRatio) {
             //Letterbox left and right
             VIEWPORT.viewportWidth = VIEWPORT.viewportHeight * (VIEWPORT.physicalWidth/VIEWPORT.physicalHeight);
             VIEWPORT.viewportHeight = VIEWPORT.virtualHeight;
@@ -291,8 +285,8 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
             VIEWPORT.viewportHeight = VIEWPORT.viewportWidth * (VIEWPORT.physicalHeight/VIEWPORT.physicalWidth);
         }
 
-        LOGGER.debug("WorldRenderer: virtual: (" + VIEWPORT.virtualWidth + "," + VIEWPORT.virtualHeight + ")" );
-        LOGGER.debug("WorldRenderer: viewport: (" + VIEWPORT.viewportWidth + "," + VIEWPORT.viewportHeight + ")" );
-        LOGGER.debug("WorldRenderer: physical: (" + VIEWPORT.physicalWidth + "," + VIEWPORT.physicalHeight + ")" );
+        LOGGER.debug("WorldRenderer: virtual: ({},{})", VIEWPORT.virtualWidth, VIEWPORT.virtualHeight);
+        LOGGER.debug("WorldRenderer: viewport: ({},{})", VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
+        LOGGER.debug("WorldRenderer: physical: ({},{})", VIEWPORT.physicalWidth, VIEWPORT.physicalHeight);
     }
 }

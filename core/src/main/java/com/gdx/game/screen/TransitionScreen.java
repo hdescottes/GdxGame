@@ -28,7 +28,7 @@ public class TransitionScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
-        if(next.getClass() != OptionScreen.class) {
+        if (next.getClass() != OptionScreen.class) {
             Arrays.stream(AudioObserver.AudioTypeEvent.values())
                     .filter(e -> e.equals(current.getMusicTheme()))
                     .findFirst()
@@ -36,7 +36,7 @@ public class TransitionScreen extends BaseScreen {
                     .ifPresent(a -> notify(AudioObserver.AudioCommand.MUSIC_STOP, a));
         }
 
-        if(currentTransitionEffect >= transitionEffects.size()) {
+        if (currentTransitionEffect >= transitionEffects.size()) {
             game.setScreen(next);
             return;
         }
@@ -44,7 +44,7 @@ public class TransitionScreen extends BaseScreen {
         transitionEffects.get(currentTransitionEffect).update(delta);
         transitionEffects.get(currentTransitionEffect).render(current, next);
 
-        if(transitionEffects.get(currentTransitionEffect).isFinished()) {
+        if (transitionEffects.get(currentTransitionEffect).isFinished()) {
             currentTransitionEffect++;
         }
 

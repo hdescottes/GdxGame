@@ -193,7 +193,7 @@ public class StatusUI extends Window implements StatusSubject {
     public void setLevelValue(int levelValue, boolean isFromQuest) {
         this.levelVal = levelValue;
         levelValLabel.setText(String.valueOf(levelVal));
-        if(isFromQuest) {
+        if (isFromQuest) {
             notify(levelVal, StatusObserver.StatusEvent.UPDATED_LEVEL_FROM_QUEST);
         } else {
             notify(levelVal, StatusObserver.StatusEvent.UPDATED_LEVEL);
@@ -231,7 +231,7 @@ public class StatusUI extends Window implements StatusSubject {
     public void addXPValue(int xpValue, boolean isFromQuest) {
         this.xpVal += xpValue;
 
-        if(xpVal > xpCurrentMax) {
+        if (xpVal > xpCurrentMax) {
             updateToNewLevel(isFromQuest);
         }
 
@@ -245,7 +245,7 @@ public class StatusUI extends Window implements StatusSubject {
     public void setXPValue(int xpValue) {
         this.xpVal = xpValue;
 
-        if(xpVal > xpCurrentMax) {
+        if (xpVal > xpCurrentMax) {
             updateToNewLevel(false);
         }
 
@@ -262,7 +262,7 @@ public class StatusUI extends Window implements StatusSubject {
 
     public void setStatusForLevel(int level) {
         for(LevelTable table: levelTables) {
-            if(Integer.parseInt(table.getLevelID()) == level) {
+            if (Integer.parseInt(table.getLevelID()) == level) {
                 setXPValueMax(table.getXpMax());
                 setXPValue(0);
 
@@ -281,7 +281,7 @@ public class StatusUI extends Window implements StatusSubject {
     public void updateToNewLevel(boolean isFromQuest){
         int xpRemain = xpVal;
         for(LevelTable table: levelTables) {
-            if(xpRemain <= table.getXpMax()) {
+            if (xpRemain <= table.getXpMax()) {
                 setXPValueMax(table.getXpMax());
                 setXPValue(xpRemain);
 
@@ -296,7 +296,7 @@ public class StatusUI extends Window implements StatusSubject {
                 notify(levelVal, StatusObserver.StatusEvent.LEVELED_UP);
                 return;
             }
-            if(levelVal <= Integer.parseInt(table.getLevelID())) {
+            if (levelVal <= Integer.parseInt(table.getLevelID())) {
                 xpRemain = xpRemain - table.getXpMax();
             }
         }

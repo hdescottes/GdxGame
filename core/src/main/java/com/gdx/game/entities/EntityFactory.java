@@ -81,7 +81,7 @@ public class EntityFactory {
     }
 
     public static EntityFactory getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new EntityFactory();
         }
 
@@ -90,41 +90,48 @@ public class EntityFactory {
 
     public Entity getEntity(EntityType entityType) {
         Entity entity;
-        switch(entityType) {
-            case WARRIOR:
+        switch (entityType) {
+            case WARRIOR -> {
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_WARRIOR_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
-            case MAGE:
+            }
+            case MAGE -> {
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_MAGE_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
-            case THIEF:
+            }
+            case THIEF -> {
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_THIEF_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
-            case GRAPPLER:
+            }
+            case GRAPPLER -> {
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_GRAPPLER_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
-            case CLERIC:
+            }
+            case CLERIC -> {
                 entity = new Entity(new PlayerInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 entity.setEntityConfig(Entity.getEntityConfig(EntityFactory.PLAYER_CLERIC_CONFIG));
                 entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));
                 return entity;
-            case PLAYER_DEMO:
+            }
+            case PLAYER_DEMO -> {
                 entity = new Entity(new NPCInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 return entity;
-            case NPC:
-            case ENEMY:
+            }
+            case NPC, ENEMY -> {
                 entity = new Entity(new NPCInputComponent(), new NPCPhysicsComponent(), new NPCGraphicsComponent());
                 return entity;
-            default:
+            }
+            default -> {
                 return null;
+            }
         }
     }
 

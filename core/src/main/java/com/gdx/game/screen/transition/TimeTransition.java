@@ -16,7 +16,7 @@ public class TimeTransition {
      * Returns the percentage of the current time over the total time.
      */
     public float get() {
-        if(transitionTime == 0) {
+        if (transitionTime == 0) {
             return 1f;
         }
         return (currentTime / transitionTime);
@@ -35,14 +35,14 @@ public class TimeTransition {
     }
 
     public void update(float time) {
-        if(!started) {
+        if (!started) {
             return;
         }
-        if(finished) {
+        if (finished) {
             return;
         }
         this.currentTime += time;
-        if(currentTime >= transitionTime) {
+        if (currentTime >= transitionTime) {
             currentTime = transitionTime;
             finished = true;
         }

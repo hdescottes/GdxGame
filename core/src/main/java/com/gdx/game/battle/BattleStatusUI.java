@@ -186,7 +186,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
     public void addXPValue(int xpValue) {
         this.xpVal += xpValue;
 
-        if(xpVal > xpCurrentMax) {
+        if (xpVal > xpCurrentMax) {
             updateToNewLevel();
         }
 
@@ -200,7 +200,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
     public void setXPValue(int xpValue) {
         this.xpVal = xpValue;
 
-        if(xpVal > xpCurrentMax) {
+        if (xpVal > xpCurrentMax) {
             updateToNewLevel();
         }
 
@@ -217,7 +217,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
 
     public void setStatusForLevel(int level) {
         for(LevelTable table: levelTables) {
-            if(Integer.parseInt(table.getLevelID()) == level) {
+            if (Integer.parseInt(table.getLevelID()) == level) {
                 setXPValueMax(table.getXpMax());
                 setXPValue(0);
 
@@ -236,7 +236,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
     public void updateToNewLevel(){
         int xpRemain = xpVal;
         for(LevelTable table: levelTables) {
-            if(xpRemain <= table.getXpMax()) {
+            if (xpRemain <= table.getXpMax()) {
                 setXPValueMax(table.getXpMax());
                 setXPValue(xpRemain);
 
@@ -251,7 +251,7 @@ public class BattleStatusUI extends Window implements StatusSubject {
                 notify(levelVal, StatusObserver.StatusEvent.LEVELED_UP);
                 return;
             }
-            if(levelVal <= Integer.parseInt(table.getLevelID())) {
+            if (levelVal <= Integer.parseInt(table.getLevelID())) {
                 xpRemain = xpRemain - table.getXpMax();
             }
         }

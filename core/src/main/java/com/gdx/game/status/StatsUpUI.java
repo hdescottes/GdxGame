@@ -24,28 +24,22 @@ public class StatsUpUI extends Window implements ClassSubject, InventorySubject 
     private Array<InventoryObserver> observers;
     private Array<ClassObserver> classObservers;
 
-    private final int pointPerLvl = 5;
-    private int maxPoint;
+    private final int maxPoint;
     private Label PValLabel;
     private int PVal;
-    private Label DPValLabel;
     private int DPVal;
-    private Label bonusDPAddedLabel;
     private int bonusDPAdded = 0;
     private final int DPValInit;
-    private Label APValLabel;
     private int APVal;
-    private Label bonusAPAddedLabel;
     private int bonusAPAdded = 0;
     private final int APValInit;
-    private Label SPDPValLabel;
     private int SPDPVal;
-    private Label bonusSPDPAddedLabel;
     private int bonusSPDPAdded = 0;
     private final int SPDPValInit;
 
     public StatsUpUI(int nbrLevelUp) {
         super("stats up", ResourceManager.skin);
+        final int pointPerLvl = 5;
         this.maxPoint = nbrLevelUp * pointPerLvl;
 
         observers = new Array<>();
@@ -80,8 +74,8 @@ public class StatsUpUI extends Window implements ClassSubject, InventorySubject 
 
     private void createAtkStatUp() {
         Label APLabel = new Label("Attack : ", ResourceManager.skin);
-        APValLabel = new Label(String.valueOf(APVal), ResourceManager.skin);
-        bonusAPAddedLabel = new Label(String.valueOf(bonusAPAdded), ResourceManager.skin);
+        Label APValLabel = new Label(String.valueOf(APVal), ResourceManager.skin);
+        Label bonusAPAddedLabel = new Label(String.valueOf(bonusAPAdded), ResourceManager.skin);
 
         ImageButton btnPlus = new ImageButton(ResourceManager.skin, "plus");
         //btnPlus.setPosition(this.getWidth() * 5 / 6 - btnPlus.getWidth() / 2, this.getHeight());
@@ -124,8 +118,8 @@ public class StatsUpUI extends Window implements ClassSubject, InventorySubject 
 
     private void createDefStatUp() {
         Label DPLabel = new Label("Defense: ", ResourceManager.skin);
-        DPValLabel = new Label(String.valueOf(DPVal), ResourceManager.skin);
-        bonusDPAddedLabel = new Label(String.valueOf(bonusDPAdded), ResourceManager.skin);
+        Label DPValLabel = new Label(String.valueOf(DPVal), ResourceManager.skin);
+        Label bonusDPAddedLabel = new Label(String.valueOf(bonusDPAdded), ResourceManager.skin);
 
         ImageButton btnPlus = new ImageButton(ResourceManager.skin, "plus");
         //btnPlus.setPosition(DPValLabel.getX() * 5 / 6 - btnPlus.getWidth() / 2, DPValLabel.getY());
@@ -168,8 +162,8 @@ public class StatsUpUI extends Window implements ClassSubject, InventorySubject 
 
     private void createSpdStatUp() {
         Label SPDPLabel = new Label("Speed: ", ResourceManager.skin);
-        SPDPValLabel = new Label(String.valueOf(SPDPVal), ResourceManager.skin);
-        bonusSPDPAddedLabel = new Label(String.valueOf(bonusSPDPAdded), ResourceManager.skin);
+        Label SPDPValLabel = new Label(String.valueOf(SPDPVal), ResourceManager.skin);
+        Label bonusSPDPAddedLabel = new Label(String.valueOf(bonusSPDPAdded), ResourceManager.skin);
 
         ImageButton btnPlus = new ImageButton(ResourceManager.skin, "plus");
         //btnPlus.setPosition(SPDPValLabel.getX() * 5 / 6 - btnPlus.getWidth() / 2, SPDPValLabel.getY());
@@ -211,7 +205,7 @@ public class StatsUpUI extends Window implements ClassSubject, InventorySubject 
     }
 
     private TextButton createValidateButton() {
-        validateBtn = new TextButton("SAVE", ResourceManager.skin);
+        TextButton validateBtn = new TextButton("SAVE", ResourceManager.skin);
         validateBtn.setPosition((this.getWidth() - validateBtn.getWidth()) / 2, this.getHeight() / 6);
         validateBtn.setVisible(false);
         validateBtn.addListener(new ClickListener() {

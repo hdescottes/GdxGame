@@ -170,7 +170,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
-        switch(event) {
+        switch (event) {
             case PLAYER_TURN_START -> {
                 LOGGER.debug("Player turn start");
                 if (GameScreen.getGameState() != GameScreen.GameState.GAME_OVER) {
@@ -200,7 +200,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 currentOpponentImagePosition.set(opponentImage.getX(), opponentImage.getY());
                 LOGGER.debug("Opponent added on battle map");
             }
-                /*if( battleShakeCam == null ){
+                /*if ( battleShakeCam == null ){
                     battleShakeCam = new ShakeCamera(currentImagePosition.x, currentImagePosition.y, 30.0f);
                 }*/
 
@@ -261,7 +261,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void onNotify(String value, ComponentEvent event) {
-        switch(event) {
+        switch (event) {
             case LOAD_RESUME -> {
                 EntityConfig config = json.fromJson(EntityConfig.class, value);
                 notificationUI.loadResume(config);
@@ -279,7 +279,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void onNotify(String value, InventoryEvent event) {
-        switch(event) {
+        switch (event) {
             case ITEM_CONSUMED -> {
                 String[] strings = value.split(Component.MESSAGE_TOKEN);
                 if (strings.length != 2) {
@@ -304,7 +304,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void onNotify(int value, StatusObserver.StatusEvent event) {
-        switch(event) {
+        switch (event) {
             case UPDATED_HP -> {
                 ProfileManager.getInstance().setProperty("currentPlayerHP", battleStatusUI.getHPValue());
             }
@@ -328,7 +328,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void onNotify(String value, ClassObserver.ClassEvent event) {
-        switch(event) {
+        switch (event) {
             case CHECK_UPGRADE_TREE_CLASS -> {
                 String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
                 int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
@@ -338,7 +338,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
                 Tree.saveNewClass(node);
 
-                if(node != null) {
+                if (node != null) {
                     notificationUI.loadUpgradeClass(node.getClassId());
                 }
             }
@@ -403,10 +403,10 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
         battleHUDStage.act(delta);
         battleHUDStage.draw();
 
-        if(dmgPlayerValLabel.isVisible() && dmgPlayerValLabel.getY() < this.battleHUDStage.getHeight()) {
+        if (dmgPlayerValLabel.isVisible() && dmgPlayerValLabel.getY() < this.battleHUDStage.getHeight()) {
             dmgPlayerValLabel.setY(dmgPlayerValLabel.getY()+5);
         }
-        if(dmgOpponentValLabel.isVisible() && dmgOpponentValLabel.getY() < this.battleHUDStage.getHeight()) {
+        if (dmgOpponentValLabel.isVisible() && dmgOpponentValLabel.getY() < this.battleHUDStage.getHeight()) {
             dmgOpponentValLabel.setY(dmgOpponentValLabel.getY()+5);
         }
 

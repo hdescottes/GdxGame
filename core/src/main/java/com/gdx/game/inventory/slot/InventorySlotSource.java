@@ -23,12 +23,12 @@ public class InventorySlotSource extends Source {
         Payload payload = new Payload();
 
         Actor actor = getActor();
-        if(actor == null) {
+        if (actor == null) {
             return null;
         }
 
         InventorySlot source = (InventorySlot)actor.getParent();
-        if(source == null) {
+        if (source == null) {
             return null;
         } else {
             sourceSlot = source;
@@ -44,7 +44,7 @@ public class InventorySlotSource extends Source {
 
     @Override
     public void dragStop (InputEvent event, float x, float y, int pointer, Payload payload, Target target) {
-        if(target == null) {
+        if (target == null) {
             sourceSlot.add(payload.getDragActor());
         }
     }

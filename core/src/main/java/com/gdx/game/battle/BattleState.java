@@ -51,7 +51,7 @@ public class BattleState extends BattleSubject {
 
     public void setCurrentOpponent(Entity entity) {
         LOGGER.debug("Entered BATTLE ZONE: {}", currentZoneLevel);
-        if(entity == null) {
+        if (entity == null) {
             return;
         }
         this.currentOpponent = entity;
@@ -59,7 +59,7 @@ public class BattleState extends BattleSubject {
     }
 
     public void setPlayer(Entity entity) {
-        if(entity == null) {
+        if (entity == null) {
             return;
         }
         this.player = entity;
@@ -76,7 +76,7 @@ public class BattleState extends BattleSubject {
     }
 
     public void playerAttacks() {
-        if(currentOpponent == null) {
+        if (currentOpponent == null) {
             return;
         }
 
@@ -84,14 +84,14 @@ public class BattleState extends BattleSubject {
         int mpVal = ProfileManager.getInstance().getProperty("currentPlayerMP", Integer.class);
         notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_PHASE_START);
 
-        if(currentPlayerWandAPPoints == 0) {
-            if(!playerAttackCalculations.isScheduled()) {
+        if (currentPlayerWandAPPoints == 0) {
+            if (!playerAttackCalculations.isScheduled()) {
                 Timer.schedule(playerAttackCalculations, 1);
             }
-        } else if(currentPlayerWandAPPoints > mpVal) {
+        } else if (currentPlayerWandAPPoints > mpVal) {
             notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
         } else {
-            if(!checkPlayerMagicUse.isScheduled() && !playerAttackCalculations.isScheduled()) {
+            if (!checkPlayerMagicUse.isScheduled() && !playerAttackCalculations.isScheduled()) {
                 Timer.schedule(checkPlayerMagicUse, .5f);
                 Timer.schedule(playerAttackCalculations, 1);
             }
@@ -99,12 +99,12 @@ public class BattleState extends BattleSubject {
     }
 
     public void opponentAttacks() {
-        if(currentOpponent == null) {
+        if (currentOpponent == null) {
             return;
         }
 
         int currentOpponentHP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString()));
-        if(!opponentAttackCalculations.isScheduled() && currentOpponentHP > 0) {
+        if (!opponentAttackCalculations.isScheduled() && currentOpponentHP > 0) {
             Timer.schedule(opponentAttackCalculations, 1);
         }
     }
@@ -121,7 +121,7 @@ public class BattleState extends BattleSubject {
         return new Timer.Task() {
             @Override
             public void run() {
-                if(speedRatio < 1) {
+                if (speedRatio < 1) {
                     speedRatio += speedRatioInit;
                     opponentAttacks();
                 } else {
@@ -161,11 +161,11 @@ public class BattleState extends BattleSubject {
                 LOGGER.debug("Player attacks {} leaving it with HP: {}", currentOpponent.getEntityConfig().getEntityID(), currentOpponentHP);
 
                 currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(damage));
-                if(damage > 0) {
+                if (damage > 0) {
                     BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.OPPONENT_HIT_DAMAGE);
                 }
 
-                if(currentOpponentHP == 0) {
+                if (currentOpponentHP == 0) {
                     BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.OPPONENT_DEFEATED);
                 }
 
@@ -185,7 +185,7 @@ public class BattleState extends BattleSubject {
                 player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(damage));
                 ProfileManager.getInstance().setProperty("currentPlayerHP", hpVal);
 
-                if(damage > 0) {
+                if (damage > 0) {
                     BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_HIT_DAMAGE);
                 }
 
@@ -202,7 +202,7 @@ public class BattleState extends BattleSubject {
         float escapeChance = BattleUtils.escapeChance(speedRatio);
         float randomVal = (float) MathUtils.random(1, 100) /100;
 
-        if(escapeChance < randomVal) {
+        if (escapeChance < randomVal) {
             notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
         } else {
             LOGGER.debug("Player flees with {}% escape chance", escapeChance * 100);

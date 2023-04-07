@@ -117,7 +117,7 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
 
             inventorySlotTable.add(inventorySlot).size(slotWidth, slotHeight);
 
-            if(i % lengthSlotRow == 0) {
+            if (i % lengthSlotRow == 0) {
                 inventorySlotTable.row();
             }
         }
@@ -132,7 +132,7 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
 
             playerInventorySlotTable.add(inventorySlot).size(slotWidth, slotHeight);
 
-            if(i % lengthSlotRow == 0) {
+            if (i % lengthSlotRow == 0) {
                 playerInventorySlotTable.row();
             }
         }
@@ -156,7 +156,7 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
         buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(fullValue > 0 && playerTotal >= fullValue) {
+                if (fullValue > 0 && playerTotal >= fullValue) {
                     playerTotal -= fullValue;
                     StoreInventoryUI.this.notify(Integer.toString(playerTotal), StoreInventoryObserver.StoreInventoryEvent.PLAYER_GP_TOTAL_UPDATED);
                     fullValue = 0;
@@ -174,7 +174,7 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
         sellButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(tradeInVal > 0) {
+                if (tradeInVal > 0) {
                     playerTotal += tradeInVal;
                     StoreInventoryUI.this.notify(Integer.toString(playerTotal), StoreInventoryObserver.StoreInventoryEvent.PLAYER_GP_TOTAL_UPDATED);
                     tradeInVal = 0;
@@ -186,8 +186,8 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
                     Array<Cell> cells = inventorySlotTable.getCells();
                     for(int i = 0; i < cells.size; i++){
                         InventorySlot inventorySlot = (InventorySlot)cells.get(i).getActor();
-                        if(inventorySlot == null) continue;
-                        if(inventorySlot.hasItem() && inventorySlot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY)) {
+                        if (inventorySlot == null) continue;
+                        if (inventorySlot.hasItem() && inventorySlot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY)) {
                             inventorySlot.clearAllInventoryItems(false);
                         }
                     }
@@ -231,7 +231,7 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
 
     @Override
     public void onNotify(InventorySlot slot, SlotEvent event) {
-        switch(event) {
+        switch (event) {
             case ADDED_ITEM -> {
                 //moving from player inventory to store inventory to sell
                 if (slot.getTopInventoryItem().getName().equalsIgnoreCase(InventoryUI.PLAYER_INVENTORY) &&
@@ -258,18 +258,20 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
                     buyTotalLabel.setText(BUY + " : " + fullValue + GP);
                 }
             }
+            default -> {
+            }
         }
         checkButtonStates();
     }
 
     public void checkButtonStates() {
-        if(tradeInVal <= 0) {
+        if (tradeInVal <= 0) {
             disableButton(sellButton, true);
         } else {
             disableButton(sellButton, false);
         }
 
-        if(fullValue <= 0 || playerTotal < fullValue) {
+        if (fullValue <= 0 || playerTotal < fullValue) {
             disableButton(buyButton, true);
         } else {
             disableButton(buyButton, false);
@@ -282,7 +284,7 @@ public class StoreInventoryUI extends Window implements InventorySlotObserver, S
     }
 
     private void disableButton(Button button, boolean disable) {
-        if(disable) {
+        if (disable) {
             button.setDisabled(true);
             button.setTouchable(Touchable.disabled);
         } else {

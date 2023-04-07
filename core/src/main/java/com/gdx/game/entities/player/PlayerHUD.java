@@ -51,10 +51,7 @@ import com.gdx.game.status.StatusUI;
 public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassObserver, ComponentObserver, ConversationGraphObserver, BattleObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
 
     private Stage stage;
-    private Viewport viewport;
-    private Camera camera;
     private Entity player;
-    private BattleState battleState;
 
     private StatusUI statusUI;
     private InventoryUI inventoryUI;
@@ -75,10 +72,9 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
     private static final String INVENTORY_FULL = "Your inventory is full!";
 
     public PlayerHUD(Camera cameraHUD, Entity entityPlayer, MapManager mapMgr) {
-        camera = cameraHUD;
         player = entityPlayer;
         mapManager = mapMgr;
-        viewport = new ScreenViewport(camera);
+        Viewport viewport = new ScreenViewport(cameraHUD);
         stage = new Stage(viewport);
         stageKeyboardFocus = stage.getKeyboardFocus();
         //_stage.setDebugAll(true);
@@ -244,7 +240,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
     }
 
     private void setInputUI(Window ui) {
-        if(ui.isVisible()) {
+        if (ui.isVisible()) {
             Gdx.input.setInputProcessor(stage);
         } else {
             stage.setKeyboardFocus(stageKeyboardFocus);
@@ -256,13 +252,12 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
     }
 
     public void setBattleState(BattleState battleState) {
-        this.battleState = battleState;
-        this.battleState.addObserver(this);
+        battleState.addObserver(this);
     }
 
     @Override
     public void onNotify(ProfileManager profileManager, ProfileEvent event) {
-        switch(event) {
+        switch (event) {
             case PROFILE_LOADED -> {
                 boolean firstTime = profileManager.getIsNewProfile();
                 if (firstTime) {
@@ -369,7 +364,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
 
     @Override
     public void onNotify(String value, ComponentEvent event) {
-        switch(event) {
+        switch (event) {
             case LOAD_CONVERSATION -> {
                 EntityConfig config = json.fromJson(EntityConfig.class, value);
 
@@ -411,10 +406,10 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
 
     @Override
     public void onNotify(ConversationGraph graph, ConversationCommandEvent event) {
-        switch(event) {
+        switch (event) {
             case LOAD_STORE_INVENTORY:
                 Entity selectedEntity = mapManager.getCurrentSelectedMapEntity();
-                if(selectedEntity == null) {
+                if (selectedEntity == null) {
                     break;
                 }
 
@@ -441,13 +436,13 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 break;
             case ACCEPT_QUEST:
                 Entity currentlySelectedEntity = mapManager.getCurrentSelectedMapEntity();
-                if(currentlySelectedEntity == null) {
+                if (currentlySelectedEntity == null) {
                     break;
                 }
                 EntityConfig config = currentlySelectedEntity.getEntityConfig();
                 QuestGraph questGraph = questUI.loadQuest(config.getQuestConfigPath());
 
-                if(questGraph != null) {
+                if (questGraph != null) {
                     //Update conversation dialog
                     config.setConversationConfigPath(QuestUI.RETURN_QUEST);
                     config.setCurrentQuestID(questGraph.getQuestID());
@@ -461,19 +456,19 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 break;
             case RETURN_QUEST:
                 Entity returnEntity = mapManager.getCurrentSelectedMapEntity();
-                if(returnEntity == null) {
+                if (returnEntity == null) {
                     break;
                 }
                 EntityConfig configReturn = returnEntity.getEntityConfig();
 
                 EntityConfig configReturnProperty = ProfileManager.getInstance().getProperty(configReturn.getEntityID(), EntityConfig.class);
-                if(configReturnProperty == null) {
+                if (configReturnProperty == null) {
                     return;
                 }
 
                 String questID = configReturnProperty.getCurrentQuestID();
 
-                if(questUI.isQuestReadyForReturn(questID)) {
+                if (questUI.isQuestReadyForReturn(questID)) {
                     //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
                     QuestGraph quest = questUI.getQuestByID(questID);
                     statusUI.addXPValue(quest.getXpReward(), true);
@@ -493,11 +488,11 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 break;
             case ADD_ENTITY_TO_INVENTORY:
                 Entity entity = mapManager.getCurrentSelectedMapEntity();
-                if(entity == null) {
+                if (entity == null) {
                     break;
                 }
 
-                if(inventoryUI.doesInventoryHaveSpace()) {
+                if (inventoryUI.doesInventoryHaveSpace()) {
                     inventoryUI.addEntityToInventory(entity, entity.getEntityConfig().getCurrentQuestID());
                     mapManager.clearCurrentSelectedMapEntity();
                     conversationUI.setVisible(false);
@@ -521,7 +516,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
 
     @Override
     public void onNotify(String value, StoreInventoryEvent event) {
-        switch(event) {
+        switch (event) {
             case PLAYER_GP_TOTAL_UPDATED -> {
                 int val = Integer.parseInt(value);
                 statusUI.setGoldValue(val);
@@ -538,7 +533,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
 
     @Override
     public void onNotify(int value, StatusEvent event) {
-        switch(event) {
+        switch (event) {
             case UPDATED_GP:
                 storeInventoryUI.setPlayerGP(value);
                 ProfileManager.getInstance().setProperty("currentPlayerGP", statusUI.getGoldValue());
@@ -569,7 +564,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
 
     @Override
     public void onNotify(String value, ClassObserver.ClassEvent event) {
-        switch(event) {
+        switch (event) {
             case CHECK_UPGRADE_TREE_CLASS -> {
                 String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
                 int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
@@ -639,24 +634,24 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
     @Override
     public void onNotify(Entity enemyEntity, BattleEvent event) {
         switch (event) {
-            case OPPONENT_DEFEATED:
+            case OPPONENT_DEFEATED -> {
                 int goldReward = Integer.parseInt(enemyEntity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_GP_REWARD.toString()));
                 statusUI.addGoldValue(goldReward);
                 int xpReward = Integer.parseInt(enemyEntity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_XP_REWARD.toString()));
                 statusUI.addXPValue(xpReward, false);
-                break;
-            case PLAYER_HIT_DAMAGE:
+            }
+            case PLAYER_HIT_DAMAGE -> {
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 statusUI.setHPValue(hpVal);
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 
     @Override
     public void onNotify(String value, InventoryEvent event) {
-        switch(event) {
+        switch (event) {
             case ITEM_CONSUMED -> {
                 String[] strings = value.split(Component.MESSAGE_TOKEN);
                 if (strings.length != 2) {
