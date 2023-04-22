@@ -1,6 +1,7 @@
 package com.gdx.game.battle;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -208,9 +209,15 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
             //this.getTitleLabel().setText("Level " + battleState.getCurrentZoneLevel() + " " + entity.getEntityConfig().getEntityID());
             case PLAYER_HIT_DAMAGE -> {
-                int damagePlayer = Integer.parseInt(player.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
+                int damagePlayer = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
+                boolean isCritical = Boolean.parseBoolean(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString()));
+
                 dmgPlayerValLabel.setText(String.valueOf(damagePlayer));
                 dmgPlayerValLabel.setY(origDmgPlayerValLabelY);
+                dmgPlayerValLabel.setColor(Color.WHITE);
+                if (isCritical) {
+                    dmgPlayerValLabel.setColor(Color.ORANGE);
+                }
                 //battleShakeCam.startShaking();
                 dmgPlayerValLabel.setVisible(true);
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
@@ -221,8 +228,14 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
             }
             case OPPONENT_HIT_DAMAGE -> {
                 int damageEnemy = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
+                boolean isCritical = Boolean.parseBoolean(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString()));
+
                 dmgOpponentValLabel.setText(String.valueOf(damageEnemy));
                 dmgOpponentValLabel.setY(origDmgOpponentValLabelY);
+                dmgOpponentValLabel.setColor(Color.WHITE);
+                if (isCritical) {
+                    dmgOpponentValLabel.setColor(Color.ORANGE);
+                }
                 //battleShakeCam.startShaking();
                 dmgOpponentValLabel.setVisible(true);
                 LOGGER.debug("Player deals {} damages", damageEnemy);

@@ -28,6 +28,7 @@ public class EntityConfig {
         ENTITY_MAGIC_DEFENSE_POINTS,
         ENTITY_SPEED_POINTS,
         ENTITY_HIT_DAMAGE_TOTAL,
+        ENTITY_RECEIVED_CRITICAL,
         ENTITY_XP_REWARD,
         ENTITY_GP_REWARD,
         NONE

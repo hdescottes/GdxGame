@@ -15,13 +15,11 @@ public class BattleState extends BattleSubject {
     private Entity player;
     private float speedRatioInit = 0;
     private float speedRatio = 0;
+    private final float criticalMultiplier = 1.5f;
     private int currentZoneLevel = 0;
     private int currentPlayerAP;
     private int currentPlayerDP;
     private int currentPlayerWandAPPoints = 0;
-    private final int chanceOfAttack = 25;
-    private final int chanceOfEscape = 40;
-    private final int criticalChance = 90;
     private Timer.Task playerAttackCalculations;
     private Timer.Task opponentAttackCalculations;
     private Timer.Task checkPlayerMagicUse;
@@ -47,6 +45,13 @@ public class BattleState extends BattleSubject {
         opponentAttackCalculations.cancel();
         checkPlayerMagicUse.cancel();
         determineTurn.cancel();
+    }
+
+    private void resetEntityBattleProps() {
+        player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "false");
+        player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(0));
+        currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "false");
+        currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(0));
     }
 
     public void setCurrentOpponent(Entity entity) {
@@ -121,6 +126,7 @@ public class BattleState extends BattleSubject {
         return new Timer.Task() {
             @Override
             public void run() {
+                resetEntityBattleProps();
                 if (speedRatio < 1) {
                     speedRatio += speedRatioInit;
                     opponentAttacks();
@@ -151,7 +157,13 @@ public class BattleState extends BattleSubject {
                 int currentOpponentHP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString()));
                 int currentOpponentDP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.toString()));
 
+                double criticalChance = BattleUtils.criticalChance(currentPlayerAP);
                 int damage = MathUtils.clamp(currentPlayerAP - currentOpponentDP, 0, currentPlayerAP);
+                if (BattleUtils.isEntitySuccessful(criticalChance)) {
+                    damage *= criticalMultiplier;
+                    currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "true");
+                    LOGGER.debug("Critical hit !");
+                }
 
                 LOGGER.debug("ENEMY HAS {} hit with damage: {}", currentOpponentHP, damage);
 
@@ -179,14 +191,22 @@ public class BattleState extends BattleSubject {
             @Override
             public void run() {
                 int currentOpponentAP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.toString()));
+
+                double criticalChance = BattleUtils.criticalChance(currentOpponentAP);
                 int damage = MathUtils.clamp(currentOpponentAP - currentPlayerDP, 0, currentOpponentAP);
+                if (BattleUtils.isEntitySuccessful(criticalChance)) {
+                    damage *= criticalMultiplier;
+                    player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "true");
+                    LOGGER.debug("Critical hit !");
+
+                }
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 hpVal = MathUtils.clamp( hpVal - damage, 0, hpVal);
                 player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(damage));
                 ProfileManager.getInstance().setProperty("currentPlayerHP", hpVal);
 
                 if (damage > 0) {
-                    BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_HIT_DAMAGE);
+                    BattleState.this.notify(player, BattleObserver.BattleEvent.PLAYER_HIT_DAMAGE);
                 }
 
                 LOGGER.debug("Player HIT for {} BY {} leaving player with HP: {}", damage, currentOpponent.getEntityConfig().getEntityID(), hpVal);
@@ -199,14 +219,13 @@ public class BattleState extends BattleSubject {
     public void playerRuns() {
         notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_PHASE_START);
 
-        float escapeChance = BattleUtils.escapeChance(speedRatio);
-        float randomVal = (float) MathUtils.random(1, 100) /100;
+        double escapeChance = BattleUtils.escapeChance(speedRatio);
 
-        if (escapeChance < randomVal) {
-            notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
-        } else {
+        if (BattleUtils.isEntitySuccessful(escapeChance)) {
             LOGGER.debug("Player flees with {}% escape chance", escapeChance * 100);
             notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_RUNNING);
+        } else {
+            notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
         }
     }
 }
