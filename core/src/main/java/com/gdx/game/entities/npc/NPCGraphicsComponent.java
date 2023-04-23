@@ -34,29 +34,29 @@ public class NPCGraphicsComponent extends GraphicsComponent {
     public void receiveMessage(String message) {
         String[] string = message.split(MESSAGE_TOKEN);
 
-        if(string.length == 0) {
+        if (string.length == 0) {
             return;
         }
 
-        if(string.length == 1) {
-            if(string[0].equalsIgnoreCase(MESSAGE.ENTITY_SELECTED.toString())) {
+        if (string.length == 1) {
+            if (string[0].equalsIgnoreCase(MESSAGE.ENTITY_SELECTED.toString())) {
                 isSelected = !wasSelected;
-            } else if(string[0].equalsIgnoreCase(MESSAGE.ENTITY_DESELECTED.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.ENTITY_DESELECTED.toString())) {
                 wasSelected = isSelected;
                 isSelected = false;
             }
         }
 
-        if(string.length == 2) {
-            if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_POSITION.toString())) {
+        if (string.length == 2) {
+            if (string[0].equalsIgnoreCase(MESSAGE.CURRENT_POSITION.toString())) {
                 currentPosition = json.fromJson(Vector2.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.INIT_START_POSITION.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.INIT_START_POSITION.toString())) {
                 currentPosition = json.fromJson(Vector2.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_STATE.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.CURRENT_STATE.toString())) {
                 currentState = json.fromJson(Entity.State.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
                 currentDirection = json.fromJson(Entity.Direction.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.LOAD_ANIMATIONS.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.LOAD_ANIMATIONS.toString())) {
                 EntityConfig entityConfig = json.fromJson(EntityConfig.class, string[1]);
                 Array<EntityConfig.AnimationConfig> animationConfigs = entityConfig.getAnimationConfig();
 
@@ -67,9 +67,9 @@ public class NPCGraphicsComponent extends GraphicsComponent {
                     float frameDuration = animationConfig.getFrameDuration();
                     Animation<TextureRegion> animation = null;
 
-                    if(textureNames.size == 1) {
+                    if (textureNames.size == 1) {
                         animation = loadAnimation(textureNames.get(0), points, frameDuration);
-                    } else if(textureNames.size == 2) {
+                    } else if (textureNames.size == 2) {
                         animation = loadAnimation(textureNames.get(0), textureNames.get(1), points, frameDuration);
                     }
 
@@ -83,16 +83,16 @@ public class NPCGraphicsComponent extends GraphicsComponent {
     public void update(Entity entity, MapManager mapMgr, Batch batch, float delta) {
         updateAnimations(delta);
 
-        if(isSelected) {
+        if (isSelected) {
             drawSelected(entity, mapMgr);
             mapMgr.setCurrentSelectedMapEntity(entity);
-            if(!sentShowConversationMessage) {
+            if (!sentShowConversationMessage) {
                 notify(json.toJson(entity.getEntityConfig()), ComponentObserver.ComponentEvent.SHOW_CONVERSATION);
                 sentShowConversationMessage = true;
                 sentHideConversationMessage = false;
             }
         } else {
-            if(!sentHideConversationMessage) {
+            if (!sentHideConversationMessage) {
                 notify(json.toJson(entity.getEntityConfig()), ComponentObserver.ComponentEvent.HIDE_CONVERSATION);
                 sentHideConversationMessage = true;
                 sentShowConversationMessage = false;

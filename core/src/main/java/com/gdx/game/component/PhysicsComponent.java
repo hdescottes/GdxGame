@@ -61,14 +61,14 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
 
         for(Entity mapEntity: tempEntities) {
             //Check for testing against self
-            if(mapEntity.equals(entity)) {
+            if (mapEntity.equals(entity)) {
                 continue;
             }
 
             Rectangle targetRect = mapEntity.getCurrentBoundingBox();
-            if(boundingBox.overlaps(targetRect)){
+            if (boundingBox.overlaps(targetRect)){
                 //Collision
-                if("FOE".equals(mapEntity.getEntityConfig().getEntityStatus())) {
+                if ("FOE".equals(mapEntity.getEntityConfig().getEntityStatus())) {
                     entity.sendMessage(MESSAGE.COLLISION_WITH_FOE, mapEntity.getEntityConfig().getEntityID());
                 } else {
                     entity.sendMessage(MESSAGE.COLLISION_WITH_ENTITY, mapEntity.getEntityConfig().getEntityID());
@@ -84,11 +84,11 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
     protected boolean isCollision(Entity entitySource, Entity entityTarget) {
         boolean isCollisionWithMapEntities = false;
 
-        if(entitySource.equals(entityTarget)) {
+        if (entitySource.equals(entityTarget)) {
             return false;
         }
 
-        if(entitySource.getCurrentBoundingBox().overlaps(entityTarget.getCurrentBoundingBox())) {
+        if (entitySource.getCurrentBoundingBox().overlaps(entityTarget.getCurrentBoundingBox())) {
             //Collision
             entitySource.sendMessage(MESSAGE.COLLISION_WITH_ENTITY);
             isCollisionWithMapEntities = true;
@@ -100,14 +100,14 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
     protected boolean isCollisionWithMapLayer(Entity entity, MapManager mapMgr) {
         MapLayer mapCollisionLayer =  mapMgr.getCollisionLayer();
 
-        if(mapCollisionLayer == null){
+        if (mapCollisionLayer == null){
             return false;
         }
 
         for(MapObject object: mapCollisionLayer.getObjects()) {
-            if(object instanceof RectangleMapObject) {
+            if (object instanceof RectangleMapObject) {
                 Rectangle rectangle = ((RectangleMapObject)object).getRectangle();
-                if(boundingBox.overlaps(rectangle)) {
+                if (boundingBox.overlaps(rectangle)) {
                     //Collision
                     entity.sendMessage(MESSAGE.COLLISION_WITH_MAP);
                     return true;
@@ -126,11 +126,11 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
     }
 
     protected void calculateNextPosition(float deltaTime) {
-        if(currentDirection == null) {
+        if (currentDirection == null) {
             return;
         }
 
-        if(deltaTime > .7) {
+        if (deltaTime > .7) {
             return;
         }
 
@@ -139,21 +139,13 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
 
         velocity.scl(deltaTime);
 
-        switch(currentDirection) {
-            case LEFT :
-                testX -=  velocity.x;
-                break;
-            case RIGHT :
-                testX += velocity.x;
-                break;
-            case UP :
-                testY += velocity.y;
-                break;
-            case DOWN :
-                testY -= velocity.y;
-                break;
-            default:
-                break;
+        switch (currentDirection) {
+            case LEFT -> testX -= velocity.x;
+            case RIGHT -> testX += velocity.x;
+            case UP -> testY += velocity.y;
+            case DOWN -> testY -= velocity.y;
+            default -> {
+            }
         }
 
         nextEntityPosition.x = testX;
@@ -174,20 +166,20 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
         float widthReductionAmount = 1.0f - percentageWidthReduced; //.8f for 20% (1 - .20)
         float heightReductionAmount = 1.0f - percentageHeightReduced; //.8f for 20% (1 - .20)
 
-        if(widthReductionAmount > 0 && widthReductionAmount < 1) {
+        if (widthReductionAmount > 0 && widthReductionAmount < 1) {
             width = Entity.FRAME_WIDTH * widthReductionAmount;
         } else {
             width = Entity.FRAME_WIDTH;
         }
 
-        if(heightReductionAmount > 0 && heightReductionAmount < 1) {
+        if (heightReductionAmount > 0 && heightReductionAmount < 1) {
             height = Entity.FRAME_HEIGHT * heightReductionAmount;
         } else {
             height = Entity.FRAME_HEIGHT;
         }
 
-        if(width == 0 || height == 0) {
-            LOGGER.debug("Width and Height are 0!! " + width + ":" + height);
+        if (width == 0 || height == 0) {
+            LOGGER.debug("Width and Height are 0!! {}:{}", width, height);
         }
 
         //Need to account for the unitscale, since the map coordinates will be in pixels
@@ -200,16 +192,10 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
         boundingBox.setWidth(width);
         boundingBox.setHeight(height);
 
-        switch(boundingBoxLocation) {
-            case BOTTOM_LEFT:
-                boundingBox.set(minX, minY, width, height);
-                break;
-            case BOTTOM_CENTER:
-                boundingBox.setCenter(minX + origWidth/2, minY + origHeight/4);
-                break;
-            case CENTER:
-                boundingBox.setCenter(minX + origWidth/2, minY + origHeight/2);
-                break;
+        switch (boundingBoxLocation) {
+            case BOTTOM_LEFT -> boundingBox.set(minX, minY, width, height);
+            case BOTTOM_CENTER -> boundingBox.setCenter(minX + origWidth / 2, minY + origHeight / 4);
+            case CENTER -> boundingBox.setCenter(minX + origWidth / 2, minY + origHeight / 2);
         }
     }
 
@@ -221,16 +207,10 @@ public abstract class PhysicsComponent extends ComponentSubject implements Compo
         minX = position.x / Map.UNIT_SCALE;
         minY = position.y / Map.UNIT_SCALE;
 
-        switch(boundingBoxLocation) {
-            case BOTTOM_LEFT:
-                boundingBox.set(minX, minY, boundingBox.getWidth(), boundingBox.getHeight());
-                break;
-            case BOTTOM_CENTER:
-                boundingBox.setCenter(minX + Entity.FRAME_WIDTH/2, minY + Entity.FRAME_HEIGHT/4);
-                break;
-            case CENTER:
-                boundingBox.setCenter(minX + Entity.FRAME_WIDTH/2, minY + Entity.FRAME_HEIGHT/2);
-                break;
+        switch (boundingBoxLocation) {
+            case BOTTOM_LEFT -> boundingBox.set(minX, minY, boundingBox.getWidth(), boundingBox.getHeight());
+            case BOTTOM_CENTER -> boundingBox.setCenter(minX + (float) Entity.FRAME_WIDTH / 2, minY + (float) Entity.FRAME_HEIGHT / 4);
+            case CENTER -> boundingBox.setCenter(minX + (float) Entity.FRAME_WIDTH / 2, minY + (float) Entity.FRAME_HEIGHT / 2);
         }
     }
 }

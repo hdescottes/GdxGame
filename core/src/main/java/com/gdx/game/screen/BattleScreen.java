@@ -3,7 +3,6 @@ package com.gdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -29,7 +28,6 @@ import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.BATTLE_THEME;
 
 public class BattleScreen extends BaseScreen implements BattleObserver {
 
-    private TextureRegion[]  textureRegions;
     private InputMultiplexer multiplexer;
     private OrthographicCamera camera;
     private Stage battleStage;
@@ -61,7 +59,7 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
     private void removeEntities() {
         Array<Entity> entities = mapManager.getCurrentMapEntities();
         for(Entity entity: entities) {
-            if(entity.getEntityConfig().getEntityID().equals(mapManager.getPlayer().getEntityEncounteredType().toString())) {
+            if (entity.getEntityConfig().getEntityID().equals(mapManager.getPlayer().getEntityEncounteredType().toString())) {
                 mapManager.removeMapEntity(entity);
             }
         }
@@ -92,21 +90,27 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
-        switch(event) {
-            case RESUME_OVER:
+        switch (event) {
+            case RESUME_OVER -> {
                 refreshStatus();
                 refreshInventory();
                 ProfileManager.getInstance().saveProfile();
                 setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
                 removeEntities();
-                break;
-            case OPPONENT_TURN_DONE:
-                if(GameScreen.getGameState() == GameScreen.GameState.GAME_OVER) {
+            }
+            case OPPONENT_TURN_DONE -> {
+                if (GameScreen.getGameState() == GameScreen.GameState.GAME_OVER) {
                     setupGameOver();
                 }
-                break;
-            default:
-                break;
+            }
+            case PLAYER_RUNNING -> {
+                refreshStatus();
+                refreshInventory();
+                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
+                removeEntities();
+            }
+            default -> {
+            }
         }
     }
 
@@ -124,11 +128,8 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
 
         gdxGame.getBatch().begin();
         gdxGame.getBatch().draw(resourceManager.battleBackgroundMeadow, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        if(textureRegions != null) {
-            gdxGame.getBatch().draw(textureRegions[1], 150, 175, textureRegions[1].getRegionWidth()*3f, textureRegions[1].getRegionHeight()*3f);
-        }
-
         gdxGame.getBatch().end();
+
         battleStage.act(Gdx.graphics.getDeltaTime());
         battleStage.draw();
 

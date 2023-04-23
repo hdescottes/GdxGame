@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AnimatedImage extends Image {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AnimatedImage.class);
     private float frameTime = 0;
     protected Entity entity;
@@ -38,8 +39,8 @@ public class AnimatedImage extends Image {
 
     public void setCurrentAnimation(Entity.AnimationType animationType){
         Animation<TextureRegion> animation = entity.getAnimation(animationType);
-        if( animation == null ){
-            LOGGER.debug("Animation type " + animationType.toString() + " does not exist!");
+        if ( animation == null ){
+            LOGGER.debug("Animation type {} does not exist!", animationType.toString());
             return;
         }
 
@@ -53,8 +54,8 @@ public class AnimatedImage extends Image {
     public void act(float delta) {
         super.act(delta);
 
-        Drawable drawable = this.getDrawable();
-        if(drawable == null) {
+        Drawable drawable = getDrawable();
+        if (drawable == null) {
             //Gdx.app.debug(TAG, "Drawable is NULL!");
             return;
         }
@@ -63,7 +64,7 @@ public class AnimatedImage extends Image {
         //Gdx.app.debug(TAG, "Keyframe number is " + _animation.getKeyFrameIndex(_frameTime));
         ((TextureRegionDrawable) drawable).setRegion(currentRegion);
 
-        for (Action action : this.getActions()) {
+        for (Action action : getActions()) {
             action.act(delta);
         }
     }

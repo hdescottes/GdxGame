@@ -1,6 +1,7 @@
 package com.gdx.game.battle;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -37,7 +38,7 @@ import org.slf4j.LoggerFactory;
 
 public class BattleHUD implements Screen, BattleObserver, ClassObserver, ComponentObserver, InventoryObserver, StatusObserver {
 
-    private static  final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BattleHUD.class);
 
     private Stage battleHUDStage;
 
@@ -91,6 +92,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
         opponentImage.setTouchable(Touchable.disabled);
         battleState.setPlayer(player);
         battleState.setCurrentOpponent(enemy);
+        battleState.setSpeedRatio(ProfileManager.getInstance().getProperty("currentPlayerSPDP", Integer.class) / Float.parseFloat(enemy.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_SPEED_POINTS.name())));
 
         dmgPlayerValLabel = new Label("0", ResourceManager.skin);
         dmgPlayerValLabel.setVisible(false);
@@ -169,167 +171,178 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
 
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
-        switch(event) {
-            case PLAYER_TURN_START:
+        switch (event) {
+            case PLAYER_TURN_START -> {
                 LOGGER.debug("Player turn start");
+                if (GameScreen.getGameState() != GameScreen.GameState.GAME_OVER) {
+                    battleUI.setVisible(true);
+                    battleUI.setTouchable(Touchable.enabled);
+                }
+            }
+            case PLAYER_PHASE_START -> {
+                LOGGER.debug("Player phase start");
                 battleUI.setVisible(false);
                 battleUI.setTouchable(Touchable.disabled);
-                break;
-            case PLAYER_ADDED:
+            }
+            case PLAYER_ADDED -> {
                 playerImage.setEntity(entity);
                 playerImage.setCurrentAnimation(Entity.AnimationType.WALK_RIGHT);
                 playerImage.setSize(playerWidth, playerHeight);
                 playerImage.setPosition(0, 200);
                 playerImage.addAction(Actions.moveTo(200, 200, 2));
-
                 currentPlayerImagePosition.set(((MoveToAction) playerImage.getActions().get(0)).getX(), playerImage.getY());
                 LOGGER.debug("Player added on battle map");
-                break;
-            case OPPONENT_ADDED:
+            }
+            case OPPONENT_ADDED -> {
                 opponentImage.setEntity(entity);
                 opponentImage.setCurrentAnimation(Entity.AnimationType.IMMOBILE);
                 opponentImage.setSize(enemyWidth, enemyHeight);
                 opponentImage.setPosition(600, 200);
-
                 currentOpponentImagePosition.set(opponentImage.getX(), opponentImage.getY());
                 LOGGER.debug("Opponent added on battle map");
-                /*if( battleShakeCam == null ){
+            }
+                /*if ( battleShakeCam == null ){
                     battleShakeCam = new ShakeCamera(currentImagePosition.x, currentImagePosition.y, 30.0f);
                 }*/
 
-                //Gdx.app.debug(TAG, "Image position: " + _image.getX() + "," + _image.getY() );
+            //Gdx.app.debug(TAG, "Image position: " + _image.getX() + "," + _image.getY() );
 
-                //this.getTitleLabel().setText("Level " + battleState.getCurrentZoneLevel() + " " + entity.getEntityConfig().getEntityID());
-                break;
-            case PLAYER_HIT_DAMAGE:
-                int damagePlayer = Integer.parseInt(player.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
+            //this.getTitleLabel().setText("Level " + battleState.getCurrentZoneLevel() + " " + entity.getEntityConfig().getEntityID());
+            case PLAYER_HIT_DAMAGE -> {
+                int damagePlayer = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
+                boolean isCritical = Boolean.parseBoolean(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString()));
+
                 dmgPlayerValLabel.setText(String.valueOf(damagePlayer));
                 dmgPlayerValLabel.setY(origDmgPlayerValLabelY);
+                dmgPlayerValLabel.setColor(Color.WHITE);
+                if (isCritical) {
+                    dmgPlayerValLabel.setColor(Color.ORANGE);
+                }
                 //battleShakeCam.startShaking();
                 dmgPlayerValLabel.setVisible(true);
-
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 battleStatusUI.setHPValue(hpVal);
-
-                if(hpVal <= 0){
+                if (hpVal <= 0) {
                     GameScreen.setGameState(GameScreen.GameState.GAME_OVER);
                 }
-                break;
-            case OPPONENT_HIT_DAMAGE:
+            }
+            case OPPONENT_HIT_DAMAGE -> {
                 int damageEnemy = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString()));
+                boolean isCritical = Boolean.parseBoolean(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString()));
+
                 dmgOpponentValLabel.setText(String.valueOf(damageEnemy));
                 dmgOpponentValLabel.setY(origDmgOpponentValLabelY);
+                dmgOpponentValLabel.setColor(Color.WHITE);
+                if (isCritical) {
+                    dmgOpponentValLabel.setColor(Color.ORANGE);
+                }
                 //battleShakeCam.startShaking();
                 dmgOpponentValLabel.setVisible(true);
-                LOGGER.debug("Opponent deals " + damageEnemy + " damages");
-                break;
-            case OPPONENT_DEFEATED:
+                LOGGER.debug("Player deals {} damages", damageEnemy);
+            }
+            case OPPONENT_DEFEATED -> {
                 dmgOpponentValLabel.setVisible(false);
                 dmgOpponentValLabel.setY(origDmgOpponentValLabelY);
                 setOpponentDefeated();
                 LOGGER.debug("Opponent is defeated");
-
                 int xpReward = Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_XP_REWARD.toString()));
                 battleStatusUI.addXPValue(xpReward);
-
                 battleUI.setVisible(false);
                 battleUI.setTouchable(Touchable.disabled);
                 battleStatusUI.setVisible(false);
                 battleConversation.notifBattleResume(enemy);
-                break;
-            case OPPONENT_TURN_DONE:
-                if(GameScreen.getGameState() != GameScreen.GameState.GAME_OVER) {
-                    battleUI.setVisible(true);
-                    battleUI.setTouchable(Touchable.enabled);
-                }
+            }
+            case OPPONENT_TURN_DONE -> {
                 LOGGER.debug("Opponent turn done");
-                break;
-            case PLAYER_TURN_DONE:
-                battleState.opponentAttacks();
+                if (GameScreen.getGameState() != GameScreen.GameState.GAME_OVER) {
+                    battleState.determineTurn();
+                }
+            }
+            case PLAYER_TURN_DONE -> {
                 LOGGER.debug("Player turn done");
-                break;
+                battleState.determineTurn();
+            }
             /*case PLAYER_USED_MAGIC:
                 float x = currentImagePosition.x + (enemyWidth/2);
                 float y = currentImagePosition.y + (enemyHeight/2);
                 //effects.add(ParticleEffectFactory.getParticleEffect(ParticleEffectFactory.ParticleEffectType.WAND_ATTACK, x,y));
                 break;*/
-            default:
-                break;
+            default -> {
+            }
         }
     }
 
     @Override
     public void onNotify(String value, ComponentEvent event) {
-        switch(event) {
-            case LOAD_RESUME:
+        switch (event) {
+            case LOAD_RESUME -> {
                 EntityConfig config = json.fromJson(EntityConfig.class, value);
                 notificationUI.loadResume(config);
-                break;
-            case SHOW_RESUME:
+            }
+            case SHOW_RESUME -> {
                 EntityConfig configShow = json.fromJson(EntityConfig.class, value);
-
                 if (configShow.getEntityID().equalsIgnoreCase(notificationUI.getCurrentEntityID())) {
                     notificationUI.setVisible(true);
                 }
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 
     @Override
     public void onNotify(String value, InventoryEvent event) {
-        switch(event) {
-            case ITEM_CONSUMED:
+        switch (event) {
+            case ITEM_CONSUMED -> {
                 String[] strings = value.split(Component.MESSAGE_TOKEN);
-                if(strings.length != 2) {
+                if (strings.length != 2) {
                     return;
                 }
 
                 int type = Integer.parseInt(strings[0]);
                 int typeValue = Integer.parseInt(strings[1]);
 
-                if(InventoryItem.doesRestoreHP(type)) {
+                if (InventoryItem.doesRestoreHP(type)) {
                     //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_EATING);
                     battleStatusUI.addHPValue(typeValue);
-                } else if(InventoryItem.doesRestoreMP(type)) {
+                } else if (InventoryItem.doesRestoreMP(type)) {
                     //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_DRINKING);
                     battleStatusUI.addMPValue(typeValue);
                 }
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 
     @Override
     public void onNotify(int value, StatusObserver.StatusEvent event) {
-        switch(event) {
-            case UPDATED_HP:
+        switch (event) {
+            case UPDATED_HP -> {
                 ProfileManager.getInstance().setProperty("currentPlayerHP", battleStatusUI.getHPValue());
-                break;
-            case UPDATED_LEVEL:
+            }
+            case UPDATED_LEVEL -> {
                 ProfileManager.getInstance().setProperty("currentPlayerLevel", battleStatusUI.getLevelValue());
                 createStatsUpUI(battleStatusUI.getNbrLevelUp());
-                break;
-            case UPDATED_MP:
+            }
+            case UPDATED_MP -> {
                 ProfileManager.getInstance().setProperty("currentPlayerMP", battleStatusUI.getMPValue());
-                break;
-            case UPDATED_XP:
+            }
+            case UPDATED_XP -> {
                 ProfileManager.getInstance().setProperty("currentPlayerXP", battleStatusUI.getXPValue());
-                break;
-            case LEVELED_UP:
+            }
+            case LEVELED_UP -> {
                 //notify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, AudioObserver.AudioTypeEvent.MUSIC_LEVEL_UP_FANFARE);
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 
     @Override
     public void onNotify(String value, ClassObserver.ClassEvent event) {
-        switch(event) {
-            case CHECK_UPGRADE_TREE_CLASS:
+        switch (event) {
+            case CHECK_UPGRADE_TREE_CLASS -> {
                 String currentClass = ProfileManager.getInstance().getProperty("characterClass", String.class);
                 int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
                 int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
@@ -338,12 +351,12 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
                 Tree.saveNewClass(node);
 
-                if(node != null) {
+                if (node != null) {
                     notificationUI.loadUpgradeClass(node.getClassId());
                 }
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 
@@ -403,10 +416,10 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
         battleHUDStage.act(delta);
         battleHUDStage.draw();
 
-        if(dmgPlayerValLabel.isVisible() && dmgPlayerValLabel.getY() < this.battleHUDStage.getHeight()) {
+        if (dmgPlayerValLabel.isVisible() && dmgPlayerValLabel.getY() < this.battleHUDStage.getHeight()) {
             dmgPlayerValLabel.setY(dmgPlayerValLabel.getY()+5);
         }
-        if(dmgOpponentValLabel.isVisible() && dmgOpponentValLabel.getY() < this.battleHUDStage.getHeight()) {
+        if (dmgOpponentValLabel.isVisible() && dmgOpponentValLabel.getY() < this.battleHUDStage.getHeight()) {
             dmgOpponentValLabel.setY(dmgOpponentValLabel.getY()+5);
         }
 

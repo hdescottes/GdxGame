@@ -20,20 +20,26 @@ public class CharacterRecord {
     private final int baseMP;
     private final int baseAttack;
     private final int baseDefense;
+    private final int baseSpeed;
     private final String name;
 
     public static final List<EntityFactory.EntityType> charactersList = Arrays.asList(WARRIOR, MAGE, THIEF, GRAPPLER,
             CLERIC);
 
     public static CharacterRecord[] CHARACTERS = charactersList.stream()
-            .map(c -> new CharacterRecord(2, 2, loadAPStats(c.name()), loadDPStats(c.name()), c.name()))
+            .map(c -> new CharacterRecord(2, 2,
+                    loadStats(c.name(), EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS),
+                    loadStats(c.name(), EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS),
+                    loadStats(c.name(), EntityConfig.EntityProperties.ENTITY_SPEED_POINTS),
+                    c.name()))
             .toArray(CharacterRecord[]::new);
 
-    public CharacterRecord(int baseHP, int baseMP, int baseAttack, int baseDefense, String name) {
+    public CharacterRecord(int baseHP, int baseMP, int baseAttack, int baseDefense, int baseSpeed, String name) {
         this.baseHP = baseHP;
         this.baseMP = baseMP;
         this.baseAttack = baseAttack;
         this.baseDefense = baseDefense;
+        this.baseSpeed = baseSpeed;
         this.name = name;
     }
 
@@ -53,17 +59,16 @@ public class CharacterRecord {
         return baseDefense;
     }
 
+    public int getBaseSpeed() {
+        return baseSpeed;
+    }
+
     public String getName() {
         return name;
     }
 
-    private static int loadAPStats(String charName) {
+    private static int loadStats(String charName, EntityConfig.EntityProperties prop) {
         Entity entity = EntityFactory.getInstance().getEntity( EntityFactory.EntityType.valueOf(charName.toUpperCase(Locale.ROOT)));
-        return Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.toString()));
-    }
-
-    private static int loadDPStats(String charName) {
-        Entity entity = EntityFactory.getInstance().getEntity( EntityFactory.EntityType.valueOf(charName.toUpperCase(Locale.ROOT)));
-        return Integer.parseInt(entity.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.toString()));
+        return Integer.parseInt(entity.getEntityConfig().getPropertyValue(prop.toString()));
     }
 }

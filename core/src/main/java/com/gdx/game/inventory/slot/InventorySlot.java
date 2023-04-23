@@ -54,11 +54,11 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     public void decrementItemCount(boolean sendRemoveNotification) {
         numItemsVal--;
         numItemsLabel.setText(String.valueOf(numItemsVal));
-        if(defaultBackground.getChildren().size == 1) {
+        if (defaultBackground.getChildren().size == 1) {
             defaultBackground.add(customBackgroundDecal);
         }
         checkVisibilityOfItemCount();
-        if(sendRemoveNotification) {
+        if (sendRemoveNotification) {
             notify(this, InventorySlotObserver.SlotEvent.REMOVED_ITEM);
         }
 
@@ -67,11 +67,11 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     public void incrementItemCount(boolean sendAddNotification) {
         numItemsVal++;
         numItemsLabel.setText(String.valueOf(numItemsVal));
-        if(defaultBackground.getChildren().size > 1) {
+        if (defaultBackground.getChildren().size > 1) {
             defaultBackground.getChildren().pop();
         }
         checkVisibilityOfItemCount();
-        if(sendAddNotification) {
+        if (sendAddNotification) {
             notify(this, InventorySlotObserver.SlotEvent.ADDED_ITEM);
         }
     }
@@ -80,11 +80,11 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     public void add(Actor actor) {
         super.add(actor);
 
-        if(numItemsLabel == null) {
+        if (numItemsLabel == null) {
             return;
         }
 
-        if(!actor.equals(defaultBackground) && !actor.equals(numItemsLabel)) {
+        if (!actor.equals(defaultBackground) && !actor.equals(numItemsLabel)) {
             incrementItemCount(true);
         }
     }
@@ -92,11 +92,11 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     public void remove(Actor actor) {
         super.removeActor(actor);
 
-        if(numItemsLabel == null) {
+        if (numItemsLabel == null) {
             return;
         }
 
-        if(!actor.equals(defaultBackground) && !actor.equals(numItemsLabel)) {
+        if (!actor.equals(defaultBackground) && !actor.equals(numItemsLabel)) {
             decrementItemCount(true);
         }
     }
@@ -105,11 +105,11 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
         for(Actor actor : array) {
             super.add(actor);
 
-            if(numItemsLabel == null) {
+            if (numItemsLabel == null) {
                 return;
             }
 
-            if(!actor.equals(defaultBackground) && !actor.equals(numItemsLabel)) {
+            if (!actor.equals(defaultBackground) && !actor.equals(numItemsLabel)) {
                 incrementItemCount(true);
             }
         }
@@ -117,7 +117,7 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
 
     public Array<Actor> getAllInventoryItems() {
         Array<Actor> items = new Array<>();
-        if(hasItem()) {
+        if (hasItem()) {
             SnapshotArray<Actor> arrayChildren = this.getChildren();
             int numInventoryItems =  arrayChildren.size - 2;
             for(int i = 0; i < numInventoryItems; i++) {
@@ -129,7 +129,7 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     }
 
     public void updateAllInventoryItemNames(String name) {
-        if(hasItem()) {
+        if (hasItem()) {
             SnapshotArray<Actor> arrayChildren = this.getChildren();
             //skip first two elements
             for(int i = arrayChildren.size - 1; i > 1 ; i--) {
@@ -139,12 +139,12 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     }
 
     public void removeAllInventoryItemsWithName(String name) {
-        if(hasItem()) {
+        if (hasItem()) {
             SnapshotArray<Actor> arrayChildren = this.getChildren();
             //skip first two elements
             for(int i = arrayChildren.size - 1; i > 1 ; i--) {
                 String itemName = arrayChildren.get(i).getName();
-                if(itemName.equalsIgnoreCase(name)) {
+                if (itemName.equalsIgnoreCase(name)) {
                     decrementItemCount(true);
                     arrayChildren.removeIndex(i);
                 }
@@ -153,7 +153,7 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     }
 
     public void clearAllInventoryItems(boolean sendRemoveNotifications) {
-        if(hasItem()) {
+        if (hasItem()) {
             SnapshotArray<Actor> arrayChildren = this.getChildren();
             int numInventoryItems =  getNumItems();
             for(int i = 0; i < numInventoryItems; i++) {
@@ -168,7 +168,7 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     }
 
     public boolean hasItem() {
-        if(hasChildren()) {
+        if (hasChildren()) {
             SnapshotArray<Actor> items = this.getChildren();
             return items.size > 2;
         }
@@ -176,7 +176,7 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     }
 
     public int getNumItems() {
-        if(hasChildren()) {
+        if (hasChildren()) {
             SnapshotArray<Actor> items = this.getChildren();
             return items.size - 2;
         }
@@ -184,11 +184,11 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     }
 
     public int getNumItems(String name) {
-        if(hasChildren()) {
+        if (hasChildren()) {
             SnapshotArray<Actor> items = this.getChildren();
             int totalFilteredSize = 0;
             for(Actor actor: items) {
-                if(actor.getName().equalsIgnoreCase(name)) {
+                if (actor.getName().equalsIgnoreCase(name)) {
                     totalFilteredSize++;
                 }
             }
@@ -198,7 +198,7 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
     }
 
     public boolean doesAcceptItemUseType(int itemUseType) {
-        if(filterItemType == 0) {
+        if (filterItemType == 0) {
             return true;
         } else {
             return ((filterItemType & itemUseType) == itemUseType);
@@ -207,9 +207,9 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
 
     public InventoryItem getTopInventoryItem() {
         InventoryItem actor = null;
-        if(hasChildren()) {
+        if (hasChildren()) {
             SnapshotArray<Actor> items = this.getChildren();
-            if(items.size > 2 ) {
+            if (items.size > 2 ) {
                 actor = (InventoryItem) items.peek();
             }
         }
@@ -218,7 +218,7 @@ public class InventorySlot extends Stack implements InventorySlotSubject {
 
     static public void swapSlots(InventorySlot inventorySlotSource, InventorySlot inventorySlotTarget, InventoryItem dragActor) {
         //check if items can accept each other, otherwise, no swap
-        if(!inventorySlotTarget.doesAcceptItemUseType(dragActor.getItemUseType()) ||
+        if (!inventorySlotTarget.doesAcceptItemUseType(dragActor.getItemUseType()) ||
                 !inventorySlotSource.doesAcceptItemUseType(inventorySlotTarget.getTopInventoryItem().getItemUseType())) {
             inventorySlotSource.add(dragActor);
             return;

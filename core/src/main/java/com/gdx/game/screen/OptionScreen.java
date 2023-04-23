@@ -55,7 +55,7 @@ public class OptionScreen extends BaseScreen {
     private void loadContents() {
         vfxManager = new VfxManager(Pixmap.Format.RGBA8888);
         vfxEffect = new GaussianBlurEffect();
-        if(previousScreen.getClass() != MenuScreen.class) {
+        if (previousScreen.getClass() != MenuScreen.class) {
             vfxManager.addEffect(vfxEffect);
         }
 
@@ -182,10 +182,10 @@ public class OptionScreen extends BaseScreen {
 
     @Override
     public void show() {
-        if(controlClickListener) {
+        if (controlClickListener) {
             controlStage.addActor(controlTable);
             Gdx.input.setInputProcessor(controlStage);
-        } else if(musicClickListener) {
+        } else if (musicClickListener) {
             musicStage.addActor(musicTable);
             Gdx.input.setInputProcessor(musicStage);
         } else {
@@ -203,10 +203,10 @@ public class OptionScreen extends BaseScreen {
         vfxManager.cleanUpBuffers();
         vfxManager.beginInputCapture();
 
-        if(previousScreen != null && previousScreenAsImg == null) {
+        if (previousScreen != null && previousScreenAsImg == null) {
             previousScreen.render(stateTime);
         }
-        if(previousScreenAsImg != null) {
+        if (previousScreenAsImg != null) {
             backgroundStage.addActor(previousScreenAsImg);
             backgroundStage.draw();
         }
@@ -215,11 +215,11 @@ public class OptionScreen extends BaseScreen {
         vfxManager.applyEffects();
         vfxManager.renderToScreen();
 
-        if(controlClickListener) {
+        if (controlClickListener) {
             show();
             controlStage.act(delta);
             controlStage.draw();
-        } else if(musicClickListener) {
+        } else if (musicClickListener) {
             show();
             musicStage.act(delta);
             musicStage.draw();

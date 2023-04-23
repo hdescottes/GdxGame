@@ -27,6 +27,7 @@ public class InventoryUITest {
         ProfileManager profileManager = ProfileManager.getInstance();
         profileManager.setProperty("currentPlayerCharacterAP", 5);
         profileManager.setProperty("currentPlayerCharacterDP", 5);
+        profileManager.setProperty("currentPlayerCharacterSPDP", 5);
 
         InventoryUI inventoryUI = new InventoryUI();
 

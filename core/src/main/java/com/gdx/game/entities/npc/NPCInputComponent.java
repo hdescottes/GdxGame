@@ -19,23 +19,23 @@ public class NPCInputComponent extends InputComponent {
     public void receiveMessage(String message) {
         String[] string = message.split(MESSAGE_TOKEN);
 
-        if(string.length == 0) {
+        if (string.length == 0) {
             return;
         }
 
         //Specifically for messages with 1 object payload
-        if(string.length == 1) {
-            if(string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_MAP.toString())) {
+        if (string.length == 1) {
+            if (string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_MAP.toString())) {
                 currentDirection = Entity.Direction.getRandomNext();
-            } else if(string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_ENTITY.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_ENTITY.toString())) {
                 currentState = Entity.State.IDLE;
             }
         }
 
-        if(string.length == 2) {
-            if(string[0].equalsIgnoreCase(MESSAGE.INIT_STATE.toString())) {
+        if (string.length == 2) {
+            if (string[0].equalsIgnoreCase(MESSAGE.INIT_STATE.toString())) {
                 currentState = json.fromJson(Entity.State.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.INIT_DIRECTION.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.INIT_DIRECTION.toString())) {
                 currentDirection = json.fromJson(Entity.Direction.class, string[1]);
             }
         }
@@ -48,12 +48,12 @@ public class NPCInputComponent extends InputComponent {
 
     @Override
     public void update(Entity entity, float delta) {
-        if(keys.get(Keys.QUIT)) {
+        if (keys.get(Keys.QUIT)) {
             Gdx.app.exit();
         }
 
         //If IMMOBILE, don't update anything
-        if(currentState == Entity.State.IMMOBILE) {
+        if (currentState == Entity.State.IMMOBILE) {
             entity.sendMessage(MESSAGE.CURRENT_STATE, json.toJson(Entity.State.IMMOBILE));
             return;
         }
@@ -61,13 +61,13 @@ public class NPCInputComponent extends InputComponent {
         frameTime += delta;
 
         //Change direction after so many seconds
-        if(frameTime > MathUtils.random(1,5)) {
+        if (frameTime > MathUtils.random(1,5)) {
             currentState = Entity.State.getRandomNext();
             currentDirection = Entity.Direction.getRandomNext();
             frameTime = 0.0f;
         }
 
-        if(currentState == Entity.State.IDLE) {
+        if (currentState == Entity.State.IDLE) {
             entity.sendMessage(MESSAGE.CURRENT_STATE, json.toJson(Entity.State.IDLE));
             return;
         }
@@ -94,7 +94,7 @@ public class NPCInputComponent extends InputComponent {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.ESCAPE) {
+        if (keycode == Input.Keys.ESCAPE) {
             keys.put(Keys.QUIT, true);
         }
         return false;

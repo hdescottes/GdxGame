@@ -59,19 +59,19 @@ graph TD;
 
 -------
 ## Demo
-<p align="center">
+<p style="text-align:center">
   <img src="desktop/src/main/resources/demo/demo.gif" width="396" height="315">
 </p>
-<p align="center">gameplay demo</p>
-<p align="center">
+<p style="text-align:center">gameplay demo</p>
+<p style="text-align:center">
   <img src="desktop/src/main/resources/demo/battle_demo.gif" width="396" height="315">
 </p>
-<p align="center">battle demo</p>
-<p align="center">
+<p style="text-align:center">battle demo</p>
+<p style="text-align:center">
   <img src="desktop/src/main/resources/demo/demo_new_DA.gif" width="396" height="315">
   <img src="desktop/src/main/resources/demo/demo_new_DA_battle.gif" width="396" height="315">
 </p>
-<p align="center">demo with the new DA (can't show it on a public repo)</p>
+<p style="text-align:center">demo with the new DA (can't show it on a public repo)</p>
 
 -------
 ## Game idea
@@ -82,8 +82,10 @@ graph TD;
 - [x] battle feature
     - [ ] entities' animation while attacking
     - [ ] implement bonus gained by class
-    - [ ] implement speed, magic, resist, ... stats
+    - [ ] implement magic, resist, ... stats
     - [ ] implements drops from enemies
+
+- [ ] armor sets
 
 - [ ] crafting feature
 

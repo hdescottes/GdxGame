@@ -86,7 +86,7 @@ public class MenuNewGameScreen extends BaseScreen {
                 //check to see if the current profile matches one that already exists
                 boolean exists = ProfileManager.getInstance().doesProfileExist(messageText);
 
-                if(exists) {
+                if (exists) {
                     //Pop up dialog for Overwrite
                     overwriteDialog.show(newStage);
                 } else {
@@ -164,7 +164,7 @@ public class MenuNewGameScreen extends BaseScreen {
     public void render(float delta) {
         stateTime += Gdx.graphics.getDeltaTime();
 
-        if(previousScreen != null) {
+        if (previousScreen != null) {
             previousScreen.render(stateTime);
         }
 

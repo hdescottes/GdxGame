@@ -28,8 +28,6 @@ public class QuestUI extends Window {
     private List listTasks;
     private Json json;
     private Array<QuestGraph> quests;
-    private Label questLabel;
-    private Label tasksLabel;
 
     public QuestUI() {
         super("Quest Log", ResourceManager.skin);
@@ -38,8 +36,8 @@ public class QuestUI extends Window {
         quests = new Array<>();
 
         //create
-        questLabel = new Label("Quests:", ResourceManager.skin);
-        tasksLabel = new Label("Tasks:", ResourceManager.skin);
+        Label questLabel = new Label("Quests:", ResourceManager.skin);
+        Label tasksLabel = new Label("Tasks:", ResourceManager.skin);
 
         listQuests = new List<QuestGraph>(ResourceManager.skin);
 
@@ -71,7 +69,7 @@ public class QuestUI extends Window {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 QuestGraph quest = (QuestGraph) listQuests.getSelected();
-                if(quest == null) {
+                if (quest == null) {
                     return;
                 }
                 populateQuestTaskDialog(quest);
@@ -81,8 +79,8 @@ public class QuestUI extends Window {
 
     public void questTaskComplete(String questID, String questTaskID) {
         for(QuestGraph questGraph: quests) {
-            if(questGraph.getQuestID().equalsIgnoreCase(questID)) {
-                if(questGraph.isQuestTaskAvailable(questTaskID)) {
+            if (questGraph.getQuestID().equalsIgnoreCase(questID)) {
+                if (questGraph.isQuestTaskAvailable(questTaskID)) {
                     questGraph.setQuestTaskComplete(questTaskID);
                 } else {
                     return;
@@ -92,13 +90,13 @@ public class QuestUI extends Window {
     }
 
     public QuestGraph loadQuest(String questConfigPath) {
-        if(questConfigPath.isEmpty() || !Gdx.files.internal(questConfigPath).exists()) {
+        if (questConfigPath.isEmpty() || !Gdx.files.internal(questConfigPath).exists()) {
             LOGGER.debug("Quest file does not exist!");
             return null;
         }
 
         QuestGraph graph = json.fromJson(QuestGraph.class, Gdx.files.internal(questConfigPath));
-        if(doesQuestExist(graph.getQuestID())) {
+        if (doesQuestExist(graph.getQuestID())) {
             return null;
         }
 
@@ -109,7 +107,7 @@ public class QuestUI extends Window {
     }
 
     public QuestGraph removeQuest(QuestGraph graph) {
-        if(doesQuestExist(graph.getQuestID())) {
+        if (doesQuestExist(graph.getQuestID())) {
             clearDialog();
             quests.removeValue(graph, true);
             updateQuestItemList();
@@ -119,21 +117,21 @@ public class QuestUI extends Window {
     }
 
     public boolean isQuestReadyForReturn(String questID) {
-        if(questID.isEmpty()) {
+        if (questID.isEmpty()) {
             LOGGER.debug("Quest ID not valid");
             return false;
         }
 
-        if(!doesQuestExist(questID)) {
+        if (!doesQuestExist(questID)) {
             return false;
         }
 
         QuestGraph graph = getQuestByID(questID);
-        if(graph == null) {
+        if (graph == null) {
             return false;
         }
 
-        if(graph.updateQuestForReturn()) {
+        if (graph.updateQuestForReturn()) {
             graph.setQuestComplete(true);
         } else {
             return false;
@@ -143,7 +141,7 @@ public class QuestUI extends Window {
 
     public QuestGraph getQuestByID(String questGraphID) {
         for(QuestGraph questGraph: quests) {
-            if(questGraph.getQuestID().equalsIgnoreCase(questGraphID)) {
+            if (questGraph.getQuestID().equalsIgnoreCase(questGraphID)) {
                 return questGraph;
             }
         }
@@ -152,7 +150,7 @@ public class QuestUI extends Window {
 
     public boolean doesQuestExist(String questGraphID) {
         for(QuestGraph questGraph: quests) {
-            if(questGraph.getQuestID().equalsIgnoreCase(questGraphID)) {
+            if (questGraph.getQuestID().equalsIgnoreCase(questGraphID)) {
                 return true;
             }
         }
@@ -185,7 +183,7 @@ public class QuestUI extends Window {
         listTasks.clearItems();
 
         ArrayList<QuestTask> tasks =  graph.getAllQuestTasks();
-        if(tasks == null) {
+        if (tasks == null) {
             return;
         }
 
@@ -198,7 +196,7 @@ public class QuestUI extends Window {
 
         //populate items if quests have them
         for(QuestGraph quest : quests) {
-            if(!quest.isQuestComplete()) {
+            if (!quest.isQuestComplete()) {
                 quest.init(mapMgr);
             }
         }
@@ -207,7 +205,7 @@ public class QuestUI extends Window {
 
     public void updateQuests(MapManager mapMgr) {
         for(QuestGraph quest : quests) {
-            if(!quest.isQuestComplete()) {
+            if (!quest.isQuestComplete()) {
                 quest.update(mapMgr);
             }
         }

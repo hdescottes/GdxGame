@@ -121,16 +121,16 @@ public class ResourceManager {
     }
 
     public static void loadMapAsset(String mapFilenamePath) {
-        if(mapFilenamePath == null || mapFilenamePath.isEmpty()) {
+        if (mapFilenamePath == null || mapFilenamePath.isEmpty()) {
             return;
         }
 
-        if(assetManager.isLoaded(mapFilenamePath)) {
+        if (assetManager.isLoaded(mapFilenamePath)) {
             return;
         }
 
         //load asset
-        if(filePathResolver.resolve(mapFilenamePath).exists() ) {
+        if (filePathResolver.resolve(mapFilenamePath).exists() ) {
             assetManager.setLoader(TiledMap.class, new TmxMapLoader(filePathResolver));
             assetManager.load(mapFilenamePath, TiledMap.class);
             //Until we add loading screen, just block until we load the map
@@ -149,7 +149,7 @@ public class ResourceManager {
         TiledMap map = null;
 
         // once the asset manager is done loading
-        if(assetManager.isLoaded(mapFilenamePath)) {
+        if (assetManager.isLoaded(mapFilenamePath)) {
             map = assetManager.get(mapFilenamePath, TiledMap.class);
         } else {
             LOGGER.debug("Map is not loaded: {}", mapFilenamePath);
@@ -159,16 +159,16 @@ public class ResourceManager {
     }
 
     public static void loadTextureAsset(String textureFilenamePath) {
-        if(textureFilenamePath == null || textureFilenamePath.isEmpty()) {
+        if (textureFilenamePath == null || textureFilenamePath.isEmpty()) {
             return;
         }
 
-        if(assetManager.isLoaded(textureFilenamePath)) {
+        if (assetManager.isLoaded(textureFilenamePath)) {
             return;
         }
 
         //load asset
-        if(filePathResolver.resolve(textureFilenamePath).exists()) {
+        if (filePathResolver.resolve(textureFilenamePath).exists()) {
             assetManager.setLoader(Texture.class, new TextureLoader(filePathResolver));
             assetManager.load(textureFilenamePath, Texture.class);
             //Until we add loading screen, just block until we load the map
@@ -182,7 +182,7 @@ public class ResourceManager {
         Texture texture = null;
 
         // once the asset manager is done loading
-        if(assetManager.isLoaded(textureFilenamePath)) {
+        if (assetManager.isLoaded(textureFilenamePath)) {
             texture = assetManager.get(textureFilenamePath,Texture.class);
         } else {
             LOGGER.debug("Texture is not loaded: {}", textureFilenamePath);
@@ -192,16 +192,16 @@ public class ResourceManager {
     }
 
     public static void loadMusicAsset(String musicFilenamePath) {
-        if(musicFilenamePath == null || musicFilenamePath.isEmpty()) {
+        if (musicFilenamePath == null || musicFilenamePath.isEmpty()) {
             return;
         }
 
-        if(assetManager.isLoaded(musicFilenamePath)) {
+        if (assetManager.isLoaded(musicFilenamePath)) {
             return;
         }
 
         //load asset
-        if(filePathResolver.resolve(musicFilenamePath).exists()) {
+        if (filePathResolver.resolve(musicFilenamePath).exists()) {
             assetManager.setLoader(Music.class, new MusicLoader(filePathResolver));
             assetManager.load(musicFilenamePath, Music.class);
             //Until we add loading screen, just block until we load the map
@@ -216,7 +216,7 @@ public class ResourceManager {
         Music music = null;
 
         // once the asset manager is done loading
-        if(assetManager.isLoaded(musicFilenamePath)) {
+        if (assetManager.isLoaded(musicFilenamePath)) {
             music = assetManager.get(musicFilenamePath, Music.class);
         } else {
             LOGGER.debug("Music is not loaded: {}", musicFilenamePath);

@@ -23,7 +23,7 @@ public class AudioManager implements AudioObserver {
     }
 
     public static AudioManager getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new AudioManager();
         }
 
@@ -39,7 +39,7 @@ public class AudioManager implements AudioObserver {
     }
 
     private void checkMusicEnabled(Music music) {
-        if(!PreferenceManager.getInstance().isMusicEnabled()) {
+        if (!PreferenceManager.getInstance().isMusicEnabled()) {
             music.stop();
         } else {
             music.play();
@@ -48,40 +48,34 @@ public class AudioManager implements AudioObserver {
 
     @Override
     public void onNotify(AudioCommand command, AudioTypeEvent event) {
-        switch(command){
-            case MUSIC_LOAD:
-                ResourceManager.loadMusicAsset(event.getValue());
-                break;
-            case MUSIC_PLAY_ONCE:
-                playMusic(false, event.getValue());
-                break;
-            case MUSIC_PLAY_LOOP:
-                playMusic(true, event.getValue());
-                break;
-            case MUSIC_STOP:
+        switch (command) {
+            case MUSIC_LOAD -> ResourceManager.loadMusicAsset(event.getValue());
+            case MUSIC_PLAY_ONCE -> playMusic(false, event.getValue());
+            case MUSIC_PLAY_LOOP -> playMusic(true, event.getValue());
+            case MUSIC_STOP -> {
                 Music music = queuedMusic.get(event.getValue());
-                if(music != null) {
+                if (music != null) {
                     music.stop();
                 }
-                break;
-            case MUSIC_STOP_ALL:
-                for(Music musicStop: queuedMusic.values()) {
+            }
+            case MUSIC_STOP_ALL -> {
+                for (Music musicStop : queuedMusic.values()) {
                     musicStop.stop();
                 }
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
     }
 
     private void playMusic(boolean isLooping, String fullFilePath) {
         Music music = queuedMusic.get(fullFilePath);
-        if(music != null) {
+        if (music != null) {
             music.setLooping(isLooping);
             music.setVolume(PreferenceManager.getMusicVolume());
             checkMusicEnabled(music);
             setCurrentMusic(music);
-        } else if(ResourceManager.isAssetLoaded(fullFilePath)) {
+        } else if (ResourceManager.isAssetLoaded(fullFilePath)) {
             music = ResourceManager.getMusicAsset(fullFilePath);
             music.setLooping(isLooping);
             music.setVolume(PreferenceManager.getMusicVolume());

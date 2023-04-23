@@ -23,14 +23,14 @@ public class MapFactory {
         switch(mapType) {
             case TOPPLE_ROAD_1:
                 map = mapTable.get(MapType.TOPPLE_ROAD_1);
-                if(map == null) {
+                if (map == null) {
                     map = new ToppleRoad1();
                     mapTable.put(MapType.TOPPLE_ROAD_1, map);
                 }
                 break;
             case TOPPLE:
                 map = mapTable.get(MapType.TOPPLE);
-                if(map == null) {
+                if (map == null) {
                     map = new Topple();
                     mapTable.put(MapType.TOPPLE, map);
                 }

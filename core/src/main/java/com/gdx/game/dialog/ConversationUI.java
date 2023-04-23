@@ -70,7 +70,7 @@ public class ConversationUI extends Window {
             @Override
             public void clicked (InputEvent event, float x, float y) {
                 ConversationChoice choice = (ConversationChoice) listItems.getSelected();
-                if(choice == null) {
+                if (choice == null) {
                     return;
                 }
                 graph.notify(graph, choice.getConversationCommandEvent());
@@ -97,7 +97,7 @@ public class ConversationUI extends Window {
 
         clearDialog();
 
-        if(fullFilenamePath.isEmpty() || !Gdx.files.internal(fullFilenamePath).exists()) {
+        if (fullFilenamePath.isEmpty() || !Gdx.files.internal(fullFilenamePath).exists()) {
             LOGGER.debug("Conversation file does not exist!");
             return;
         }
@@ -130,7 +130,7 @@ public class ConversationUI extends Window {
     }
 
     public void setConversationGraph(ConversationGraph graph) {
-        if(this.graph != null) {
+        if (this.graph != null) {
             this.graph.removeAllObservers();
         }
         this.graph = graph;
@@ -145,13 +145,13 @@ public class ConversationUI extends Window {
         clearDialog();
 
         Conversation conversation = graph.getConversationByID(conversationID);
-        if(conversation == null) {
+        if (conversation == null) {
             return;
         }
         graph.setCurrentConversation(conversationID);
         dialogText.setText(conversation.getDialog());
         ArrayList<ConversationChoice> choices =  graph.getCurrentChoices();
-        if(choices == null) {
+        if (choices == null) {
             return;
         }
         listItems.setItems(choices.toArray());

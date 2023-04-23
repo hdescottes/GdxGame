@@ -46,28 +46,28 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
     public void receiveMessage(String message) {
         String[] string = message.split(MESSAGE_TOKEN);
 
-        if(string.length == 0) {
+        if (string.length == 0) {
             return;
         }
 
         //Specifically for messages with 1 object payload
-        if(string.length == 2) {
-            if(string[0].equalsIgnoreCase(Component.MESSAGE.INIT_START_POSITION.toString())) {
+        if (string.length == 2) {
+            if (string[0].equalsIgnoreCase(Component.MESSAGE.INIT_START_POSITION.toString())) {
                 currentEntityPosition = json.fromJson(Vector2.class, string[1]);
                 nextEntityPosition.set(currentEntityPosition.x, currentEntityPosition.y);
                 previousDiscovery = "";
                 previousEnemySpawn = "0";
                 notify(previousEnemySpawn, ComponentObserver.ComponentEvent.ENEMY_SPAWN_LOCATION_CHANGED);
-            } else if(string[0].equalsIgnoreCase(Component.MESSAGE.CURRENT_STATE.toString())) {
+            } else if (string[0].equalsIgnoreCase(Component.MESSAGE.CURRENT_STATE.toString())) {
                 state = json.fromJson(Entity.State.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(Component.MESSAGE.CURRENT_DIRECTION.toString())) {
+            } else if (string[0].equalsIgnoreCase(Component.MESSAGE.CURRENT_DIRECTION.toString())) {
                 currentDirection = json.fromJson(Entity.Direction.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(Component.MESSAGE.INIT_SELECT_ENTITY.toString())) {
+            } else if (string[0].equalsIgnoreCase(Component.MESSAGE.INIT_SELECT_ENTITY.toString())) {
                 mouseSelectCoordinates = json.fromJson(Vector3.class, string[1]);
                 isMouseSelectEnabled = true;
-            } else if(string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_ENTITY.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_ENTITY.toString())) {
                 entityEncounteredType = json.fromJson(EntityFactory.EntityName.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_FOE.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.COLLISION_WITH_FOE.toString())) {
                 entityEncounteredType = json.fromJson(EntityFactory.EntityName.class, string[1]);
                 notify(entityEncounteredType.name(), ComponentObserver.ComponentEvent.START_BATTLE);
             }
@@ -82,12 +82,12 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
         updateDiscoverLayerActivation(mapMgr);
         updateEnemySpawnLayerActivation(mapMgr);
 
-        if(isMouseSelectEnabled) {
+        if (isMouseSelectEnabled) {
             selectMapEntityCandidate(mapMgr);
             isMouseSelectEnabled = false;
         }
 
-        if(!isCollisionWithMapLayer(entity, mapMgr) && !isCollisionWithMapEntities(entity, mapMgr) && state == Entity.State.WALKING) {
+        if (!isCollisionWithMapLayer(entity, mapMgr) && !isCollisionWithMapEntities(entity, mapMgr) && state == Entity.State.WALKING) {
             setNextPositionToCurrent(entity);
 
             Camera camera = mapMgr.getCamera();
@@ -114,16 +114,16 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
             //Don't break, reset all entities
             mapEntity.sendMessage(Component.MESSAGE.ENTITY_DESELECTED);
             Rectangle mapEntityBoundingBox = mapEntity.getCurrentBoundingBox();
-            if(mapEntity.getCurrentBoundingBox().contains(mouseSelectCoordinates.x, mouseSelectCoordinates.y)) {
+            if (mapEntity.getCurrentBoundingBox().contains(mouseSelectCoordinates.x, mouseSelectCoordinates.y)) {
                 //Check distance
                 Vector3 vec3Player = new Vector3(boundingBox.x, boundingBox.y, 0);
                 Vector3 vec3Npc = new Vector3(mapEntityBoundingBox.x, mapEntityBoundingBox.y, 0);
                 float distance = vec3Player.dst(vec3Npc);
 
-                if(distance <= SELECT_RAY_MAXIMUM_DISTANCE) {
+                if (distance <= SELECT_RAY_MAXIMUM_DISTANCE) {
                     //We have a valid entity selection
                     //Picked/Selected
-                    LOGGER.debug("Selected Entity! " + mapEntity.getEntityConfig().getEntityID());
+                    LOGGER.debug("Selected Entity! {}", mapEntity.getEntityConfig().getEntityID());
                     mapEntity.sendMessage(Component.MESSAGE.ENTITY_SELECTED);
                     notify(json.toJson(mapEntity.getEntityConfig()), ComponentObserver.ComponentEvent.LOAD_CONVERSATION);
                 }
@@ -135,26 +135,26 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
     private boolean updateDiscoverLayerActivation(MapManager mapMgr) {
         MapLayer mapDiscoverLayer =  mapMgr.getQuestDiscoverLayer();
 
-        if(mapDiscoverLayer == null) {
+        if (mapDiscoverLayer == null) {
             return false;
         }
 
         Rectangle rectangle;
 
         for(MapObject object: mapDiscoverLayer.getObjects()) {
-            if(object instanceof RectangleMapObject) {
+            if (object instanceof RectangleMapObject) {
                 rectangle = ((RectangleMapObject)object).getRectangle();
 
-                if(boundingBox.overlaps(rectangle)) {
+                if (boundingBox.overlaps(rectangle)) {
                     String questID = object.getName();
                     String questTaskID = (String)object.getProperties().get("taskID");
                     String val = questID + MESSAGE_TOKEN + questTaskID;
 
-                    if(questID == null) {
+                    if (questID == null) {
                         return false;
                     }
 
-                    if(previousDiscovery.equalsIgnoreCase(val)) {
+                    if (previousDiscovery.equalsIgnoreCase(val)) {
                         return true;
                     } else {
                         previousDiscovery = val;
@@ -172,27 +172,27 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
     private boolean updateEnemySpawnLayerActivation(MapManager mapMgr) {
         MapLayer mapEnemySpawnLayer =  mapMgr.getEnemySpawnLayer();
 
-        if(mapEnemySpawnLayer == null) {
+        if (mapEnemySpawnLayer == null) {
             return false;
         }
 
         Rectangle rectangle;
 
         for(MapObject object: mapEnemySpawnLayer.getObjects()) {
-            if(object instanceof RectangleMapObject) {
+            if (object instanceof RectangleMapObject) {
                 rectangle = ((RectangleMapObject)object).getRectangle();
 
-                if(boundingBox.overlaps(rectangle)) {
+                if (boundingBox.overlaps(rectangle)) {
                     String enemySpawnID = object.getName();
 
-                    if(enemySpawnID == null) {
+                    if (enemySpawnID == null) {
                         return false;
                     }
 
-                    if(previousEnemySpawn.equalsIgnoreCase(enemySpawnID)) {
+                    if (previousEnemySpawn.equalsIgnoreCase(enemySpawnID)) {
                         return true;
                     } else {
-                        LOGGER.debug("Enemy Spawn Area " + enemySpawnID + " Activated with previous Spawn value: " + previousEnemySpawn);
+                        LOGGER.debug("Enemy Spawn Area {} Activated with previous Spawn value: {}", enemySpawnID, previousEnemySpawn);
                         previousEnemySpawn = enemySpawnID;
                     }
 
@@ -203,8 +203,8 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
         }
 
         //If no collision, reset the value
-        if(!previousEnemySpawn.equalsIgnoreCase(String.valueOf(0))) {
-            LOGGER.debug("Enemy Spawn Area RESET with previous value " + previousEnemySpawn);
+        if (!previousEnemySpawn.equalsIgnoreCase(String.valueOf(0))) {
+            LOGGER.debug("Enemy Spawn Area RESET with previous value {}", previousEnemySpawn);
             previousEnemySpawn = String.valueOf(0);
             notify(previousEnemySpawn, ComponentObserver.ComponentEvent.ENEMY_SPAWN_LOCATION_CHANGED);
         }
@@ -215,19 +215,19 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
     private boolean updatePortalLayerActivation(MapManager mapMgr) {
         MapLayer mapPortalLayer =  mapMgr.getPortalLayer();
 
-        if(mapPortalLayer == null) {
+        if (mapPortalLayer == null) {
             return false;
         }
 
         Rectangle rectangle;
 
         for(MapObject object: mapPortalLayer.getObjects()) {
-            if(object instanceof RectangleMapObject) {
+            if (object instanceof RectangleMapObject) {
                 rectangle = ((RectangleMapObject)object).getRectangle();
 
-                if(boundingBox.overlaps(rectangle)) {
+                if (boundingBox.overlaps(rectangle)) {
                     String mapName = object.getName();
-                    if(mapName == null) {
+                    if (mapName == null) {
                         return false;
                     }
 

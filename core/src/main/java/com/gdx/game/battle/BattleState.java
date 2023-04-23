@@ -13,21 +13,23 @@ public class BattleState extends BattleSubject {
 
     private Entity currentOpponent;
     private Entity player;
+    private float speedRatioInit = 0;
+    private float speedRatio = 0;
+    private final float criticalMultiplier = 1.5f;
     private int currentZoneLevel = 0;
     private int currentPlayerAP;
     private int currentPlayerDP;
     private int currentPlayerWandAPPoints = 0;
-    private final int chanceOfAttack = 25;
-    private final int chanceOfEscape = 40;
-    private final int criticalChance = 90;
     private Timer.Task playerAttackCalculations;
     private Timer.Task opponentAttackCalculations;
     private Timer.Task checkPlayerMagicUse;
+    private Timer.Task determineTurn;
 
     public BattleState() {
         playerAttackCalculations = getPlayerAttackCalculationTimer();
         opponentAttackCalculations = getOpponentAttackCalculationTimer();
         checkPlayerMagicUse = getPlayerMagicUseCheckTimer();
+        determineTurn = getTurnTimer();
 
         currentPlayerAP = ProfileManager.getInstance().getProperty("currentPlayerAP", Integer.class);
         currentPlayerDP = ProfileManager.getInstance().getProperty("currentPlayerDP", Integer.class);
@@ -42,36 +44,19 @@ public class BattleState extends BattleSubject {
         playerAttackCalculations.cancel();
         opponentAttackCalculations.cancel();
         checkPlayerMagicUse.cancel();
+        determineTurn.cancel();
     }
 
-    public void setCurrentZoneLevel(int zoneLevel) {
-        currentZoneLevel = zoneLevel;
-    }
-
-    public int getCurrentZoneLevel() {
-        return currentZoneLevel;
-    }
-
-    public boolean isOpponentReady() {
-        if(currentZoneLevel == 0) {
-            return false;
-        }
-        int randomVal = MathUtils.random(1,100);
-
-        //Gdx.app.debug(TAG, "CHANGE OF ATTACK: " + _chanceOfAttack + " randomval: " + randomVal);
-
-        if(chanceOfAttack > randomVal) {
-            //setCurrentOpponent();
-            return true;
-        } else {
-            return false;
-        }
+    private void resetEntityBattleProps() {
+        player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "false");
+        player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(0));
+        currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "false");
+        currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(0));
     }
 
     public void setCurrentOpponent(Entity entity) {
-        LOGGER.debug("Entered BATTLE ZONE: " + currentZoneLevel);
-        //Entity entity = MonsterFactory.getInstance().getRandomMonster(currentZoneLevel);
-        if(entity == null) {
+        LOGGER.debug("Entered BATTLE ZONE: {}", currentZoneLevel);
+        if (entity == null) {
             return;
         }
         this.currentOpponent = entity;
@@ -79,30 +64,39 @@ public class BattleState extends BattleSubject {
     }
 
     public void setPlayer(Entity entity) {
-        if(entity == null) {
+        if (entity == null) {
             return;
         }
         this.player = entity;
         notify(entity, BattleObserver.BattleEvent.PLAYER_ADDED);
     }
 
+    public void setSpeedRatio(float speedRatio) {
+        this.speedRatioInit = speedRatio;
+        this.speedRatio = speedRatio;
+    }
+
+    public void determineTurn() {
+        Timer.schedule(determineTurn, 1);
+    }
+
     public void playerAttacks() {
-        if(currentOpponent == null) {
+        if (currentOpponent == null) {
             return;
         }
 
         //Check for magic if used in attack; If we don't have enough MP, then return
         int mpVal = ProfileManager.getInstance().getProperty("currentPlayerMP", Integer.class);
-        notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_START);
+        notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_PHASE_START);
 
-        if(currentPlayerWandAPPoints == 0) {
-            if(!playerAttackCalculations.isScheduled()) {
+        if (currentPlayerWandAPPoints == 0) {
+            if (!playerAttackCalculations.isScheduled()) {
                 Timer.schedule(playerAttackCalculations, 1);
             }
-        } else if(currentPlayerWandAPPoints > mpVal) {
+        } else if (currentPlayerWandAPPoints > mpVal) {
             notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
         } else {
-            if(!checkPlayerMagicUse.isScheduled() && !playerAttackCalculations.isScheduled()) {
+            if (!checkPlayerMagicUse.isScheduled() && !playerAttackCalculations.isScheduled()) {
                 Timer.schedule(checkPlayerMagicUse, .5f);
                 Timer.schedule(playerAttackCalculations, 1);
             }
@@ -110,18 +104,38 @@ public class BattleState extends BattleSubject {
     }
 
     public void opponentAttacks() {
-        if(currentOpponent == null) {
+        if (currentOpponent == null) {
             return;
         }
 
         int currentOpponentHP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString()));
-        if(!opponentAttackCalculations.isScheduled() && currentOpponentHP > 0) {
+        if (!opponentAttackCalculations.isScheduled() && currentOpponentHP > 0) {
             Timer.schedule(opponentAttackCalculations, 1);
         }
     }
 
+    public void startPlayerTurn() {
+        notify(player, BattleObserver.BattleEvent.PLAYER_TURN_START);
+    }
+
     public void resumeOver() {
         notify(currentOpponent, BattleObserver.BattleEvent.RESUME_OVER);
+    }
+
+    private Timer.Task getTurnTimer() {
+        return new Timer.Task() {
+            @Override
+            public void run() {
+                resetEntityBattleProps();
+                if (speedRatio < 1) {
+                    speedRatio += speedRatioInit;
+                    opponentAttacks();
+                } else {
+                    speedRatio--;
+                    startPlayerTurn();
+                }
+            }
+        };
     }
 
     private Timer.Task getPlayerMagicUseCheckTimer() {
@@ -141,23 +155,29 @@ public class BattleState extends BattleSubject {
             @Override
             public void run() {
                 int currentOpponentHP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString()));
-                int currentOpponentDP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_DEFENSE_POINTS.toString()));
+                int currentOpponentDP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.toString()));
 
+                double criticalChance = BattleUtils.criticalChance(currentPlayerAP);
                 int damage = MathUtils.clamp(currentPlayerAP - currentOpponentDP, 0, currentPlayerAP);
+                if (BattleUtils.isEntitySuccessful(criticalChance)) {
+                    damage *= criticalMultiplier;
+                    currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "true");
+                    LOGGER.debug("Critical hit !");
+                }
 
-                LOGGER.debug("ENEMY HAS " + currentOpponentHP + " hit with damage: " + damage);
+                LOGGER.debug("ENEMY HAS {} hit with damage: {}", currentOpponentHP, damage);
 
                 currentOpponentHP = MathUtils.clamp(currentOpponentHP - damage, 0, currentOpponentHP);
                 currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString(), String.valueOf(currentOpponentHP));
 
-                LOGGER.debug("Player attacks " + currentOpponent.getEntityConfig().getEntityID() + " leaving it with HP: " + currentOpponentHP);
+                LOGGER.debug("Player attacks {} leaving it with HP: {}", currentOpponent.getEntityConfig().getEntityID(), currentOpponentHP);
 
                 currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(damage));
-                if(damage > 0) {
+                if (damage > 0) {
                     BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.OPPONENT_HIT_DAMAGE);
                 }
 
-                if(currentOpponentHP == 0) {
+                if (currentOpponentHP == 0) {
                     BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.OPPONENT_DEFEATED);
                 }
 
@@ -170,18 +190,26 @@ public class BattleState extends BattleSubject {
         return new Timer.Task() {
             @Override
             public void run() {
-                int currentOpponentAP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_ATTACK_POINTS.toString()));
+                int currentOpponentAP = Integer.parseInt(currentOpponent.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.toString()));
+
+                double criticalChance = BattleUtils.criticalChance(currentOpponentAP);
                 int damage = MathUtils.clamp(currentOpponentAP - currentPlayerDP, 0, currentOpponentAP);
+                if (BattleUtils.isEntitySuccessful(criticalChance)) {
+                    damage *= criticalMultiplier;
+                    player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "true");
+                    LOGGER.debug("Critical hit !");
+
+                }
                 int hpVal = ProfileManager.getInstance().getProperty("currentPlayerHP", Integer.class);
                 hpVal = MathUtils.clamp( hpVal - damage, 0, hpVal);
                 player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HIT_DAMAGE_TOTAL.toString(), String.valueOf(damage));
                 ProfileManager.getInstance().setProperty("currentPlayerHP", hpVal);
 
-                if(damage > 0) {
-                    BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_HIT_DAMAGE);
+                if (damage > 0) {
+                    BattleState.this.notify(player, BattleObserver.BattleEvent.PLAYER_HIT_DAMAGE);
                 }
 
-                LOGGER.debug("Player HIT for " + damage + " BY " + currentOpponent.getEntityConfig().getEntityID() + " leaving player with HP: " + hpVal);
+                LOGGER.debug("Player HIT for {} BY {} leaving player with HP: {}", damage, currentOpponent.getEntityConfig().getEntityID(), hpVal);
 
                 BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.OPPONENT_TURN_DONE);
             }
@@ -189,11 +217,15 @@ public class BattleState extends BattleSubject {
     }
 
     public void playerRuns() {
-        int randomVal = MathUtils.random(1,100);
-        if(chanceOfEscape > randomVal) {
+        notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_PHASE_START);
+
+        double escapeChance = BattleUtils.escapeChance(speedRatio);
+
+        if (BattleUtils.isEntitySuccessful(escapeChance)) {
+            LOGGER.debug("Player flees with {}% escape chance", escapeChance * 100);
             notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_RUNNING);
-        } else if(randomVal > criticalChance) {
-            opponentAttacks();
+        } else {
+            notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
         }
     }
 }

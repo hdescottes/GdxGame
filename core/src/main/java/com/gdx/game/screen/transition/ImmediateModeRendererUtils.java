@@ -17,7 +17,7 @@ public class ImmediateModeRendererUtils {
     }
 
     public static Matrix4 getProjectionMatrix() {
-        if(projectionMatrix == null) {
+        if (projectionMatrix == null) {
             projectionMatrix = new Matrix4();
             projectionMatrix.setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }

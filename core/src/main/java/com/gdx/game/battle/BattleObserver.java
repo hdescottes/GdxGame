@@ -13,6 +13,7 @@ public interface BattleObserver {
         PLAYER_RUNNING,
         PLAYER_TURN_DONE,
         PLAYER_TURN_START,
+        PLAYER_PHASE_START,
         PLAYER_USED_MAGIC,
         RESUME_OVER,
         NONE

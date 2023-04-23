@@ -21,7 +21,7 @@ public class InventorySlotTooltipListener extends InputListener {
     @Override
     public boolean mouseMoved(InputEvent event, float x, float y) {
         InventorySlot inventorySlot = (InventorySlot)event.getListenerActor();
-        if(isInside) {
+        if (isInside) {
             currentCoords.set(x, y);
             inventorySlot.localToStageCoordinates(currentCoords);
 

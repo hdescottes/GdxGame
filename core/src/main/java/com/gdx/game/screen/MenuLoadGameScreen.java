@@ -79,13 +79,13 @@ public class MenuLoadGameScreen extends BaseScreen {
             public void clicked (InputEvent event, float x, float y) {
                 previousScreen.dispose();
 
-                if(listItems.getSelected() == null) {
+                if (listItems.getSelected() == null) {
                     return;
                 }
                 String fileName = listItems.getSelected().toString();
-                if(fileName != null && !fileName.isEmpty()) {
+                if (fileName != null && !fileName.isEmpty()) {
                     FileHandle file = ProfileManager.getInstance().getProfileFile(fileName);
-                    if(file != null) {
+                    if (file != null) {
                         ProfileManager.getInstance().setCurrentProfile(fileName);
                         ProfileManager.getInstance().loadProfile();
                         gdxGame.setGameScreen(new GameScreen(gdxGame, resourceManager));
@@ -126,7 +126,7 @@ public class MenuLoadGameScreen extends BaseScreen {
     public void render(float delta) {
         stateTime += Gdx.graphics.getDeltaTime();
 
-        if(previousScreen != null) {
+        if (previousScreen != null) {
             previousScreen.render(stateTime);
         }
 

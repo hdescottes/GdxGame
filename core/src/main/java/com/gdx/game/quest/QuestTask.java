@@ -64,7 +64,7 @@ public class QuestTask {
     }
 
     public boolean isTaskComplete() {
-        if(!taskProperties.containsKey(QuestTaskPropertyType.IS_TASK_COMPLETE.toString())) {
+        if (!taskProperties.containsKey(QuestTaskPropertyType.IS_TASK_COMPLETE.toString())) {
             setPropertyValue(QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "false");
             return false;
         }
@@ -86,7 +86,7 @@ public class QuestTask {
 
     public String getPropertyValue(String key) {
         Object propertyVal = taskProperties.get(key);
-        if(propertyVal == null) {
+        if (propertyVal == null) {
             return "";
         }
         return propertyVal.toString();

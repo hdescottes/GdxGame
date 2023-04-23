@@ -24,27 +24,27 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
     public void receiveMessage(String message) {
         String[] string = message.split(MESSAGE_TOKEN);
 
-        if(string.length == 0) {
+        if (string.length == 0) {
             return;
         }
 
-        if(string.length == 1) {
-            if(string[0].equalsIgnoreCase(MESSAGE.RESET_POSITION.toString())) {
+        if (string.length == 1) {
+            if (string[0].equalsIgnoreCase(MESSAGE.RESET_POSITION.toString())) {
                 currentPosition = null;
             }
         }
 
         //Specifically for messages with 1 object payload
-        if(string.length == 2) {
-            if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_POSITION.toString())) {
+        if (string.length == 2) {
+            if (string[0].equalsIgnoreCase(MESSAGE.CURRENT_POSITION.toString())) {
                 currentPosition = json.fromJson(Vector2.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.INIT_START_POSITION.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.INIT_START_POSITION.toString())) {
                 currentPosition = json.fromJson(Vector2.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_STATE.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.CURRENT_STATE.toString())) {
                 currentState = json.fromJson(Entity.State.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
                 currentDirection = json.fromJson(Entity.Direction.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.LOAD_ANIMATIONS.toString())) {
+            } else if (string[0].equalsIgnoreCase(MESSAGE.LOAD_ANIMATIONS.toString())) {
                 EntityConfig entityConfig = json.fromJson(EntityConfig.class, string[1]);
                 Array<EntityConfig.AnimationConfig> animationConfigs = entityConfig.getAnimationConfig();
 
@@ -55,9 +55,9 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
                     float frameDuration = animationConfig.getFrameDuration();
                     Animation<TextureRegion> animation = null;
 
-                    if(textureNames.size == 1) {
+                    if (textureNames.size == 1) {
                         animation = loadAnimation(textureNames.get(0), points, frameDuration);
-                    } else if(textureNames.size == 2) {
+                    } else if (textureNames.size == 2) {
                         animation = loadAnimation(textureNames.get(0), textureNames.get(1), points, frameDuration);
                     }
 
@@ -72,7 +72,7 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
         updateAnimations(delta);
 
         //Player has moved
-        if(previousPosition.x != currentPosition.x || previousPosition.y != currentPosition.y) {
+        if (previousPosition.x != currentPosition.x || previousPosition.y != currentPosition.y) {
             previousPosition = currentPosition.cpy();
         }
 

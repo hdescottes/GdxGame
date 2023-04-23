@@ -39,13 +39,13 @@ public class ConversationGraph extends ConversationGraphSubject {
 
     public void setCurrentConversation(String id) {
         Conversation conversation = getConversationByID(id);
-        if(conversation == null) {
+        if (conversation == null) {
             return;
         }
         //Can we reach the new conversation from the current one?
 
         //Make sure we check case where the current node is checked against itself
-        if(currentConversationID == null || currentConversationID.equalsIgnoreCase(id) || isReachable(currentConversationID, id)) {
+        if (currentConversationID == null || currentConversationID.equalsIgnoreCase(id) || isReachable(currentConversationID, id)) {
             currentConversationID = id;
         } else {
             //System.out.println("New conversation node [" + id +"] is not reachable from current node [" + currentConversationID + "]");
@@ -58,17 +58,17 @@ public class ConversationGraph extends ConversationGraphSubject {
     }
 
     public boolean isReachable(String sourceID, String sinkID) {
-        if(!isValid(sourceID) || !isValid(sinkID)) {
+        if (!isValid(sourceID) || !isValid(sinkID)) {
             return false;
         }
 
         //First get edges/choices from the source
         ArrayList<ConversationChoice> list = associatedChoices.get(sourceID);
-        if(list == null) {
+        if (list == null) {
             return false;
         }
         for(ConversationChoice choice: list) {
-            if(choice.getSourceId().equalsIgnoreCase(sourceID) && choice.getDestinationId().equalsIgnoreCase(sinkID)) {
+            if (choice.getSourceId().equalsIgnoreCase(sourceID) && choice.getDestinationId().equalsIgnoreCase(sinkID)) {
                 return true;
             }
         }
@@ -76,7 +76,7 @@ public class ConversationGraph extends ConversationGraphSubject {
     }
 
     public Conversation getConversationByID(String id) {
-        if(!isValid(id)) {
+        if (!isValid(id)) {
             //System.out.println("Id " + id + " is not valid!");
             return null;
         }
@@ -90,7 +90,7 @@ public class ConversationGraph extends ConversationGraphSubject {
     public void addChoice(ConversationChoice conversationChoice) {
 
         ArrayList<ConversationChoice> list = associatedChoices.get(conversationChoice.getSourceId());
-        if(list == null) {
+        if (list == null) {
             return;
         }
 

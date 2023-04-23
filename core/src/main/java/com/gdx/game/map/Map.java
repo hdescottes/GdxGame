@@ -79,13 +79,13 @@ public abstract class Map implements AudioSubject {
         closestPlayerStartPosition = new Vector2(0,0);
         convertedUnits = new Vector2(0,0);
 
-        if(fullMapPath == null || fullMapPath.isEmpty()) {
+        if (fullMapPath == null || fullMapPath.isEmpty()) {
             LOGGER.debug("Map is invalid");
             return;
         }
 
         ResourceManager.loadMapAsset(fullMapPath);
-        if(ResourceManager.isAssetLoaded(fullMapPath)) {
+        if (ResourceManager.isAssetLoaded(fullMapPath)) {
             currentMap = ResourceManager.getMapAsset(fullMapPath);
         } else {
             LOGGER.debug("Map not loaded");
@@ -93,34 +93,34 @@ public abstract class Map implements AudioSubject {
         }
 
         collisionLayer = currentMap.getLayers().get(COLLISION_LAYER);
-        if(collisionLayer == null) {
+        if (collisionLayer == null) {
             LOGGER.debug("No collision layer!");
         }
 
         portalLayer = currentMap.getLayers().get(PORTAL_LAYER);
-        if(portalLayer == null) {
+        if (portalLayer == null) {
             LOGGER.debug("No portal layer!");
         }
 
         spawnsLayer = currentMap.getLayers().get(SPAWNS_LAYER);
-        if(spawnsLayer == null) {
+        if (spawnsLayer == null) {
             LOGGER.debug("No spawn layer!");
         } else {
             setClosestStartPosition(playerStart);
         }
 
         questItemSpawnLayer = currentMap.getLayers().get(QUEST_ITEM_SPAWN_LAYER);
-        if(questItemSpawnLayer == null) {
+        if (questItemSpawnLayer == null) {
             LOGGER.debug("No quest item spawn layer!");
         }
 
         questDiscoverLayer = currentMap.getLayers().get(QUEST_DISCOVER_LAYER);
-        if(questDiscoverLayer == null) {
+        if (questDiscoverLayer == null) {
             LOGGER.debug("No quest discover layer!");
         }
 
         enemySpawnLayer = currentMap.getLayers().get(ENEMY_SPAWN_LAYER);
-        if(enemySpawnLayer == null) {
+        if (enemySpawnLayer == null) {
             LOGGER.debug("No enemy layer found!");
         } else {
             enemyStartPositions = getEnemyStartPositions();
@@ -144,7 +144,7 @@ public abstract class Map implements AudioSubject {
             String name = object.getName();
             String taskID = (String)object.getProperties().get("taskID");
 
-            if(name == null || taskID == null || name.isEmpty() || taskID.isEmpty() ||
+            if (name == null || taskID == null || name.isEmpty() || taskID.isEmpty() ||
                     !name.equalsIgnoreCase(objectName) || !taskID.equalsIgnoreCase(objectTaskID)) {
                 continue;
             }
@@ -239,11 +239,11 @@ public abstract class Map implements AudioSubject {
         for(MapObject object: spawnsLayer.getObjects()) {
             String objectName = object.getName();
 
-            if(objectName == null || objectName.isEmpty()) {
+            if (objectName == null || objectName.isEmpty()) {
                 continue;
             }
 
-            if(objectName.equalsIgnoreCase(NPC_START)) {
+            if (objectName.equalsIgnoreCase(NPC_START)) {
                 //Get center of rectangle
                 float x = ((RectangleMapObject)object).getRectangle().getX();
                 float y = ((RectangleMapObject)object).getRectangle().getY();
@@ -264,7 +264,7 @@ public abstract class Map implements AudioSubject {
         for(MapObject object: enemySpawnLayer.getObjects()) {
             String objectName = object.getName();
 
-            if(objectName == null || objectName.isEmpty()) {
+            if (objectName == null || objectName.isEmpty()) {
                 continue;
             }
 
@@ -288,12 +288,12 @@ public abstract class Map implements AudioSubject {
         for(MapObject object: spawnsLayer.getObjects()) {
             String objectName = object.getName();
 
-            if(objectName == null || objectName.isEmpty()) {
+            if (objectName == null || objectName.isEmpty()) {
                 continue;
             }
 
             //This is meant for all the special spawn locations, a catch all, so ignore known ones
-            if(objectName.equalsIgnoreCase(NPC_START) || objectName.equalsIgnoreCase(PLAYER_START)) {
+            if (objectName.equalsIgnoreCase(NPC_START) || objectName.equalsIgnoreCase(PLAYER_START)) {
                 continue;
             }
 
@@ -311,7 +311,7 @@ public abstract class Map implements AudioSubject {
     }
 
     private void setClosestStartPosition(final Vector2 position) {
-         LOGGER.debug("setClosestStartPosition INPUT: (" + position.x + "," + position.y + ") " + currentMapType.toString());
+         LOGGER.debug("setClosestStartPosition INPUT: ({},{}) {}", position.x, position.y, currentMapType.toString());
 
         //Get last known position on this map
         playerStartPositionRect.set(0,0);
@@ -322,20 +322,20 @@ public abstract class Map implements AudioSubject {
         for(MapObject object: spawnsLayer.getObjects()) {
             String objectName = object.getName();
 
-            if(objectName == null || objectName.isEmpty()) {
+            if (objectName == null || objectName.isEmpty()) {
                 continue;
             }
 
-            if(objectName.equalsIgnoreCase(PLAYER_START)) {
+            if (objectName.equalsIgnoreCase(PLAYER_START)) {
                 ((RectangleMapObject)object).getRectangle().getPosition(playerStartPositionRect);
                 float distance = position.dst2(playerStartPositionRect);
 
-                LOGGER.debug("DISTANCE: " + distance + " for " + currentMapType.toString());
+                LOGGER.debug("DISTANCE: {} for {}", distance, currentMapType.toString());
 
-                if(distance < shortestDistance || shortestDistance == 0) {
+                if (distance < shortestDistance || shortestDistance == 0) {
                     closestPlayerStartPosition.set(playerStartPositionRect);
                     shortestDistance = distance;
-                    LOGGER.debug("closest START is: (" + closestPlayerStartPosition.x + "," + closestPlayerStartPosition.y + ") " +  currentMapType.toString());
+                    LOGGER.debug("closest START is: ({},{}) {}", closestPlayerStartPosition.x, closestPlayerStartPosition.y,  currentMapType.toString());
                 }
             }
         }

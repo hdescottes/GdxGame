@@ -14,11 +14,23 @@
 				class: java.lang.String
 				value: 15
 			}
-			ENTITY_ATTACK_POINTS: {
+			ENTITY_PHYSICAL_ATTACK_POINTS: {
 				class: java.lang.String
 				value: 6
 			}
-			ENTITY_DEFENSE_POINTS: {
+			ENTITY_PHYSICAL_DEFENSE_POINTS: {
+				class: java.lang.String
+				value: 5
+			}
+			ENTITY_MAGIC_ATTACK_POINTS: {
+				class: java.lang.String
+				value: 10
+			}
+			ENTITY_MAGIC_DEFENSE_POINTS: {
+				class: java.lang.String
+				value: 10
+			}
+			ENTITY_SPEED_POINTS: {
 				class: java.lang.String
 				value: 5
 			}
@@ -87,11 +99,23 @@
 				class: java.lang.String
 				value: 15
 			}
-			ENTITY_ATTACK_POINTS: {
+			ENTITY_PHYSICAL_ATTACK_POINTS: {
 				class: java.lang.String
 				value: 15
 			}
-			ENTITY_DEFENSE_POINTS: {
+			ENTITY_PHYSICAL_DEFENSE_POINTS: {
+				class: java.lang.String
+				value: 10
+			}
+			ENTITY_MAGIC_ATTACK_POINTS: {
+				class: java.lang.String
+				value: 10
+			}
+			ENTITY_MAGIC_DEFENSE_POINTS: {
+				class: java.lang.String
+				value: 10
+			}
+			ENTITY_SPEED_POINTS: {
 				class: java.lang.String
 				value: 10
 			}
