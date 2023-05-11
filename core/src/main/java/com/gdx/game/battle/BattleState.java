@@ -1,9 +1,11 @@
 package com.gdx.game.battle;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
+import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -159,7 +161,7 @@ public class BattleState extends BattleSubject {
 
                 double criticalChance = BattleUtils.criticalChance(currentPlayerAP);
                 int damage = MathUtils.clamp(currentPlayerAP - currentOpponentDP, 0, currentPlayerAP);
-                if (BattleUtils.isEntitySuccessful(criticalChance)) {
+                if (BattleUtils.isSuccessful(criticalChance)) {
                     damage *= criticalMultiplier;
                     currentOpponent.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "true");
                     LOGGER.debug("Critical hit !");
@@ -178,12 +180,23 @@ public class BattleState extends BattleSubject {
                 }
 
                 if (currentOpponentHP == 0) {
+                    calculateDrops();
                     BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.OPPONENT_DEFEATED);
                 }
 
                 BattleState.this.notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
             }
         };
+    }
+
+    private void calculateDrops() {
+        Array<EntityConfig.Drop> drops = currentOpponent.getEntityConfig().getDrops();
+        for (EntityConfig.Drop drop : drops) {
+            boolean isSuccessful = BattleUtils.isSuccessful(drop.getProbability());
+            if (isSuccessful) {
+                BattleState.this.notify(drop.getItemTypeID(), InventoryObserver.InventoryEvent.DROP_ITEM_ADDED);
+            }
+        }
     }
 
     private Timer.Task getOpponentAttackCalculationTimer() {
@@ -194,7 +207,7 @@ public class BattleState extends BattleSubject {
 
                 double criticalChance = BattleUtils.criticalChance(currentOpponentAP);
                 int damage = MathUtils.clamp(currentOpponentAP - currentPlayerDP, 0, currentOpponentAP);
-                if (BattleUtils.isEntitySuccessful(criticalChance)) {
+                if (BattleUtils.isSuccessful(criticalChance)) {
                     damage *= criticalMultiplier;
                     player.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_RECEIVED_CRITICAL.toString(), "true");
                     LOGGER.debug("Critical hit !");
@@ -221,7 +234,7 @@ public class BattleState extends BattleSubject {
 
         double escapeChance = BattleUtils.escapeChance(speedRatio);
 
-        if (BattleUtils.isEntitySuccessful(escapeChance)) {
+        if (BattleUtils.isSuccessful(escapeChance)) {
             LOGGER.debug("Player flees with {}% escape chance", escapeChance * 100);
             notify(currentOpponent, BattleObserver.BattleEvent.PLAYER_RUNNING);
         } else {

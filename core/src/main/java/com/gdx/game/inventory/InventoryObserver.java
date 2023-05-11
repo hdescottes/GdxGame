@@ -5,6 +5,7 @@ public interface InventoryObserver {
         UPDATED_AP,
         UPDATED_DP,
         ITEM_CONSUMED,
+        DROP_ITEM_ADDED,
         ADD_WAND_AP,
         REMOVE_WAND_AP,
         REFRESH_STATS,

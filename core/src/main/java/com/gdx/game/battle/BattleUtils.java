@@ -16,7 +16,7 @@ public class BattleUtils {
         return roundDown((94 - (15260) / (atkStat + 163)) / 100);
     }
 
-    static boolean isEntitySuccessful(double statChance) {
+    static boolean isSuccessful(double statChance) {
         double randomVal = MathUtils.random(100f) / 100;
 
         return statChance > randomVal;
