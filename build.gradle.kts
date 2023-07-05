@@ -1,4 +1,4 @@
-val gdxVersion by extra {"1.11.0"}
+val gdxVersion by extra {"1.12.0"}
 val gdxVfxVersion by extra {"0.5.1"}
 val jUnitPlatformVersion by extra {"1.9.2"}
 val jUnitJupiterVersion by extra {"5.9.2"}
