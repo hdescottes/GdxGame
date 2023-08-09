@@ -43,6 +43,16 @@
 				value: 5
 			}
 		}
+		drops: [
+			{
+				itemTypeID: HERB001
+				probability: 0.6
+			}
+			{
+				itemTypeID: FUR001
+				probability: 0.4
+			}
+		]
 		animationConfig: [
 			{
 				frameDuration: .5
@@ -128,6 +138,16 @@
 				value: 5
 			}
 		}
+		drops: [
+			{
+				itemTypeID: HERB001
+				probability: 0.6
+			}
+			{
+				itemTypeID: FUR001
+				probability: 0.4
+			}
+		]
 		animationConfig: [
 			{
 				frameDuration: .5

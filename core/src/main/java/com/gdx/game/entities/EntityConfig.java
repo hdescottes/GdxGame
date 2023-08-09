@@ -19,6 +19,7 @@ public class EntityConfig {
     private String currentQuestID;
     private String itemTypeID;
     private ObjectMap<String, String> entityProperties;
+    private Array<Drop> drops;
 
     public enum EntityProperties {
         ENTITY_HEALTH_POINTS,
@@ -38,6 +39,7 @@ public class EntityConfig {
         animationConfig = new Array<>();
         inventory = new Array<>();
         entityProperties = new ObjectMap<>();
+        drops = new Array<>();
     }
 
     public EntityConfig(EntityConfig config) {
@@ -60,6 +62,9 @@ public class EntityConfig {
 
         entityProperties = new ObjectMap<>();
         entityProperties.putAll(config.entityProperties);
+
+        drops = new Array<>();
+        drops.addAll(config.getDrops());
     }
 
     public ObjectMap<String, String> getEntityProperties() {
@@ -178,6 +183,14 @@ public class EntityConfig {
         this.inventory = inventory;
     }
 
+    public Array<Drop> getDrops() {
+        return drops;
+    }
+
+    public void addDrop(Drop drop) {
+        this.drops.add(drop);
+    }
+
     public static class AnimationConfig {
         private float frameDuration = 1.0f;
         private Entity.AnimationType animationType;
@@ -220,6 +233,30 @@ public class EntityConfig {
 
         public void setAnimationType(Entity.AnimationType animationType) {
             this.animationType = animationType;
+        }
+    }
+
+    public static class Drop {
+        private String itemTypeID = null;
+        private float probability = 1.0f;
+
+        public Drop() {
+        }
+
+        public String getItemTypeID() {
+            return itemTypeID;
+        }
+
+        public void setItemTypeID(String itemTypeID) {
+            this.itemTypeID = itemTypeID;
+        }
+
+        public float getProbability() {
+            return probability;
+        }
+
+        public void setProbability(float probability) {
+            this.probability = probability;
         }
     }
 

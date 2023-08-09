@@ -20,10 +20,14 @@ import com.gdx.game.inventory.slot.InventorySlotTarget;
 import com.gdx.game.inventory.slot.InventorySlotTooltip;
 import com.gdx.game.inventory.slot.InventorySlotTooltipListener;
 import com.gdx.game.manager.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.gdx.game.component.Component.MESSAGE_TOKEN;
 
 public class BattleInventoryUI extends Window implements InventorySubject {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BattleInventoryUI.class);
 
     public final static int NUM_SLOTS = 50;
     public static final String PLAYER_INVENTORY = "Player_Inventory";
@@ -269,7 +273,7 @@ public class BattleInventoryUI extends Window implements InventorySubject {
         return false;
     }
 
-    public void addEntityToInventory(Entity entity, String itemName) {
+    public void addEntityToInventory(String itemTypeID, String itemName) {
         Array<Cell> sourceCells = inventorySlotTable.getCells();
         int index = 0;
 
@@ -280,10 +284,11 @@ public class BattleInventoryUI extends Window implements InventorySubject {
             }
             int numItems = inventorySlot.getNumItems();
             if (numItems == 0) {
-                InventoryItem inventoryItem = InventoryItemFactory.getInstance().getInventoryItem(InventoryItem.ItemTypeID.valueOf(entity.getEntityConfig().getItemTypeID()));
+                InventoryItem inventoryItem = InventoryItemFactory.getInstance().getInventoryItem(InventoryItem.ItemTypeID.valueOf(itemTypeID));
                 inventoryItem.setName(itemName);
                 inventorySlot.add(inventoryItem);
                 dragAndDrop.addSource(new InventorySlotSource(inventorySlot, dragAndDrop));
+                LOGGER.info("Item {} was looted", itemName);
                 break;
             }
         }

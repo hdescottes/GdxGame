@@ -1,6 +1,7 @@
 package com.gdx.game.battle;
 
 import com.gdx.game.entities.Entity;
+import com.gdx.game.inventory.InventoryObserver.InventoryEvent;
 
 public interface BattleObserver {
     enum BattleEvent {
@@ -20,4 +21,6 @@ public interface BattleObserver {
     }
 
     void onNotify(final Entity enemyEntity, BattleEvent event);
+
+    void onNotify(final String drop, InventoryEvent event);
 }

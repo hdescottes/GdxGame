@@ -56,6 +56,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
     private Entity enemy;
     private BattleState battleState;
     private BattleConversation battleConversation;
+    private Array<String> drops;
 
     private final int enemyWidth = 50;
     private final int enemyHeight = 50;
@@ -80,6 +81,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
         json = new Json();
         player = mapManager.getPlayer();
         battleConversation = new BattleConversation();
+        drops = new Array<>();
 
         battleState.addObserver(this);
         battleConversation.addObserver(this);
@@ -277,7 +279,7 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
         switch (event) {
             case LOAD_RESUME -> {
                 EntityConfig config = json.fromJson(EntityConfig.class, value);
-                notificationUI.loadResume(config);
+                notificationUI.loadResume(config, drops);
             }
             case SHOW_RESUME -> {
                 EntityConfig configShow = json.fromJson(EntityConfig.class, value);
@@ -308,6 +310,12 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 } else if (InventoryItem.doesRestoreMP(type)) {
                     //notify(AudioObserver.AudioCommand.SOUND_PLAY_ONCE, AudioObserver.AudioTypeEvent.SOUND_DRINKING);
                     battleStatusUI.addMPValue(typeValue);
+                }
+            }
+            case DROP_ITEM_ADDED -> {
+                if (battleInventoryUI.doesInventoryHaveSpace()) {
+                    battleInventoryUI.addEntityToInventory(value, value);
+                    drops.add(value);
                 }
             }
             default -> {

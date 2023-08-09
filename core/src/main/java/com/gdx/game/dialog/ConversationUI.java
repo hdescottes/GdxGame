@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.manager.ResourceManager;
@@ -109,10 +110,18 @@ public class ConversationUI extends Window {
         setConversationGraph(graph);
     }
 
-    public void loadResume(EntityConfig entityConfig) {
+    public void loadResume(EntityConfig entityConfig, Array<String> drops) {
         String fullResumePath = entityConfig.getResumeConfigPath();
-        String resume = fullResumePath.replace("<xp>", entityConfig.getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_XP_REWARD.name()))
+        String resume = fullResumePath
+                .replace("<xp>", entityConfig.getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_XP_REWARD.name()))
                 .replace("<gold>", entityConfig.getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_GP_REWARD.name()));
+        if (!drops.isEmpty()) {
+            String newLine = System.getProperty("line.separator");
+            for (String drop : drops) {
+                String dropResume = "Obtained : " + drop;
+                resume = resume.concat(newLine).concat(dropResume);
+            }
+        }
         this.getTitleLabel().setText("");
 
         clearDialog();
