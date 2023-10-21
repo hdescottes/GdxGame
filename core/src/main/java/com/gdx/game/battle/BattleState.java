@@ -152,7 +152,7 @@ public class BattleState extends BattleSubject {
         };
     }
 
-    private Timer.Task getPlayerAttackCalculationTimer() {
+    protected Timer.Task getPlayerAttackCalculationTimer() {
         return new Timer.Task() {
             @Override
             public void run() {
@@ -199,7 +199,7 @@ public class BattleState extends BattleSubject {
         }
     }
 
-    private Timer.Task getOpponentAttackCalculationTimer() {
+    protected Timer.Task getOpponentAttackCalculationTimer() {
         return new Timer.Task() {
             @Override
             public void run() {
