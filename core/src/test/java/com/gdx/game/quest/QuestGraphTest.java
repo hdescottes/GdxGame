@@ -6,26 +6,37 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.entities.EntityFactory;
+import com.gdx.game.entities.npc.NPCGraphicsComponent;
 import com.gdx.game.map.MapFactory;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedConstruction;
 
 import java.util.Hashtable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
 
 @ExtendWith(GdxRunner.class)
 public class QuestGraphTest {
+
+    private MockedConstruction<NPCGraphicsComponent> mockNPCGraphics;
 
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
+        mockNPCGraphics = mockConstruction(NPCGraphicsComponent.class);
+    }
+
+    @AfterEach
+    void end() {
+        mockNPCGraphics.close();
     }
 
     @Test
@@ -237,7 +248,6 @@ public class QuestGraphTest {
         assertThat(isQuestReturnable).isFalse();
     }
 
-    @Disabled
     @Test
     public void testUpdate_ShouldSucceedForQuestTypeFETCH() {
         MapManager mapManager = new MapManager();
@@ -259,7 +269,6 @@ public class QuestGraphTest {
         assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo("true");
     }
 
-    @Disabled
     @Test
     public void testUpdate_ShouldSucceedForQuestTypeKILL() {
         MapManager mapManager = new MapManager();
@@ -281,7 +290,6 @@ public class QuestGraphTest {
         assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo("false");
     }
 
-    @Disabled("Need to set up item spawn layer")
     @Test
     public void testInit_ShouldSucceedForQuestTypeFETCH() {
         MapManager mapManager = new MapManager();
@@ -307,7 +315,6 @@ public class QuestGraphTest {
         assertThat(ProfileManager.getInstance().getProperty("TOWN_INNKEEPER", Array.class)).isNotNull();
     }
 
-    @Disabled
     @Test
     public void testInit_ShouldSucceedForQuestTypeKILL() {
         MapManager mapManager = new MapManager();

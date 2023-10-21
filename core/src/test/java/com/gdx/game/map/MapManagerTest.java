@@ -7,26 +7,41 @@ import com.badlogic.gdx.math.Vector2;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
+import com.gdx.game.entities.npc.NPCGraphicsComponent;
+import com.gdx.game.entities.player.PlayerGraphicsComponent;
 import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.profile.ProfileObserver;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedConstruction;
 
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
 
-@Disabled
 @ExtendWith(GdxRunner.class)
 public class MapManagerTest {
+
+    private MockedConstruction<PlayerGraphicsComponent> mockPlayerGraphics;
+
+    private MockedConstruction<NPCGraphicsComponent> mockNPCGraphics;
 
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
+        mockPlayerGraphics = mockConstruction(PlayerGraphicsComponent.class);
+        mockNPCGraphics = mockConstruction(NPCGraphicsComponent.class);
+    }
+
+    @AfterEach
+    void end() {
+        mockPlayerGraphics.close();
+        mockNPCGraphics.close();
     }
 
     @Test

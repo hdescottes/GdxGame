@@ -2,25 +2,35 @@ package com.gdx.game.entities.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.entities.Entity;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedConstruction;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
 
-@Disabled
 @ExtendWith(GdxRunner.class)
 public class PlayerGraphicsComponentTest {
+
+    private MockedConstruction<ShapeRenderer> mockShapeRenderer;
 
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
+        mockShapeRenderer = mockConstruction(ShapeRenderer.class);
+    }
+
+    @AfterEach
+    void end() {
+        mockShapeRenderer.close();
     }
 
     @Test
