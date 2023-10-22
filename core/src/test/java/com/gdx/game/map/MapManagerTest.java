@@ -2,12 +2,15 @@ package com.gdx.game.map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.gdx.game.GdxRunner;
+import com.gdx.game.component.Component;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.entities.npc.NPCGraphicsComponent;
 import com.gdx.game.entities.player.PlayerGraphicsComponent;
 import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.profile.ProfileObserver;
@@ -24,6 +27,7 @@ import java.util.HashMap;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 
@@ -32,20 +36,20 @@ public class MapManagerTest {
 
     private MockedConstruction<PlayerGraphicsComponent> mockPlayerGraphics;
 
-    private MockedConstruction<NPCGraphicsComponent> mockNPCGraphics;
+    private MockedConstruction<ShapeRenderer> mockShapeRenderer;
 
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
         mockPlayerGraphics = mockConstruction(PlayerGraphicsComponent.class);
-        mockNPCGraphics = mockConstruction(NPCGraphicsComponent.class);
+        mockShapeRenderer = mockConstruction(ShapeRenderer.class);
     }
 
     @AfterEach
     void end() {
         mockPlayerGraphics.close();
-        mockNPCGraphics.close();
+        mockShapeRenderer.close();
     }
 
     @ParameterizedTest
@@ -169,5 +173,40 @@ public class MapManagerTest {
                 Arguments.of(false, MapFactory.MapType.TOPPLE),
                 Arguments.of(true, MapFactory.MapType.TOPPLE_ROAD_1)
         );
+    }
+
+    @Test
+    void remove_map_quest_entities() {
+        Json json = new Json();
+        MapManager mapManager = new MapManager();
+        mapManager.loadMap(MapFactory.MapType.TOPPLE);
+        Vector2 questEntityPosition = new Vector2(10, 10);
+        Entity questEntity = EntityFactory.getInstance().getEntityByName(EntityFactory.EntityName.TOWN_BLACKSMITH);
+        questEntity.sendMessage(Component.MESSAGE.INIT_START_POSITION, json.toJson(questEntityPosition));
+        Array<Vector2> positions = new Array<>();
+        positions.add(questEntityPosition);
+        Array<Entity> questEntities = new Array<>();
+        questEntities.add(questEntity);
+        mapManager.addMapQuestEntities(questEntities);
+        ProfileManager profileManager = ProfileManager.getInstance();
+        profileManager.setProperty("TOWN_BLACKSMITH", positions);
+
+        mapManager.removeMapQuestEntity(questEntity);
+
+        assertThat(mapManager.getCurrentMapQuestEntities()).isEmpty();
+        assertThat(profileManager.getProperty("TOWN_BLACKSMITH", Array.class)).isEmpty();
+    }
+
+    @Test
+    void remove_map_entity() {
+        MapManager mapManager = new MapManager();
+        mapManager.loadMap(MapFactory.MapType.TOPPLE);
+        int mapEntitiesSize = mapManager.getCurrentMapEntities().size;
+
+        mapManager.removeMapEntity(mapManager.getCurrentMapEntities().get(0));
+        int newMapEntitiesSize = mapManager.getCurrentMapEntities().size;
+
+        assertThat(mapEntitiesSize).isGreaterThan(newMapEntitiesSize);
+        assertEquals(mapEntitiesSize - newMapEntitiesSize, 1);
     }
 }

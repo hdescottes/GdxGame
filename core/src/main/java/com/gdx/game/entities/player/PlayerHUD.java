@@ -233,6 +233,14 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
         return inventoryUI;
     }
 
+    protected ConversationUI getConversationUI() {
+        return conversationUI;
+    }
+
+    protected StoreInventoryUI getStoreInventoryUI() {
+        return storeInventoryUI;
+    }
+
     public void updateEntityObservers() {
         mapManager.unregisterCurrentMapEntityObservers();
         questUI.initQuests(mapManager);
