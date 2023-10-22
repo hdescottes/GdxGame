@@ -7,49 +7,59 @@ import com.badlogic.gdx.math.Vector2;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
+import com.gdx.game.entities.npc.NPCGraphicsComponent;
+import com.gdx.game.entities.player.PlayerGraphicsComponent;
 import com.gdx.game.profile.ProfileManager;
 import com.gdx.game.profile.ProfileObserver;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.MockedConstruction;
 
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
 
-@Disabled
 @ExtendWith(GdxRunner.class)
 public class MapManagerTest {
+
+    private MockedConstruction<PlayerGraphicsComponent> mockPlayerGraphics;
+
+    private MockedConstruction<NPCGraphicsComponent> mockNPCGraphics;
 
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
+        mockPlayerGraphics = mockConstruction(PlayerGraphicsComponent.class);
+        mockNPCGraphics = mockConstruction(NPCGraphicsComponent.class);
     }
 
-    @Test
-    public void testOnNotify_ShouldSucceedWithProfileLoaded() {
+    @AfterEach
+    void end() {
+        mockPlayerGraphics.close();
+        mockNPCGraphics.close();
+    }
+
+    @ParameterizedTest
+    @MethodSource("currentMap")
+    void testOnNotify(boolean isCurrentMap, MapFactory.MapType mapType) {
         ProfileManager profileManager = new ProfileManager();
+        if (isCurrentMap) {
+            profileManager.setProperty("currentMapType", mapType.name());
+        }
         MapManager mapManager = new MapManager();
 
         mapManager.onNotify(profileManager, ProfileObserver.ProfileEvent.PROFILE_LOADED);
 
-        assertThat(mapManager.getCurrentMapType()).isEqualTo(MapFactory.MapType.TOPPLE);
-        assertThat(mapManager.hasMapChanged()).isTrue();
-        assertThat(mapManager.getCurrentSelectedMapEntity()).isNull();
-    }
-
-    @Test
-    public void testOnNotify_ShouldSucceedWithProfileLoadedAndCurrentMapNotNull() {
-        ProfileManager profileManager = new ProfileManager();
-        profileManager.setProperty("currentMapType", "TOPPLE_ROAD_1");
-        MapManager mapManager = new MapManager();
-
-        mapManager.onNotify(profileManager, ProfileObserver.ProfileEvent.PROFILE_LOADED);
-
-        assertThat(mapManager.getCurrentMapType()).isEqualTo(MapFactory.MapType.TOPPLE_ROAD_1);
+        assertThat(mapManager.getCurrentMapType()).isEqualTo(mapType);
         assertThat(mapManager.hasMapChanged()).isTrue();
         assertThat(mapManager.getCurrentSelectedMapEntity()).isNull();
     }
@@ -141,22 +151,23 @@ public class MapManagerTest {
         assertThat(profileManager.getProperty("toppleRoad1MapStartPosition", Vector2.class)).isEqualTo(profileProperties.get("toppleRoad1MapStartPosition"));
     }
 
-    @Test
-    public void testGetCurrentTiledMap_ShouldSucceedWithoutCurrentMap() {
+    @ParameterizedTest
+    @MethodSource("currentMap")
+    void testGetCurrentTiledMap(boolean isCurrentMap, MapFactory.MapType mapType) {
         MapManager mapManager = new MapManager();
+        if (isCurrentMap) {
+            mapManager.loadMap(mapType);
+        }
 
         TiledMap tiledMap = mapManager.getCurrentTiledMap();
 
-        assertThat(tiledMap).isEqualTo(MapFactory.getMap(MapFactory.MapType.TOPPLE).getCurrentTiledMap());
+        assertThat(tiledMap).isEqualTo(MapFactory.getMap(mapType).getCurrentTiledMap());
     }
 
-    @Test
-    public void testGetCurrentTiledMap_ShouldSucceedWithCurrentMap() {
-        MapManager mapManager = new MapManager();
-        mapManager.loadMap(MapFactory.MapType.TOPPLE_ROAD_1);
-
-        TiledMap tiledMap = mapManager.getCurrentTiledMap();
-
-        assertThat(tiledMap).isEqualTo(MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1).getCurrentTiledMap());
+    private static Stream<Arguments> currentMap() {
+        return Stream.of(
+                Arguments.of(false, MapFactory.MapType.TOPPLE),
+                Arguments.of(true, MapFactory.MapType.TOPPLE_ROAD_1)
+        );
     }
 }

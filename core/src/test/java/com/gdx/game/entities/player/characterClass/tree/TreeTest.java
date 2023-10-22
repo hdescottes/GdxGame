@@ -5,6 +5,11 @@ import com.gdx.game.GdxRunner;
 import com.gdx.game.profile.ProfileManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -33,74 +38,46 @@ public class TreeTest {
         assertThat(tree.getRoot().getRight().getRight().getClassId()).isEqualTo("WEAPON_MASTER");
     }
 
-    @Test
-    public void testCheckForClassUpgrade_ShouldSucceedWithInitialClass() {
-        String configFilePath = "classes/tree_warrior.json";
+    @ParameterizedTest
+    @MethodSource("classCheck")
+    public void testCheckForClassUpgrade(String configFilePath, String currentClass, int attribute1, int attribute2, String expectedClassId) {
         Tree tree = Tree.buildClassTree(configFilePath);
 
-        Node node = tree.checkForClassUpgrade("WARRIOR", 20, 15);
+        Node node = tree.checkForClassUpgrade(currentClass, attribute1, attribute2);
 
-        assertThat(node).isNotNull();
-        assertThat(node.getClassId()).isEqualTo("KNIGHT");
+        if (expectedClassId != null) {
+            assertThat(node).isNotNull();
+            assertThat(node.getClassId()).isEqualTo(expectedClassId);
+        } else {
+            assertThat(node).isNull();
+        }
     }
 
-    @Test
-    public void testCheckForClassUpgrade_ShouldSucceedWithInterClass() {
-        String configFilePath = "classes/tree_warrior.json";
-        Tree tree = Tree.buildClassTree(configFilePath);
-
-        Node node = tree.checkForClassUpgrade("GLADIATOR", 40, 30);
-
-        assertThat(node).isNotNull();
-        assertThat(node.getClassId()).isEqualTo("WEAPON_MASTER");
+    private static Stream<Arguments> classCheck() {
+        return Stream.of(
+                Arguments.of("classes/tree_warrior.json", "WARRIOR", 20, 15, "KNIGHT"),
+                Arguments.of("classes/tree_warrior.json", "GLADIATOR", 40, 30, "WEAPON_MASTER"),
+                Arguments.of("classes/tree_warrior.json", "KNIGHT", 35, 35, "PALADIN"),
+                Arguments.of("classes/tree_warrior.json", "WARLORD", 60, 60, null)
+        );
     }
 
-    @Test
-    public void testCheckForClassUpgrade_ShouldSucceedWithInterClassBis() {
-        String configFilePath = "classes/tree_warrior.json";
+    @ParameterizedTest
+    @MethodSource("saveNewClass")
+    public void testSaveNewClass(String configFilePath, String currentClass, int attribute1, int attribute2, String expectedClassId, int expectedBonusSize) {
         Tree tree = Tree.buildClassTree(configFilePath);
-
-        Node node = tree.checkForClassUpgrade("KNIGHT", 35, 35);
-
-        assertThat(node).isNotNull();
-        assertThat(node.getClassId()).isEqualTo("PALADIN");
-    }
-
-    @Test
-    public void testCheckForClassUpgrade_ShouldSucceedWithFinalClass() {
-        String configFilePath = "classes/tree_warrior.json";
-        Tree tree = Tree.buildClassTree(configFilePath);
-
-        Node node = tree.checkForClassUpgrade("WARLORD", 60, 60);
-
-        assertThat(node).isNull();
-    }
-
-    @Test
-    public void testSaveNewClass_ShouldSucceed() {
-        String configFilePath = "classes/tree_warrior.json";
-        Tree tree = Tree.buildClassTree(configFilePath);
-        Node node = tree.checkForClassUpgrade("KNIGHT", 35, 35);
-
+        Node node = tree.checkForClassUpgrade(currentClass, attribute1, attribute2);
         Tree.saveNewClass(node);
 
-        assertThat(ProfileManager.getInstance().getProperty("characterClass", String.class)).isEqualTo("PALADIN");
+        assertThat(ProfileManager.getInstance().getProperty("characterClass", String.class)).isEqualTo(expectedClassId);
         assertThat(ProfileManager.getInstance().getProperty("classBonus", ObjectMap.class)).isNotNull();
-        assertThat(ProfileManager.getInstance().getProperty("classBonus", ObjectMap.class).size).isEqualTo(2);
+        assertThat(ProfileManager.getInstance().getProperty("classBonus", ObjectMap.class).size).isEqualTo(expectedBonusSize);
     }
 
-    @Test
-    public void testSaveNewClass_ShouldSucceedWithNoNewClass() {
-        String configFilePath = "classes/tree_warrior.json";
-        Tree tree = Tree.buildClassTree(configFilePath);
-        Node node = tree.checkForClassUpgrade("KNIGHT", 35, 35);
-        Tree.saveNewClass(node);
-
-        Node node2 = tree.checkForClassUpgrade("PALADIN", 60, 60);
-        Tree.saveNewClass(node2);
-
-        assertThat(ProfileManager.getInstance().getProperty("characterClass", String.class)).isEqualTo("PALADIN");
-        assertThat(ProfileManager.getInstance().getProperty("classBonus", ObjectMap.class)).isNotNull();
-        assertThat(ProfileManager.getInstance().getProperty("classBonus", ObjectMap.class).size).isEqualTo(2);
+    static Stream<Arguments> saveNewClass() {
+        return Stream.of(
+                Arguments.of("classes/tree_warrior.json", "KNIGHT", 35, 35, "PALADIN", 2),
+                Arguments.of("classes/tree_warrior.json", "PALADIN", 60, 60, "PALADIN", 2)
+        );
     }
 }
