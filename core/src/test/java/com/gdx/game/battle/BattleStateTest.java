@@ -14,7 +14,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockedConstruction;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -108,27 +113,50 @@ public class BattleStateTest {
         verify(battleState).notify(enemy, BattleObserver.BattleEvent.OPPONENT_TURN_DONE);
     }
 
-    @Test
-    void playerRuns_shouldSucceed() {
+    @ParameterizedTest
+    @MethodSource("determineRun")
+    void playerRuns(float speedRatio, BattleObserver.BattleEvent event) {
         BattleState battleState = spy(new BattleState());
         Entity enemy = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.ENEMY);
         battleState.setCurrentOpponent(enemy);
-        battleState.setSpeedRatio(100);
+        battleState.setSpeedRatio(speedRatio);
 
         battleState.playerRuns();
 
-        verify(battleState).notify(enemy, BattleObserver.BattleEvent.PLAYER_RUNNING);
+        verify(battleState).notify(enemy, event);
     }
 
-    @Test
-    void playerRuns_shouldFail() {
+    private static Stream<Arguments> determineRun() {
+        return Stream.of(
+                Arguments.of(100f, BattleObserver.BattleEvent.PLAYER_RUNNING),
+                Arguments.of(-1.2f, BattleObserver.BattleEvent.PLAYER_TURN_DONE)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("determineTurn")
+    void determineTurn(float speedRatio, boolean expectPlayerTurn) {
         BattleState battleState = spy(new BattleState());
+        Entity player = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR);
         Entity enemy = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.ENEMY);
+        enemy.getEntityConfig().setPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString(), "5");
+        battleState.setPlayer(player);
         battleState.setCurrentOpponent(enemy);
-        battleState.setSpeedRatio(0);
+        battleState.setSpeedRatio(speedRatio);
 
-        battleState.playerRuns();
+        battleState.getTurnTimer().run();
 
-        verify(battleState).notify(enemy, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
+        if (expectPlayerTurn) {
+            verify(battleState).notify(player, BattleObserver.BattleEvent.PLAYER_TURN_START);
+        } else {
+            verify(battleState, never()).notify(player, BattleObserver.BattleEvent.PLAYER_TURN_START);
+        }
+    }
+
+    private static Stream<Arguments> determineTurn() {
+        return Stream.of(
+                Arguments.of(1.2f, true),
+                Arguments.of(0.8f, false)
+        );
     }
 }

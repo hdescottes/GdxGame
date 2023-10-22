@@ -124,7 +124,7 @@ public class BattleState extends BattleSubject {
         notify(currentOpponent, BattleObserver.BattleEvent.RESUME_OVER);
     }
 
-    private Timer.Task getTurnTimer() {
+    protected Timer.Task getTurnTimer() {
         return new Timer.Task() {
             @Override
             public void run() {

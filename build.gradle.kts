@@ -29,6 +29,7 @@ allprojects {
     dependencies {
         testImplementation("org.junit.platform:junit-platform-launcher:$jUnitPlatformVersion")
         testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitJupiterVersion")
+        testImplementation("org.junit.jupiter:junit-jupiter-params:$jUnitJupiterVersion")
         testImplementation("org.mockito:mockito-core:$mockitoVersion")
         testImplementation("org.assertj:assertj-core:$assertJVersion")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitJupiterVersion")

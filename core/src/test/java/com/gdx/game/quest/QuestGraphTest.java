@@ -14,9 +14,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockedConstruction;
 
 import java.util.Hashtable;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -65,34 +69,29 @@ public class QuestGraphTest {
         assertThat(isValid).isFalse();
     }
 
-    @Test
-    public void testGetQuestTaskById_ShouldSucceed() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
-        questTask.setId("1");
-        questTask.setPropertyValue("1", "test");
-        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
-        questGraph.setTasks(questTasks);
-
-        QuestTask questTask1 = questGraph.getQuestTaskByID("1");
-
-        assertThat(questTask1).isEqualTo(questTask);
+    @ParameterizedTest
+    @MethodSource("questTask")
+    public void testGetQuestTaskById(QuestGraph questGraph, String taskId, String expectedPropertyValue) {
+        QuestTask questTask = questGraph.getQuestTaskByID(taskId);
+        assertThat(questTask != null ? questTask.getPropertyValue(taskId) : null).isEqualTo(expectedPropertyValue);
     }
 
-    @Test
-    public void testGetQuestTaskById_ShouldSucceedWithNonValidId() {
+    static Stream<Arguments> questTask() {
+        return Stream.of(
+                Arguments.of(createQuestGraphWithTask("1", "test"), "1", "test"),
+                Arguments.of(createQuestGraphWithTask("1", "test"), "2", null)
+        );
+    }
+
+    private static QuestGraph createQuestGraphWithTask(String taskId, String propertyValue) {
         QuestGraph questGraph = new QuestGraph();
         QuestTask questTask = new QuestTask();
-        questTask.setId("1");
-        questTask.setPropertyValue("1", "test");
+        questTask.setId(taskId);
+        questTask.setPropertyValue(taskId, propertyValue);
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
+        questTasks.put(taskId, questTask);
         questGraph.setTasks(questTasks);
-
-        QuestTask questTask1 = questGraph.getQuestTaskByID("2");
-
-        assertThat(questTask1).isNull();
+        return questGraph;
     }
 
     @Test
@@ -146,110 +145,68 @@ public class QuestGraphTest {
         assertThat(doesQuestHaveDependencies).isFalse();
     }
 
-    @Test
-    public void testDoesUpdateQuestForReturn_ShouldSucceed() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
-        questTask.setId("1");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "false");
-        questTask.setQuestType(QuestTask.QuestType.RETURN);
-        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
-        questGraph.setTasks(questTasks);
-        QuestTaskDependency questTaskDependency = new QuestTaskDependency();
-        questTaskDependency.setSourceId("1");
-        questTaskDependency.setDestinationId("1");
-
+    @ParameterizedTest
+    @MethodSource("updateQuestForReturn")
+    public void testDoesUpdateQuestForReturn(QuestGraph questGraph, boolean expectedResult) {
         boolean isQuestReturnable = questGraph.updateQuestForReturn();
-
-        assertThat(isQuestReturnable).isTrue();
+        assertThat(isQuestReturnable).isEqualTo(expectedResult);
     }
 
-    @Test
-    public void testDoesUpdateQuestForReturn_ShouldSucceedForAlreadyCompleteTask() {
+    private static Stream<Arguments> updateQuestForReturn() {
+        return Stream.of(
+                // Test case 1: Task is incomplete and of type RETURN
+                Arguments.of(createQuestGraphWithTask("1", false, QuestTask.QuestType.RETURN), true),
+                // Test case 2: Task is already complete
+                Arguments.of(createQuestGraphWithTask("1", true, QuestTask.QuestType.RETURN), false),
+                // Test case 3: Task is complete but not of type RETURN
+                Arguments.of(createQuestGraphWithTask("1", true, QuestTask.QuestType.DELIVERY), false),
+                // Test case 4: Task is not available
+                Arguments.of(createQuestGraphWithTask("", true, QuestTask.QuestType.DELIVERY), false)
+        );
+    }
+
+    private static QuestGraph createQuestGraphWithTask(String taskId, boolean isTaskComplete, QuestTask.QuestType questType) {
         QuestGraph questGraph = new QuestGraph();
         QuestTask questTask = new QuestTask();
-        questTask.setId("1");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
+        questTask.setId(taskId);
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), String.valueOf(isTaskComplete));
+        questTask.setQuestType(questType);
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
+        questTasks.put(taskId, questTask);
         questGraph.setTasks(questTasks);
-        QuestTaskDependency questTaskDependency = new QuestTaskDependency();
-        questTaskDependency.setSourceId("1");
-        questTaskDependency.setDestinationId("1");
-
-        boolean isQuestReturnable = questGraph.updateQuestForReturn();
-
-        assertThat(isQuestReturnable).isFalse();
+        return questGraph;
     }
 
-    @Test
-    public void testDoesUpdateQuestForReturn_ShouldSucceedForNonReturnTaskType() {
+    @ParameterizedTest
+    @MethodSource("isQuestReturnable")
+    public void testIsQuestTaskAvailable(QuestGraph questGraph, String taskId, boolean expectedResult) {
+        boolean isQuestReturnable = questGraph.isQuestTaskAvailable(taskId);
+        assertThat(isQuestReturnable).isEqualTo(expectedResult);
+    }
+
+    private static Stream<Arguments> isQuestReturnable() {
+        String taskId = "1";
+        String wrongTaskId = "2";
+        return Stream.of(
+                Arguments.of(createQuestGraphWithTask(taskId, true), taskId, true),
+                Arguments.of(createQuestGraphWithTask(taskId, true), wrongTaskId, false)
+        );
+    }
+
+    private static QuestGraph createQuestGraphWithTask(String taskId, boolean isTaskComplete) {
         QuestGraph questGraph = new QuestGraph();
         QuestTask questTask = new QuestTask();
-        questTask.setId("1");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
-        questTask.setQuestType(QuestTask.QuestType.DELIVERY);
+        questTask.setId(taskId);
+        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), String.valueOf(isTaskComplete));
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
+        questTasks.put(taskId, questTask);
         questGraph.setTasks(questTasks);
-        QuestTaskDependency questTaskDependency = new QuestTaskDependency();
-        questTaskDependency.setSourceId("1");
-        questTaskDependency.setDestinationId("1");
-
-        boolean isQuestReturnable = questGraph.updateQuestForReturn();
-
-        assertThat(isQuestReturnable).isFalse();
+        return questGraph;
     }
 
-    @Test
-    public void testDoesUpdateQuestForReturn_ShouldSucceedForNonAvailableTask() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
-        questTask.setId("");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
-        questTask.setQuestType(QuestTask.QuestType.DELIVERY);
-        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
-        questGraph.setTasks(questTasks);
-
-        boolean isQuestReturnable = questGraph.updateQuestForReturn();
-
-        assertThat(isQuestReturnable).isFalse();
-    }
-
-    @Test
-    public void testIsQuestTypeAvailable_ShouldSucceed() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
-        questTask.setId("1");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
-        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
-        questGraph.setTasks(questTasks);
-
-        boolean isQuestReturnable = questGraph.isQuestTaskAvailable("1");
-
-        assertThat(isQuestReturnable).isTrue();
-    }
-
-    @Test
-    public void testIsQuestTypeAvailable_ShouldSucceedWithWrongTaskId() {
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
-        questTask.setId("1");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString(), "true");
-        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
-        questGraph.setTasks(questTasks);
-
-        boolean isQuestReturnable = questGraph.isQuestTaskAvailable("2");
-
-        assertThat(isQuestReturnable).isFalse();
-    }
-
-    @Test
-    public void testUpdate_ShouldSucceedForQuestTypeFETCH() {
+    @ParameterizedTest
+    @MethodSource("updateQuest")
+    public void testUpdateQuest(QuestTask.QuestType questType, String isTaskComplete) {
         MapManager mapManager = new MapManager();
         mapManager.loadMap(MapFactory.MapType.TOPPLE);
         ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
@@ -259,35 +216,21 @@ public class QuestGraphTest {
         questTask.setId("1");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
         questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
-        questTask.setQuestType(QuestTask.QuestType.FETCH);
+        questTask.setQuestType(questType);
         Hashtable<String, QuestTask> questTasks = new Hashtable<>();
         questTasks.put("1", questTask);
         questGraph.setTasks(questTasks);
 
         questGraph.update(mapManager);
 
-        assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo("true");
+        assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo(isTaskComplete);
     }
 
-    @Test
-    public void testUpdate_ShouldSucceedForQuestTypeKILL() {
-        MapManager mapManager = new MapManager();
-        mapManager.loadMap(MapFactory.MapType.TOPPLE);
-        ProfileManager.getInstance().setProperty("TOWN_INNKEEPER", new Array<Vector2>());
-
-        QuestGraph questGraph = new QuestGraph();
-        QuestTask questTask = new QuestTask();
-        questTask.setId("1");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString(), "TOPPLE");
-        questTask.setPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString(), EntityFactory.TOWN_INNKEEPER_CONFIG);
-        questTask.setQuestType(QuestTask.QuestType.KILL);
-        Hashtable<String, QuestTask> questTasks = new Hashtable<>();
-        questTasks.put("1", questTask);
-        questGraph.setTasks(questTasks);
-
-        questGraph.update(mapManager);
-
-        assertThat(questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.IS_TASK_COMPLETE.toString())).isEqualTo("false");
+    private static Stream<Arguments> updateQuest() {
+        return Stream.of(
+                Arguments.of(QuestTask.QuestType.FETCH, "true"),
+                Arguments.of(QuestTask.QuestType.KILL, "false")
+        );
     }
 
     @Test

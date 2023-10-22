@@ -4,12 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.profile.ProfileManager;
-import com.gdx.game.status.StatusUI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -41,23 +44,21 @@ public class BattleStatusUITest {
         assertThat(Arrays.stream(battleStatusUI.getChildren().items).count()).isEqualTo(24);
     }
 
-    @Test
-    public void testSetXpValue_ShouldSucceedWithLevelUp() {
+    @ParameterizedTest
+    @MethodSource("xpValue")
+    void testSetXpValue(int xp, int xpRemainder, int level) {
         BattleStatusUI battleStatusUI = new BattleStatusUI();
-        battleStatusUI.setXPValue(210);
+        battleStatusUI.setXPValue(xp);
 
         assertThat(battleStatusUI).isNotNull();
-        assertThat(battleStatusUI.getXPValue()).isEqualTo(10);
-        assertThat(battleStatusUI.getLevelValue()).isEqualTo(2);
+        assertThat(battleStatusUI.getXPValue()).isEqualTo(xpRemainder);
+        assertThat(battleStatusUI.getLevelValue()).isEqualTo(level);
     }
 
-    @Test
-    public void testSetXpValue_ShouldSucceedWithTwoLevelUp() {
-        BattleStatusUI battleStatusUI = new BattleStatusUI();
-        battleStatusUI.setXPValue(650);
-
-        assertThat(battleStatusUI).isNotNull();
-        assertThat(battleStatusUI.getXPValue()).isEqualTo(50);
-        assertThat(battleStatusUI.getLevelValue()).isEqualTo(3);
+    private static Stream<Arguments> xpValue() {
+        return Stream.of(
+                Arguments.of(210, 10, 2),
+                Arguments.of(650, 50, 3)
+        );
     }
 }

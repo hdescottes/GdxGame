@@ -10,7 +10,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockedConstruction;
+
+import java.util.stream.Stream;
 
 import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,20 +39,20 @@ public class MapFactoryTest {
         mockNPCGraphics.close();
     }
 
-    @Test
-    public void testGetMap_ShouldSucceedWithTopple() {
-        Map map = MapFactory.getMap(MapFactory.MapType.TOPPLE);
+    @ParameterizedTest
+    @MethodSource("getMap")
+    void testGetMap(MapFactory.MapType mapType, Class<?> mapClass) {
+        Map map = MapFactory.getMap(mapType);
 
-        assertThat(map).isInstanceOf(Topple.class);
-        assertThat(MapFactory.getMapTable()).contains(entry(MapFactory.MapType.TOPPLE, map));
+        assertThat(map).isInstanceOf(mapClass);
+        assertThat(MapFactory.getMapTable()).contains(entry(mapType, map));
     }
 
-    @Test
-    public void testGetMap_ShouldSucceedWithToppleRoad1() {
-        Map map = MapFactory.getMap(MapFactory.MapType.TOPPLE_ROAD_1);
-
-        assertThat(map).isInstanceOf(ToppleRoad1.class);
-        assertThat(MapFactory.getMapTable()).contains(entry(MapFactory.MapType.TOPPLE_ROAD_1, map));
+    private static Stream<Arguments> getMap() {
+        return Stream.of(
+                Arguments.of(MapFactory.MapType.TOPPLE, Topple.class),
+                Arguments.of(MapFactory.MapType.TOPPLE_ROAD_1, ToppleRoad1.class)
+        );
     }
 
     @Test

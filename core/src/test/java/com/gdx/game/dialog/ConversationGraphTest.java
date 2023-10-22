@@ -5,8 +5,12 @@ import com.badlogic.gdx.utils.Json;
 import com.gdx.game.GdxRunner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Hashtable;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,37 +70,24 @@ public class ConversationGraphTest {
         assertThat(isValid).isFalse();
     }
 
-    @Test
-    public void testIsReachable_ShouldSucceedIsNotValid() {
+    @ParameterizedTest
+    @MethodSource("loadConversation")
+    public void testIsReachable(String fullFilenamePath, String sourceNode, String destinationNode, boolean expectedResult) {
         Json json = new Json();
-        String fullFilenamePath = "conversations/conversation004.json";
         ConversationGraph graph = json.fromJson(ConversationGraph.class, Gdx.files.internal(fullFilenamePath));
-
-        boolean isReachable = graph.isReachable("5", "1");
-
-        assertThat(isReachable).isFalse();
+        boolean isReachable = graph.isReachable(sourceNode, destinationNode);
+        assertThat(isReachable).isEqualTo(expectedResult);
     }
 
-    @Test
-    public void testIsReachable_ShouldSucceedReturnTrue() {
-        Json json = new Json();
-        String fullFilenamePath = "conversations/conversation004.json";
-        ConversationGraph graph = json.fromJson(ConversationGraph.class, Gdx.files.internal(fullFilenamePath));
-
-        boolean isReachable = graph.isReachable("1", "2");
-
-        assertThat(isReachable).isTrue();
-    }
-
-    @Test
-    public void testIsReachable_ShouldSucceedReturnFalse() {
-        Json json = new Json();
-        String fullFilenamePath = "conversations/conversation004.json";
-        ConversationGraph graph = json.fromJson(ConversationGraph.class, Gdx.files.internal(fullFilenamePath));
-
-        boolean isReachable = graph.isReachable("1", "1");
-
-        assertThat(isReachable).isFalse();
+    static Stream<Arguments> loadConversation() {
+        return Stream.of(
+                // Test case 1: Source node is not valid
+                Arguments.of("conversations/conversation004.json", "5", "1", false),
+                // Test case 2: Valid path exists
+                Arguments.of("conversations/conversation004.json", "1", "2", true),
+                // Test case 3: No path exists between the same node
+                Arguments.of("conversations/conversation004.json", "1", "1", false)
+        );
     }
 
     @Test

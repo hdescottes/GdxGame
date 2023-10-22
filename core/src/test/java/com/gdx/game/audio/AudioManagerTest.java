@@ -3,12 +3,15 @@ package com.gdx.game.audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.gdx.game.GdxRunner;
-import com.gdx.game.audio.AudioManager;
-import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.manager.ResourceManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.MENU_THEME;
 import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.TOPPLE_THEME;
@@ -30,28 +33,24 @@ class AudioManagerTest {
         assertThat(audioManager).isNotNull();
     }
 
-    @Test
-    void testOnNotify_ShouldSucceedWithMusicPlayOnce() {
+    @ParameterizedTest
+    @MethodSource("loadMusic")
+    void testOnNotify(AudioObserver.AudioCommand command, AudioObserver.AudioTypeEvent event) {
         new ResourceManager();
         AudioManager audioManager = AudioManager.getInstance();
         audioManager.setCurrentMusic(null);
 
-        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_LOAD, MENU_THEME);
-        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, MENU_THEME);
+        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_LOAD, event);
+        audioManager.onNotify(command, event);
 
-        assertThat(audioManager.getCurrentMusic()).isEqualTo(ResourceManager.getMusicAsset(MENU_THEME.getValue()));
+        assertThat(audioManager.getCurrentMusic()).isEqualTo(ResourceManager.getMusicAsset(event.getValue()));
     }
 
-    @Test
-    void testOnNotify_ShouldSucceedWithMusicPlayLoop() {
-        new ResourceManager();
-        AudioManager audioManager = AudioManager.getInstance();
-        audioManager.setCurrentMusic(null);
-
-        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_LOAD, TOPPLE_THEME);
-        audioManager.onNotify(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, TOPPLE_THEME);
-
-        assertThat(audioManager.getCurrentMusic()).isEqualTo(ResourceManager.getMusicAsset(TOPPLE_THEME.getValue()));
+    private static Stream<Arguments> loadMusic() {
+        return Stream.of(
+                Arguments.of(AudioObserver.AudioCommand.MUSIC_PLAY_ONCE, MENU_THEME),
+                Arguments.of(AudioObserver.AudioCommand.MUSIC_PLAY_LOOP, TOPPLE_THEME)
+        );
     }
 
     @Test
