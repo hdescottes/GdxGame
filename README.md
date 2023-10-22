@@ -104,7 +104,6 @@ graph TD;
 -------
 ## To improve
 
-- More tests (find a way to initialize GL20, some tests don't work anymore with 1.9.13)
 - More transition effect
 - Z sorting
 - Improve collision with Box2D
