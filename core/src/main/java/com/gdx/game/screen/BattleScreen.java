@@ -57,6 +57,10 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         multiplexer.addProcessor(battleHUD.getBattleHUDStage());
     }
 
+    protected BattleHUD getBattleHUD() {
+        return battleHUD;
+    }
+
     private void removeEntities() {
         Array<Entity> entities = mapManager.getCurrentMapEntities();
         for(Entity entity: entities) {
