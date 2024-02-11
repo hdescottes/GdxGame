@@ -1,12 +1,16 @@
-package com.gdx.game.component;
+package com.gdx.game.entities.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.gdx.game.GdxRunner;
+import com.gdx.game.component.Component;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.entities.npc.NPCPhysicsComponent;
+import com.gdx.game.map.Map;
 import com.gdx.game.map.MapFactory;
 import com.gdx.game.map.MapManager;
 import org.junit.jupiter.api.AfterEach;
@@ -19,26 +23,28 @@ import org.mockito.MockedConstruction;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockConstruction;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(GdxRunner.class)
-public class PhysicsComponentTest {
+public class PlayerPhysicsComponentTest {
 
+    private MockedConstruction<SpriteBatch> mockSpriteBatch;
     private MockedConstruction<ShapeRenderer> mockShapeRenderer;
 
     @BeforeEach
     void init() {
         Gdx.gl = mock(GL20.class);
         Gdx.gl20 = mock(GL20.class);
+        mockSpriteBatch = mockConstruction(SpriteBatch.class);
         mockShapeRenderer = mockConstruction(ShapeRenderer.class);
     }
 
     @AfterEach
     void end() {
+        mockSpriteBatch.close();
         mockShapeRenderer.close();
     }
 
@@ -47,19 +53,19 @@ public class PhysicsComponentTest {
     public void testCollisionMapEntities(MapFactory.MapType mapType, Component.MESSAGE message, String entityId) {
         Entity player = spy(EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR));
         MapManager mapManager = new MapManager();
+        mapManager.setCamera(new OrthographicCamera());
         mapManager.setPlayer(player);
         mapManager.loadMap(mapType);
-        NPCPhysicsComponent npcPhysicsComponent = new NPCPhysicsComponent();
+        OrthogonalTiledMapRenderer mapRenderer = new OrthogonalTiledMapRenderer(mapManager.getCurrentTiledMap(), Map.UNIT_SCALE);
 
-        boolean result = npcPhysicsComponent.isCollisionWithMapEntities(player, mapManager);
+        player.update(mapManager, mapRenderer.getBatch(), 1.0f);
 
         verify(player).sendMessage(message, entityId);
-        assertTrue(result);
     }
 
     private static Stream<Arguments> collisionMapData() {
         return Stream.of(
-                Arguments.of(MapFactory.MapType.TOPPLE_ROAD_1, Component.MESSAGE.COLLISION_WITH_ENTITY, "RABITE"),
+                Arguments.of(MapFactory.MapType.TOPPLE_ROAD_1, Component.MESSAGE.COLLISION_WITH_FOE, "RABITE"),
                 Arguments.of(MapFactory.MapType.TOPPLE, Component.MESSAGE.COLLISION_WITH_ENTITY, "TOWN_INNKEEPER")
         );
     }

@@ -6,6 +6,7 @@ import com.gdx.game.component.Component;
 import com.gdx.game.entities.npc.NPCGraphicsComponent;
 import com.gdx.game.entities.npc.NPCInputComponent;
 import com.gdx.game.entities.npc.NPCPhysicsComponent;
+import com.gdx.game.entities.npc.enemy.EnemyPhysicsComponent;
 import com.gdx.game.entities.player.PlayerGraphicsComponent;
 import com.gdx.game.entities.player.PlayerInputComponent;
 import com.gdx.game.entities.player.PlayerPhysicsComponent;
@@ -125,8 +126,12 @@ public class EntityFactory {
                 entity = new Entity(new NPCInputComponent(), new PlayerPhysicsComponent(), new PlayerGraphicsComponent());
                 return entity;
             }
-            case NPC, ENEMY -> {
+            case NPC -> {
                 entity = new Entity(new NPCInputComponent(), new NPCPhysicsComponent(), new NPCGraphicsComponent());
+                return entity;
+            }
+            case ENEMY -> {
+                entity = new Entity(new NPCInputComponent(), new EnemyPhysicsComponent(), new NPCGraphicsComponent());
                 return entity;
             }
             default -> {
