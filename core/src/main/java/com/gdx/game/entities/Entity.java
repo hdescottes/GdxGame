@@ -261,7 +261,12 @@ public class Entity {
 
 	public static Entity initEntity(EntityConfig entityConfig) {
 		Json json = new Json();
-		Entity entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.NPC);
+		Entity entity;
+		if ("FOE".equals(entityConfig.getEntityStatus())) {
+			entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.ENEMY);
+		} else {
+			entity = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.NPC);
+		}
 		entity.setEntityConfig(entityConfig);
 
 		entity.sendMessage(Component.MESSAGE.LOAD_ANIMATIONS, json.toJson(entity.getEntityConfig()));

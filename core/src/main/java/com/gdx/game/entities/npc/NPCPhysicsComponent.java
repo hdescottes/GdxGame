@@ -9,7 +9,7 @@ import com.gdx.game.map.MapManager;
 
 public class NPCPhysicsComponent extends PhysicsComponent {
 
-    private Entity.State state;
+    protected Entity.State state;
 
     public NPCPhysicsComponent() {
         boundingBoxLocation = BoundingBoxLocation.CENTER;
@@ -63,20 +63,14 @@ public class NPCPhysicsComponent extends PhysicsComponent {
 
     private boolean isEntityFarFromPlayer(MapManager mapMgr) {
         //Check distance
-        Vector3 vec3Player = new Vector3(mapMgr.getPlayer().getCurrentBoundingBox().x, mapMgr.getPlayer().getCurrentBoundingBox().y, 0.0f);
-        Vector3 vec3Npc = new Vector3(boundingBox.x, boundingBox.y, 0.0f);
-        float distance = vec3Player.dst(vec3Npc);
+        float distance = calculateDistance(mapMgr);
 
         return !(distance <= SELECT_RAY_MAXIMUM_DISTANCE);
     }
 
-    @Override
-    protected boolean isCollisionWithMapEntities(Entity entity, MapManager mapMgr) {
-        //Test against player
-        if (isCollision(entity, mapMgr.getPlayer())) {
-            return true;
-        }
-
-        return super.isCollisionWithMapEntities(entity, mapMgr);
+    protected float calculateDistance(MapManager mapMgr) {
+        Vector3 vec3Player = new Vector3(mapMgr.getPlayer().getCurrentBoundingBox().x, mapMgr.getPlayer().getCurrentBoundingBox().y, 0.0f);
+        Vector3 vec3Npc = new Vector3(boundingBox.x, boundingBox.y, 0.0f);
+        return vec3Player.dst(vec3Npc);
     }
 }
