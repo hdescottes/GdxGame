@@ -1,8 +1,11 @@
 package com.gdx.game.component;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.quest.QuestGraph;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +16,7 @@ public abstract class InputComponent extends ComponentSubject implements Compone
     protected Entity.State currentState = null;
     protected Json json;
 
-    protected enum Keys {
+    public enum Keys {
         LEFT, RIGHT, UP, DOWN, QUIT, INTERACT, OPTION
     }
 
@@ -50,5 +53,7 @@ public abstract class InputComponent extends ComponentSubject implements Compone
     public boolean scrolled(float amountX, float amountY) {
         return false;
     }
+
+    public static Map<Integer, Keys> playerControls = new HashMap<>();
 
 }

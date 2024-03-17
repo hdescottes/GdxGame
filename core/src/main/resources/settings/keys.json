@@ -1,0 +1,30 @@
+{
+  "33":{
+    "class":"java.lang.String",
+    "value":"INTERACT"
+  },
+  "44":{
+    "class":"java.lang.String",
+    "value":"OPTION"
+  },
+  "111":{
+    "class":"java.lang.String",
+    "value":"QUIT"
+  },
+  "47":{
+    "class":"java.lang.String",
+    "value":"DOWN"
+  },
+  "29":{
+    "class":"java.lang.String",
+    "value":"LEFT"
+  },
+  "51":{
+    "class":"java.lang.String",
+    "value":"UP"
+  },
+  "32":{
+    "class":"java.lang.String",
+    "value":"RIGHT"
+  }
+}
