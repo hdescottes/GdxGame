@@ -78,7 +78,11 @@ public class MenuScreen extends BaseScreen {
         optionButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new OptionScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), resourceManager), new ArrayList<>());
+                setScreenWithTransition(
+                        (BaseScreen) gdxGame.getScreen(),
+                        new OptionScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), resourceManager),
+                        new ArrayList<>()
+                );
             }
         });
     }
@@ -90,7 +94,11 @@ public class MenuScreen extends BaseScreen {
         newButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new MenuNewGameScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), resourceManager), new ArrayList<>());
+                setScreenWithTransition(
+                        (BaseScreen) gdxGame.getScreen(),
+                        new MenuNewGameScreen(gdxGame, (BaseScreen) gdxGame.getScreen(), resourceManager),
+                        new ArrayList<>()
+                );
             }
         });
     }
