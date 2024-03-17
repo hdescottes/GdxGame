@@ -92,30 +92,31 @@ public class PlayerInputComponent extends InputComponent {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		switch (keycode) {
-			case Input.Keys.DOWN:
-			case Input.Keys.S:
+
+		if(!playerControls.containsKey(keycode)){
+			return false;
+		}
+
+		switch (playerControls.get(keycode)) {
+			case DOWN:
 				this.downPressed();
 				break;
-			case Input.Keys.UP:
-			case Input.Keys.W:
+			case UP:
 				this.upPressed();
 				break;
-			case Input.Keys.LEFT:
-			case Input.Keys.A:
+			case LEFT:
 				this.leftPressed();
 				break;
-			case Input.Keys.RIGHT:
-			case Input.Keys.D:
+			case RIGHT:
 				this.rightPressed();
 				break;
-			case Input.Keys.E:
+			case INTERACT:
 				this.interactPressed();
 				break;
-			case Input.Keys.O:
+			case OPTION:
 				this.optionPressed();
 				break;
-			case Input.Keys.ESCAPE:
+			case QUIT:
 				this.quitPressed();
 				break;
 			default:
@@ -126,34 +127,32 @@ public class PlayerInputComponent extends InputComponent {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		switch (keycode) {
-			case Input.Keys.DOWN:
-			case Input.Keys.S:
+
+		if(!playerControls.containsKey(keycode)){
+			return false;
+		}
+
+		switch (playerControls.get(keycode)) {
+			case DOWN:
 				this.downReleased();
 				break;
-			case Input.Keys.UP:
-			case Input.Keys.W:
+			case UP:
 				this.upReleased();
 				break;
-			case Input.Keys.LEFT:
-			case Input.Keys.A:
+			case LEFT:
 				this.leftReleased();
 				break;
-			case Input.Keys.RIGHT:
-			case Input.Keys.D:
+			case RIGHT:
 				this.rightReleased();
 				break;
-			case Input.Keys.E:
+			case INTERACT:
 				this.interactReleased();
 				break;
-			case Input.Keys.O:
+			case OPTION:
 				this.optionReleased();
 				break;
-			case Input.Keys.ESCAPE:
+			case QUIT:
 				this.quitReleased();
-				break;
-			case Input.Keys.BACKSPACE:
-				debug = !debug;
 				break;
 			default:
 				break;

@@ -15,6 +15,7 @@ import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.camera.CameraStyles;
 import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
+import com.gdx.game.component.InputComponent;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.player.PlayerHUD;
@@ -28,6 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.gdx.game.component.InputComponent.playerControls;
 
 public class GameScreen extends BaseScreen implements ComponentObserver {
 
@@ -91,6 +95,15 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
         player = EntityFactory.getInstance().getEntity(ProfileManager.getInstance().getProperty("playerCharacter", EntityFactory.EntityType.class));
         player.registerObserver(this);
+
+        //initialize controls
+        Json jsonObject = new Json();
+        HashMap<String, String> jsonMap =
+                jsonObject.fromJson(HashMap.class, Gdx.files.local("settings/keys.json"));
+
+        for(var entry : jsonMap.entrySet()){
+            playerControls.put(Integer.valueOf(entry.getKey()), InputComponent.Keys.valueOf(entry.getValue()));
+        }
 
         mapManager.setPlayer(player);
         mapManager.setCamera(camera);
