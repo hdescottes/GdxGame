@@ -120,4 +120,19 @@ public class ConversationGraph extends ConversationGraphSubject {
         return outputString.toString();
     }
 
+    public Hashtable<String, Conversation> getConversations() {
+        return conversations;
+    }
+
+    public Hashtable<String, ArrayList<ConversationChoice>> getAssociatedChoices() {
+        return associatedChoices;
+    }
+
+    public void setAssociatedChoices(Hashtable<String, ArrayList<ConversationChoice>> associatedChoices) {
+        this.associatedChoices = associatedChoices;
+    }
+
+    public void setCurrentConversationID(String currentConversationID) {
+        this.currentConversationID = currentConversationID;
+    }
 }

@@ -17,6 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import static com.gdx.game.common.Constats.COURTESY_PHRASES_PATH;
+import static com.gdx.game.common.Constats.FOE;
 
 public class ConversationUI extends Window {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConversationUI.class);
@@ -29,6 +33,8 @@ public class ConversationUI extends Window {
     private TextButton closeButton;
 
     private Json json;
+
+    private Random random = new Random();
 
     public ConversationUI() {
         super("dialog", ResourceManager.skin);
@@ -98,15 +104,26 @@ public class ConversationUI extends Window {
 
         clearDialog();
 
-        if (fullFilenamePath.isEmpty() || !Gdx.files.internal(fullFilenamePath).exists()) {
-            LOGGER.debug("Conversation file does not exist!");
+        if(FOE.equalsIgnoreCase(entityConfig.getEntityStatus())){
+            LOGGER.debug("The NPC is an Enemy");
             return;
+        }
+
+        if (fullFilenamePath.isEmpty() || !Gdx.files.internal(fullFilenamePath).exists()) {
+            fullFilenamePath = COURTESY_PHRASES_PATH;
         }
 
         currentEntityID = entityConfig.getEntityID();
         this.getTitleLabel().setText(entityConfig.getEntityID());
 
         ConversationGraph graph = json.fromJson(ConversationGraph.class, Gdx.files.internal(fullFilenamePath));
+
+        // if the npc has nothing to say, use a random courtesy phrases
+        if(graph.getCurrentConversationID() == null){
+            int randomNumber = random.nextInt(graph.getConversations().size()) + 1;
+            graph.setCurrentConversationID(String.valueOf(randomNumber));
+        }
+
         setConversationGraph(graph);
     }
 
