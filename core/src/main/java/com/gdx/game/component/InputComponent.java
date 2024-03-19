@@ -1,8 +1,11 @@
 package com.gdx.game.component;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.quest.QuestGraph;
 
 import java.util.HashMap;
 import java.util.Map;
