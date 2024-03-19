@@ -2,8 +2,6 @@ package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
@@ -21,19 +18,15 @@ import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.component.InputComponent;
-import com.gdx.game.entities.player.PlayerInputComponent;
 import com.gdx.game.manager.ResourceManager;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import static com.gdx.game.common.UtilityClass.getKeysByValue;
+import static com.gdx.game.common.UtilityClass.getFirstKeyByValue;
+import static com.gdx.game.common.UtilityClass.mapInverter;
 import static com.gdx.game.manager.ResourceManager.skin;
 
 public class OptionScreen extends BaseScreen {
@@ -108,20 +101,31 @@ public class OptionScreen extends BaseScreen {
         Json jsonObject = new Json();
         playerControlsNew = jsonObject.fromJson(HashMap.class, Gdx.files.internal("settings/keys.json"));
 
-        Label downLabel = new Label(InputComponent.Keys.DOWN.name(), skin);
-        TextField downText = new TextField("S", skin);
+        playerControlsNew = mapInverter(playerControlsNew);
+
         Label upLabel = new Label(InputComponent.Keys.UP.name(), skin);
-        TextField upText = new TextField("W", skin);
+        TextField upText = new TextField(
+                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.UP.name()))), skin);
+        Label downLabel = new Label(InputComponent.Keys.DOWN.name(), skin);
+        TextField downText = new TextField(
+                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.DOWN.name()))), skin);
         Label leftLabel = new Label(InputComponent.Keys.LEFT.name(), skin);
-        TextField leftText = new TextField("A", skin);
+        TextField leftText = new TextField(
+                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.LEFT.name()))), skin);
         Label rightLabel = new Label(InputComponent.Keys.RIGHT.name(), skin);
-        TextField rightText = new TextField("D", skin);
+        TextField rightText = new TextField(
+                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.RIGHT.name()))), skin);
         Label interactLabel = new Label(InputComponent.Keys.INTERACT.name(), skin);
-        TextField interactText = new TextField("E", skin);
+        TextField interactText = new TextField(
+                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.INTERACT.name()))), skin);
         Label optionLabel = new Label(InputComponent.Keys.OPTION.name(), skin);
-        TextField optionText = new TextField("O", skin);
+        TextField optionText = new TextField(
+                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.OPTION.name()))), skin);
         Label quitLabel = new Label(InputComponent.Keys.QUIT.name(), skin);
-        TextField quitText = new TextField("ENTER", skin);
+        TextField quitText = new TextField(
+                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.QUIT.name()))), skin);
+
+        playerControlsNew = mapInverter(playerControlsNew);
 
         downText.setMaxLength(1);
         upText.setMaxLength(1);
@@ -136,9 +140,9 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                String keyToRemove = getKeysByValue(playerControlsNew, InputComponent.Keys.DOWN.name())
-                        .stream().findFirst().toString();
-                playerControlsNew.remove(keyToRemove);
+                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.DOWN.name());
+
+                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
 
                 playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.DOWN.name());
                 downText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -153,9 +157,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                String keyToRemove = getKeysByValue(playerControlsNew, InputComponent.Keys.DOWN.name())
-                        .stream().findFirst().toString();
-                playerControlsNew.remove(keyToRemove);
+                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.UP.name());
+                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
 
                 playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.UP.name());
                 upText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -170,9 +173,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                String keyToRemove = getKeysByValue(playerControlsNew, InputComponent.Keys.DOWN.name())
-                        .stream().findFirst().toString();
-                playerControlsNew.remove(keyToRemove);
+                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.LEFT.name());
+                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
 
                 playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.LEFT.name());
                 leftText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -187,9 +189,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                String keyToRemove = getKeysByValue(playerControlsNew, InputComponent.Keys.DOWN.name())
-                        .stream().findFirst().toString();
-                playerControlsNew.remove(keyToRemove);
+                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.RIGHT.name());
+                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
 
                 playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.RIGHT.name());
                 rightText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -204,9 +205,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                String keyToRemove = getKeysByValue(playerControlsNew, InputComponent.Keys.DOWN.name())
-                        .stream().findFirst().toString();
-                playerControlsNew.remove(keyToRemove);
+                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.INTERACT.name());
+                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
 
                 playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.INTERACT.name());
                 interactText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -221,9 +221,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                String keyToRemove = getKeysByValue(playerControlsNew, InputComponent.Keys.DOWN.name())
-                        .stream().findFirst().toString();
-                playerControlsNew.remove(keyToRemove);
+                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.OPTION.name());
+                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
 
                 playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.OPTION.name());
                 optionText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -238,9 +237,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                String keyToRemove = getKeysByValue(playerControlsNew, InputComponent.Keys.DOWN.name())
-                        .stream().findFirst().toString();
-                playerControlsNew.remove(keyToRemove);
+                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.QUIT.name());
+                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
 
                 playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.QUIT.name());
                 quitText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -250,11 +248,11 @@ public class OptionScreen extends BaseScreen {
             }
         });
 
-        controlTable.add(downLabel);
-        controlTable.add(downText);
-        controlTable.row();
         controlTable.add(upLabel);
         controlTable.add(upText);
+        controlTable.row();
+        controlTable.add(downLabel);
+        controlTable.add(downText);
         controlTable.row();
         controlTable.add(leftLabel);
         controlTable.add(leftText);
@@ -284,18 +282,8 @@ public class OptionScreen extends BaseScreen {
 
                 Json json = new Json();
 
-                File f = Gdx.files.local("settings/keys.json").file();
-                try {
-                    f.createNewFile();
-
-                    FileWriter fw = new FileWriter(f);
-
-                    fw.write(json.prettyPrint(playerControlsNew));
-                    fw.close();
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                FileHandle commandsFile = Gdx.files.local("core/src/main/resources/settings/keys.json");
+                commandsFile.writeString(json.prettyPrint(playerControlsNew), false);
 
                 controlClickListener = false;
             }
