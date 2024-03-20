@@ -2,13 +2,14 @@ package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.SerializationException;
 import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
@@ -31,6 +32,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.gdx.game.common.Constats.FULL_CONTROLS_SETTINGS_PATH;
+import static com.gdx.game.common.Constats.PARTIAL_CONTROLS_SETTINGS_PATH;
+import static com.gdx.game.common.DefaultControlsMap.DEFAULT_CONTROLS;
 import static com.gdx.game.component.InputComponent.playerControls;
 
 public class GameScreen extends BaseScreen implements ComponentObserver {
@@ -60,14 +64,13 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
     protected MapManager mapManager;
     protected OrthographicCamera camera;
     protected OrthographicCamera hudCamera;
-    private Stage gameStage = new Stage();
 
-    private Json json;
-    private GdxGame game;
-    private InputMultiplexer multiplexer;
+    private final Json json;
+    private final GdxGame game;
+    private final InputMultiplexer multiplexer;
 
-    private Entity player;
-    private PlayerHUD playerHUD;
+    private final Entity player;
+    private final PlayerHUD playerHUD;
 
     private float startX;
     private float startY;
@@ -97,10 +100,20 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
         player.registerObserver(this);
 
         //initialize controls
-        Json jsonObject = new Json();
-        HashMap<String, String> jsonMap =
-                jsonObject.fromJson(HashMap.class, Gdx.files.local("settings/keys.json"));
+        HashMap<String, String> jsonMap;
 
+        try {
+            jsonMap = json.fromJson(HashMap.class, Gdx.files.local(PARTIAL_CONTROLS_SETTINGS_PATH));
+        }catch (SerializationException se){
+
+            // if I can not read the file it doesn't exist, so use the default controls binding and save it
+            jsonMap = DEFAULT_CONTROLS;
+
+            FileHandle commandsFile = Gdx.files.local(FULL_CONTROLS_SETTINGS_PATH);
+            commandsFile.writeString(json.prettyPrint(jsonMap), false);
+        }
+
+        // map player controls get by json into game readable controls
         for(var entry : jsonMap.entrySet()){
             playerControls.put(Integer.valueOf(entry.getKey()), InputComponent.Keys.valueOf(entry.getValue()));
         }
@@ -249,7 +262,6 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
     public static void setGameState(GameState state) {
         switch (state) {
-            case RUNNING -> gameState = GameState.RUNNING;
             case LOADING -> {
                 ProfileManager.getInstance().loadProfile();
                 gameState = GameState.RUNNING;

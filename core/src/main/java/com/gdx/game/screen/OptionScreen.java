@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.SerializationException;
 import com.crashinvaders.vfx.VfxManager;
 import com.crashinvaders.vfx.effects.GaussianBlurEffect;
 import com.gdx.game.GdxGame;
@@ -25,6 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.gdx.game.common.Constats.FULL_CONTROLS_SETTINGS_PATH;
+import static com.gdx.game.common.Constats.PARTIAL_CONTROLS_SETTINGS_PATH;
+import static com.gdx.game.common.DefaultControlsMap.DEFAULT_CONTROLS;
 import static com.gdx.game.common.UtilityClass.getFirstKeyByValue;
 import static com.gdx.game.common.UtilityClass.mapInverter;
 import static com.gdx.game.manager.ResourceManager.skin;
@@ -99,7 +103,13 @@ public class OptionScreen extends BaseScreen {
     private void handleControlSettings() {
 
         Json jsonObject = new Json();
-        playerControlsNew = jsonObject.fromJson(HashMap.class, Gdx.files.internal("settings/keys.json"));
+
+        try {
+            playerControlsNew = jsonObject.fromJson(HashMap.class, Gdx.files.internal(PARTIAL_CONTROLS_SETTINGS_PATH));
+        }catch (SerializationException se){
+            playerControlsNew = DEFAULT_CONTROLS;
+        }
+
 
         playerControlsNew = mapInverter(playerControlsNew);
 
@@ -282,7 +292,7 @@ public class OptionScreen extends BaseScreen {
 
                 Json json = new Json();
 
-                FileHandle commandsFile = Gdx.files.local("core/src/main/resources/settings/keys.json");
+                FileHandle commandsFile = Gdx.files.local(FULL_CONTROLS_SETTINGS_PATH);
                 commandsFile.writeString(json.prettyPrint(playerControlsNew), false);
 
                 controlClickListener = false;

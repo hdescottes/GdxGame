@@ -6,16 +6,16 @@ import java.util.HashMap;
 
 public class DefaultControlsMap {
 
-    public static final HashMap<String, String> defaultControls = new HashMap<>();
+    public static final HashMap<String, String> DEFAULT_CONTROLS = new HashMap<>();
 
     static {
-        defaultControls.put("33", InputComponent.Keys.INTERACT.name());
-        defaultControls.put("44", InputComponent.Keys.OPTION.name());
-        defaultControls.put("22", InputComponent.Keys.RIGHT.name());
-        defaultControls.put("111", InputComponent.Keys.QUIT.name());
-        defaultControls.put("19", InputComponent.Keys.UP.name());
-        defaultControls.put("20", InputComponent.Keys.DOWN.name());
-        defaultControls.put("21", InputComponent.Keys.LEFT.name());
+        DEFAULT_CONTROLS.put("33", InputComponent.Keys.INTERACT.name());
+        DEFAULT_CONTROLS.put("43", InputComponent.Keys.OPTION.name());
+        DEFAULT_CONTROLS.put("32", InputComponent.Keys.RIGHT.name());
+        DEFAULT_CONTROLS.put("111", InputComponent.Keys.QUIT.name());
+        DEFAULT_CONTROLS.put("51", InputComponent.Keys.UP.name());
+        DEFAULT_CONTROLS.put("47", InputComponent.Keys.DOWN.name());
+        DEFAULT_CONTROLS.put("29", InputComponent.Keys.LEFT.name());
     }
 
 }
