@@ -20,6 +20,8 @@ import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.component.InputComponent;
 import com.gdx.game.manager.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +34,7 @@ import static com.gdx.game.common.DefaultControlsMap.DEFAULT_CONTROLS;
 import static com.gdx.game.common.UtilityClass.getFirstKeyByValue;
 import static com.gdx.game.common.UtilityClass.mapInverter;
 import static com.gdx.game.manager.ResourceManager.skin;
+import static com.gdx.game.screen.GameScreen.GameState.PAUSED;
 
 public class OptionScreen extends BaseScreen {
 
@@ -52,6 +55,8 @@ public class OptionScreen extends BaseScreen {
     private GaussianBlurEffect vfxEffect;
 
     private Map<String, String> playerControlsNew = new HashMap<>();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameScreen.class);
 
     public OptionScreen(GdxGame gdxGame, BaseScreen previousScreen, ResourceManager resourceManager) {
         super(gdxGame, resourceManager);
@@ -77,8 +82,10 @@ public class OptionScreen extends BaseScreen {
             vfxManager.addEffect(vfxEffect);
         }
 
+        GameScreen.GameState gameState = GameScreen.getGameState();
+
         optionTable = createTable();
-        handleControlButton();
+        if (gameState == null) handleControlButton();
         handleMusicButton();
         handleBackButton();
     }
@@ -86,7 +93,7 @@ public class OptionScreen extends BaseScreen {
     private void handleControlButton() {
         createButton("Control",0, optionTable.getHeight()/10, optionTable);
 
-        Actor controlButton = optionTable.getCells().get(0).getActor();
+        Actor controlButton = optionTable.getCells().get(optionTable.getCells().size - 1).getActor();
 
         controlButton.addListener(new ClickListener() {
             @Override
@@ -106,7 +113,15 @@ public class OptionScreen extends BaseScreen {
 
         try {
             playerControlsNew = jsonObject.fromJson(HashMap.class, Gdx.files.internal(PARTIAL_CONTROLS_SETTINGS_PATH));
+
+            if (DEFAULT_CONTROLS.size() != playerControlsNew.size()){
+                throw new SerializationException("Not valid control map");
+            }
+
         }catch (SerializationException se){
+
+            LOGGER.error(se.getMessage());
+
             playerControlsNew = DEFAULT_CONTROLS;
         }
 
@@ -303,7 +318,7 @@ public class OptionScreen extends BaseScreen {
     private void handleMusicButton() {
         createButton("Music",0, optionTable.getHeight()/15, optionTable);
 
-        Actor musicButton = optionTable.getCells().get(1).getActor();
+        Actor musicButton = optionTable.getCells().get(optionTable.getCells().size - 1).getActor();
         musicButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
@@ -368,7 +383,7 @@ public class OptionScreen extends BaseScreen {
     private void handleMusicBackButton() {
         createButton("Back",0, musicTable.getHeight()/20, musicTable);
 
-        Actor backButton = musicTable.getCells().get(6).getActor();
+        Actor backButton = musicTable.getCells().get(musicTable.getCells().size - 1).getActor();
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
@@ -380,7 +395,7 @@ public class OptionScreen extends BaseScreen {
     private void handleBackButton() {
         createButton("Back",0, optionTable.getHeight()/5, optionTable);
 
-        Actor backButton = optionTable.getCells().get(2).getActor();
+        Actor backButton = optionTable.getCells().get(optionTable.getCells().size - 1).getActor();
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {

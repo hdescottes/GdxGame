@@ -104,7 +104,13 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
         try {
             jsonMap = json.fromJson(HashMap.class, Gdx.files.local(PARTIAL_CONTROLS_SETTINGS_PATH));
+
+            if (DEFAULT_CONTROLS.size() != jsonMap.size()){
+                throw new SerializationException("Not valid control map");
+            }
+
         }catch (SerializationException se){
+            LOGGER.error(se.getMessage());
 
             // if I can not read the file it doesn't exist, so use the default controls binding and save it
             jsonMap = DEFAULT_CONTROLS;
