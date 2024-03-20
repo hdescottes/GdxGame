@@ -100,27 +100,27 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
         player.registerObserver(this);
 
         //initialize controls
-        HashMap<String, String> jsonMap;
+        HashMap<String, String> controlMap;
 
         try {
-            jsonMap = json.fromJson(HashMap.class, Gdx.files.local(PARTIAL_CONTROLS_SETTINGS_PATH));
+            controlMap = json.fromJson(HashMap.class, Gdx.files.local(PARTIAL_CONTROLS_SETTINGS_PATH));
 
-            if (DEFAULT_CONTROLS.size() != jsonMap.size()){
+            if (DEFAULT_CONTROLS.size() != controlMap.size()){
                 throw new SerializationException("Not valid control map");
             }
 
-        }catch (SerializationException se){
+        } catch (SerializationException se){
             LOGGER.error(se.getMessage());
 
-            // if I can not read the file it doesn't exist, so use the default controls binding and save it
-            jsonMap = DEFAULT_CONTROLS;
+            // if I can not read the file, so use the default controls binding and save it
+            controlMap = DEFAULT_CONTROLS;
 
             FileHandle commandsFile = Gdx.files.local(FULL_CONTROLS_SETTINGS_PATH);
-            commandsFile.writeString(json.prettyPrint(jsonMap), false);
+            commandsFile.writeString(json.prettyPrint(controlMap), false);
         }
 
         // map player controls get by json into game readable controls
-        for(var entry : jsonMap.entrySet()){
+        for (var entry : controlMap.entrySet()){
             playerControls.put(Integer.valueOf(entry.getKey()), InputComponent.Keys.valueOf(entry.getValue()));
         }
 

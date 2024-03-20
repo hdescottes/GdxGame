@@ -5,6 +5,7 @@ lib/
 *.hprof
 .DS_Store
 *.sav
+/**/settings/keys.json
 
 ### STS ###
 .apt_generated

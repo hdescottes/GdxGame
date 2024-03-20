@@ -8,7 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
@@ -34,7 +39,6 @@ import static com.gdx.game.common.DefaultControlsMap.DEFAULT_CONTROLS;
 import static com.gdx.game.common.UtilityClass.getFirstKeyByValue;
 import static com.gdx.game.common.UtilityClass.mapInverter;
 import static com.gdx.game.manager.ResourceManager.skin;
-import static com.gdx.game.screen.GameScreen.GameState.PAUSED;
 
 public class OptionScreen extends BaseScreen {
 
