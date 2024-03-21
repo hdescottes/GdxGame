@@ -16,7 +16,6 @@ import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.camera.CameraStyles;
 import com.gdx.game.component.Component;
 import com.gdx.game.component.ComponentObserver;
-import com.gdx.game.component.InputComponent;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.player.PlayerHUD;
@@ -36,6 +35,7 @@ import static com.gdx.game.common.Constats.FULL_CONTROLS_SETTINGS_PATH;
 import static com.gdx.game.common.Constats.PARTIAL_CONTROLS_SETTINGS_PATH;
 import static com.gdx.game.common.DefaultControlsMap.DEFAULT_CONTROLS;
 import static com.gdx.game.component.InputComponent.playerControls;
+import static com.gdx.game.component.InputComponent.setPlayerControlMapFromJsonControlsMap;
 
 public class GameScreen extends BaseScreen implements ComponentObserver {
 
@@ -102,26 +102,23 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
         //initialize controls
         HashMap<String, String> controlMap;
 
-        try {
-            controlMap = json.fromJson(HashMap.class, Gdx.files.local(PARTIAL_CONTROLS_SETTINGS_PATH));
+        if(playerControls.isEmpty()){
+            try {
+                controlMap = json.fromJson(HashMap.class, Gdx.files.local(PARTIAL_CONTROLS_SETTINGS_PATH));
 
-            if (DEFAULT_CONTROLS.size() != controlMap.size()){
-                throw new SerializationException("Not valid control map");
+                if (DEFAULT_CONTROLS.size() != controlMap.size()){
+                    throw new SerializationException("Not valid control map");
+                }
+            } catch (SerializationException se) {LOGGER.error(se.getMessage());
+
+                // if I can not read the file , so use the default controls binding and save it
+                controlMap = DEFAULT_CONTROLS;
+
+                FileHandle commandsFile = Gdx.files.local(FULL_CONTROLS_SETTINGS_PATH);
+                commandsFile.writeString(json.prettyPrint(controlMap), false);
             }
 
-        } catch (SerializationException se){
-            LOGGER.error(se.getMessage());
-
-            // if I can not read the file, so use the default controls binding and save it
-            controlMap = DEFAULT_CONTROLS;
-
-            FileHandle commandsFile = Gdx.files.local(FULL_CONTROLS_SETTINGS_PATH);
-            commandsFile.writeString(json.prettyPrint(controlMap), false);
-        }
-
-        // map player controls get by json into game readable controls
-        for (var entry : controlMap.entrySet()){
-            playerControls.put(Integer.valueOf(entry.getKey()), InputComponent.Keys.valueOf(entry.getValue()));
+            setPlayerControlMapFromJsonControlsMap(controlMap);
         }
 
         mapManager.setPlayer(player);

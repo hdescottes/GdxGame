@@ -8,12 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
@@ -24,20 +19,19 @@ import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
 import com.gdx.game.component.InputComponent;
+import com.gdx.game.manager.PreferenceManager;
 import com.gdx.game.manager.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 import static com.gdx.game.common.Constats.FULL_CONTROLS_SETTINGS_PATH;
 import static com.gdx.game.common.Constats.PARTIAL_CONTROLS_SETTINGS_PATH;
 import static com.gdx.game.common.DefaultControlsMap.DEFAULT_CONTROLS;
-import static com.gdx.game.common.UtilityClass.getFirstKeyByValue;
 import static com.gdx.game.common.UtilityClass.mapInverter;
+import static com.gdx.game.component.InputComponent.*;
 import static com.gdx.game.manager.ResourceManager.skin;
 
 public class OptionScreen extends BaseScreen {
@@ -45,11 +39,11 @@ public class OptionScreen extends BaseScreen {
     private Table optionTable;
     private Table musicTable;
     private Table controlTable;
-    private Stage optionStage = new Stage();
-    private Stage musicStage = new Stage();
-    private Stage controlStage = new Stage();
-    private Stage backgroundStage = new Stage();
-    private BaseScreen previousScreen;
+    private final Stage optionStage = new Stage();
+    private final Stage musicStage = new Stage();
+    private final Stage controlStage = new Stage();
+    private final Stage backgroundStage = new Stage();
+    private final BaseScreen previousScreen;
     private Image previousScreenAsImg;
     private boolean musicClickListener;
     private boolean controlClickListener;
@@ -58,7 +52,7 @@ public class OptionScreen extends BaseScreen {
     private VfxManager vfxManager;
     private GaussianBlurEffect vfxEffect;
 
-    private Map<String, String> playerControlsNew = new HashMap<>();
+    private HashMap<String, String> playerControlsNew = mapJsonControlsToPlayerControl(playerControls);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameScreen.class);
 
@@ -86,10 +80,8 @@ public class OptionScreen extends BaseScreen {
             vfxManager.addEffect(vfxEffect);
         }
 
-        GameScreen.GameState gameState = GameScreen.getGameState();
-
         optionTable = createTable();
-        if (gameState == null) handleControlButton();
+        handleControlButton();
         handleMusicButton();
         handleBackButton();
     }
@@ -115,18 +107,20 @@ public class OptionScreen extends BaseScreen {
 
         Json jsonObject = new Json();
 
-        try {
-            playerControlsNew = jsonObject.fromJson(HashMap.class, Gdx.files.internal(PARTIAL_CONTROLS_SETTINGS_PATH));
+        if (playerControls.isEmpty()){
+            try {
+                playerControlsNew = jsonObject.fromJson(HashMap.class, Gdx.files.internal(PARTIAL_CONTROLS_SETTINGS_PATH));
 
-            if (DEFAULT_CONTROLS.size() != playerControlsNew.size()){
-                throw new SerializationException("Not valid control map");
+                if (DEFAULT_CONTROLS.size() != playerControlsNew.size()) {
+                    throw new SerializationException("Not valid control map");
+                }
+
+            } catch (SerializationException se) {
+
+                LOGGER.error(se.getMessage());
+
+                playerControlsNew = DEFAULT_CONTROLS;
             }
-
-        }catch (SerializationException se){
-
-            LOGGER.error(se.getMessage());
-
-            playerControlsNew = DEFAULT_CONTROLS;
         }
 
 
@@ -169,11 +163,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.DOWN.name());
+                playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.DOWN, keycode);
 
-                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
-
-                playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.DOWN.name());
                 downText.setMaxLength(Input.Keys.toString(keycode).length());
                 downText.setText(Input.Keys.toString(keycode));
 
@@ -186,10 +177,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.UP.name());
-                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
+                playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.UP, keycode);
 
-                playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.UP.name());
                 upText.setMaxLength(Input.Keys.toString(keycode).length());
                 upText.setText(Input.Keys.toString(keycode));
 
@@ -202,10 +191,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.LEFT.name());
-                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
+                playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.LEFT, keycode);
 
-                playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.LEFT.name());
                 leftText.setMaxLength(Input.Keys.toString(keycode).length());
                 leftText.setText(Input.Keys.toString(keycode));
 
@@ -218,10 +205,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.RIGHT.name());
-                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
+                playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.RIGHT, keycode);
 
-                playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.RIGHT.name());
                 rightText.setMaxLength(Input.Keys.toString(keycode).length());
                 rightText.setText(Input.Keys.toString(keycode));
 
@@ -234,10 +219,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.INTERACT.name());
-                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
+                playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.INTERACT, keycode);
 
-                playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.INTERACT.name());
                 interactText.setMaxLength(Input.Keys.toString(keycode).length());
                 interactText.setText(Input.Keys.toString(keycode));
 
@@ -250,10 +233,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.OPTION.name());
-                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
+                playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.OPTION, keycode);
 
-                playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.OPTION.name());
                 optionText.setMaxLength(Input.Keys.toString(keycode).length());
                 optionText.setText(Input.Keys.toString(keycode));
 
@@ -266,10 +247,8 @@ public class OptionScreen extends BaseScreen {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                Optional<String> keyToRemove = getFirstKeyByValue(playerControlsNew, InputComponent.Keys.QUIT.name());
-                keyToRemove.ifPresent(s -> playerControlsNew.remove(s));
+                playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.QUIT, keycode);
 
-                playerControlsNew.put(String.valueOf(keycode), InputComponent.Keys.QUIT.name());
                 quitText.setMaxLength(Input.Keys.toString(keycode).length());
                 quitText.setText(Input.Keys.toString(keycode));
 
@@ -314,6 +293,8 @@ public class OptionScreen extends BaseScreen {
                 FileHandle commandsFile = Gdx.files.local(FULL_CONTROLS_SETTINGS_PATH);
                 commandsFile.writeString(json.prettyPrint(playerControlsNew), false);
 
+                setPlayerControlMapFromJsonControlsMap(playerControlsNew);
+
                 controlClickListener = false;
             }
         });
@@ -338,10 +319,10 @@ public class OptionScreen extends BaseScreen {
         Label musicLabel = new Label("MUSIC", skin);
         musicLabel.setAlignment(Align.left);
         Slider musicSlider = new Slider(0, 1, 0.01f, false, skin);
-        musicSlider.setValue(gdxGame.getPreferenceManager().getMusicVolume());
+        musicSlider.setValue(PreferenceManager.getMusicVolume());
         musicSlider.addListener(event -> {
             gdxGame.getPreferenceManager().setMusicVolume(musicSlider.getValue());
-            AudioManager.getInstance().getCurrentMusic().setVolume(gdxGame.getPreferenceManager().getMusicVolume());
+            AudioManager.getInstance().getCurrentMusic().setVolume(PreferenceManager.getMusicVolume());
             return false;
         });
         CheckBox musicCheckbox = new CheckBox("Enable Music", skin);

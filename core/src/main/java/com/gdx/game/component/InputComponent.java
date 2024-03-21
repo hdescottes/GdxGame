@@ -7,6 +7,8 @@ import com.gdx.game.entities.Entity;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.gdx.game.common.UtilityClass.mapInverter;
+
 public abstract class InputComponent extends ComponentSubject implements Component, InputProcessor {
 
     protected Entity.Direction currentDirection = null;
@@ -51,6 +53,39 @@ public abstract class InputComponent extends ComponentSubject implements Compone
         return false;
     }
 
-    public static Map<Integer, Keys> playerControls = new HashMap<>();
+    public static HashMap<Integer, Keys> playerControls = new HashMap<>();
+
+    public static void setPlayerControlMapFromJsonControlsMap(HashMap<String, String> jsonMap){
+
+        HashMap<Integer, Keys> newPlayerControls = new HashMap<>();
+
+        for (var entry : jsonMap.entrySet()) {
+            newPlayerControls.put(Integer.valueOf(entry.getKey()), InputComponent.Keys.valueOf(entry.getValue()));
+        }
+
+        playerControls = newPlayerControls;
+
+    }
+
+    public static HashMap<String, String> mapJsonControlsToPlayerControl(HashMap<Integer, Keys> playerControls){
+
+        HashMap<String, String> result = new HashMap<>();
+
+        for (var entry : playerControls.entrySet()) {
+            result.put(entry.getKey().toString(), entry.getValue().toString());
+        }
+
+        return result;
+    }
+
+    public static HashMap<String, String> changeValueFromJsonControlsMap(HashMap<String, String> jsonMap,
+                                                                         Keys keyValue,
+                                                                         Integer keyCode){
+        jsonMap = mapInverter(jsonMap);
+        jsonMap.put(keyValue.name(), String.valueOf(keyCode));
+        jsonMap = mapInverter(jsonMap);
+
+        return jsonMap;
+    }
 
 }
