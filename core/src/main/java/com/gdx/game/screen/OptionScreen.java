@@ -104,7 +104,6 @@ public class OptionScreen extends BaseScreen {
     }
 
     private void handleControlSettings() {
-
         Json jsonObject = new Json();
 
         if (playerControls.isEmpty()){
@@ -114,9 +113,7 @@ public class OptionScreen extends BaseScreen {
                 if (DEFAULT_CONTROLS.size() != playerControlsNew.size()) {
                     throw new SerializationException("Not valid control map");
                 }
-
             } catch (SerializationException se) {
-
                 LOGGER.error(se.getMessage());
 
                 playerControlsNew = DEFAULT_CONTROLS;
@@ -127,26 +124,19 @@ public class OptionScreen extends BaseScreen {
         playerControlsNew = mapInverter(playerControlsNew);
 
         Label upLabel = new Label(InputComponent.Keys.UP.name(), skin);
-        TextField upText = new TextField(
-                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.UP.name()))), skin);
+        TextField upText = new TextField(Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.UP.name()))), skin);
         Label downLabel = new Label(InputComponent.Keys.DOWN.name(), skin);
-        TextField downText = new TextField(
-                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.DOWN.name()))), skin);
+        TextField downText = new TextField(Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.DOWN.name()))), skin);
         Label leftLabel = new Label(InputComponent.Keys.LEFT.name(), skin);
-        TextField leftText = new TextField(
-                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.LEFT.name()))), skin);
+        TextField leftText = new TextField(Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.LEFT.name()))), skin);
         Label rightLabel = new Label(InputComponent.Keys.RIGHT.name(), skin);
-        TextField rightText = new TextField(
-                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.RIGHT.name()))), skin);
+        TextField rightText = new TextField(Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.RIGHT.name()))), skin);
         Label interactLabel = new Label(InputComponent.Keys.INTERACT.name(), skin);
-        TextField interactText = new TextField(
-                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.INTERACT.name()))), skin);
+        TextField interactText = new TextField(Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.INTERACT.name()))), skin);
         Label optionLabel = new Label(InputComponent.Keys.OPTION.name(), skin);
-        TextField optionText = new TextField(
-                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.OPTION.name()))), skin);
+        TextField optionText = new TextField(Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.OPTION.name()))), skin);
         Label quitLabel = new Label(InputComponent.Keys.QUIT.name(), skin);
-        TextField quitText = new TextField(
-                Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.QUIT.name()))), skin);
+        TextField quitText = new TextField(Input.Keys.toString(Integer.parseInt(playerControlsNew.get(InputComponent.Keys.QUIT.name()))), skin);
 
         playerControlsNew = mapInverter(playerControlsNew);
 
@@ -162,7 +152,6 @@ public class OptionScreen extends BaseScreen {
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-
                 playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.DOWN, keycode);
 
                 downText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -176,7 +165,6 @@ public class OptionScreen extends BaseScreen {
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-
                 playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.UP, keycode);
 
                 upText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -190,7 +178,6 @@ public class OptionScreen extends BaseScreen {
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-
                 playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.LEFT, keycode);
 
                 leftText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -204,7 +191,6 @@ public class OptionScreen extends BaseScreen {
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-
                 playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.RIGHT, keycode);
 
                 rightText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -218,7 +204,6 @@ public class OptionScreen extends BaseScreen {
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-
                 playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.INTERACT, keycode);
 
                 interactText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -232,7 +217,6 @@ public class OptionScreen extends BaseScreen {
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-
                 playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.OPTION, keycode);
 
                 optionText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -246,7 +230,6 @@ public class OptionScreen extends BaseScreen {
 
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-
                 playerControlsNew = changeValueFromJsonControlsMap(playerControlsNew, Keys.QUIT, keycode);
 
                 quitText.setMaxLength(Input.Keys.toString(keycode).length());
@@ -287,7 +270,6 @@ public class OptionScreen extends BaseScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent even, float x, float y) {
-
                 Json json = new Json();
 
                 FileHandle commandsFile = Gdx.files.local(FULL_CONTROLS_SETTINGS_PATH);

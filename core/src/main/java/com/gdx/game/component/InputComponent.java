@@ -56,31 +56,26 @@ public abstract class InputComponent extends ComponentSubject implements Compone
     public static HashMap<Integer, Keys> playerControls = new HashMap<>();
 
     public static void setPlayerControlMapFromJsonControlsMap(HashMap<String, String> jsonMap){
-
         HashMap<Integer, Keys> newPlayerControls = new HashMap<>();
 
-        for (var entry : jsonMap.entrySet()) {
+        for (Map.Entry<String, String> entry : jsonMap.entrySet()) {
             newPlayerControls.put(Integer.valueOf(entry.getKey()), InputComponent.Keys.valueOf(entry.getValue()));
         }
 
         playerControls = newPlayerControls;
-
     }
 
     public static HashMap<String, String> mapJsonControlsToPlayerControl(HashMap<Integer, Keys> playerControls){
-
         HashMap<String, String> result = new HashMap<>();
 
-        for (var entry : playerControls.entrySet()) {
+        for (Map.Entry<Integer, InputComponent.Keys> entry : playerControls.entrySet()) {
             result.put(entry.getKey().toString(), entry.getValue().toString());
         }
 
         return result;
     }
 
-    public static HashMap<String, String> changeValueFromJsonControlsMap(HashMap<String, String> jsonMap,
-                                                                         Keys keyValue,
-                                                                         Integer keyCode){
+    public static HashMap<String, String> changeValueFromJsonControlsMap(HashMap<String, String> jsonMap, Keys keyValue, Integer keyCode){
         jsonMap = mapInverter(jsonMap);
         jsonMap.put(keyValue.name(), String.valueOf(keyCode));
         jsonMap = mapInverter(jsonMap);

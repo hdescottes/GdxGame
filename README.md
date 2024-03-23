@@ -26,7 +26,7 @@ For now, you can do a basic attack and use objects to restore your health and ma
 #### Option Screen
 The option screen is divided into 3 buttons : <br>
 - The music settings (music is ok / sound is not implemented yet) <br>
-- The control settings (which will be added later) <br>
+- The control settings <br>
 - A back input, so we can return to the previous screen <br>
 
 The option screen is triggered on the "O" key.
@@ -75,8 +75,6 @@ graph TD;
 
 -------
 ## Game idea
-- [ ] possibility to custom controls / default control schema
-
 - [ ] add sounds & sounds settings
 
 - [x] battle feature
