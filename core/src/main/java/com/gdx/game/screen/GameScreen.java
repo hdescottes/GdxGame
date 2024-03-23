@@ -2,13 +2,14 @@ package com.gdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.SerializationException;
 import com.gdx.game.GdxGame;
 import com.gdx.game.audio.AudioManager;
 import com.gdx.game.audio.AudioObserver;
@@ -28,6 +29,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static com.gdx.game.common.Constats.FULL_CONTROLS_SETTINGS_PATH;
+import static com.gdx.game.common.Constats.PARTIAL_CONTROLS_SETTINGS_PATH;
+import static com.gdx.game.common.DefaultControlsMap.DEFAULT_CONTROLS;
+import static com.gdx.game.component.InputComponent.playerControls;
+import static com.gdx.game.component.InputComponent.setPlayerControlMapFromJsonControlsMap;
 
 public class GameScreen extends BaseScreen implements ComponentObserver {
 
@@ -56,14 +64,13 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
     protected MapManager mapManager;
     protected OrthographicCamera camera;
     protected OrthographicCamera hudCamera;
-    private Stage gameStage = new Stage();
 
-    private Json json;
-    private GdxGame game;
-    private InputMultiplexer multiplexer;
+    private final Json json;
+    private final GdxGame game;
+    private final InputMultiplexer multiplexer;
 
-    private Entity player;
-    private PlayerHUD playerHUD;
+    private final Entity player;
+    private final PlayerHUD playerHUD;
 
     private float startX;
     private float startY;
@@ -91,6 +98,28 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
         player = EntityFactory.getInstance().getEntity(ProfileManager.getInstance().getProperty("playerCharacter", EntityFactory.EntityType.class));
         player.registerObserver(this);
+
+        //initialize controls
+        HashMap<String, String> controlMap;
+
+        if(playerControls.isEmpty()){
+            try {
+                controlMap = json.fromJson(HashMap.class, Gdx.files.local(PARTIAL_CONTROLS_SETTINGS_PATH));
+
+                if (DEFAULT_CONTROLS.size() != controlMap.size()){
+                    throw new SerializationException("Not valid control map");
+                }
+            } catch (SerializationException se) {LOGGER.error(se.getMessage());
+
+                // if I can not read the file , so use the default controls binding and save it
+                controlMap = DEFAULT_CONTROLS;
+
+                FileHandle commandsFile = Gdx.files.local(FULL_CONTROLS_SETTINGS_PATH);
+                commandsFile.writeString(json.prettyPrint(controlMap), false);
+            }
+
+            setPlayerControlMapFromJsonControlsMap(controlMap);
+        }
 
         mapManager.setPlayer(player);
         mapManager.setCamera(camera);
@@ -236,7 +265,6 @@ public class GameScreen extends BaseScreen implements ComponentObserver {
 
     public static void setGameState(GameState state) {
         switch (state) {
-            case RUNNING -> gameState = GameState.RUNNING;
             case LOADING -> {
                 ProfileManager.getInstance().loadProfile();
                 gameState = GameState.RUNNING;
