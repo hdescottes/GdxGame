@@ -131,17 +131,8 @@ public class QuestGraph {
     }
 
     public void addDependency(QuestTaskDependency questTaskDependency) {
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(questTaskDependency.getSourceId());
-        if (list == null) {
-            return;
-        }
-
-        //Will not add if creates cycles
-        if (doesCycleExist(questTaskDependency)) {
-            //System.out.println("Cycle exists! Not adding");
-            return;
-        }
-
+        String sourceId = questTaskDependency.getSourceId();
+        ArrayList<QuestTaskDependency> list = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
         list.add(questTaskDependency);
     }
 
