@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
+import com.gdx.game.map.MapFactory;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
@@ -199,53 +200,21 @@ public class QuestGraph {
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
-            if (questTask.isTaskComplete()) {
-                continue;
-            }
+            if (isInvalidQuestTask(questTask, mapMgr)) continue;
 
-            //We first want to make sure the task is available and is relevant to current location
-            if (!isQuestTaskAvailable(questTask.getId())) {
-                continue;
-            }
+            // Determine the handler based on quest type
+            QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
+            if (handler != null)
+                handler.handleUpdate(questTask, questID);
+        }
+    }
 
-            String taskLocation = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString());
-            if (taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapMgr.getCurrentMapType().toString())) {
-                continue;
-            }
-
-            switch(questTask.getQuestType()) {
-                case FETCH:
-                    String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
-                    if (taskConfig == null || taskConfig.isEmpty()) {
-                        break;
-                    }
-                    EntityConfig config = Entity.getEntityConfig(taskConfig);
-
-                    Array<Vector2> questItemPositions = ProfileManager.getInstance().getProperty(config.getEntityID(), Array.class);
-                    if (questItemPositions == null) {
-                        break;
-                    }
-
-                    //Case where all the items have been picked up
-                    if (questItemPositions.size == 0) {
-                        questTask.setTaskComplete();
-                        LOGGER.debug("TASK : {} is complete of Quest: {}", questTask.getId(), questID);
-                        LOGGER.debug("INFO : {}", QuestTask.QuestTaskPropertyType.TARGET_TYPE);
-                    }
-                    break;
-                case KILL:
-                    break;
-                case DELIVERY:
-                    break;
-                case GUARD:
-                    break;
-                case ESCORT:
-                    break;
-                case RETURN:
-                    break;
-                case DISCOVER:
-                    break;
-            }
+    private QuestTaskHandler getHandlerForQuestType(QuestTask.QuestType questType) {
+        switch (questType) {
+            case FETCH:
+                return new FetchQuestTaskHandler();
+            default:
+                return null;
         }
     }
 
@@ -253,65 +222,24 @@ public class QuestGraph {
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
-            if (questTask.isTaskComplete()) {
-                continue;
-            }
+            if (isInvalidQuestTask(questTask, mapMgr)) continue;
 
-            //We first want to make sure the task is available and is relevant to current location
-            if (!isQuestTaskAvailable(questTask.getId())) {
-                continue;
-            }
-
-            String taskLocation = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString());
-            if (taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapMgr.getCurrentMapType().toString())) {
-                continue;
-            }
-
-            switch(questTask.getQuestType()) {
-                case FETCH:
-                    Array<Entity> questEntities = new Array<>();
-                    Array<Vector2> positions = mapMgr.getQuestItemSpawnPositions(questID, questTask.getId());
-                    String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
-                    if (taskConfig == null || taskConfig.isEmpty()) {
-                        break;
-                    }
-                    EntityConfig config = Entity.getEntityConfig(taskConfig);
-
-                    Array<Vector2> questItemPositions = ProfileManager.getInstance().getProperty(config.getEntityID(), Array.class);
-
-                    if (questItemPositions == null) {
-                        questItemPositions = new Array<>();
-                        for(Vector2 position: positions) {
-                            questItemPositions.add(position);
-                            Entity entity = Entity.initEntity(config, position);
-                            entity.getEntityConfig().setCurrentQuestID(questID);
-                            questEntities.add(entity);
-                        }
-                    } else {
-                        for(Vector2 questItemPosition: questItemPositions) {
-                            Entity entity = Entity.initEntity(config, questItemPosition);
-                            entity.getEntityConfig().setCurrentQuestID(questID);
-                            questEntities.add(entity);
-                        }
-                    }
-
-                    mapMgr.addMapQuestEntities(questEntities);
-                    ProfileManager.getInstance().setProperty(config.getEntityID(), questItemPositions);
-                    break;
-                case KILL:
-                    break;
-                case DELIVERY:
-                    break;
-                case GUARD:
-                    break;
-                case ESCORT:
-                    break;
-                case RETURN:
-                    break;
-                case DISCOVER:
-                    break;
-            }
+            // Determine the handler based on quest type
+            QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
+            if (handler != null)
+                handler.handleInit(mapMgr, questTask, questID);
         }
+    }
+
+    private boolean isInvalidQuestTask(QuestTask questTask, MapManager mapManager) {
+        if (questTask.isTaskComplete() || !isQuestTaskAvailable(questTask.getId()))
+            return true;
+
+        QuestTask.QuestTaskPropertyType questTaskPropertyType = QuestTask.QuestTaskPropertyType.TARGET_LOCATION;
+        String taskLocation = questTask.getPropertyValue(questTaskPropertyType.toString());
+        MapFactory.MapType mapType = mapManager.getCurrentMapType();
+
+        return taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapType.toString());
     }
 
     public String toString() {
