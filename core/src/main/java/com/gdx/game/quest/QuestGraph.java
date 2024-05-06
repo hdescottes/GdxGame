@@ -160,22 +160,15 @@ public class QuestGraph {
 
         //First, see if all tasks are available, meaning no blocking dependencies
         for(QuestTask task : tasks) {
-            if (!isQuestTaskAvailable(task.getId())) {
+            if (isQuestTaskAvailable(task.getId()) && !task.isTaskComplete() && task.getQuestType().equals(QuestTask.QuestType.RETURN)) {
+                readyTask = task;
+                readyTask.setTaskComplete();
+            } else {
                 return false;
             }
-            if (!task.isTaskComplete()) {
-                if (task.getQuestType().equals(QuestTask.QuestType.RETURN)) {
-                    readyTask = task;
-                } else {
-                    return false;
-                }
-            }
         }
-        if (readyTask == null) {
-            return false;
-        }
-        readyTask.setTaskComplete();
-        return true;
+
+        return readyTask != null;
     }
 
     public boolean isQuestTaskAvailable(String id) {
