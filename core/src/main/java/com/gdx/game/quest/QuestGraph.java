@@ -10,11 +10,7 @@ import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
 
 public class QuestGraph {
 
@@ -27,6 +23,11 @@ public class QuestGraph {
     private boolean isQuestComplete;
     private int goldReward;
     private int xpReward;
+
+    public QuestGraph() {
+        questTasks = new Hashtable<>();
+        questTaskDependencies = new Hashtable<>();
+    }
 
     public int getGoldReward() {
         return goldReward;
@@ -103,22 +104,22 @@ public class QuestGraph {
     }
 
     public boolean isReachable(String sourceID, String sinkID) {
-        if (!isValid(sourceID) || !isValid(sinkID)) {
-            return false;
-        }
-        if (questTasks.get(sourceID) == null) {
-            return false;
+        Set<String> reachableNodes = new HashSet<>();
+        return isReachable(sourceID, sinkID, reachableNodes);
+    }
+
+    private boolean isReachable(String sourceId, String targetId, Set<String> reachableNodes) {
+        if (sourceId.equals(targetId))
+            return true;
+
+        reachableNodes.add(sourceId);
+        List<QuestTaskDependency> dependencies = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
+        for (QuestTaskDependency dep : dependencies) {
+            String destinationId = dep.getDestinationId();
+            if (!reachableNodes.contains(destinationId) && isReachable(destinationId, targetId, reachableNodes))
+                return true;
         }
 
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(sourceID);
-        if (list == null) {
-            return false;
-        }
-        for(QuestTaskDependency dependency: list) {
-            if (dependency.getSourceId().equalsIgnoreCase(sourceID) && dependency.getDestinationId().equalsIgnoreCase(sinkID)) {
-                return true;
-            }
-        }
         return false;
     }
 
