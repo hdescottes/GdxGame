@@ -134,17 +134,6 @@ public class QuestGraph {
         list.add(questTaskDependency);
     }
 
-    public boolean doesCycleExist(QuestTaskDependency questTaskDep) {
-        Set<String> keys = questTasks.keySet();
-        for(String id: keys) {
-            if (doesQuestTaskHaveDependencies(id) && questTaskDep.getDestinationId().equalsIgnoreCase(id)) {
-                    //System.out.println("ID: " + id + " destID: " + questTaskDep.getDestinationId());
-                    return true;
-                }
-            }
-        return false;
-    }
-
     public boolean doesQuestTaskHaveDependencies(String id) {
         QuestTask task = getQuestTaskByID(id);
         if (task == null) {
