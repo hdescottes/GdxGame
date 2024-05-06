@@ -173,20 +173,17 @@ public class QuestGraph {
 
     public boolean isQuestTaskAvailable(String id) {
         QuestTask task = getQuestTaskByID(id);
-        if (task == null) {
+        if (task == null)
             return false;
-        }
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
 
-        for(QuestTaskDependency dep: list) {
-            QuestTask depTask = getQuestTaskByID(dep.getDestinationId());
-            if (depTask == null || depTask.isTaskComplete()) {
-                continue;
-            }
-            if (dep.getSourceId().equalsIgnoreCase(id)) {
+        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
+        for (QuestTaskDependency dep : list) {
+            QuestTask depTask = getQuestTaskByID(dep.getSourceId());
+            if (depTask != null && !depTask.isTaskComplete() && dep.getSourceId().equalsIgnoreCase(task.getId())) {
                 return false;
             }
         }
+
         return true;
     }
 
