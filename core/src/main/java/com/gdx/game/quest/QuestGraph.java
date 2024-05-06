@@ -124,11 +124,7 @@ public class QuestGraph {
     }
 
     public QuestTask getQuestTaskByID(String id) {
-        if (!isValid(id)) {
-            //System.out.println("Id " + id + " is not valid!");
-            return null;
-        }
-        return questTasks.get(id);
+        return (isValid(id)) ? questTasks.get(id) : null;
     }
 
     public void addDependency(QuestTaskDependency questTaskDependency) {
