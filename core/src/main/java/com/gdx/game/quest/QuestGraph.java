@@ -79,10 +79,6 @@ public class QuestGraph {
     }
 
     public void setTasks(Hashtable<String, QuestTask> questTasks) {
-        if (questTasks.size() < 0) {
-            throw new IllegalArgumentException("Can't have a negative amount of conversations");
-        }
-
         this.questTasks = questTasks;
         this.questTaskDependencies = new Hashtable<>(questTasks.size());
 
