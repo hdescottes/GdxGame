@@ -1,34 +1,32 @@
 package com.gdx.game.quest;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
+import java.util.HashSet;
+
 import com.badlogic.gdx.utils.Json;
-import com.gdx.game.entities.Entity;
-import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.map.MapFactory;
 import com.gdx.game.map.MapManager;
-import com.gdx.game.profile.ProfileManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 public class QuestGraph {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestGraph.class);
+    private Hashtable<String, QuestTask> questTasks = new Hashtable<>();
 
-    private Hashtable<String, QuestTask> questTasks;
-    private Hashtable<String, ArrayList<QuestTaskDependency>> questTaskDependencies;
+    private Hashtable<String, ArrayList<QuestTaskDependency>> questTaskDependencies = new Hashtable<>();
+
     private String questTitle;
-    private String questID;
-    private boolean isQuestComplete;
-    private int goldReward;
-    private int xpReward;
 
-    public QuestGraph() {
-        questTasks = new Hashtable<>();
-        questTaskDependencies = new Hashtable<>();
-    }
+    private String questID;
+
+    private boolean isQuestComplete;
+
+    private int goldReward;
+
+    private int xpReward;
 
     public int getGoldReward() {
         return goldReward;
@@ -148,32 +146,42 @@ public class QuestGraph {
         ArrayList<QuestTask> tasks = getAllQuestTasks();
         QuestTask readyTask = null;
 
-        //First, see if all tasks are available, meaning no blocking dependencies
+        // First, see if all tasks are available, meaning no blocking dependencies
         for(QuestTask task : tasks) {
-            if (isQuestTaskAvailable(task.getId()) && !task.isTaskComplete() && task.getQuestType().equals(QuestTask.QuestType.RETURN)) {
-                readyTask = task;
-                readyTask.setTaskComplete();
-            } else {
+            if (!isQuestTaskAvailable(task.getId())) {
                 return false;
             }
+            if (!task.isTaskComplete()) {
+                if (task.getQuestType().equals(QuestTask.QuestType.RETURN)) {
+                    readyTask = task;
+                } else {
+                    return false;
+                }
+            }
         }
-
-        return readyTask != null;
+        if (readyTask == null) {
+            return false;
+        }
+        readyTask.setTaskComplete();
+        return true;
     }
 
     public boolean isQuestTaskAvailable(String id) {
         QuestTask task = getQuestTaskByID(id);
-        if (task == null)
+        if (task == null) {
             return false;
+        }
 
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
-        for (QuestTaskDependency dep : list) {
-            QuestTask depTask = getQuestTaskByID(dep.getSourceId());
-            if (depTask != null && !depTask.isTaskComplete() && dep.getSourceId().equalsIgnoreCase(task.getId())) {
+        List<QuestTaskDependency> list = questTaskDependencies.get(id);
+        for(QuestTaskDependency dep: list) {
+            QuestTask depTask = getQuestTaskByID(dep.getDestinationId());
+            if (depTask == null || depTask.isTaskComplete()) {
+                continue;
+            }
+            if (dep.getSourceId().equalsIgnoreCase(id)) {
                 return false;
             }
         }
-
         return true;
     }
 
