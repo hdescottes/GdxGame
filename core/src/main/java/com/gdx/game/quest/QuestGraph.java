@@ -1,31 +1,31 @@
 package com.gdx.game.quest;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.gdx.game.entities.Entity;
-import com.gdx.game.entities.EntityConfig;
-import com.gdx.game.map.MapManager;
-import com.gdx.game.profile.ProfileManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
+import java.util.HashSet;
+
+import com.badlogic.gdx.utils.Json;
+import com.gdx.game.map.MapFactory;
+import com.gdx.game.map.MapManager;
 
 public class QuestGraph {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuestGraph.class);
+    private Hashtable<String, QuestTask> questTasks = new Hashtable<>();
 
-    private Hashtable<String, QuestTask> questTasks;
-    private Hashtable<String, ArrayList<QuestTaskDependency>> questTaskDependencies;
+    private Hashtable<String, ArrayList<QuestTaskDependency>> questTaskDependencies = new Hashtable<>();
+
     private String questTitle;
+
     private String questID;
+
     private boolean isQuestComplete;
+
     private int goldReward;
+
     private int xpReward;
 
     public int getGoldReward() {
@@ -79,10 +79,6 @@ public class QuestGraph {
     }
 
     public void setTasks(Hashtable<String, QuestTask> questTasks) {
-        if (questTasks.size() < 0) {
-            throw new IllegalArgumentException("Can't have a negative amount of conversations");
-        }
-
         this.questTasks = questTasks;
         this.questTaskDependencies = new Hashtable<>(questTasks.size());
 
@@ -107,57 +103,33 @@ public class QuestGraph {
     }
 
     public boolean isReachable(String sourceID, String sinkID) {
-        if (!isValid(sourceID) || !isValid(sinkID)) {
-            return false;
-        }
-        if (questTasks.get(sourceID) == null) {
-            return false;
+        Set<String> reachableNodes = new HashSet<>();
+        return isReachable(sourceID, sinkID, reachableNodes);
+    }
+
+    private boolean isReachable(String sourceId, String targetId, Set<String> reachableNodes) {
+        if (sourceId.equals(targetId))
+            return true;
+
+        reachableNodes.add(sourceId);
+        List<QuestTaskDependency> dependencies = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
+        for (QuestTaskDependency dep : dependencies) {
+            String destinationId = dep.getDestinationId();
+            if (!reachableNodes.contains(destinationId) && isReachable(destinationId, targetId, reachableNodes))
+                return true;
         }
 
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(sourceID);
-        if (list == null) {
-            return false;
-        }
-        for(QuestTaskDependency dependency: list) {
-            if (dependency.getSourceId().equalsIgnoreCase(sourceID) && dependency.getDestinationId().equalsIgnoreCase(sinkID)) {
-                return true;
-            }
-        }
         return false;
     }
 
     public QuestTask getQuestTaskByID(String id) {
-        if (!isValid(id)) {
-            //System.out.println("Id " + id + " is not valid!");
-            return null;
-        }
-        return questTasks.get(id);
+        return (isValid(id)) ? questTasks.get(id) : null;
     }
 
     public void addDependency(QuestTaskDependency questTaskDependency) {
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(questTaskDependency.getSourceId());
-        if (list == null) {
-            return;
-        }
-
-        //Will not add if creates cycles
-        if (doesCycleExist(questTaskDependency)) {
-            //System.out.println("Cycle exists! Not adding");
-            return;
-        }
-
+        String sourceId = questTaskDependency.getSourceId();
+        ArrayList<QuestTaskDependency> list = questTaskDependencies.computeIfAbsent(sourceId, k -> new ArrayList<>());
         list.add(questTaskDependency);
-    }
-
-    public boolean doesCycleExist(QuestTaskDependency questTaskDep) {
-        Set<String> keys = questTasks.keySet();
-        for(String id: keys) {
-            if (doesQuestTaskHaveDependencies(id) && questTaskDep.getDestinationId().equalsIgnoreCase(id)) {
-                    //System.out.println("ID: " + id + " destID: " + questTaskDep.getDestinationId());
-                    return true;
-                }
-            }
-        return false;
     }
 
     public boolean doesQuestTaskHaveDependencies(String id) {
@@ -174,7 +146,7 @@ public class QuestGraph {
         ArrayList<QuestTask> tasks = getAllQuestTasks();
         QuestTask readyTask = null;
 
-        //First, see if all tasks are available, meaning no blocking dependencies
+        // First, see if all tasks are available, meaning no blocking dependencies
         for(QuestTask task : tasks) {
             if (!isQuestTaskAvailable(task.getId())) {
                 return false;
@@ -199,8 +171,8 @@ public class QuestGraph {
         if (task == null) {
             return false;
         }
-        ArrayList<QuestTaskDependency> list = questTaskDependencies.get(id);
 
+        List<QuestTaskDependency> list = questTaskDependencies.get(id);
         for(QuestTaskDependency dep: list) {
             QuestTask depTask = getQuestTaskByID(dep.getDestinationId());
             if (depTask == null || depTask.isTaskComplete()) {
@@ -225,53 +197,21 @@ public class QuestGraph {
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
-            if (questTask.isTaskComplete()) {
-                continue;
-            }
+            if (isInvalidQuestTask(questTask, mapMgr)) continue;
 
-            //We first want to make sure the task is available and is relevant to current location
-            if (!isQuestTaskAvailable(questTask.getId())) {
-                continue;
-            }
+            // Determine the handler based on quest type
+            QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
+            if (handler != null)
+                handler.handleUpdate(questTask, questID);
+        }
+    }
 
-            String taskLocation = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString());
-            if (taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapMgr.getCurrentMapType().toString())) {
-                continue;
-            }
-
-            switch(questTask.getQuestType()) {
-                case FETCH:
-                    String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
-                    if (taskConfig == null || taskConfig.isEmpty()) {
-                        break;
-                    }
-                    EntityConfig config = Entity.getEntityConfig(taskConfig);
-
-                    Array<Vector2> questItemPositions = ProfileManager.getInstance().getProperty(config.getEntityID(), Array.class);
-                    if (questItemPositions == null) {
-                        break;
-                    }
-
-                    //Case where all the items have been picked up
-                    if (questItemPositions.size == 0) {
-                        questTask.setTaskComplete();
-                        LOGGER.debug("TASK : {} is complete of Quest: {}", questTask.getId(), questID);
-                        LOGGER.debug("INFO : {}", QuestTask.QuestTaskPropertyType.TARGET_TYPE);
-                    }
-                    break;
-                case KILL:
-                    break;
-                case DELIVERY:
-                    break;
-                case GUARD:
-                    break;
-                case ESCORT:
-                    break;
-                case RETURN:
-                    break;
-                case DISCOVER:
-                    break;
-            }
+    private QuestTaskHandler getHandlerForQuestType(QuestTask.QuestType questType) {
+        switch (questType) {
+            case FETCH:
+                return new FetchQuestTaskHandler();
+            default:
+                return null;
         }
     }
 
@@ -279,65 +219,24 @@ public class QuestGraph {
         ArrayList<QuestTask> allQuestTasks = getAllQuestTasks();
         for(QuestTask questTask: allQuestTasks) {
 
-            if (questTask.isTaskComplete()) {
-                continue;
-            }
+            if (isInvalidQuestTask(questTask, mapMgr)) continue;
 
-            //We first want to make sure the task is available and is relevant to current location
-            if (!isQuestTaskAvailable(questTask.getId())) {
-                continue;
-            }
-
-            String taskLocation = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_LOCATION.toString());
-            if (taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapMgr.getCurrentMapType().toString())) {
-                continue;
-            }
-
-            switch(questTask.getQuestType()) {
-                case FETCH:
-                    Array<Entity> questEntities = new Array<>();
-                    Array<Vector2> positions = mapMgr.getQuestItemSpawnPositions(questID, questTask.getId());
-                    String taskConfig = questTask.getPropertyValue(QuestTask.QuestTaskPropertyType.TARGET_TYPE.toString());
-                    if (taskConfig == null || taskConfig.isEmpty()) {
-                        break;
-                    }
-                    EntityConfig config = Entity.getEntityConfig(taskConfig);
-
-                    Array<Vector2> questItemPositions = ProfileManager.getInstance().getProperty(config.getEntityID(), Array.class);
-
-                    if (questItemPositions == null) {
-                        questItemPositions = new Array<>();
-                        for(Vector2 position: positions) {
-                            questItemPositions.add(position);
-                            Entity entity = Entity.initEntity(config, position);
-                            entity.getEntityConfig().setCurrentQuestID(questID);
-                            questEntities.add(entity);
-                        }
-                    } else {
-                        for(Vector2 questItemPosition: questItemPositions) {
-                            Entity entity = Entity.initEntity(config, questItemPosition);
-                            entity.getEntityConfig().setCurrentQuestID(questID);
-                            questEntities.add(entity);
-                        }
-                    }
-
-                    mapMgr.addMapQuestEntities(questEntities);
-                    ProfileManager.getInstance().setProperty(config.getEntityID(), questItemPositions);
-                    break;
-                case KILL:
-                    break;
-                case DELIVERY:
-                    break;
-                case GUARD:
-                    break;
-                case ESCORT:
-                    break;
-                case RETURN:
-                    break;
-                case DISCOVER:
-                    break;
-            }
+            // Determine the handler based on quest type
+            QuestTaskHandler handler = getHandlerForQuestType(questTask.getQuestType());
+            if (handler != null)
+                handler.handleInit(mapMgr, questTask, questID);
         }
+    }
+
+    private boolean isInvalidQuestTask(QuestTask questTask, MapManager mapManager) {
+        if (questTask.isTaskComplete() || !isQuestTaskAvailable(questTask.getId()))
+            return true;
+
+        QuestTask.QuestTaskPropertyType questTaskPropertyType = QuestTask.QuestTaskPropertyType.TARGET_LOCATION;
+        String taskLocation = questTask.getPropertyValue(questTaskPropertyType.toString());
+        MapFactory.MapType mapType = mapManager.getCurrentMapType();
+
+        return taskLocation == null || taskLocation.isEmpty() || !taskLocation.equalsIgnoreCase(mapType.toString());
     }
 
     public String toString() {
