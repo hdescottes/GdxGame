@@ -34,10 +34,12 @@ public class InventorySlotTooltip extends Window {
         }
     }
 
-    public void updateDescription(InventorySlot inventorySlot){
+    public void updateTooltip(InventorySlot inventorySlot) {
         if (inventorySlot.hasItem()) {
             StringBuilder string = new StringBuilder();
             InventoryItem item = inventorySlot.getTopInventoryItem();
+            string.append(String.format("Rarity: %s", item.getItemRarity().getValue()));
+            string.append(System.getProperty("line.separator"));
             string.append(item.getItemShortDescription());
             if (item.isInventoryItemOffensive()) {
                 string.append(System.getProperty("line.separator"));
@@ -52,6 +54,9 @@ public class InventorySlotTooltip extends Window {
             string.append(String.format("Trade Value: %s GP", item.getTradeValue()));
 
             description.setText(string);
+
+            this.getTitleLabel().setText(item.getItemTypeID().toString());
+            this.getTitleLabel().setColor(item.getItemRarity().getColor());
         } else {
             description.setText("");
         }

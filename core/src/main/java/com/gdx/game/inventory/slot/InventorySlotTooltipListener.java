@@ -51,7 +51,7 @@ public class InventorySlotTooltipListener extends InputListener {
         currentCoords.set(x, y);
         inventorySlot.localToStageCoordinates(currentCoords);
 
-        tooltip.updateDescription(inventorySlot);
+        tooltip.updateTooltip(inventorySlot);
         tooltip.setPosition(currentCoords.x + offset.x, currentCoords.y + offset.y);
         tooltip.toFront();
         tooltip.setVisible(inventorySlot, true);
