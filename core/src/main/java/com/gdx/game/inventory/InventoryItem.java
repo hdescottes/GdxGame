@@ -1,5 +1,6 @@
 package com.gdx.game.inventory;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -61,10 +62,36 @@ public class InventoryItem extends Image {
         NONE
     }
 
+    public enum ItemRarity {
+        COMMON("Common", Color.DARK_GRAY),
+        UNCOMMON("Uncommon", Color.GREEN),
+        RARE("Rare", Color.BLUE),
+        EPIC("Epic", Color.MAGENTA),
+        LEGENDARY("Legendary", Color.ORANGE),
+        UNIQUE("Unique", Color.RED);
+
+        private final String value;
+        private final Color itemRarityColor;
+
+        ItemRarity(String value, Color itemRarityColor) {
+            this.value = value;
+            this.itemRarityColor = itemRarityColor;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public Color getColor() {
+            return itemRarityColor;
+        }
+    }
+
     private int itemAttributes;
     private int itemUseType;
     private int itemUseTypeValue;
     private ItemTypeID itemTypeID;
+    private ItemRarity itemRarity;
     private String itemShortDescription;
     private int itemValue;
 
@@ -88,6 +115,7 @@ public class InventoryItem extends Image {
         this.itemAttributes = inventoryItem.getItemAttributes();
         this.itemUseType = inventoryItem.getItemUseType();
         this.itemUseTypeValue = inventoryItem.getItemUseTypeValue();
+        this.itemRarity = inventoryItem.getItemRarity();
         this.itemShortDescription = inventoryItem.getItemShortDescription();
         this.itemValue = inventoryItem.getItemValue();
     }
@@ -130,6 +158,14 @@ public class InventoryItem extends Image {
 
     public void setItemUseType(int itemUseType) {
         this.itemUseType = itemUseType;
+    }
+
+    public ItemRarity getItemRarity() {
+        return itemRarity;
+    }
+
+    public void setItemRarity(ItemRarity itemRarity) {
+        this.itemRarity = itemRarity;
     }
 
     public String getItemShortDescription() {
