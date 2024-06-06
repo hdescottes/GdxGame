@@ -128,7 +128,7 @@ public class BattleHUDTest {
     private static Stream<Arguments> addEntitySteps() {
         return Stream.of(
                 Arguments.of(BattleObserver.BattleEvent.PLAYER_ADDED, 0, Entity.AnimationType.WALK_RIGHT),
-                Arguments.of(BattleObserver.BattleEvent.OPPONENT_ADDED, 1, Entity.AnimationType.IDLE)
+                Arguments.of(BattleObserver.BattleEvent.OPPONENT_ADDED, 1, Entity.AnimationType.IMMOBILE)
         );
     }
 

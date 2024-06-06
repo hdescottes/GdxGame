@@ -236,6 +236,10 @@ public class MapManager implements ProfileObserver {
         currentSelectedEntity = null;
     }
 
+    public void disableCurrentMapMusic(){
+        currentMap.unloadMusic();
+    }
+
     public void setPlayer(Entity entity) {
         this.player = entity;
     }

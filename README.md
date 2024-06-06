@@ -87,7 +87,7 @@ graph TD;
 
 - [ ] crafting feature
 
-- [ ] cutscenes feature
+- [ ] credits
 
 - [ ] improve AI
 

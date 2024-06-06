@@ -20,6 +20,7 @@ import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.player.CharacterRecord;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.profile.ProfileManager;
+import com.gdx.game.screen.cutscene.CreatorIntroScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +100,7 @@ public class CharacterSelectionScreen extends BaseScreen {
 
                 gdxGame.setGameScreen(new GameScreen(gdxGame, resourceManager));
                 LOGGER.info("Character {} selected", playerImage.getEntity().getEntityConfig().getEntityID());
-                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
+                setScreenWithTransition((BaseScreen) gdxGame.getScreen(), new CreatorIntroScreen(gdxGame, resourceManager), new ArrayList<>());
             }
         });
 

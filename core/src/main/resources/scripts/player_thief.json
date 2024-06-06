@@ -75,6 +75,19 @@
 	animationConfig: [
 		{
 			frameDuration: 0.15
+			animationType: IMMOBILE
+			texturePaths: [
+				sprites/characters/Thief.png
+			]
+			gridPoints: [
+				{
+					x: 0
+					y: 2
+				}
+			]
+		}
+		{
+			frameDuration: 0.15
 			animationType: IDLE
 			texturePaths: [
 				sprites/characters/Thief.png
