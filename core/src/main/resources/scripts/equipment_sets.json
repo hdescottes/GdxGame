@@ -1,0 +1,16 @@
+[
+	{
+		itemSetID: PEASANT_SET
+		itemSetDescription: Increase physical attack by 10%
+		bonus: {
+			ENTITY_PHYSICAL_ATTACK_POINTS: {
+				class: java.lang.String
+				value: 0.1
+			}
+			ENTITY_PHYSICAL_DEFENSE_POINTS: {
+				class: java.lang.String
+				value: 0.1
+			}
+		}
+	}
+]

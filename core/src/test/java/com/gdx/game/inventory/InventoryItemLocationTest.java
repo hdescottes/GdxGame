@@ -3,7 +3,7 @@ package com.gdx.game.inventory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.gdx.game.GdxRunner;
-import com.gdx.game.inventory.InventoryItemLocation;
+import com.gdx.game.inventory.item.InventoryItemLocation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

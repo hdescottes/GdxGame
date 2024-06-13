@@ -10,6 +10,12 @@ import com.gdx.game.profile.ProfileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.gdx.game.common.UtilityClass.calculateBonus;
+
 public class BattleState extends BattleSubject {
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleState.class);
 
@@ -35,6 +41,8 @@ public class BattleState extends BattleSubject {
 
         currentPlayerAP = ProfileManager.getInstance().getProperty("currentPlayerAP", Integer.class);
         currentPlayerDP = ProfileManager.getInstance().getProperty("currentPlayerDP", Integer.class);
+
+        updateStatWithBonus("bonusSet");
     }
 
     public void resetDefaults() {
@@ -80,6 +88,27 @@ public class BattleState extends BattleSubject {
 
     public void determineTurn() {
         Timer.schedule(determineTurn, 1);
+    }
+
+    private void updateStatWithBonus(String bonusAttribute) {
+        HashMap<String, Integer> bonusMap = calculateBonus(bonusAttribute);
+        Map<String, String> mapping = Map.of(
+                EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), "currentPlayerAP",
+                EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), "currentPlayerDP"
+        );
+
+        mapping.forEach((key, value) -> {
+            if (bonusMap.get(key) != null) {
+                try {
+                    Field valueField = this.getClass().getDeclaredField(value);
+                    int currentPlayerValue = valueField.getInt(this);
+                    int newPlayerValue = currentPlayerValue + bonusMap.get(key);
+                    valueField.setInt(this, newPlayerValue);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException("A value in the mapping map does not exist", e);
+                }
+            }
+        });
     }
 
     public void playerAttacks() {

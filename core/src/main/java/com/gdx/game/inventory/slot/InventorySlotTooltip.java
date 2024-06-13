@@ -3,7 +3,7 @@ package com.gdx.game.inventory.slot;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.gdx.game.inventory.InventoryItem;
+import com.gdx.game.inventory.item.InventoryItem;
 
 public class InventorySlotTooltip extends Window {
 

@@ -14,7 +14,7 @@ import com.gdx.game.battle.BattleObserver;
 import com.gdx.game.battle.BattleState;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.player.PlayerHUD;
-import com.gdx.game.inventory.InventoryItemLocation;
+import com.gdx.game.inventory.item.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.InventoryUI;
 import com.gdx.game.manager.ResourceManager;

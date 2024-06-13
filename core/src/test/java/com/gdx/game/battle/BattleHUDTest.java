@@ -11,11 +11,12 @@ import com.badlogic.gdx.utils.Array;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.animation.AnimatedImage;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityBonus;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.inventory.InventoryItem;
-import com.gdx.game.inventory.InventoryItemFactory;
-import com.gdx.game.inventory.InventoryItemLocation;
+import com.gdx.game.inventory.item.InventoryItem;
+import com.gdx.game.inventory.item.InventoryItemFactory;
+import com.gdx.game.inventory.item.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
@@ -68,6 +69,9 @@ public class BattleHUDTest {
         profileManager.setProperty("currentPlayerCharacterAP", 5);
         profileManager.setProperty("currentPlayerCharacterDP", 5);
         profileManager.setProperty("currentPlayerCharacterSPDP", 10);
+        EntityBonus entityBonusAtk = new EntityBonus(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), "0.3");
+        EntityBonus entityBonusDef = new EntityBonus(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), "0.1");
+        profileManager.setProperty("bonusSet", new Array<>(new EntityBonus[]{entityBonusAtk, entityBonusDef}));
         new ResourceManager();
     }
 
