@@ -2,8 +2,10 @@ package com.gdx.game.battle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.Array;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityBonus;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.npc.NPCGraphicsComponent;
@@ -47,6 +49,9 @@ public class BattleStateTest {
         profileManager.setProperty("currentPlayerDP", 5);
         profileManager.setProperty("currentPlayerMP", 5);
         profileManager.setProperty("currentPlayerHP", 20);
+        EntityBonus entityBonusAtk = new EntityBonus(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), "0.3");
+        EntityBonus entityBonusDef = new EntityBonus(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), "0.1");
+        profileManager.setProperty("bonusSet", new Array<>(new EntityBonus[]{entityBonusAtk, entityBonusDef}));
     }
 
     @AfterEach
@@ -67,7 +72,7 @@ public class BattleStateTest {
 
         battleState.getPlayerAttackCalculationTimer().run();
 
-        assertThat(enemy.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString())).isLessThanOrEqualTo("19");
+        assertThat(enemy.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString())).isLessThanOrEqualTo("18");
         verify(battleState).notify(enemy, BattleObserver.BattleEvent.OPPONENT_HIT_DAMAGE);
         verify(battleState).notify(enemy, BattleObserver.BattleEvent.PLAYER_TURN_DONE);
         verify(battleState, never()).notify(enemy, BattleObserver.BattleEvent.OPPONENT_DEFEATED);
@@ -108,7 +113,7 @@ public class BattleStateTest {
 
         battleState.getOpponentAttackCalculationTimer().run();
 
-        assertThat(player.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString())).isLessThanOrEqualTo("19");
+        assertThat(player.getEntityConfig().getPropertyValue(EntityConfig.EntityProperties.ENTITY_HEALTH_POINTS.toString())).isLessThanOrEqualTo("18");
         verify(battleState).notify(player, BattleObserver.BattleEvent.PLAYER_HIT_DAMAGE);
         verify(battleState).notify(enemy, BattleObserver.BattleEvent.OPPONENT_TURN_DONE);
     }

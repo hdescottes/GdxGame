@@ -83,8 +83,6 @@ graph TD;
     - [ ] implement bonus gained by class
     - [ ] implement magic, resist, ... stats
 
-- [ ] armor sets
-
 - [ ] crafting feature
 
 - [ ] credits
@@ -94,6 +92,7 @@ graph TD;
 -------
 ## Bugs
 
+- Objects in inventory are stacking even if there are not the same
 - FadeIn effect not working when transition [menu &#8594; game]
 - Drag and drop selection issue on item's render (items are far from mouse when picking them)
 - Sometimes current hp/mp on status HUD add a blank space before the max player's hp/mp

@@ -1,4 +1,4 @@
-package com.gdx.game.inventory;
+package com.gdx.game.inventory.item;
 
 
 import com.badlogic.gdx.Gdx;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Scaling;
-import com.gdx.game.inventory.InventoryItem.ItemTypeID;
+import com.gdx.game.inventory.item.InventoryItem.ItemTypeID;
 
 import java.util.ArrayList;
 import java.util.Hashtable;

@@ -3,7 +3,7 @@ package com.gdx.game.entities;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gdx.game.inventory.InventoryItem;
+import com.gdx.game.inventory.item.InventoryItem;
 
 public class EntityConfig {
     private Array<AnimationConfig> animationConfig;

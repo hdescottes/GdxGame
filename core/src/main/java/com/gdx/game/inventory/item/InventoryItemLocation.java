@@ -1,4 +1,4 @@
-package com.gdx.game.inventory;
+package com.gdx.game.inventory.item;
 
 public class InventoryItemLocation {
     private int locationIndex;

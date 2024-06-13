@@ -32,10 +32,11 @@ import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.player.characterClass.ClassObserver;
 import com.gdx.game.entities.player.characterClass.tree.Node;
 import com.gdx.game.entities.player.characterClass.tree.Tree;
-import com.gdx.game.inventory.InventoryItem;
-import com.gdx.game.inventory.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.InventoryUI;
+import com.gdx.game.inventory.item.InventoryItem;
+import com.gdx.game.inventory.item.InventoryItemLocation;
+import com.gdx.game.inventory.slot.InventorySlot;
 import com.gdx.game.inventory.store.StoreInventoryObserver;
 import com.gdx.game.inventory.store.StoreInventoryUI;
 import com.gdx.game.manager.ResourceManager;
@@ -47,6 +48,9 @@ import com.gdx.game.quest.QuestUI;
 import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
+
+import static com.gdx.game.inventory.InventoryUI.getInventory;
+import static com.gdx.game.inventory.InventoryUI.setBonusFromSet;
 
 public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassObserver, ComponentObserver, ConversationGraphObserver, BattleObserver, StoreInventoryObserver, InventoryObserver, StatusObserver {
 
@@ -282,7 +286,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                         itemLocations.add(new InventoryItemLocation(i, items.get(i).toString(), 1, InventoryUI.PLAYER_INVENTORY));
                     }
                     InventoryUI.populateInventory(inventoryUI.getInventorySlotTable(), itemLocations, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
-                    profileManager.setProperty("playerInventory", InventoryUI.getInventory(inventoryUI.getInventorySlotTable()));
+                    profileManager.setProperty("playerInventory", getInventory(inventoryUI.getInventorySlotTable()));
 
                     //start the player with some money
                     statusUI.setGoldValue(20);
@@ -297,6 +301,9 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                     inventoryUI.resetEquipSlots();
                     if (equipInventory != null && equipInventory.size > 0) {
                         InventoryUI.populateInventory(inventoryUI.getEquipSlotTable(), equipInventory, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
+                        if (inventoryUI.isSetEquipped(equipInventory)) {
+                            setBonusFromSet(((InventorySlot) inventoryUI.getEquipSlotTable().getCells().get(1).getActor()).getTopInventoryItem());
+                        }
                     }
 
                     Array<QuestGraph> quests = profileManager.getProperty("playerQuests", Array.class);
@@ -329,8 +336,8 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
             }
             case SAVING_PROFILE -> {
                 profileManager.setProperty("playerQuests", questUI.getQuests());
-                profileManager.setProperty("playerInventory", InventoryUI.getInventory(inventoryUI.getInventorySlotTable()));
-                profileManager.setProperty("playerEquipInventory", InventoryUI.getInventory(inventoryUI.getEquipSlotTable()));
+                profileManager.setProperty("playerInventory", getInventory(inventoryUI.getInventorySlotTable()));
+                profileManager.setProperty("playerEquipInventory", getInventory(inventoryUI.getEquipSlotTable()));
                 if (mapManager.getPlayer() != null) {
                     profileManager.setProperty("playerCharacter", EntityFactory.EntityType.valueOf(mapManager.getPlayer().getEntityConfig().getEntityID()));
                 }
@@ -344,8 +351,6 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 profileManager.setProperty("currentPlayerHPMax", statusUI.getHPValueMax());
                 profileManager.setProperty("currentPlayerMP", statusUI.getMPValue());
                 profileManager.setProperty("currentPlayerMPMax", statusUI.getMPValueMax());
-                profileManager.setProperty("currentPlayerAP", inventoryUI.getAPVal());
-                profileManager.setProperty("currentPlayerDP", inventoryUI.getDPVal());
                 profileManager.setProperty("currentPlayerSPDP", inventoryUI.getSPDPVal());
             }
             case CLEAR_CURRENT_PROFILE -> {
@@ -364,6 +369,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 profileManager.setProperty("currentPlayerDP", 0);
                 profileManager.setProperty("currentPlayerSPDP", 0);
                 profileManager.setProperty("currentTime", 0);
+                profileManager.setProperty("bonusSet", null);
             }
             default -> {
             }
@@ -421,7 +427,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                     break;
                 }
 
-                Array<InventoryItemLocation> inventory =  InventoryUI.getInventory(inventoryUI.getInventorySlotTable());
+                Array<InventoryItemLocation> inventory =  getInventory(inventoryUI.getInventorySlotTable());
                 storeInventoryUI.loadPlayerInventory(inventory);
 
                 Array<InventoryItem.ItemTypeID> items  = selectedEntity.getEntityConfig().getInventory();
