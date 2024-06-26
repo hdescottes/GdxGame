@@ -1,4 +1,4 @@
-package com.gdx.game.inventory;
+package com.gdx.game.inventory.item;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -87,11 +87,16 @@ public class InventoryItem extends Image {
         }
     }
 
+    public enum ItemSetID {
+        PEASANT_SET
+    }
+
     private int itemAttributes;
     private int itemUseType;
     private int itemUseTypeValue;
     private ItemTypeID itemTypeID;
     private ItemRarity itemRarity;
+    private ItemSetID itemSetID;
     private String itemShortDescription;
     private int itemValue;
 
@@ -116,6 +121,7 @@ public class InventoryItem extends Image {
         this.itemUseType = inventoryItem.getItemUseType();
         this.itemUseTypeValue = inventoryItem.getItemUseTypeValue();
         this.itemRarity = inventoryItem.getItemRarity();
+        this.itemSetID = inventoryItem.getItemSetID();
         this.itemShortDescription = inventoryItem.getItemShortDescription();
         this.itemValue = inventoryItem.getItemValue();
     }
@@ -166,6 +172,14 @@ public class InventoryItem extends Image {
 
     public void setItemRarity(ItemRarity itemRarity) {
         this.itemRarity = itemRarity;
+    }
+
+    public ItemSetID getItemSetID() {
+        return itemSetID;
+    }
+
+    public void setItemSetID(ItemSetID itemSetID) {
+        this.itemSetID = itemSetID;
     }
 
     public String getItemShortDescription() {

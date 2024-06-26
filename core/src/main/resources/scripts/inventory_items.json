@@ -14,6 +14,7 @@
 		itemUseTypeValue: 10
 		itemTypeID: SHIELD02
 		itemRarity: COMMON
+		itemSetID: PEASANT_SET
 		itemShortDescription: A wooden shield fit for a peasant
 		itemValue: 25
 	},
@@ -77,6 +78,7 @@
 		itemUseTypeValue: 10
 		itemTypeID: ARMOR04
 		itemRarity: COMMON
+		itemSetID: PEASANT_SET
 		itemShortDescription: Broken mail armor fit for a peasant
 		itemValue: 25
 	},
@@ -113,6 +115,7 @@
 		itemUseTypeValue: 10
 		itemTypeID: BOOTS03
 		itemRarity: COMMON
+		itemSetID: PEASANT_SET
 		itemShortDescription: Leather boots fit for a peasant
 		itemValue: 25
 	},
@@ -176,6 +179,7 @@
 		itemUseTypeValue: 10
 		itemTypeID: HELMET05
 		itemRarity: COMMON
+		itemSetID: PEASANT_SET
 		itemShortDescription: A leather helmet fit for a peasant
 		itemValue: 25
 	},
@@ -230,6 +234,7 @@
 		itemUseTypeValue: 10
 		itemTypeID: WEAPON01
 		itemRarity: COMMON
+		itemSetID: PEASANT_SET
 		itemShortDescription: A copper sword of a peasant
 		itemValue: 25
 	},

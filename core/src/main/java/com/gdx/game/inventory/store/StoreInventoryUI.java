@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.gdx.game.inventory.InventoryItemLocation;
+import com.gdx.game.inventory.item.InventoryItemLocation;
 import com.gdx.game.inventory.slot.InventorySlot;
 import com.gdx.game.inventory.slot.InventorySlotObserver;
 import com.gdx.game.inventory.slot.InventorySlotTarget;

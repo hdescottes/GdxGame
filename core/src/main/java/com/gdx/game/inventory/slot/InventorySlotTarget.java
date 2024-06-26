@@ -3,7 +3,7 @@ package com.gdx.game.inventory.slot;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
-import com.gdx.game.inventory.InventoryItem;
+import com.gdx.game.inventory.item.InventoryItem;
 
 public class InventorySlotTarget extends Target {
 

@@ -12,7 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityBonus;
+import com.gdx.game.entities.EntityConfig;
+import com.gdx.game.inventory.item.InventoryItem;
+import com.gdx.game.inventory.item.InventoryItemFactory;
+import com.gdx.game.inventory.item.InventoryItemLocation;
+import com.gdx.game.inventory.set.EquipmentSet;
+import com.gdx.game.inventory.set.EquipmentSetFactory;
 import com.gdx.game.inventory.slot.InventorySlot;
 import com.gdx.game.inventory.slot.InventorySlotObserver;
 import com.gdx.game.inventory.slot.InventorySlotSource;
@@ -22,6 +28,11 @@ import com.gdx.game.inventory.slot.InventorySlotTooltipListener;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.profile.ProfileManager;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.gdx.game.common.UtilityClass.calculateBonus;
 import static com.gdx.game.component.Component.MESSAGE_TOKEN;
 import static com.gdx.game.manager.ResourceManager.ITEMS_TEXTURE_ATLAS;
 import static com.gdx.game.manager.ResourceManager.STATUS_UI_TEXTURE_ATLAS;
@@ -39,6 +50,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
 
     private Label classValLabel;
     private String classVal;
+    private Label setValLabel;
+    private String setVal;
     private Label DPValLabel;
     private int DPVal;
     private Label APValLabel;
@@ -80,6 +93,9 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         Label classLabel = new Label("Class: ", ResourceManager.skin);
         classValLabel = new Label(classVal, ResourceManager.skin);
 
+        Label setLabel = new Label("Set: ", ResourceManager.skin);
+        setValLabel = new Label(setVal, ResourceManager.skin);
+
         Label DPLabel = new Label("Defense: ", ResourceManager.skin);
         DPValLabel = new Label(String.valueOf(DPVal), ResourceManager.skin);
 
@@ -92,6 +108,10 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         Table labelTable = new Table();
         labelTable.add(classLabel).align(Align.left);
         labelTable.add(classValLabel).align(Align.center);
+        labelTable.row();
+        labelTable.add(setLabel).align(Align.left);
+        labelTable.add(setValLabel).align(Align.center);
+        labelTable.row();
         labelTable.row();
         labelTable.row();
         labelTable.add(DPLabel).align(Align.left);
@@ -231,12 +251,14 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     }
 
     public void resetEquipSlots() {
+        ProfileManager.getInstance().setProperty("bonusSet", null);
         classVal = ProfileManager.getInstance().getProperty("characterClass", String.class);
         APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
         DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
         SPDPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterSPDP", Integer.class);
 
         classValLabel.setText(String.valueOf(classVal));
+        setValLabel.setText("");
 
         DPValLabel.setText(String.valueOf(DPVal));
         notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
@@ -455,6 +477,65 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         return inventoryActors;
     }
 
+    public boolean isSetEquipped(Array<InventoryItemLocation> equipItems) {
+        if (equipItems.isEmpty() || equipItems.size != 5) {
+            return false;
+        }
+
+        InventoryItem firstItem = InventoryItemFactory.getInstance().getInventoryItem(InventoryItem.ItemTypeID.valueOf(equipItems.get(0).getItemTypeAtLocation()));
+        String firstItemSetID = firstItem.getItemSetID().name();
+
+        for (int i = 1; i < equipItems.size - 1; i++) {
+            InventoryItem currentItem = InventoryItemFactory.getInstance().getInventoryItem(InventoryItem.ItemTypeID.valueOf(equipItems.get(i).getItemTypeAtLocation()));
+            String currentItemSetID = String.valueOf(currentItem.getItemSetID());
+            if (!firstItemSetID.equals(currentItemSetID)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void setBonusFromSet(InventoryItem item) {
+        EquipmentSet set = EquipmentSetFactory.getInstance().getEquipmentSet(item.getItemSetID());
+        HashMap<String, String> bonusMap = set.getBonus();
+        Array<EntityBonus> bonusArray = new Array<>();
+
+        for (Map.Entry<String, String> entry : bonusMap.entrySet()) {
+            EntityBonus entityBonus = new EntityBonus(entry.getKey(), entry.getValue());
+            bonusArray.add(entityBonus);
+        }
+
+        ProfileManager.getInstance().setProperty("bonusSet", bonusArray);
+    }
+
+    private void updateValuesWithBonus(String bonusAttribute, boolean isAdd) {
+        HashMap<String, Integer> bonusMap = calculateBonus(bonusAttribute);
+
+        Map<String, String[]> updates = Map.of(
+                EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), new String[]{"APVal", "APValLabel"},
+                EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), new String[]{"DPVal", "DPValLabel"}
+        );
+
+        updates.forEach((key, fields) -> {
+            Integer value = bonusMap.get(key);
+            if (value != null) {
+                try {
+                    Field propertyField = this.getClass().getDeclaredField(fields[0]);
+                    Field labelField = this.getClass().getDeclaredField(fields[1]);
+
+                    int currentValue = propertyField.getInt(this);
+                    int newValue = isAdd ? currentValue + value : currentValue - value;
+                    propertyField.setInt(this, newValue);
+
+                    Label label = (Label) labelField.get(this);
+                    label.setText(String.valueOf(newValue));
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    throw new RuntimeException("A value in the update stat map does not exist", e);
+                }
+            }
+        });
+    }
+
     @Override
     public void onNotify(InventorySlot slot, SlotEvent event) {
         switch (event) {
@@ -463,6 +544,13 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                 if (addItem == null) {
                     return;
                 }
+                boolean isSetEquipped = isSetEquipped(getInventory(equipSlots));
+                if (!isSetEquipped) {
+                    setValLabel.setText("");
+                    updateValuesWithBonus("bonusSet", false);
+                    ProfileManager.getInstance().setProperty("bonusSet", null);
+                }
+
                 if (addItem.isInventoryItemOffensive()) {
                     APVal += addItem.getItemUseTypeValue();
                     APValLabel.setText(String.valueOf(APVal));
@@ -481,12 +569,21 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
 
                     ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 }
+                if (isSetEquipped) {
+                    setVal = InventoryItemFactory.getInstance().getInventoryItem(InventoryItem.ItemTypeID.valueOf(getInventory(equipSlots).get(0).getItemTypeAtLocation())).getItemSetID().name();
+                    setValLabel.setText(setVal);
+
+                    setBonusFromSet(addItem);
+                    updateValuesWithBonus("bonusSet", true);
+                }
             }
             case REMOVED_ITEM -> {
                 InventoryItem removeItem = slot.getTopInventoryItem();
                 if (removeItem == null) {
                     return;
                 }
+                updateValuesWithBonus("bonusSet", false);
+
                 if (removeItem.isInventoryItemOffensive()) {
                     APVal -= removeItem.getItemUseTypeValue();
                     APValLabel.setText(String.valueOf(APVal));
@@ -505,6 +602,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
 
                     ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 }
+                setValLabel.setText("");
+                ProfileManager.getInstance().setProperty("bonusSet", null);
             }
             default -> {
             }

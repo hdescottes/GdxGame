@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.gdx.game.inventory.InventoryItem;
+import com.gdx.game.inventory.item.InventoryItem;
 
 import static com.gdx.game.manager.ResourceManager.STATUS_UI_SKIN;
 import static com.gdx.game.manager.ResourceManager.STATUS_UI_TEXTURE_ATLAS;

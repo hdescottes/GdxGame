@@ -2,10 +2,13 @@ package com.gdx.game.inventory.slot;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
+
+import static com.gdx.game.inventory.InventoryUI.getInventory;
 
 public class InventorySlotSource extends Source {
 
@@ -34,13 +37,13 @@ public class InventorySlotSource extends Source {
             sourceSlot = source;
         }
 
-    sourceSlot.decrementItemCount(true);
+        sourceSlot.decrementItemCount(true);
 
-    payload.setDragActor(getActor());
-    dragAndDrop.setDragActorPosition(-x, -y + getActor().getHeight());
+        payload.setDragActor(getActor());
+        dragAndDrop.setDragActorPosition(-x, -y + getActor().getHeight());
 
-    return payload;
-}
+        return payload;
+    }
 
     @Override
     public void dragStop (InputEvent event, float x, float y, int pointer, Payload payload, Target target) {

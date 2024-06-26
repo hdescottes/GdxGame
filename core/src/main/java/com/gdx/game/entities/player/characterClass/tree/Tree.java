@@ -2,6 +2,7 @@ package com.gdx.game.entities.player.characterClass.tree;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
+import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.profile.ProfileManager;
 
 import java.util.*;
@@ -112,10 +113,10 @@ public class Tree {
         List<Node> nodes = findToWhichClassesUpgrade(currentClassId);
 
         if (nodes != null && nodes.size() == 2) {
-            int AP0 = Integer.parseInt(nodes.get(0).getRequirements().get("ENTITY_PHYSICAL_ATTACK_POINTS"));
-            int DP0 = Integer.parseInt(nodes.get(0).getRequirements().get("ENTITY_PHYSICAL_DEFENSE_POINTS"));
-            int AP1 = Integer.parseInt(nodes.get(1).getRequirements().get("ENTITY_PHYSICAL_ATTACK_POINTS"));
-            int DP1 = Integer.parseInt(nodes.get(1).getRequirements().get("ENTITY_PHYSICAL_DEFENSE_POINTS"));
+            int AP0 = Integer.parseInt(nodes.get(0).getRequirements().get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
+            int DP0 = Integer.parseInt(nodes.get(0).getRequirements().get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
+            int AP1 = Integer.parseInt(nodes.get(1).getRequirements().get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
+            int DP1 = Integer.parseInt(nodes.get(1).getRequirements().get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
 
             if (currentPlayerCharacterAP >= AP0 && currentPlayerCharacterDP >= DP0) {
                 return nodes.get(0);
