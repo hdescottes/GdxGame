@@ -11,8 +11,8 @@ jobs:
       - name: Prep Release
         id: get_latest_release
         run: |
-          curl --silent "https://api.github.com/repos/hdescottes/GdxGame/releases/latest" |
-          latest_version= grep -Po "(?<=\"tag_name\": \").*(?=\")" >> $env:GITHUB_OUTPUT
+          curl --silent latest_version="https://api.github.com/repos/hdescottes/GdxGame/releases/latest" |
+          grep -Po "(?<=\"tag_name\": \").*(?=\")" >> $env:GITHUB_OUTPUT
 #      - name: Get version
 #        id: get_version
 #        run:
