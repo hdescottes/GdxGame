@@ -43,6 +43,7 @@ public class BattleState extends BattleSubject {
         currentPlayerDP = ProfileManager.getInstance().getProperty("currentPlayerDP", Integer.class);
 
         updateStatWithBonus("bonusSet");
+        //TODO: update with class bonuses
     }
 
     public void resetDefaults() {

@@ -341,6 +341,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 if (mapManager.getPlayer() != null) {
                     profileManager.setProperty("playerCharacter", EntityFactory.EntityType.valueOf(mapManager.getPlayer().getEntityConfig().getEntityID()));
                 }
+                profileManager.setProperty("characterClass", inventoryUI.getCharacterClass());
                 profileManager.setProperty("currentPlayerGP", statusUI.getGoldValue());
                 profileManager.setProperty("currentPlayerLevel", statusUI.getLevelValue());
                 profileManager.setProperty("currentPlayerXP", statusUI.getXPValue());
@@ -357,6 +358,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 profileManager.setProperty("playerInventory", new Array<InventoryItemLocation>());
                 profileManager.setProperty("playerEquipInventory", new Array<InventoryItemLocation>());
                 profileManager.setProperty("playerCharacter", null);
+                profileManager.setProperty("characterClass", null);
                 profileManager.setProperty("currentPlayerGP", 0);
                 profileManager.setProperty("currentPlayerLevel", 0);
                 profileManager.setProperty("currentPlayerXP", 0);
@@ -687,6 +689,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 if (equipInventory != null && equipInventory.size > 0) {
                     InventoryUI.populateInventory(inventoryUI.getEquipSlotTable(), equipInventory, inventoryUI.getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
                 }
+                //TODO: update with class bonuses
             }
             default -> {
             }

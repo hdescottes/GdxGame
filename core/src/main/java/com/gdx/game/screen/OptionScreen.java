@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.gdx.game.common.Constats.FULL_CONTROLS_SETTINGS_PATH;
-import static com.gdx.game.common.Constats.PARTIAL_CONTROLS_SETTINGS_PATH;
+import static com.gdx.game.common.Constants.FULL_CONTROLS_SETTINGS_PATH;
+import static com.gdx.game.common.Constants.PARTIAL_CONTROLS_SETTINGS_PATH;
 import static com.gdx.game.common.DefaultControlsMap.DEFAULT_CONTROLS;
 import static com.gdx.game.common.UtilityClass.mapInverter;
 import static com.gdx.game.component.InputComponent.*;

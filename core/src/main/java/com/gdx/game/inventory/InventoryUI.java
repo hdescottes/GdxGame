@@ -204,6 +204,10 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         return SPDPVal;
     }
 
+    public String getCharacterClass() {
+        return classVal;
+    }
+
     public DragAndDrop getDragAndDrop() {
         return dragAndDrop;
     }
@@ -557,6 +561,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                     notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
 
                     ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
+                    //TODO: update with class bonuses
 
                     if (addItem.isInventoryItemOffensiveWand()) {
                         notify(String.valueOf(addItem.getItemUseTypeValue()), InventoryObserver.InventoryEvent.ADD_WAND_AP);
@@ -568,6 +573,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                     notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
 
                     ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
+                    //TODO: update with class bonuses
                 }
                 if (isSetEquipped) {
                     setVal = InventoryItemFactory.getInstance().getInventoryItem(InventoryItem.ItemTypeID.valueOf(getInventory(equipSlots).get(0).getItemTypeAtLocation())).getItemSetID().name();
@@ -590,6 +596,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                     notify(String.valueOf(APVal), InventoryObserver.InventoryEvent.UPDATED_AP);
 
                     ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
+                    //TODO: update with class bonuses
 
                     if (removeItem.isInventoryItemOffensiveWand()) {
                         notify(String.valueOf(removeItem.getItemUseTypeValue()), InventoryObserver.InventoryEvent.REMOVE_WAND_AP);
@@ -601,6 +608,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
                     notify(String.valueOf(DPVal), InventoryObserver.InventoryEvent.UPDATED_DP);
 
                     ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
+                    //TODO: update with class bonuses
                 }
                 setValLabel.setText("");
                 ProfileManager.getInstance().setProperty("bonusSet", null);

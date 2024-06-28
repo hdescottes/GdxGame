@@ -15,9 +15,15 @@
           value: 15
         }
       }
-      bonus : {
-        character : {},
-        weapon : {}
+      bonus: {
+        ENTITY_PHYSICAL_ATTACK_POINTS: {
+          class: java.lang.String
+          value: 0.1
+        }
+        ENTITY_PHYSICAL_DEFENSE_POINTS: {
+          class: java.lang.String
+          value: 0.1
+        }
       },
       classUpgrade : [
         {
