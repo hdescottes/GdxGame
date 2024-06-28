@@ -1,4 +1,4 @@
-package com.gdx.game.entities.player.characterClass.tree;
+package com.gdx.game.entities.player.characterclass.tree;
 
 import com.badlogic.gdx.utils.ObjectMap;
 
@@ -9,9 +9,9 @@ public class Node {
 
     private int id;
     private String classId;
-    private List<Node> classUpgrade;
-    private ObjectMap<String, String> requirements;
-    private ObjectMap<String, String> bonus;
+    private final List<Node> classUpgrade;
+    private final ObjectMap<String, String> requirements;
+    private final ObjectMap<String, ObjectMap<String, String>> bonus;
     private Node left;
     private Node right;
 
@@ -21,7 +21,7 @@ public class Node {
         this.bonus = new ObjectMap<>();
     }
 
-    public Node(int id, String classId, List<Node> classUpgrade, ObjectMap<String, String> requirements, ObjectMap<String, String> bonus) {
+    public Node(int id, String classId, List<Node> classUpgrade, ObjectMap<String, String> requirements, ObjectMap<String, ObjectMap<String, String>> bonus) {
         this.id = id;
         this.classId = classId;
         this.classUpgrade = classUpgrade;
@@ -47,7 +47,7 @@ public class Node {
         return requirements;
     }
 
-    public ObjectMap<String, String> getBonus() {
+    public ObjectMap<String, ObjectMap<String, String>> getBonus() {
         return bonus;
     }
 

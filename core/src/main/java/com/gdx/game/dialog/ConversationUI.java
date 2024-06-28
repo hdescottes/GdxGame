@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.gdx.game.common.Constats.COURTESY_PHRASES_PATH;
-import static com.gdx.game.common.Constats.FOE;
+import static com.gdx.game.common.Constants.COURTESY_PHRASES_PATH;
+import static com.gdx.game.common.Constants.FOE;
 
 public class ConversationUI extends Window {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConversationUI.class);

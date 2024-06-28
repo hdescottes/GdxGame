@@ -29,9 +29,9 @@ import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.entities.player.characterClass.ClassObserver;
-import com.gdx.game.entities.player.characterClass.tree.Node;
-import com.gdx.game.entities.player.characterClass.tree.Tree;
+import com.gdx.game.entities.player.characterclass.ClassObserver;
+import com.gdx.game.entities.player.characterclass.tree.Node;
+import com.gdx.game.entities.player.characterclass.tree.Tree;
 import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.InventoryUI;
 import com.gdx.game.inventory.item.InventoryItem;
@@ -49,6 +49,9 @@ import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
+import java.util.Map;
+
+import static com.gdx.game.common.UtilityClass.calculateBonus;
 import static com.gdx.game.inventory.InventoryUI.getInventory;
 import static com.gdx.game.inventory.InventoryUI.setBonusFromSet;
 
@@ -341,6 +344,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 if (mapManager.getPlayer() != null) {
                     profileManager.setProperty("playerCharacter", EntityFactory.EntityType.valueOf(mapManager.getPlayer().getEntityConfig().getEntityID()));
                 }
+                profileManager.setProperty("characterClass", inventoryUI.getCharacterClass());
                 profileManager.setProperty("currentPlayerGP", statusUI.getGoldValue());
                 profileManager.setProperty("currentPlayerLevel", statusUI.getLevelValue());
                 profileManager.setProperty("currentPlayerXP", statusUI.getXPValue());
@@ -357,6 +361,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 profileManager.setProperty("playerInventory", new Array<InventoryItemLocation>());
                 profileManager.setProperty("playerEquipInventory", new Array<InventoryItemLocation>());
                 profileManager.setProperty("playerCharacter", null);
+                profileManager.setProperty("characterClass", null);
                 profileManager.setProperty("currentPlayerGP", 0);
                 profileManager.setProperty("currentPlayerLevel", 0);
                 profileManager.setProperty("currentPlayerXP", 0);
@@ -370,6 +375,7 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 profileManager.setProperty("currentPlayerSPDP", 0);
                 profileManager.setProperty("currentTime", 0);
                 profileManager.setProperty("bonusSet", null);
+                profileManager.setProperty("bonusClass", null);
             }
             default -> {
             }
@@ -589,6 +595,11 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 Tree.saveNewClass(node);
 
                 if (node != null) {
+                    Map<String, Integer> bonusMap = calculateBonus("bonusClass", "currentPlayerCharacterAP", "currentPlayerCharacterDP");
+
+                    ProfileManager.getInstance().setProperty("currentPlayerBonusClassAP", AP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
+                    ProfileManager.getInstance().setProperty("currentPlayerBonusClassDP", DP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
+
                     statusUI.setVisible(false);
                     notificationUI.setVisible(true);
                     notificationUI.loadUpgradeClass(node.getClassId());

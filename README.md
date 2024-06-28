@@ -80,7 +80,6 @@ graph TD;
 - [x] battle feature
     - [ ] entities' animation while attacking
     - [ ] ultimate attack cutscene
-    - [ ] implement bonus gained by class
     - [ ] implement magic, resist, ... stats
 
 - [ ] crafting feature
@@ -96,6 +95,7 @@ graph TD;
 - FadeIn effect not working when transition [menu &#8594; game]
 - Drag and drop selection issue on item's render (items are far from mouse when picking them)
 - Sometimes current hp/mp on status HUD add a blank space before the max player's hp/mp
+- Class is not refreshed in inventory when changed through battle
 
 &#8855; _Reset position when exiting the game is not properly set when you close the game with the X window button (it is fine when exiting with the ESCAPE key)_
 

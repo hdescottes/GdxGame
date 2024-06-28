@@ -1,6 +1,6 @@
 package com.gdx.game.common;
 
-public class Constats {
+public class Constants {
 
     public static final String FOE = "FOE";
 

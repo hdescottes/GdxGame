@@ -57,6 +57,8 @@ public class BattleScreenTest {
         mockStage = mockConstruction(Stage.class);
         ProfileManager profileManager = ProfileManager.getInstance();
         profileManager.setProperty("characterClass", "WARRIOR");
+        profileManager.setProperty("currentPlayerBonusClassAP", 15);
+        profileManager.setProperty("currentPlayerBonusClassDP", 15);
         profileManager.setProperty("currentPlayerCharacterAP", 15);
         profileManager.setProperty("currentPlayerCharacterDP", 15);
         profileManager.setProperty("currentPlayerCharacterSPDP", 10);

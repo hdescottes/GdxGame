@@ -21,9 +21,9 @@ import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.entities.player.characterClass.ClassObserver;
-import com.gdx.game.entities.player.characterClass.tree.Node;
-import com.gdx.game.entities.player.characterClass.tree.Tree;
+import com.gdx.game.entities.player.characterclass.ClassObserver;
+import com.gdx.game.entities.player.characterclass.tree.Node;
+import com.gdx.game.entities.player.characterclass.tree.Tree;
 import com.gdx.game.inventory.item.InventoryItem;
 import com.gdx.game.inventory.item.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
@@ -35,6 +35,10 @@ import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+
+import static com.gdx.game.common.UtilityClass.calculateBonus;
 
 public class BattleHUD implements Screen, BattleObserver, ClassObserver, ComponentObserver, InventoryObserver, StatusObserver {
 
@@ -360,6 +364,11 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 Tree.saveNewClass(node);
 
                 if (node != null) {
+                    Map<String, Integer> bonusMap = calculateBonus("bonusClass", "currentPlayerCharacterAP", "currentPlayerCharacterDP");
+
+                    ProfileManager.getInstance().setProperty("currentPlayerBonusClassAP", AP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
+                    ProfileManager.getInstance().setProperty("currentPlayerBonusClassDP", DP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
+
                     notificationUI.loadUpgradeClass(node.getClassId());
                 }
             }

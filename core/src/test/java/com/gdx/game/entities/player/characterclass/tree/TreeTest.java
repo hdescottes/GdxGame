@@ -1,6 +1,6 @@
-package com.gdx.game.entities.player.characterClass.tree;
+package com.gdx.game.entities.player.characterclass.tree;
 
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.Array;
 import com.gdx.game.GdxRunner;
 import com.gdx.game.profile.ProfileManager;
 import org.junit.jupiter.api.Test;
@@ -70,8 +70,8 @@ public class TreeTest {
         Tree.saveNewClass(node);
 
         assertThat(ProfileManager.getInstance().getProperty("characterClass", String.class)).isEqualTo(expectedClassId);
-        assertThat(ProfileManager.getInstance().getProperty("classBonus", ObjectMap.class)).isNotNull();
-        assertThat(ProfileManager.getInstance().getProperty("classBonus", ObjectMap.class).size).isEqualTo(expectedBonusSize);
+        assertThat(ProfileManager.getInstance().getProperty("bonusClass", Array.class)).isNotNull();
+        assertThat(ProfileManager.getInstance().getProperty("bonusClass", Array.class).size).isEqualTo(expectedBonusSize);
     }
 
     static Stream<Arguments> saveNewClass() {
