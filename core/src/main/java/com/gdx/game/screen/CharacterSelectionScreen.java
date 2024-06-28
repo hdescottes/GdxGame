@@ -94,6 +94,8 @@ public class CharacterSelectionScreen extends BaseScreen {
                 ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
                 ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 ProfileManager.getInstance().setProperty("currentPlayerSPDP", SPDPVal);
+                ProfileManager.getInstance().setProperty("currentPlayerBonusClassAP", APVal);
+                ProfileManager.getInstance().setProperty("currentPlayerBonusClassDP", DPVal);
                 ProfileManager.getInstance().setProperty("currentPlayerCharacterAP", APVal);
                 ProfileManager.getInstance().setProperty("currentPlayerCharacterDP", DPVal);
                 ProfileManager.getInstance().setProperty("currentPlayerCharacterSPDP", SPDPVal);

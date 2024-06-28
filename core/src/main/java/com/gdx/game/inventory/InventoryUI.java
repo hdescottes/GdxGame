@@ -75,8 +75,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         inventoryActors = new Array<>();
 
         classVal = ProfileManager.getInstance().getProperty("characterClass", String.class);
-        APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
-        DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+        APVal = ProfileManager.getInstance().getProperty("currentPlayerBonusClassAP", Integer.class);
+        DPVal = ProfileManager.getInstance().getProperty("currentPlayerBonusClassDP", Integer.class);
         SPDPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterSPDP", Integer.class);
 
         //create
@@ -204,6 +204,10 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
         return SPDPVal;
     }
 
+    public String getCharacterClass() {
+        return classVal;
+    }
+
     public DragAndDrop getDragAndDrop() {
         return dragAndDrop;
     }
@@ -253,8 +257,8 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     public void resetEquipSlots() {
         ProfileManager.getInstance().setProperty("bonusSet", null);
         classVal = ProfileManager.getInstance().getProperty("characterClass", String.class);
-        APVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
-        DPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+        APVal = ProfileManager.getInstance().getProperty("currentPlayerBonusClassAP", Integer.class);
+        DPVal = ProfileManager.getInstance().getProperty("currentPlayerBonusClassDP", Integer.class);
         SPDPVal = ProfileManager.getInstance().getProperty("currentPlayerCharacterSPDP", Integer.class);
 
         classValLabel.setText(String.valueOf(classVal));
@@ -509,7 +513,7 @@ public class InventoryUI extends Window implements InventorySubject, InventorySl
     }
 
     private void updateValuesWithBonus(String bonusAttribute, boolean isAdd) {
-        HashMap<String, Integer> bonusMap = calculateBonus(bonusAttribute);
+        Map<String, Integer> bonusMap = calculateBonus(bonusAttribute, "currentPlayerAP", "currentPlayerDP");
 
         Map<String, String[]> updates = Map.of(
                 EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), new String[]{"APVal", "APValLabel"},

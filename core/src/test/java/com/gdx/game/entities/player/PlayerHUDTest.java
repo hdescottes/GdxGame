@@ -14,8 +14,10 @@ import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.dialog.ConversationGraph;
 import com.gdx.game.dialog.ConversationGraphObserver;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityBonus;
+import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.entities.player.characterClass.ClassObserver;
+import com.gdx.game.entities.player.characterclass.ClassObserver;
 import com.gdx.game.inventory.item.InventoryItem;
 import com.gdx.game.inventory.item.InventoryItemFactory;
 import com.gdx.game.inventory.InventoryObserver;
@@ -38,6 +40,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.gdx.game.component.Component.MESSAGE_TOKEN;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -67,6 +70,8 @@ public class PlayerHUDTest {
         mockShapeRenderer = mockConstruction(ShapeRenderer.class);
         mockSpriteBatch = mockConstruction(SpriteBatch.class);
         profileManager.setProperty("characterClass", "WARRIOR");
+        profileManager.setProperty("currentPlayerBonusClassAP", 15);
+        profileManager.setProperty("currentPlayerBonusClassDP", 15);
         profileManager.setProperty("currentPlayerCharacterAP", 15);
         profileManager.setProperty("currentPlayerCharacterDP", 15);
         profileManager.setProperty("currentPlayerCharacterSPDP", 10);
@@ -264,10 +269,17 @@ public class PlayerHUDTest {
         mapManager.setPlayer(player);
         Camera camera = new OrthographicCamera();
         PlayerHUD hud = new PlayerHUD(camera, player, mapManager);
+        Array<EntityBonus> bonusArray = new Array<>();
+        bonusArray.add(new EntityBonus(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), "0.1"));
+        bonusArray.add(new EntityBonus(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), "0.1"));
 
         hud.onNotify("", ClassObserver.ClassEvent.CHECK_UPGRADE_TREE_CLASS);
 
         assertEquals("KNIGHT", ProfileManager.getInstance().getProperty("characterClass", String.class));
+        assertEquals(bonusArray.get(0).getValue(), ((EntityBonus) ProfileManager.getInstance().getProperty("bonusClass", Array.class).get(0)).getValue());
+        assertEquals(bonusArray.get(1).getValue(), ((EntityBonus) ProfileManager.getInstance().getProperty("bonusClass", Array.class).get(1)).getValue());
+        assertEquals(16, ProfileManager.getInstance().getProperty("currentPlayerBonusClassAP", Integer.class));
+        assertEquals(16, ProfileManager.getInstance().getProperty("currentPlayerBonusClassDP", Integer.class));
         assertFalse(hud.getStatusUI().isVisible());
     }
 
