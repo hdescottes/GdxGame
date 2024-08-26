@@ -17,10 +17,10 @@ updates:
     groups:
       gdx:
         patterns:
-          - "com.badlogicgames.gdx"
+          - "com.badlogicgames.gdx*"
       gdx-vfx:
         patterns:
-          - "com.crashinvaders.vfx"
+          - "com.crashinvaders.vfx*"
       junit-jupiter:
         patterns:
-          - "org.junit.jupiter"
+          - "org.junit.jupiter*"
