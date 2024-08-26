@@ -1,11 +1,3 @@
-val gdxVersion by extra {"1.12.1"}
-val gdxVfxVersion by extra {"0.5.4"}
-val jUnitPlatformVersion by extra {"1.10.1"}
-val jUnitJupiterVersion by extra {"5.10.1"}
-val mockitoVersion by extra {"5.7.0"}
-val assertJVersion by extra {"3.24.2"}
-val logbackVersion by extra {"1.4.11"}
-
 plugins {
     java
     `java-library`
@@ -27,12 +19,10 @@ allprojects {
     }
 
     dependencies {
-        testImplementation("org.junit.platform:junit-platform-launcher:$jUnitPlatformVersion")
-        testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitJupiterVersion")
-        testImplementation("org.junit.jupiter:junit-jupiter-params:$jUnitJupiterVersion")
-        testImplementation("org.mockito:mockito-core:$mockitoVersion")
-        testImplementation("org.assertj:assertj-core:$assertJVersion")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitJupiterVersion")
+        testImplementation(rootProject.libs.bundles.junit)
+        testImplementation(rootProject.libs.mockito)
+        testImplementation(rootProject.libs.assertj)
+        testRuntimeOnly(rootProject.libs.junit.jupiter.engine)
     }
 }
 
@@ -44,8 +34,8 @@ project(":desktop") {
 
     dependencies {
         implementation(project(":core"))
-        implementation("com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion")
-        implementation("com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop")
+        implementation(rootProject.libs.gdx.lwjgl3)
+        implementation(variantOf(rootProject.libs.gdx.freetype.platform) { classifier("natives-desktop") })
     }
 }
 
@@ -56,11 +46,10 @@ project(":core") {
     }
 
     dependencies {
-        implementation("com.badlogicgames.gdx:gdx:$gdxVersion")
-        implementation("com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop")
-        implementation("com.crashinvaders.vfx:gdx-vfx-core:$gdxVfxVersion")
-        implementation("com.crashinvaders.vfx:gdx-vfx-effects:$gdxVfxVersion")
-        implementation("ch.qos.logback:logback-classic:$logbackVersion")
-        testImplementation("com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion")
+        implementation(rootProject.libs.gdx)
+        implementation(variantOf(rootProject.libs.gdx.platform) { classifier("natives-desktop") })
+        implementation(rootProject.libs.bundles.gdx.vfx)
+        implementation(rootProject.libs.logback)
+        testImplementation(rootProject.libs.gdx.backend.headless)
     }
 }

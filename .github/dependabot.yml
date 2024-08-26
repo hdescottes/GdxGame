@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 20
+    groups:
+      gdx:
+        patterns:
+          - "com.badlogicgames.gdx"
+      gdx-vfx:
+        patterns:
+          - "com.crashinvaders.vfx"
+      junit-jupiter:
+        patterns:
+          - "org.junit.jupiter"
