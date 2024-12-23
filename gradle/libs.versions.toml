@@ -5,7 +5,7 @@ logback = "1.5.12"
 junit-platform = "1.11.3"
 junit-jupiter = "5.11.3"
 mockito = "5.14.2"
-assertj = "3.26.3"
+assertj = "3.27.0"
 
 [libraries]
 gdx-lwjgl3 = { group = "com.badlogicgames.gdx", name = "gdx-backend-lwjgl3", version.ref = "libgdx" }
