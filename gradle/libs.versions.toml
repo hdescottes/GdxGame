@@ -2,7 +2,7 @@
 libgdx = "1.13.5"
 gdx-vfx = "0.5.4"
 logback = "1.5.18"
-junit-platform = "1.13.2"
+junit-platform = "1.13.3"
 junit-jupiter = "5.13.3"
 mockito = "5.18.0"
 assertj = "3.27.3"
