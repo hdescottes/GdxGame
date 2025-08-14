@@ -49,9 +49,7 @@ import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
-import java.util.Map;
-
-import static com.gdx.game.common.UtilityClass.calculateBonus;
+import static com.gdx.game.entities.player.characterclass.tree.Tree.saveNewClass;
 import static com.gdx.game.inventory.InventoryUI.getInventory;
 import static com.gdx.game.inventory.InventoryUI.setBonusFromSet;
 
@@ -592,13 +590,9 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 String configFilePath = player.getEntityConfig().getClassTreePath();
                 Tree tree = Tree.buildClassTree(configFilePath);
                 Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
-                Tree.saveNewClass(node);
 
                 if (node != null) {
-                    Map<String, Integer> bonusMap = calculateBonus("bonusClass", "currentPlayerCharacterAP", "currentPlayerCharacterDP");
-
-                    ProfileManager.getInstance().setProperty("currentPlayerBonusClassAP", AP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
-                    ProfileManager.getInstance().setProperty("currentPlayerBonusClassDP", DP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
+                    saveNewClass(node);
 
                     statusUI.setVisible(false);
                     notificationUI.setVisible(true);

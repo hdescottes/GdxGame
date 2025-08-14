@@ -13,8 +13,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.stream.Stream;
+
+import static com.gdx.game.common.UtilityClass.calculateBonus;
 
 public class Tree {
 
@@ -139,6 +142,7 @@ public class Tree {
         if (newClass != null) {
             ProfileManager.getInstance().setProperty("characterClass", newClass.getClassId());
             setBonusFromClass(newClass.getBonus());
+            registerBonusClass();
         }
     }
 
@@ -151,5 +155,14 @@ public class Tree {
         }
 
         ProfileManager.getInstance().setProperty("bonusClass", bonusArray);
+    }
+
+    private static void registerBonusClass() {
+        int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+        int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+        Map<String, Integer> bonusMap = calculateBonus("bonusClass", "currentPlayerCharacterAP", "currentPlayerCharacterDP");
+
+        ProfileManager.getInstance().setProperty("currentPlayerBonusClassAP", AP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
+        ProfileManager.getInstance().setProperty("currentPlayerBonusClassDP", DP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
     }
 }

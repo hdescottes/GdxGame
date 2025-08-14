@@ -18,9 +18,9 @@ import com.gdx.game.entities.EntityBonus;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.player.characterclass.ClassObserver;
+import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.item.InventoryItem;
 import com.gdx.game.inventory.item.InventoryItemFactory;
-import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.store.StoreInventoryObserver;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
@@ -40,7 +40,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.gdx.game.component.Component.MESSAGE_TOKEN;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

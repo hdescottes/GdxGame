@@ -65,6 +65,8 @@ public class TreeTest {
     @ParameterizedTest
     @MethodSource("saveNewClass")
     public void testSaveNewClass(String configFilePath, String currentClass, int attribute1, int attribute2, String expectedClassId, int expectedBonusSize) {
+        ProfileManager.getInstance().setProperty("currentPlayerCharacterAP", 10);
+        ProfileManager.getInstance().setProperty("currentPlayerCharacterDP", 10);
         Tree tree = Tree.buildClassTree(configFilePath);
         Node node = tree.checkForClassUpgrade(currentClass, attribute1, attribute2);
         Tree.saveNewClass(node);
