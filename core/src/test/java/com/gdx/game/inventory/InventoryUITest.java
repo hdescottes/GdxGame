@@ -44,6 +44,8 @@ public class InventoryUITest {
 
     private static final int PLAYER_AP = 15;
     private static final int PLAYER_DP = 15;
+    private static final int PLAYER_CLASS_AP = PLAYER_AP + 10;
+    private static final int PLAYER_CLASS_DP = PLAYER_DP + 10;
 
     @BeforeEach
     void init() {
@@ -54,8 +56,8 @@ public class InventoryUITest {
         new ResourceManager();
         ProfileManager profileManager = ProfileManager.getInstance();
         profileManager.setProperty("playerCharacter", EntityFactory.EntityType.WARRIOR);
-        profileManager.setProperty("currentPlayerBonusClassAP", PLAYER_AP);
-        profileManager.setProperty("currentPlayerBonusClassDP", PLAYER_DP);
+        profileManager.setProperty("currentPlayerBonusClassAP", PLAYER_CLASS_AP);
+        profileManager.setProperty("currentPlayerBonusClassDP", PLAYER_CLASS_DP);
         profileManager.setProperty("currentPlayerCharacterAP", PLAYER_AP);
         profileManager.setProperty("currentPlayerCharacterDP", PLAYER_DP);
         profileManager.setProperty("currentPlayerCharacterSPDP", 10);
@@ -105,8 +107,8 @@ public class InventoryUITest {
 
     private static Stream<Arguments> itemEventData() {
         return Stream.of(
-                Arguments.of(getInventoryItem(8), PLAYER_AP, "currentPlayerAP", InventoryObserver.InventoryEvent.UPDATED_AP),
-                Arguments.of(getInventoryItem(128), PLAYER_DP, "currentPlayerDP", InventoryObserver.InventoryEvent.UPDATED_DP)
+                Arguments.of(getInventoryItem(8), PLAYER_CLASS_AP, "currentPlayerAP", InventoryObserver.InventoryEvent.UPDATED_AP),
+                Arguments.of(getInventoryItem(128), PLAYER_CLASS_DP, "currentPlayerDP", InventoryObserver.InventoryEvent.UPDATED_DP)
         );
     }
 
