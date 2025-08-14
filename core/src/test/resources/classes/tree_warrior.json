@@ -1,11 +1,11 @@
 {
-  "id" : 1,
-  "classId" : "WARRIOR",
+  "id": 1,
+  "classId": "WARRIOR",
   "classUpgrade": [
     {
-      "id" : 2,
+      "id": 2,
       "classId": "KNIGHT",
-      "requirements" : {
+      "requirements": {
         "ENTITY_PHYSICAL_ATTACK_POINTS": {
           "class": "java.lang.String",
           "value": 15
@@ -29,11 +29,11 @@
         "weapon": {
         }
       },
-      "classUpgrade" : [
+      "classUpgrade": [
         {
-          "id" : 4,
-          "classId" : "PALADIN",
-          "requirements" : {
+          "id": 4,
+          "classId": "PALADIN",
+          "requirements": {
             "ENTITY_PHYSICAL_ATTACK_POINTS": {
               "class": "java.lang.String",
               "value": 35
@@ -59,9 +59,9 @@
           }
         },
         {
-          "id" : 5,
-          "classId" : "WARLORD",
-          "requirements" : {
+          "id": 5,
+          "classId": "WARLORD",
+          "requirements": {
             "ENTITY_PHYSICAL_ATTACK_POINTS": {
               "class": "java.lang.String",
               "value": 45
@@ -89,9 +89,9 @@
       ]
     },
     {
-      "id" : 3,
-      "classId" : "GLADIATOR",
-      "requirements" : {
+      "id": 3,
+      "classId": "GLADIATOR",
+      "requirements": {
         "ENTITY_PHYSICAL_ATTACK_POINTS": {
           "class": "java.lang.String",
           "value": 20
@@ -115,11 +115,11 @@
         "weapon": {
         }
       },
-      "classUpgrade" : [
+      "classUpgrade": [
         {
-          "id" : 6,
-          "classId" : "DUELIST",
-          "requirements" : {
+          "id": 6,
+          "classId": "DUELIST",
+          "requirements": {
             "ENTITY_PHYSICAL_ATTACK_POINTS": {
               "class": "java.lang.String",
               "value": 50
@@ -145,9 +145,9 @@
           }
         },
         {
-          "id" : 7,
-          "classId" : "WEAPON_MASTER",
-          "requirements" : {
+          "id": 7,
+          "classId": "WEAPON_MASTER",
+          "requirements": {
             "ENTITY_PHYSICAL_ATTACK_POINTS": {
               "class": "java.lang.String",
               "value": 40
