@@ -18,6 +18,7 @@ import java.util.Queue;
 import java.util.stream.Stream;
 
 import static com.gdx.game.common.UtilityClass.calculateBonus;
+import static com.gdx.game.common.UtilityClass.registerBonusClass;
 
 public class Tree {
 
@@ -155,14 +156,5 @@ public class Tree {
         }
 
         ProfileManager.getInstance().setProperty("bonusClass", bonusArray);
-    }
-
-    private static void registerBonusClass() {
-        int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
-        int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
-        Map<String, Integer> bonusMap = calculateBonus("bonusClass", "currentPlayerCharacterAP", "currentPlayerCharacterDP");
-
-        ProfileManager.getInstance().setProperty("currentPlayerBonusClassAP", AP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
-        ProfileManager.getInstance().setProperty("currentPlayerBonusClassDP", DP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
     }
 }
