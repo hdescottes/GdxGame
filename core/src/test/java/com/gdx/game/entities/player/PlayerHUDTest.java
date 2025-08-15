@@ -61,6 +61,8 @@ public class PlayerHUDTest {
     private static final int XP_VALUE = 10;
     private static final int GOLD_VALUE = 100;
     private static final int LEVEL_VALUE = 2;
+    private static final String CHARACTER_CLASS = "WARRIOR";
+    private static final Array<EntityBonus> bonusClass = new Array<>();
 
     @BeforeEach
     void init() {
@@ -68,7 +70,7 @@ public class PlayerHUDTest {
         Gdx.gl20 = mock(GL20.class);
         mockShapeRenderer = mockConstruction(ShapeRenderer.class);
         mockSpriteBatch = mockConstruction(SpriteBatch.class);
-        profileManager.setProperty("characterClass", "WARRIOR");
+        profileManager.setProperty("characterClass", CHARACTER_CLASS);
         profileManager.setProperty("currentPlayerBonusClassAP", 15);
         profileManager.setProperty("currentPlayerBonusClassDP", 15);
         profileManager.setProperty("currentPlayerCharacterAP", 15);
@@ -82,6 +84,8 @@ public class PlayerHUDTest {
         profileManager.setProperty("currentPlayerMP", MP_VALUE);
         profileManager.setProperty("currentPlayerLevel", LEVEL_VALUE);
         profileManager.setProperty("currentPlayerGP", GOLD_VALUE);
+        bonusClass.add(new EntityBonus("atk", "0.1"));
+        profileManager.setProperty("bonusClass", bonusClass);
         new ResourceManager();
     }
 
@@ -143,7 +147,7 @@ public class PlayerHUDTest {
 
     @ParameterizedTest
     @MethodSource("profileStates")
-    void profile_states(ProfileObserver.ProfileEvent event, Map<String, Integer> stats) {
+    void profile_states(ProfileObserver.ProfileEvent event, Map<String, Object> stats) {
         Entity player = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR);
         MapManager mapManager = new MapManager();
         mapManager.setPlayer(player);
@@ -165,10 +169,14 @@ public class PlayerHUDTest {
         assertEquals(stats.get("xpValue"), profileManager.getProperty("currentPlayerXP", Integer.class));
         assertEquals(stats.get("xpMaxValue"), profileManager.getProperty("currentPlayerXPMax", Integer.class));
         assertEquals(stats.get("levelValue"), profileManager.getProperty("currentPlayerLevel", Integer.class));
+        assertEquals(stats.get("characterClass"), profileManager.getProperty("characterClass", String.class));
+        assertEquals(stats.get("playerCharacter"), profileManager.getProperty("playerCharacter", String.class));
+        assertEquals(stats.get("bonusClass"), profileManager.getProperty("bonusClass", Array.class));
+        assertEquals(stats.get("bonusSet"), profileManager.getProperty("bonusSet", Array.class));
     }
 
     private static Stream<Arguments> profileStates() {
-        Map<String, Integer> profileStats = new HashMap<>();
+        Map<String, Object> profileStats = new HashMap<>();
         profileStats.put("goldValue", GOLD_VALUE);
         profileStats.put("hpValue", HP_VALUE);
         profileStats.put("hpMaxValue", HP_MAX_VALUE);
@@ -177,6 +185,10 @@ public class PlayerHUDTest {
         profileStats.put("mpValue", MP_VALUE);
         profileStats.put("mpMaxValue", MP_MAX_VALUE);
         profileStats.put("levelValue", LEVEL_VALUE);
+        profileStats.put("bonusClass", bonusClass);
+        profileStats.put("bonusSet", null);
+        profileStats.put("playerCharacter", EntityFactory.EntityType.valueOf(CHARACTER_CLASS));
+        profileStats.put("characterClass", CHARACTER_CLASS);
         Map<String, Integer> clearProfileStats = new HashMap<>();
         clearProfileStats.put("goldValue", 0);
         clearProfileStats.put("hpValue", 0);
@@ -186,6 +198,10 @@ public class PlayerHUDTest {
         clearProfileStats.put("mpValue", 0);
         clearProfileStats.put("mpMaxValue", 0);
         clearProfileStats.put("levelValue", 0);
+        clearProfileStats.put("bonusClass", null);
+        clearProfileStats.put("bonusSet", null);
+        clearProfileStats.put("playerCharacter", null);
+        clearProfileStats.put("characterClass", null);
         return Stream.of(
                 Arguments.of(ProfileObserver.ProfileEvent.SAVING_PROFILE, profileStats),
                 Arguments.of(ProfileObserver.ProfileEvent.CLEAR_CURRENT_PROFILE, clearProfileStats)
