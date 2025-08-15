@@ -13,6 +13,7 @@ import com.gdx.game.battle.BattleInventoryUI;
 import com.gdx.game.battle.BattleObserver;
 import com.gdx.game.battle.BattleState;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityBonus;
 import com.gdx.game.entities.player.PlayerHUD;
 import com.gdx.game.inventory.item.InventoryItemLocation;
 import com.gdx.game.inventory.InventoryObserver;
@@ -26,6 +27,7 @@ import com.gdx.game.screen.transition.effects.TransitionEffect;
 import java.util.ArrayList;
 
 import static com.gdx.game.audio.AudioObserver.AudioTypeEvent.BATTLE_THEME;
+import static com.gdx.game.common.UtilityClass.registerBonusClass;
 
 public class BattleScreen extends BaseScreen implements BattleObserver {
 
@@ -93,12 +95,25 @@ public class BattleScreen extends BaseScreen implements BattleObserver {
         InventoryUI.populateInventory(playerHUD.getInventoryUI().getInventorySlotTable(), inventory, playerHUD.getInventoryUI().getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
     }
 
+    private void refreshStats() {
+        Array<EntityBonus> bonusClass = ProfileManager.getInstance().getProperty("bonusClass", Array.class);
+        if (bonusClass != null && bonusClass.size > 0) {
+            registerBonusClass();
+        }
+        Array<InventoryItemLocation> equipInventory = ProfileManager.getInstance().getProperty("playerEquipInventory", Array.class);
+        playerHUD.getInventoryUI().resetEquipSlots();
+        if (equipInventory != null && equipInventory.size > 0) {
+            InventoryUI.populateInventory(playerHUD.getInventoryUI().getEquipSlotTable(), equipInventory, playerHUD.getInventoryUI().getDragAndDrop(), InventoryUI.PLAYER_INVENTORY, false);
+        }
+    }
+
     @Override
     public void onNotify(Entity entity, BattleEvent event) {
         switch (event) {
             case RESUME_OVER -> {
                 refreshStatus();
                 refreshInventory();
+                refreshStats();
                 ProfileManager.getInstance().saveProfile();
                 setScreenWithTransition((BaseScreen) gdxGame.getScreen(), gdxGame.getGameScreen(), new ArrayList<>());
                 removeEntities();

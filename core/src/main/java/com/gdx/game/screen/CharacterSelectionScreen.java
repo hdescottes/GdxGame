@@ -91,6 +91,7 @@ public class CharacterSelectionScreen extends BaseScreen {
                 int SPDPVal = Integer.parseInt(player.getEntityConfig().getEntityProperties().get(EntityConfig.EntityProperties.ENTITY_SPEED_POINTS.name()));
                 ProfileManager.getInstance().setProperty("playerCharacter", EntityFactory.EntityType.valueOf(player.getEntityConfig().getEntityID()));
                 ProfileManager.getInstance().setProperty("characterClass", player.getEntityConfig().getEntityID());
+                ProfileManager.getInstance().setProperty("bonusClass", null);
                 ProfileManager.getInstance().setProperty("currentPlayerAP", APVal);
                 ProfileManager.getInstance().setProperty("currentPlayerDP", DPVal);
                 ProfileManager.getInstance().setProperty("currentPlayerSPDP", SPDPVal);

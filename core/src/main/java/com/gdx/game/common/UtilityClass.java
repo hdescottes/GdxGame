@@ -69,4 +69,13 @@ public class UtilityClass {
         return bonusStatMap;
     }
 
+    public static void registerBonusClass() {
+        int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+        int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+        Map<String, Integer> bonusMap = calculateBonus("bonusClass", "currentPlayerCharacterAP", "currentPlayerCharacterDP");
+
+        ProfileManager.getInstance().setProperty("currentPlayerBonusClassAP", AP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
+        ProfileManager.getInstance().setProperty("currentPlayerBonusClassDP", DP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
+    }
+
 }

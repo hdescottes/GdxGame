@@ -27,6 +27,7 @@ import com.gdx.game.dialog.ConversationGraph;
 import com.gdx.game.dialog.ConversationGraphObserver;
 import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityBonus;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
 import com.gdx.game.entities.player.characterclass.ClassObserver;
@@ -49,6 +50,7 @@ import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import com.gdx.game.status.StatusUI;
 
+import static com.gdx.game.common.UtilityClass.registerBonusClass;
 import static com.gdx.game.entities.player.characterclass.tree.Tree.saveNewClass;
 import static com.gdx.game.inventory.InventoryUI.getInventory;
 import static com.gdx.game.inventory.InventoryUI.setBonusFromSet;
@@ -687,6 +689,10 @@ public class PlayerHUD implements Screen, AudioSubject, ProfileObserver, ClassOb
                 }
             }
             case REFRESH_STATS -> {
+                Array<EntityBonus> bonusClass = ProfileManager.getInstance().getProperty("bonusClass", Array.class);
+                if (bonusClass != null && bonusClass.size > 0) {
+                    registerBonusClass();
+                }
                 Array<InventoryItemLocation> equipInventory = ProfileManager.getInstance().getProperty("playerEquipInventory", Array.class);
                 inventoryUI.resetEquipSlots();
                 if (equipInventory != null && equipInventory.size > 0) {
