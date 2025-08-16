@@ -8,11 +8,11 @@
       "requirements": {
         "ENTITY_PHYSICAL_ATTACK_POINTS": {
           "class": "java.lang.String",
-          "value": 15
+          "value": 10
         },
         "ENTITY_PHYSICAL_DEFENSE_POINTS": {
           "class": "java.lang.String",
-          "value": 15
+          "value": 10
         }
       },
       "bonus": {
