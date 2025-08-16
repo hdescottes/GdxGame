@@ -1,11 +1,10 @@
 {
-conversations: {
-        1: {
-                id: 1
-                dialog: No time to conversate stranger. I must stay viligant at all times for the safety of our town!
-        }
-}
-associatedChoices: {
-}
-currentConversationID: 1
+  "conversations": {
+    "1": {
+      "id": 1,
+      "dialog": "No time to conversate stranger. I must stay viligant at all times for the safety of our town!"
+    }
+  },
+  "associatedChoices": {},
+  "currentConversationID": 1
 }

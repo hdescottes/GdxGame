@@ -1,84 +1,84 @@
 {
-conversations: {
-        1: {
-                id: 1
-                dialog: Hi.
-        }
-        2: {
-                id: 2
-                dialog: What a beautiful day!
-        }
-        3: {
-                id: 3,
-                dialog: Greetings stranger.
-        }
-        4: {
-                id: 4,
-                dialog: Well met traveler!
-        }
-        5: {
-                id: 5,
-                dialog: May the winds guide you on your journey
-        }
-        6: {
-                id: 6
-                dialog: See you later traveler!
-        }
-}
-        associatedChoices: {
-                1: [
-                        {
-                                class: com.gdx.game.dialog.ConversationChoice
-                                sourceId: 1
-                                destinationId: 7
-                                choicePhrase: "Bye."
-                                conversationCommandEvent: EXIT_CONVERSATION
-                        }
-                ],
-                2: [
-                        {
-                                class: com.gdx.game.dialog.ConversationChoice
-                                sourceId: 1
-                                destinationId: 7
-                                choicePhrase: "Bye."
-                                conversationCommandEvent: EXIT_CONVERSATION
-                        }
-                ],
-                3: [
-                        {
-                                class: com.gdx.game.dialog.ConversationChoice
-                                sourceId: 1
-                                destinationId: 7
-                                choicePhrase: "Bye."
-                                conversationCommandEvent: EXIT_CONVERSATION
-                        }
-                ],
-                4: [
-                        {
-                                class: com.gdx.game.dialog.ConversationChoice
-                                sourceId: 1
-                                destinationId: 7
-                                choicePhrase: "Bye."
-                                conversationCommandEvent: EXIT_CONVERSATION
-                        }
-                ],
-                5: [
-                        {
-                                class: com.gdx.game.dialog.ConversationChoice
-                                sourceId: 1
-                                destinationId: 7
-                                choicePhrase: "Bye."
-                                conversationCommandEvent: EXIT_CONVERSATION
-                        }
-                ],
-                6: [
-                        {
-                                class: com.gdx.game.dialog.ConversationChoice
-                                sourceId: 1
-                                destinationId: 7
-                                choicePhrase: "Bye."
-                                conversationCommandEvent: EXIT_CONVERSATION
-                        }
-                ]
-        }
+  "conversations": {
+    "1": {
+      "id": 1,
+      "dialog": "Hi."
+    },
+    "2": {
+      "id": 2,
+      "dialog": "What a beautiful day!"
+    },
+    "3": {
+      "id": 3,
+      "dialog": "Greetings stranger."
+    },
+    "4": {
+      "id": 4,
+      "dialog": "Well met traveler!"
+    },
+    "5": {
+      "id": 5,
+      "dialog": "May the winds guide you on your journey"
+    },
+    "6": {
+      "id": 6,
+      "dialog": "See you later traveler!"
+    }
+  },
+  "associatedChoices": {
+    "1": [
+      {
+        "class": "com.gdx.game.dialog.ConversationChoice",
+        "sourceId": 1,
+        "destinationId": 7,
+        "choicePhrase": "Bye.",
+        "conversationCommandEvent": "EXIT_CONVERSATION"
+      }
+    ],
+    "2": [
+      {
+        "class": "com.gdx.game.dialog.ConversationChoice",
+        "sourceId": 1,
+        "destinationId": 7,
+        "choicePhrase": "Bye.",
+        "conversationCommandEvent": "EXIT_CONVERSATION"
+      }
+    ],
+    "3": [
+      {
+        "class": "com.gdx.game.dialog.ConversationChoice",
+        "sourceId": 1,
+        "destinationId": 7,
+        "choicePhrase": "Bye.",
+        "conversationCommandEvent": "EXIT_CONVERSATION"
+      }
+    ],
+    "4": [
+      {
+        "class": "com.gdx.game.dialog.ConversationChoice",
+        "sourceId": 1,
+        "destinationId": 7,
+        "choicePhrase": "Bye.",
+        "conversationCommandEvent": "EXIT_CONVERSATION"
+      }
+    ],
+    "5": [
+      {
+        "class": "com.gdx.game.dialog.ConversationChoice",
+        "sourceId": 1,
+        "destinationId": 7,
+        "choicePhrase": "Bye.",
+        "conversationCommandEvent": "EXIT_CONVERSATION"
+      }
+    ],
+    "6": [
+      {
+        "class": "com.gdx.game.dialog.ConversationChoice",
+        "sourceId": 1,
+        "destinationId": 7,
+        "choicePhrase": "Bye.",
+        "conversationCommandEvent": "EXIT_CONVERSATION"
+      }
+    ]
+  }
 }

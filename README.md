@@ -80,7 +80,6 @@ graph TD;
 - [x] battle feature
     - [ ] entities' animation while attacking
     - [ ] ultimate attack cutscene
-    - [ ] implement bonus gained by class
     - [ ] implement magic, resist, ... stats
 
 - [ ] crafting feature

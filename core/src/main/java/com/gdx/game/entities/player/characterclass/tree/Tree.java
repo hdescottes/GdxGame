@@ -1,13 +1,24 @@
-package com.gdx.game.entities.player.characterClass.tree;
+package com.gdx.game.entities.player.characterclass.tree;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.gdx.game.entities.EntityBonus;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.profile.ProfileManager;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.stream.Stream;
+
+import static com.gdx.game.common.UtilityClass.calculateBonus;
+import static com.gdx.game.common.UtilityClass.registerBonusClass;
 
 public class Tree {
 
@@ -26,11 +37,11 @@ public class Tree {
         List<Node> nodeRoot = Collections.singletonList(node);
         List<Node> nodesInterClass = Stream.of(node)
                 .flatMap(n -> n.getClassUpgrade().stream().distinct())
-                .collect(Collectors.toList());
+                .toList();
         List<Node> nodesFinalClass = Stream.of(node)
                 .flatMap(n -> n.getClassUpgrade().stream().map(Node::getClassUpgrade))
                 .flatMap(n2 -> n2.stream().distinct())
-                .collect(Collectors.toList());
+                .toList();
         List<Node> nodesTree = new ArrayList<>();
         Stream.of(nodeRoot, nodesInterClass, nodesFinalClass).forEach(nodesTree::addAll);
 
@@ -131,7 +142,19 @@ public class Tree {
     public static void saveNewClass(Node newClass) {
         if (newClass != null) {
             ProfileManager.getInstance().setProperty("characterClass", newClass.getClassId());
-            ProfileManager.getInstance().setProperty("classBonus", newClass.getBonus());
+            setBonusFromClass(newClass.getBonus());
+            registerBonusClass();
         }
+    }
+
+    private static void setBonusFromClass(ObjectMap<String, ObjectMap<String, String>> bonusMap) {
+        Array<EntityBonus> bonusArray = new Array<>();
+
+        for (ObjectMap.Entry<String, String> entry : bonusMap.get("character")) {
+            EntityBonus entityBonus = new EntityBonus(entry.key, entry.value);
+            bonusArray.add(entityBonus);
+        }
+
+        ProfileManager.getInstance().setProperty("bonusClass", bonusArray);
     }
 }

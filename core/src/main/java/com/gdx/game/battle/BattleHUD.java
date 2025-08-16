@@ -21,12 +21,12 @@ import com.gdx.game.dialog.ConversationUI;
 import com.gdx.game.entities.Entity;
 import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.entities.player.characterClass.ClassObserver;
-import com.gdx.game.entities.player.characterClass.tree.Node;
-import com.gdx.game.entities.player.characterClass.tree.Tree;
+import com.gdx.game.entities.player.characterclass.ClassObserver;
+import com.gdx.game.entities.player.characterclass.tree.Node;
+import com.gdx.game.entities.player.characterclass.tree.Tree;
+import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.item.InventoryItem;
 import com.gdx.game.inventory.item.InventoryItemLocation;
-import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
 import com.gdx.game.profile.ProfileManager;
@@ -35,6 +35,8 @@ import com.gdx.game.status.StatsUpUI;
 import com.gdx.game.status.StatusObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.gdx.game.entities.player.characterclass.tree.Tree.saveNewClass;
 
 public class BattleHUD implements Screen, BattleObserver, ClassObserver, ComponentObserver, InventoryObserver, StatusObserver {
 
@@ -357,9 +359,10 @@ public class BattleHUD implements Screen, BattleObserver, ClassObserver, Compone
                 String configFilePath = player.getEntityConfig().getClassTreePath();
                 Tree tree = Tree.buildClassTree(configFilePath);
                 Node node = tree.checkForClassUpgrade(currentClass, AP, DP);
-                Tree.saveNewClass(node);
 
                 if (node != null) {
+                    saveNewClass(node);
+
                     notificationUI.loadUpgradeClass(node.getClassId());
                 }
             }

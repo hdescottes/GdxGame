@@ -24,7 +24,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.MockedConstruction;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.gdx.game.common.UtilityClass.calculateBonus;
@@ -44,6 +44,8 @@ public class InventoryUITest {
 
     private static final int PLAYER_AP = 15;
     private static final int PLAYER_DP = 15;
+    private static final int PLAYER_CLASS_AP = PLAYER_AP + 10;
+    private static final int PLAYER_CLASS_DP = PLAYER_DP + 10;
 
     @BeforeEach
     void init() {
@@ -54,6 +56,8 @@ public class InventoryUITest {
         new ResourceManager();
         ProfileManager profileManager = ProfileManager.getInstance();
         profileManager.setProperty("playerCharacter", EntityFactory.EntityType.WARRIOR);
+        profileManager.setProperty("currentPlayerBonusClassAP", PLAYER_CLASS_AP);
+        profileManager.setProperty("currentPlayerBonusClassDP", PLAYER_CLASS_DP);
         profileManager.setProperty("currentPlayerCharacterAP", PLAYER_AP);
         profileManager.setProperty("currentPlayerCharacterDP", PLAYER_DP);
         profileManager.setProperty("currentPlayerCharacterSPDP", 10);
@@ -103,8 +107,8 @@ public class InventoryUITest {
 
     private static Stream<Arguments> itemEventData() {
         return Stream.of(
-                Arguments.of(getInventoryItem(8), PLAYER_AP, "currentPlayerAP", InventoryObserver.InventoryEvent.UPDATED_AP),
-                Arguments.of(getInventoryItem(128), PLAYER_DP, "currentPlayerDP", InventoryObserver.InventoryEvent.UPDATED_DP)
+                Arguments.of(getInventoryItem(8), PLAYER_CLASS_AP, "currentPlayerAP", InventoryObserver.InventoryEvent.UPDATED_AP),
+                Arguments.of(getInventoryItem(128), PLAYER_CLASS_DP, "currentPlayerDP", InventoryObserver.InventoryEvent.UPDATED_DP)
         );
     }
 
@@ -166,11 +170,13 @@ public class InventoryUITest {
 
     @Test
     public void should_calculate_bonus_from_set() {
-        ProfileManager.getInstance().setProperty("currentPlayerAP", 10);
-        ProfileManager.getInstance().setProperty("currentPlayerDP", 25);
+        String playerAP = "currentPlayerAP";
+        String playerDP = "currentPlayerDP";
+        ProfileManager.getInstance().setProperty(playerAP, 10);
+        ProfileManager.getInstance().setProperty(playerDP, 25);
         InventoryUI.setBonusFromSet(getInventoryItem(8));
 
-        HashMap<String, Integer> bonusMap = calculateBonus("bonusSet");
+        Map<String, Integer> bonusMap = calculateBonus("bonusSet", playerAP, playerDP);
 
         assertEquals(1, bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
         assertEquals(2, bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
