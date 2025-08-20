@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.gdx.game.common.UtilityClass.calculateBonus;
@@ -91,10 +90,12 @@ public class BattleState extends BattleSubject {
     }
 
     private void updateStatWithBonus(String bonusAttribute) {
-        HashMap<String, Integer> bonusMap = calculateBonus(bonusAttribute);
+        String playerAP = "currentPlayerAP";
+        String playerDP = "currentPlayerDP";
+        Map<String, Integer> bonusMap = calculateBonus(bonusAttribute, playerAP, playerDP);
         Map<String, String> mapping = Map.of(
-                EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), "currentPlayerAP",
-                EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), "currentPlayerDP"
+                EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), playerAP,
+                EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), playerDP
         );
 
         mapping.forEach((key, value) -> {

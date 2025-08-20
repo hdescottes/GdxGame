@@ -1,4 +1,4 @@
-package com.gdx.game.entities.player.characterClass;
+package com.gdx.game.entities.player.characterclass;
 
 public interface ClassSubject {
 

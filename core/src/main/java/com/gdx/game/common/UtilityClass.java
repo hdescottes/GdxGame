@@ -6,12 +6,14 @@ import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.profile.ProfileManager;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import static java.lang.Float.parseFloat;
 
 public class UtilityClass {
+
+    private UtilityClass() {
+    }
 
     public static <T, E> HashMap<E, T> mapInverter(HashMap<T, E> hashMap){
 
@@ -35,11 +37,11 @@ public class UtilityClass {
         return newMap;
     }
 
-    public static HashMap<String, Integer> calculateBonus(String bonusProperty) {
-        final Hashtable<String, String> attributeTable = new Hashtable<>() {{
-            put(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), "currentPlayerAP");
-            put(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), "currentPlayerDP");
-        }};
+    public static Map<String, Integer> calculateBonus(String bonusProperty, String playerAP, String playerDP) {
+        final Map<String, String> attributeTable = Map.of(
+            EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), playerAP,
+            EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), playerDP
+        );
 
         HashMap<String, Integer> bonusStatMap = new HashMap<>();
         Array<EntityBonus> bonusArray = ProfileManager.getInstance().getProperty(bonusProperty, Array.class);
@@ -54,7 +56,7 @@ public class UtilityClass {
         }
 
         for (String key : attributeTable.keySet()) {
-            float bonusValue = parseFloat(bonusEntityValues.get(key));
+            float bonusValue = parseFloat(bonusEntityValues.get(key) != null ? bonusEntityValues.get(key) : "0");
             if (bonusValue > 1) {
                 bonusStatMap.put(key, (int) bonusValue);
             } else {
@@ -65,6 +67,15 @@ public class UtilityClass {
         }
 
         return bonusStatMap;
+    }
+
+    public static void registerBonusClass() {
+        int AP = ProfileManager.getInstance().getProperty("currentPlayerCharacterAP", Integer.class);
+        int DP = ProfileManager.getInstance().getProperty("currentPlayerCharacterDP", Integer.class);
+        Map<String, Integer> bonusMap = calculateBonus("bonusClass", "currentPlayerCharacterAP", "currentPlayerCharacterDP");
+
+        ProfileManager.getInstance().setProperty("currentPlayerBonusClassAP", AP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name()));
+        ProfileManager.getInstance().setProperty("currentPlayerBonusClassDP", DP + bonusMap.get(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name()));
     }
 
 }

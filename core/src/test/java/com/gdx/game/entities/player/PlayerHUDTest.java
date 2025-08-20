@@ -14,11 +14,13 @@ import com.gdx.game.component.ComponentObserver;
 import com.gdx.game.dialog.ConversationGraph;
 import com.gdx.game.dialog.ConversationGraphObserver;
 import com.gdx.game.entities.Entity;
+import com.gdx.game.entities.EntityBonus;
+import com.gdx.game.entities.EntityConfig;
 import com.gdx.game.entities.EntityFactory;
-import com.gdx.game.entities.player.characterClass.ClassObserver;
+import com.gdx.game.entities.player.characterclass.ClassObserver;
+import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.item.InventoryItem;
 import com.gdx.game.inventory.item.InventoryItemFactory;
-import com.gdx.game.inventory.InventoryObserver;
 import com.gdx.game.inventory.store.StoreInventoryObserver;
 import com.gdx.game.manager.ResourceManager;
 import com.gdx.game.map.MapManager;
@@ -59,6 +61,8 @@ public class PlayerHUDTest {
     private static final int XP_VALUE = 10;
     private static final int GOLD_VALUE = 100;
     private static final int LEVEL_VALUE = 2;
+    private static final String CHARACTER_CLASS = "WARRIOR";
+    private static final Array<EntityBonus> bonusClass = new Array<>();
 
     @BeforeEach
     void init() {
@@ -66,7 +70,9 @@ public class PlayerHUDTest {
         Gdx.gl20 = mock(GL20.class);
         mockShapeRenderer = mockConstruction(ShapeRenderer.class);
         mockSpriteBatch = mockConstruction(SpriteBatch.class);
-        profileManager.setProperty("characterClass", "WARRIOR");
+        profileManager.setProperty("characterClass", CHARACTER_CLASS);
+        profileManager.setProperty("currentPlayerBonusClassAP", 15);
+        profileManager.setProperty("currentPlayerBonusClassDP", 15);
         profileManager.setProperty("currentPlayerCharacterAP", 15);
         profileManager.setProperty("currentPlayerCharacterDP", 15);
         profileManager.setProperty("currentPlayerCharacterSPDP", 10);
@@ -78,6 +84,8 @@ public class PlayerHUDTest {
         profileManager.setProperty("currentPlayerMP", MP_VALUE);
         profileManager.setProperty("currentPlayerLevel", LEVEL_VALUE);
         profileManager.setProperty("currentPlayerGP", GOLD_VALUE);
+        bonusClass.add(new EntityBonus("atk", "0.1"));
+        profileManager.setProperty("bonusClass", bonusClass);
         new ResourceManager();
     }
 
@@ -139,7 +147,7 @@ public class PlayerHUDTest {
 
     @ParameterizedTest
     @MethodSource("profileStates")
-    void profile_states(ProfileObserver.ProfileEvent event, Map<String, Integer> stats) {
+    void profile_states(ProfileObserver.ProfileEvent event, Map<String, Object> stats) {
         Entity player = EntityFactory.getInstance().getEntity(EntityFactory.EntityType.WARRIOR);
         MapManager mapManager = new MapManager();
         mapManager.setPlayer(player);
@@ -161,10 +169,14 @@ public class PlayerHUDTest {
         assertEquals(stats.get("xpValue"), profileManager.getProperty("currentPlayerXP", Integer.class));
         assertEquals(stats.get("xpMaxValue"), profileManager.getProperty("currentPlayerXPMax", Integer.class));
         assertEquals(stats.get("levelValue"), profileManager.getProperty("currentPlayerLevel", Integer.class));
+        assertEquals(stats.get("characterClass"), profileManager.getProperty("characterClass", String.class));
+        assertEquals(stats.get("playerCharacter"), profileManager.getProperty("playerCharacter", String.class));
+        assertEquals(stats.get("bonusClass"), profileManager.getProperty("bonusClass", Array.class));
+        assertEquals(stats.get("bonusSet"), profileManager.getProperty("bonusSet", Array.class));
     }
 
     private static Stream<Arguments> profileStates() {
-        Map<String, Integer> profileStats = new HashMap<>();
+        Map<String, Object> profileStats = new HashMap<>();
         profileStats.put("goldValue", GOLD_VALUE);
         profileStats.put("hpValue", HP_VALUE);
         profileStats.put("hpMaxValue", HP_MAX_VALUE);
@@ -173,6 +185,10 @@ public class PlayerHUDTest {
         profileStats.put("mpValue", MP_VALUE);
         profileStats.put("mpMaxValue", MP_MAX_VALUE);
         profileStats.put("levelValue", LEVEL_VALUE);
+        profileStats.put("bonusClass", bonusClass);
+        profileStats.put("bonusSet", null);
+        profileStats.put("playerCharacter", EntityFactory.EntityType.valueOf(CHARACTER_CLASS));
+        profileStats.put("characterClass", CHARACTER_CLASS);
         Map<String, Integer> clearProfileStats = new HashMap<>();
         clearProfileStats.put("goldValue", 0);
         clearProfileStats.put("hpValue", 0);
@@ -182,6 +198,10 @@ public class PlayerHUDTest {
         clearProfileStats.put("mpValue", 0);
         clearProfileStats.put("mpMaxValue", 0);
         clearProfileStats.put("levelValue", 0);
+        clearProfileStats.put("bonusClass", null);
+        clearProfileStats.put("bonusSet", null);
+        clearProfileStats.put("playerCharacter", null);
+        clearProfileStats.put("characterClass", null);
         return Stream.of(
                 Arguments.of(ProfileObserver.ProfileEvent.SAVING_PROFILE, profileStats),
                 Arguments.of(ProfileObserver.ProfileEvent.CLEAR_CURRENT_PROFILE, clearProfileStats)
@@ -264,10 +284,17 @@ public class PlayerHUDTest {
         mapManager.setPlayer(player);
         Camera camera = new OrthographicCamera();
         PlayerHUD hud = new PlayerHUD(camera, player, mapManager);
+        Array<EntityBonus> bonusArray = new Array<>();
+        bonusArray.add(new EntityBonus(EntityConfig.EntityProperties.ENTITY_PHYSICAL_ATTACK_POINTS.name(), "0.1"));
+        bonusArray.add(new EntityBonus(EntityConfig.EntityProperties.ENTITY_PHYSICAL_DEFENSE_POINTS.name(), "0.1"));
 
         hud.onNotify("", ClassObserver.ClassEvent.CHECK_UPGRADE_TREE_CLASS);
 
         assertEquals("KNIGHT", ProfileManager.getInstance().getProperty("characterClass", String.class));
+        assertEquals(bonusArray.get(0).getValue(), ((EntityBonus) ProfileManager.getInstance().getProperty("bonusClass", Array.class).get(0)).getValue());
+        assertEquals(bonusArray.get(1).getValue(), ((EntityBonus) ProfileManager.getInstance().getProperty("bonusClass", Array.class).get(1)).getValue());
+        assertEquals(16, ProfileManager.getInstance().getProperty("currentPlayerBonusClassAP", Integer.class));
+        assertEquals(16, ProfileManager.getInstance().getProperty("currentPlayerBonusClassDP", Integer.class));
         assertFalse(hud.getStatusUI().isVisible());
     }
 

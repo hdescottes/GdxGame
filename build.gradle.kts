@@ -10,8 +10,18 @@ allprojects {
     apply(plugin = "java")
     apply(plugin = "java-library")
 
-    tasks.named<Test>("test") {
+    tasks.register<Test>("unitTest") {
         useJUnitPlatform()
+        filter {
+            excludeTestsMatching("*IntegrationTest")
+        }
+    }
+
+    tasks.register<Test>("integrationTest") {
+        useJUnitPlatform()
+        filter {
+            includeTestsMatching("*IntegrationTest")
+        }
     }
 
     repositories {

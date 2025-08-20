@@ -1,115 +1,175 @@
 {
-  id : 1
-  classId : WARRIOR
-  classUpgrade: [
+  "id": 1,
+  "classId": "WARRIOR",
+  "classUpgrade": [
     {
-      id : 2
-      classId: KNIGHT
-      requirements : {
-        ENTITY_PHYSICAL_ATTACK_POINTS: {
-          class: java.lang.String
-          value: 15
+      "id": 2,
+      "classId": "KNIGHT",
+      "requirements": {
+        "ENTITY_PHYSICAL_ATTACK_POINTS": {
+          "class": "java.lang.String",
+          "value": 10
+        },
+        "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+          "class": "java.lang.String",
+          "value": 10
         }
-        ENTITY_PHYSICAL_DEFENSE_POINTS: {
-          class: java.lang.String
-          value: 15
-        }
-      }
-      bonus : {
-        character : {},
-        weapon : {}
       },
-      classUpgrade : [
-        {
-          id : 4
-          classId : PALADIN
-          requirements : {
-            ENTITY_PHYSICAL_ATTACK_POINTS: {
-              class: java.lang.String
-              value: 35
-            }
-            ENTITY_PHYSICAL_DEFENSE_POINTS: {
-              class: java.lang.String
-              value: 35
-            }
+      "bonus": {
+        "character": {
+          "ENTITY_PHYSICAL_ATTACK_POINTS": {
+            "class": "java.lang.String",
+            "value": 0.1
+          },
+          "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+            "class": "java.lang.String",
+            "value": 0.1
           }
-          bonus : {
-            character : {},
-            weapon : {}
+        },
+        "weapon": {
+        }
+      },
+      "classUpgrade": [
+        {
+          "id": 4,
+          "classId": "PALADIN",
+          "requirements": {
+            "ENTITY_PHYSICAL_ATTACK_POINTS": {
+              "class": "java.lang.String",
+              "value": 35
+            },
+            "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+              "class": "java.lang.String",
+              "value": 35
+            }
+          },
+          "bonus": {
+            "character": {
+              "ENTITY_PHYSICAL_ATTACK_POINTS": {
+                "class": "java.lang.String",
+                "value": 0.1
+              },
+              "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+                "class": "java.lang.String",
+                "value": 0.1
+              }
+            },
+            "weapon": {
+            }
           }
         },
         {
-          id : 5
-          classId : WARLORD
-          requirements : {
-            ENTITY_PHYSICAL_ATTACK_POINTS: {
-              class: java.lang.String
-              value: 45
+          "id": 5,
+          "classId": "WARLORD",
+          "requirements": {
+            "ENTITY_PHYSICAL_ATTACK_POINTS": {
+              "class": "java.lang.String",
+              "value": 45
+            },
+            "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+              "class": "java.lang.String",
+              "value": 25
             }
-            ENTITY_PHYSICAL_DEFENSE_POINTS: {
-              class: java.lang.String
-              value: 25
+          },
+          "bonus": {
+            "character": {
+              "ENTITY_PHYSICAL_ATTACK_POINTS": {
+                "class": "java.lang.String",
+                "value": 0.1
+              },
+              "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+                "class": "java.lang.String",
+                "value": 0.1
+              }
+            },
+            "weapon": {
             }
-          }
-          bonus : {
-            character : {},
-            weapon : {}
           }
         }
       ]
     },
     {
-      id : 3
-      classId : GLADIATOR
-      requirements : {
-        ENTITY_PHYSICAL_ATTACK_POINTS: {
-          class: java.lang.String
-          value: 20
+      "id": 3,
+      "classId": "GLADIATOR",
+      "requirements": {
+        "ENTITY_PHYSICAL_ATTACK_POINTS": {
+          "class": "java.lang.String",
+          "value": 20
+        },
+        "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+          "class": "java.lang.String",
+          "value": 10
         }
-        ENTITY_PHYSICAL_DEFENSE_POINTS: {
-          class: java.lang.String
-          value: 10
-        }
-      }
-      bonus : {
-        character : {},
-        weapon : {}
-      }
-      classUpgrade : [
-        {
-          id : 6
-          classId : DUELIST
-          requirements : {
-            ENTITY_PHYSICAL_ATTACK_POINTS: {
-              class: java.lang.String
-              value: 50
-            }
-            ENTITY_PHYSICAL_DEFENSE_POINTS: {
-              class: java.lang.String
-              value: 20
-            }
+      },
+      "bonus": {
+        "character": {
+          "ENTITY_PHYSICAL_ATTACK_POINTS": {
+            "class": "java.lang.String",
+            "value": 0.1
+          },
+          "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+            "class": "java.lang.String",
+            "value": 0.1
           }
-          bonus : {
-            character : {},
-            weapon : {}
+        },
+        "weapon": {
+        }
+      },
+      "classUpgrade": [
+        {
+          "id": 6,
+          "classId": "DUELIST",
+          "requirements": {
+            "ENTITY_PHYSICAL_ATTACK_POINTS": {
+              "class": "java.lang.String",
+              "value": 50
+            },
+            "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+              "class": "java.lang.String",
+              "value": 20
+            }
+          },
+          "bonus": {
+            "character": {
+              "ENTITY_PHYSICAL_ATTACK_POINTS": {
+                "class": "java.lang.String",
+                "value": 0.1
+              },
+              "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+                "class": "java.lang.String",
+                "value": 0.1
+              }
+            },
+            "weapon": {
+            }
           }
         },
         {
-          id : 7
-          classId : WEAPON_MASTER
-          requirements : {
-            ENTITY_PHYSICAL_ATTACK_POINTS: {
-              class: java.lang.String
-              value: 40
+          "id": 7,
+          "classId": "WEAPON_MASTER",
+          "requirements": {
+            "ENTITY_PHYSICAL_ATTACK_POINTS": {
+              "class": "java.lang.String",
+              "value": 40
+            },
+            "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+              "class": "java.lang.String",
+              "value": 30
             }
-            ENTITY_PHYSICAL_DEFENSE_POINTS: {
-              class: java.lang.String
-              value: 30
+          },
+          "bonus": {
+            "character": {
+              "ENTITY_PHYSICAL_ATTACK_POINTS": {
+                "class": "java.lang.String",
+                "value": 0.1
+              },
+              "ENTITY_PHYSICAL_DEFENSE_POINTS": {
+                "class": "java.lang.String",
+                "value": 0.1
+              }
+            },
+            "weapon": {
             }
-          }
-          bonus : {
-            character : {},
-            weapon : {}
           }
         }
       ]
