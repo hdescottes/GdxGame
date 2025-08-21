@@ -11,6 +11,8 @@ allprojects {
     apply(plugin = "java-library")
 
     tasks.register<Test>("unitTest") {
+        testClassesDirs = sourceSets["test"].output.classesDirs
+        classpath = sourceSets["test"].runtimeClasspath
         useJUnitPlatform()
         filter {
             excludeTestsMatching("*IntegrationTest")
@@ -18,6 +20,8 @@ allprojects {
     }
 
     tasks.register<Test>("integrationTest") {
+        testClassesDirs = sourceSets["test"].output.classesDirs
+        classpath = sourceSets["test"].runtimeClasspath
         useJUnitPlatform()
         filter {
             includeTestsMatching("*IntegrationTest")
