@@ -29,7 +29,7 @@ class AnimationManagerTest {
 
         TextureRegion[][] textureRegions = animationManager.setTextureRegionsDouble(resourceManager.heroWalkUp, 32, 37);
 
-        assertThat(textureRegions.length).isEqualTo(1);
+        assertThat(3).isEqualTo(1);
         assertThat(textureRegions[0].length).isEqualTo(3);
     }
 
