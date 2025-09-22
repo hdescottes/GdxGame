@@ -4,7 +4,7 @@ gdx-vfx = "0.5.4"
 logback = "1.5.18"
 junit-platform = "1.13.4"
 junit-jupiter = "5.13.4"
-mockito = "5.19.0"
+mockito = "5.20.0"
 assertj = "3.27.5"
 
 [libraries]
