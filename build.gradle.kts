@@ -55,6 +55,14 @@ project(":desktop") {
 
 project(":core") {
 
+    tasks.named<Copy>("processResources") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    tasks.named<Copy>("processTestResources") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
     repositories {
         mavenCentral()
     }

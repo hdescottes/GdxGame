@@ -6,9 +6,9 @@ java {
 
 configure<SourceSetContainer> {
     named("main") {
-        java.srcDir("src/java/")
+        java.srcDir("src/main/java/")
     }
     named("test") {
-        java.srcDir("src/java/")
+        java.srcDir("src/test/java/")
     }
 }
