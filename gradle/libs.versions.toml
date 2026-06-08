@@ -1,5 +1,5 @@
 [versions]
-libgdx = "1.14.1"
+libgdx = "1.14.2"
 gdx-vfx = "0.5.4"
 logback = "1.5.33"
 junit-platform = "6.1.0"
