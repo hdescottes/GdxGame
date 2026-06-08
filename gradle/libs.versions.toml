@@ -1,7 +1,7 @@
 [versions]
 libgdx = "1.14.1"
 gdx-vfx = "0.5.4"
-logback = "1.5.33"
+logback = "1.5.34"
 junit-platform = "6.1.0"
 junit-jupiter = "6.1.0"
 mockito = "5.23.0"
