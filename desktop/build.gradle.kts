@@ -12,3 +12,11 @@ configure<SourceSetContainer> {
         java.srcDir("src/test/java/")
     }
 }
+
+tasks.register<JavaExec>("run") {
+    group = "application"
+    description = "Runs the game"
+
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("com.gdx.game.desktop.DesktopLauncher")
+}
